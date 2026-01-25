@@ -13,10 +13,15 @@
     --accent: 130 52% 61%;
     --accent-foreground: 152 43% 15%;
     
-    /* CTA Colors (Orange - nur für WhatsApp) */
+    /* CTA Colors (Orange) */
     --cta: 22 100% 62%;
     --cta-hover: 22 80% 52%;
     --cta-foreground: 0 0% 100%;
+    
+    /* WhatsApp Colors */
+    --whatsapp: 142 70% 49%;
+    --whatsapp-hover: 142 70% 42%;
+    --whatsapp-foreground: 0 0% 100%;
     
     /* Backgrounds */
     --background: 50 14% 96%;
@@ -72,6 +77,11 @@
     --cta: 22 100% 62%;
     --cta-hover: 22 80% 52%;
     --cta-foreground: 0 0% 100%;
+    
+    /* WhatsApp Colors */
+    --whatsapp: 142 70% 49%;
+    --whatsapp-hover: 142 70% 42%;
+    --whatsapp-foreground: 0 0% 100%;
     
     --background: 210 14% 8%;
     --foreground: 50 14% 96%;
