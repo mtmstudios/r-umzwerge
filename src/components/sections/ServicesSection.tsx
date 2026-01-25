@@ -1,4 +1,5 @@
-import { ArrowRight, Home, Users, Warehouse, Building2, Truck, ShieldAlert } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowRight, Home, Users, Warehouse, Building2, Truck, ShieldAlert, RotateCcw } from 'lucide-react';
 import { SERVICES } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
@@ -15,6 +16,11 @@ const serviceIcons: Record<string, typeof Home> = {
 export function ServicesSection() {
   const { ref: headerRef, isVisible: headerVisible } = useScrollReveal(0.1);
   const { ref: gridRef, isVisible: gridVisible } = useScrollReveal(0.1);
+  const [flippedCard, setFlippedCard] = useState<string | null>(null);
+
+  const handleCardClick = (slug: string) => {
+    setFlippedCard(flippedCard === slug ? null : slug);
+  };
 
   return (
     <section id="leistungen" className="py-16 lg:py-24 bg-secondary/30">
@@ -57,7 +63,7 @@ export function ServicesSection() {
           </div>
         </div>
 
-        {/* Services Grid */}
+        {/* Services Grid - Flip Cards */}
         <div
           ref={gridRef}
           className={cn(
@@ -68,34 +74,55 @@ export function ServicesSection() {
         >
           {SERVICES.map((service, index) => {
             const Icon = serviceIcons[service.slug] || Home;
+            const isFlipped = flippedCard === service.slug;
+            
             return (
               <div
                 key={service.slug}
-                className="bg-card rounded-xl p-6 border border-border card-hover group"
+                className={cn(
+                  "flip-card h-64 cursor-pointer",
+                  isFlipped && "flipped"
+                )}
                 style={{ transitionDelay: `${index * 50}ms` }}
+                onClick={() => handleCardClick(service.slug)}
               >
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-secondary rounded-xl flex items-center justify-center group-hover:bg-accent/20 transition-colors">
-                    <Icon className="h-6 w-6 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-foreground mb-1">
+                <div className="flip-card-inner">
+                  {/* Front Side */}
+                  <div className="flip-card-front bg-card border border-border p-6 flex flex-col items-center justify-center shadow-sm">
+                    <div className="w-16 h-16 bg-accent/20 rounded-2xl flex items-center justify-center mb-4 transition-colors group-hover:bg-accent/30">
+                      <Icon className="h-8 w-8 text-primary" />
+                    </div>
+                    <h3 className="font-semibold text-foreground text-center text-lg">
                       {service.title}
-                      {service.subtitle && (
-                        <span className="block text-sm font-normal text-muted-foreground">
-                          {service.subtitle}
-                        </span>
-                      )}
                     </h3>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      {service.description}
-                    </p>
+                    {service.subtitle && (
+                      <span className="text-sm text-muted-foreground mt-1">
+                        {service.subtitle}
+                      </span>
+                    )}
+                    <span className="text-xs text-muted-foreground mt-4 flex items-center gap-1.5 opacity-60">
+                      <RotateCcw className="h-3 w-3" />
+                      Details anzeigen
+                    </span>
+                  </div>
+
+                  {/* Back Side */}
+                  <div className="flip-card-back bg-gradient-to-br from-primary to-primary/80 p-6 flex flex-col justify-between shadow-lg">
+                    <div>
+                      <h3 className="font-semibold text-primary-foreground text-lg mb-3">
+                        {service.title}
+                      </h3>
+                      <p className="text-primary-foreground/90 text-sm leading-relaxed">
+                        {service.description}
+                      </p>
+                    </div>
                     <a
                       href={`/leistungen/${service.slug}`}
-                      className="inline-flex items-center gap-1 text-sm text-primary font-medium hover:gap-2 transition-all"
+                      onClick={(e) => e.stopPropagation()}
+                      className="inline-flex items-center justify-center gap-2 bg-accent text-accent-foreground font-medium py-3 px-4 rounded-xl hover:bg-accent/90 transition-colors mt-4"
                     >
                       Mehr erfahren
-                      <ArrowRight className="h-3 w-3" />
+                      <ArrowRight className="h-4 w-4" />
                     </a>
                   </div>
                 </div>

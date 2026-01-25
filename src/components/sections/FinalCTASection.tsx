@@ -27,7 +27,7 @@ export function FinalCTASection() {
                 Foto senden · Preiseinschätzung erhalten
               </a>
             </Button>
-            <Button asChild variant="outline" size="lg" className="gap-2 h-14 px-8 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
+            <Button asChild variant="outline" size="lg" className="gap-2 h-14 px-8 border-2 border-primary-foreground/50 text-primary-foreground hover:bg-cta hover:text-cta-foreground hover:border-cta transition-all duration-300">
               <a href={PHONE_LINK}>
                 <Phone className="h-5 w-5" />
                 Anrufen
