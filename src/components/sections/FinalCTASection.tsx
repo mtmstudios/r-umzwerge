@@ -1,8 +1,9 @@
-import { MessageCircle, Phone, CheckCircle } from 'lucide-react';
+import { Phone, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getWhatsAppLink, PHONE_LINK } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
+import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 
 const badges = ["Unverbindlich", "Keine versteckten Kosten", "Besenrein"];
 
@@ -20,9 +21,9 @@ export function FinalCTASection() {
             Unverbindlich anfragen. Transparentes Vorgehen. Besenrein.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
-            <Button asChild size="lg" className="gap-3 bg-cta hover:bg-cta-hover text-cta-foreground h-14 px-8 btn-lift shadow-cta">
+            <Button asChild size="lg" className="gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-14 px-8 btn-lift shadow-whatsapp">
               <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="h-5 w-5" />
+                <WhatsAppIcon className="h-5 w-5" />
                 Foto senden · Preiseinschätzung erhalten
               </a>
             </Button>

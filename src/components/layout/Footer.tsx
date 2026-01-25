@@ -1,5 +1,6 @@
-import { Phone, MessageCircle, Mail, MapPin } from 'lucide-react';
+import { Phone, Mail, MapPin } from 'lucide-react';
 import { NAV_ITEMS, SERVICES, PHONE_NUMBER, EMAIL, SERVICE_HOURS, getWhatsAppLink } from '@/lib/constants';
+import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -45,7 +46,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground transition-colors text-sm"
                 >
-                  <MessageCircle className="h-4 w-4 flex-shrink-0" />
+                  <WhatsAppIcon className="h-4 w-4 flex-shrink-0" />
                   WhatsApp
                 </a>
               </li>
