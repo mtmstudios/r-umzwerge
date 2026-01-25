@@ -1,8 +1,9 @@
-import { MessageCircle, Camera, Clock, Sparkles } from 'lucide-react';
+import { Camera, Clock, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getWhatsAppLink } from '@/lib/constants';
 import { useAnimatedCounter, useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
+import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 
 const steps = [
   {
@@ -97,10 +98,10 @@ export function ProcessSection() {
           <Button
             asChild
             size="lg"
-            className="gap-3 bg-cta hover:bg-cta-hover text-cta-foreground h-14 px-8 btn-lift shadow-cta"
+            className="gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-14 px-8 btn-lift shadow-whatsapp"
           >
             <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="h-5 w-5" />
+              <WhatsAppIcon className="h-5 w-5" />
               Jetzt Foto senden
             </a>
           </Button>

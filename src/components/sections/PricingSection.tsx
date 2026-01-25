@@ -1,8 +1,9 @@
-import { MessageCircle, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getWhatsAppLink, PRICE_FACTORS } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
+import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 
 export function PricingSection() {
   const { ref, isVisible } = useScrollReveal(0.1);
@@ -40,11 +41,10 @@ export function PricingSection() {
             </div>
           </div>
 
-          {/* Highlight Box */}
           <div className="bg-secondary rounded-2xl lg:rounded-3xl p-8 lg:p-10">
             <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-12 h-12 bg-cta/20 rounded-xl flex items-center justify-center">
-                <MessageCircle className="h-6 w-6 text-cta" />
+              <div className="flex-shrink-0 w-12 h-12 bg-whatsapp/20 rounded-xl flex items-center justify-center">
+                <WhatsAppIcon className="h-6 w-6 text-whatsapp" />
               </div>
               <div>
                 <h3 className="font-semibold text-foreground text-lg mb-2">
@@ -59,10 +59,10 @@ export function PricingSection() {
             <Button
               asChild
               size="lg"
-              className="w-full gap-3 bg-cta hover:bg-cta-hover text-cta-foreground h-14 btn-lift shadow-cta"
+              className="w-full gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-14 btn-lift shadow-whatsapp"
             >
               <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="h-5 w-5" />
+                <WhatsAppIcon className="h-5 w-5" />
                 Foto senden · Preiseinschätzung erhalten
               </a>
             </Button>

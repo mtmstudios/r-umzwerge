@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Phone, MessageCircle } from 'lucide-react';
+import { Menu, X, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { NAV_ITEMS, getWhatsAppLink, PHONE_LINK, SERVICE_HOURS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
+import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -71,10 +72,10 @@ export function Header() {
               <Button
                 asChild
                 size="sm"
-                className="gap-2 bg-cta hover:bg-cta-hover text-cta-foreground btn-lift"
+                className="gap-2 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground btn-lift"
               >
                 <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="h-4 w-4" />
+                  <WhatsAppIcon className="h-4 w-4" />
                   Foto per WhatsApp senden
                 </a>
               </Button>
@@ -131,10 +132,10 @@ export function Header() {
                 </Button>
                 <Button
                   asChild
-                  className="w-full gap-2 bg-cta hover:bg-cta-hover text-cta-foreground"
+                  className="w-full gap-2 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground"
                 >
                   <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                    <MessageCircle className="h-4 w-4" />
+                    <WhatsAppIcon className="h-4 w-4" />
                     Foto per WhatsApp senden
                   </a>
                 </Button>
