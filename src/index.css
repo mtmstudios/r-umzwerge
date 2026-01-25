@@ -2,95 +2,109 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Räumzwerge Design System */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
+    /* Brand Colors */
+    --primary: 152 43% 21%;
+    --primary-foreground: 40 20% 98%;
+    
+    --accent: 130 52% 61%;
+    --accent-foreground: 152 43% 15%;
+    
+    /* CTA Colors (Orange - nur für WhatsApp) */
+    --cta: 22 100% 62%;
+    --cta-hover: 22 80% 52%;
+    --cta-foreground: 0 0% 100%;
+    
+    /* Backgrounds */
+    --background: 50 14% 96%;
+    --foreground: 210 14% 11%;
+    
+    /* Cards & Surfaces */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
+    --card-foreground: 210 14% 11%;
+    
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --popover-foreground: 210 14% 11%;
+    
+    /* Secondary */
+    --secondary: 152 25% 95%;
+    --secondary-foreground: 152 43% 21%;
+    
+    /* Muted */
+    --muted: 50 10% 92%;
+    --muted-foreground: 210 10% 40%;
+    
+    /* UI Grau */
+    --ui-gray: 210 8% 58%;
+    
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Borders & Inputs */
+    --border: 50 10% 88%;
+    --input: 50 10% 88%;
+    --ring: 152 43% 21%;
+    
+    --radius: 1rem;
+    
+    /* Sidebar (falls benötigt) */
+    --sidebar-background: 50 14% 98%;
+    --sidebar-foreground: 210 14% 20%;
+    --sidebar-primary: 152 43% 21%;
+    --sidebar-primary-foreground: 40 20% 98%;
+    --sidebar-accent: 152 25% 95%;
+    --sidebar-accent-foreground: 152 43% 21%;
+    --sidebar-border: 50 10% 88%;
+    --sidebar-ring: 152 43% 21%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --primary: 130 52% 61%;
+    --primary-foreground: 152 43% 10%;
+    
+    --accent: 152 43% 21%;
+    --accent-foreground: 130 52% 80%;
+    
+    --cta: 22 100% 62%;
+    --cta-hover: 22 80% 52%;
+    --cta-foreground: 0 0% 100%;
+    
+    --background: 210 14% 8%;
+    --foreground: 50 14% 96%;
+    
+    --card: 210 14% 12%;
+    --card-foreground: 50 14% 96%;
+    
+    --popover: 210 14% 12%;
+    --popover-foreground: 50 14% 96%;
+    
+    --secondary: 152 20% 15%;
+    --secondary-foreground: 130 52% 80%;
+    
+    --muted: 210 10% 18%;
+    --muted-foreground: 210 10% 65%;
+    
+    --ui-gray: 210 8% 50%;
+    
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 210 10% 20%;
+    --input: 210 10% 20%;
+    --ring: 130 52% 61%;
+    
+    --sidebar-background: 210 14% 10%;
+    --sidebar-foreground: 50 14% 90%;
+    --sidebar-primary: 130 52% 61%;
+    --sidebar-primary-foreground: 152 43% 10%;
+    --sidebar-accent: 152 20% 18%;
+    --sidebar-accent-foreground: 130 52% 80%;
+    --sidebar-border: 210 10% 20%;
+    --sidebar-ring: 130 52% 61%;
   }
 }
 
@@ -99,7 +113,159 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
-  body {
-    @apply bg-background text-foreground;
+  html {
+    scroll-behavior: smooth;
   }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+}
+
+/* Custom Utility Classes */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .container-custom {
+    @apply mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8;
+  }
+}
+
+/* Animations */
+@layer components {
+  /* Scroll Reveal */
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.45s ease-out, transform 0.45s ease-out;
+  }
+  
+  .scroll-reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Button Hover Effects */
+  .btn-lift {
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  }
+  
+  .btn-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px -8px hsl(var(--cta) / 0.35);
+  }
+  
+  .btn-lift:active {
+    transform: translateY(0);
+  }
+  
+  /* Card Hover */
+  .card-hover {
+    transition: transform 0.25s ease-out, box-shadow 0.25s ease-out, border-color 0.25s ease-out;
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px -12px hsl(var(--foreground) / 0.12);
+    border-color: hsl(var(--accent) / 0.5);
+  }
+  
+  /* Sticky Header Shadow */
+  .header-shadow {
+    box-shadow: 0 2px 16px -4px hsl(var(--foreground) / 0.08);
+    backdrop-filter: blur(8px);
+  }
+  
+  /* Marker Glow */
+  .marker-glow {
+    transition: filter 0.2s ease-out;
+  }
+  
+  .marker-glow:hover {
+    filter: drop-shadow(0 0 8px currentColor);
+  }
+  
+  /* Counter Animation */
+  @keyframes count-up {
+    from {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .count-animate {
+    animation: count-up 0.5s ease-out forwards;
+  }
+  
+  /* Fade In Up */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-fade-in-up {
+    animation: fade-in-up 0.5s ease-out forwards;
+  }
+  
+  /* Pulse Subtle */
+  @keyframes pulse-subtle {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+  
+  .animate-pulse-subtle {
+    animation: pulse-subtle 2s ease-in-out infinite;
+  }
+}
+
+/* WhatsApp Floating Button Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Before/After Slider Styles */
+.comparison-slider {
+  position: relative;
+  overflow: hidden;
+  cursor: ew-resize;
+}
+
+.comparison-slider::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  background: white;
+  z-index: 20;
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
+  transform: translateX(-50%);
+  pointer-events: none;
 }
