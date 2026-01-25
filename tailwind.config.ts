@@ -52,6 +52,11 @@ export default {
           hover: "hsl(var(--cta-hover))",
           foreground: "hsl(var(--cta-foreground))",
         },
+        whatsapp: {
+          DEFAULT: "hsl(var(--whatsapp))",
+          hover: "hsl(var(--whatsapp-hover))",
+          foreground: "hsl(var(--whatsapp-foreground))",
+        },
         "ui-gray": "hsl(var(--ui-gray))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -84,6 +89,7 @@ export default {
         'soft': '0 4px 24px -4px hsl(var(--foreground) / 0.08)',
         'medium': '0 8px 32px -8px hsl(var(--foreground) / 0.12)',
         'cta': '0 8px 24px -8px hsl(var(--cta) / 0.35)',
+        'whatsapp': '0 8px 24px -8px hsl(var(--whatsapp) / 0.4)',
       },
       keyframes: {
         "accordion-down": {
