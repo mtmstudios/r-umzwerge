@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 
 export function useTimelineProgress(stepsCount: number) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(-1);
   const [progress, setProgress] = useState(0);
+  const [justActivated, setJustActivated] = useState<number | null>(null);
+  const previousActiveStep = useRef(-1);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -30,8 +32,20 @@ export function useTimelineProgress(stepsCount: number) {
       
       // Calculate which step is active
       const stepProgress = rawProgress * stepsCount;
-      const currentStep = Math.min(Math.floor(stepProgress), stepsCount - 1);
-      setActiveStep(currentStep);
+      const newActiveStep = Math.min(Math.floor(stepProgress), stepsCount - 1);
+      
+      // Check if a new step was just activated
+      if (newActiveStep > previousActiveStep.current && newActiveStep >= 0) {
+        setJustActivated(newActiveStep);
+        previousActiveStep.current = newActiveStep;
+        
+        // Remove animation class after 500ms
+        setTimeout(() => {
+          setJustActivated(null);
+        }, 500);
+      }
+      
+      setActiveStep(newActiveStep);
     };
 
     // Initial calculation
@@ -46,5 +60,5 @@ export function useTimelineProgress(stepsCount: number) {
     };
   }, [stepsCount]);
 
-  return { containerRef, activeStep, progress };
+  return { containerRef, activeStep, progress, justActivated };
 }
