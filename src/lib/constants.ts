@@ -41,17 +41,6 @@ export const REGIONS = [
 // Services
 export const SERVICES = [
   {
-    title: "Wohnungsentrümpelung",
-    description: "Schnell, sauber und übergabefertig.",
-    longDescription: "Wir räumen komplette Wohnungen – von Möbeln über Hausrat bis zur besenreinen Übergabe. Ideal bei Umzug, Mieterwechsel oder Nachlass. Schnelle Abwicklung, faire Preise.",
-    highlights: [
-      "Besenreine Übergabe inklusive",
-      "Flexible Terminvereinbarung",
-      "Festpreis nach Einschätzung"
-    ],
-    slug: "wohnungsentruempelung",
-  },
-  {
     title: "Haushaltsauflösung",
     description: "Strukturiert, respektvoll und transparent.",
     longDescription: "Bei Erbschaft oder Umzug ins Pflegeheim übernehmen wir die komplette Auflösung – respektvoll und ohne Zeitdruck. Wertgegenstände werden auf Wunsch angerechnet.",
@@ -83,17 +72,6 @@ export const SERVICES = [
       "Feste Terminplanung"
     ],
     slug: "gewerbe-buero-lager",
-  },
-  {
-    title: "Sperrmüll & Abtransport",
-    description: "Fachgerecht entsorgt, sauber abgewickelt.",
-    longDescription: "Einzelne Möbelstücke oder größere Mengen – wir holen ab und entsorgen fachgerecht. Inklusive Elektrogeräte und Sondermüll nach Absprache.",
-    highlights: [
-      "Abholung vor Ort",
-      "Fachgerechte Entsorgung",
-      "Elektro & Sondermüll möglich"
-    ],
-    slug: "sperrmuell-abtransport",
   },
   {
     title: "Diskrete Reinigung & Entrümpelung",
