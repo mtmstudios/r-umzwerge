@@ -1,159 +1,231 @@
 
 
-# Plan: Sanfte Bounce-Animation für Timeline-Schritte
+# Plan: Mobile Touch-Timeline & Entrümpelung-Kachel Anpassen
 
-## Ziel
+## Zwei Änderungen
 
-Wenn ein Schritt im Prozess-Timeline aktiviert wird (durch Scrollen), soll eine sanfte Bounce-Animation das Element kurz "aufspringen" lassen. Dies verstärkt die visuelle Rückmeldung und macht die Interaktion lebendiger.
+### 1. Entrümpelung Featured Card - Breite anpassen
 
-## Design-Vorschau
+**Problem:** Die Entrümpelung-Karte hat `max-w-2xl` (672px), während das Bento-Grid `max-w-4xl` (896px) hat. Dadurch schließt die Karte nicht an den gleichen Rändern ab wie die anderen Kacheln.
+
+**Lösung:** Die innere `max-w-2xl` Container-Klasse auf `max-w-4xl` ändern, damit beide Elemente die gleiche maximale Breite haben und bündig abschließen.
 
 ```text
-Scroll-Aktivierung eines Schritts:
+Vorher:
+┌────────────────────────────────────────┐ max-w-4xl
+│     ┌────────────────────────┐         │
+│     │   Wohnungsentrümpelung │ max-w-2xl (zu schmal)
+│     └────────────────────────┘         │
+├────────────────────────────────────────┤
+│ ┌────────────┐    ┌────────────┐       │
+│ │  Haushalt  │    │   Keller   │       │ max-w-4xl
+│ └────────────┘    └────────────┘       │
+└────────────────────────────────────────┘
 
-    ┌─────────┐
-    │    📸   │  ← Normale Größe (scale: 1.0)
-    │         │
-    └─────────┘
-         ↓
-    ┌───────────┐
-    │     📸    │  ← Bounce nach oben (scale: 1.15)
-    │           │
-    └───────────┘
-         ↓
-    ┌──────────┐
-    │    📸    │  ← Zurück + leicht kleiner (scale: 1.05)
-    │          │
-    └──────────┘
-         ↓
-    ┌──────────┐
-    │    📸    │  ← Finale Größe (scale: 1.1)
-    │          │
-    └──────────┘
+Nachher:
+┌────────────────────────────────────────┐ max-w-4xl
+│ ┌────────────────────────────────────┐ │
+│ │      Wohnungsentrümpelung          │ │ max-w-4xl (bündig!)
+│ └────────────────────────────────────┘ │
+├────────────────────────────────────────┤
+│ ┌────────────┐    ┌────────────┐       │
+│ │  Haushalt  │    │   Keller   │       │
+│ └────────────┘    └────────────┘       │
+└────────────────────────────────────────┘
 ```
+
+---
+
+### 2. Mobile Touch-Timeline
+
+**Problem:** Auf Mobile scrollt der Nutzer durch die Seite und die Timeline-Animation wird durch Scroll-Position gesteuert. Das fühlt sich auf Touch-Geräten unnatürlich an.
+
+**Lösung:** Auf Mobile (< 768px) wird die Timeline touch-basiert:
+- Tippen auf einen Schritt aktiviert ihn direkt
+- Swipe links/rechts wechselt zwischen Schritten
+- Progress-Bar bleibt, aber wird durch aktiven Schritt berechnet statt durch Scroll
+
+---
 
 ## Dateien die geändert werden
 
 | Datei | Aktion | Beschreibung |
 |-------|--------|--------------|
-| `src/index.css` | Erweitern | Neue `@keyframes bounce-in` Animation hinzufügen |
-| `src/hooks/useTimelineProgress.ts` | Erweitern | `justActivated` Array tracken für Bounce-Trigger |
-| `src/components/ui/HorizontalTimeline.tsx` | Anpassen | Bounce-Klasse bei Aktivierung anwenden |
+| `src/components/sections/ServicesSection.tsx` | Ändern | `max-w-2xl` → `max-w-4xl` für Featured Card |
+| `src/hooks/useTimelineProgress.ts` | Erweitern | Mobile-Erkennung + Touch-Handler hinzufügen |
+| `src/components/ui/HorizontalTimeline.tsx` | Anpassen | Touch-Events auf Schritt-Circles |
 
 ---
 
 ## Technische Details
 
-### 1. CSS Keyframes in `index.css`
+### ServicesSection - Featured Card Breite
 
-Eine sanfte Bounce-Animation, die nicht zu aufdringlich ist:
+Zeile 58 ändern:
+```tsx
+// Vorher:
+<div className="relative max-w-2xl mx-auto">
 
-```css
-/* Timeline Step Bounce Animation */
-@keyframes bounce-in {
-  0% {
-    transform: scale(1);
-  }
-  40% {
-    transform: scale(1.15);
-  }
-  60% {
-    transform: scale(1.05);
-  }
-  80% {
-    transform: scale(1.12);
-  }
-  100% {
-    transform: scale(1.1);
-  }
-}
-
-.animate-bounce-in {
-  animation: bounce-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
+// Nachher:
+<div className="relative max-w-4xl mx-auto">
 ```
 
-Die Animation:
-- Dauert 0.5 Sekunden
-- Nutzt einen elastischen Easing-Wert für natürliches Gefühl
-- Endet bei `scale(1.1)` – passend zum bestehenden `scale-110` für `isCurrent`
+### useTimelineProgress - Mobile Touch-Modus
 
-### 2. Hook erweitern in `useTimelineProgress.ts`
-
-Der Hook muss tracken, welche Schritte gerade neu aktiviert wurden:
+Der Hook wird erweitert, um auf Mobile zwischen zwei Modi zu wechseln:
 
 ```typescript
 export function useTimelineProgress(stepsCount: number) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [activeStep, setActiveStep] = useState(-1); // Start bei -1
+  const [activeStep, setActiveStep] = useState(-1);
   const [progress, setProgress] = useState(0);
   const [justActivated, setJustActivated] = useState<number | null>(null);
   const previousActiveStep = useRef(-1);
+  
+  // NEU: Mobile-Erkennung
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // ... bestehende Scroll-Logik ...
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // NEU: Touch-Handler für Mobile
+  const goToStep = useCallback((stepIndex: number) => {
+    if (stepIndex < 0 || stepIndex >= stepsCount) return;
     
-    const newActiveStep = Math.min(Math.floor(stepProgress), stepsCount - 1);
-    
-    // Prüfen ob ein neuer Schritt aktiviert wurde
-    if (newActiveStep > previousActiveStep.current) {
-      setJustActivated(newActiveStep);
-      previousActiveStep.current = newActiveStep;
-      
-      // Animation-Klasse nach 500ms entfernen
-      setTimeout(() => {
-        setJustActivated(null);
-      }, 500);
+    // Bounce-Animation triggern
+    if (stepIndex !== activeStep) {
+      setJustActivated(stepIndex);
+      setTimeout(() => setJustActivated(null), 500);
     }
     
-    setActiveStep(newActiveStep);
-  }, [stepsCount]);
+    setActiveStep(stepIndex);
+    setProgress((stepIndex + 1) / stepsCount);
+    previousActiveStep.current = stepIndex;
+  }, [stepsCount, activeStep]);
 
-  return { containerRef, activeStep, progress, justActivated };
+  // Scroll-Logik nur auf Desktop
+  useEffect(() => {
+    if (isMobile) return; // Skip scroll handling on mobile
+    
+    // ... bestehende Scroll-Logik ...
+  }, [stepsCount, isMobile]);
+
+  // NEU: Auf Mobile erster Schritt sofort aktiv
+  useEffect(() => {
+    if (isMobile && activeStep === -1) {
+      goToStep(0);
+    }
+  }, [isMobile, activeStep, goToStep]);
+
+  return { 
+    containerRef, 
+    activeStep, 
+    progress, 
+    justActivated,
+    isMobile,     // NEU
+    goToStep      // NEU
+  };
 }
 ```
 
-### 3. Timeline-Komponente anpassen
+### HorizontalTimeline - Touch-Events
 
-Die Bounce-Animation nur anwenden, wenn der Schritt gerade aktiviert wurde:
+Die Komponente bekommt Touch-Handler für die Schritt-Circles:
 
 ```tsx
 export function HorizontalTimeline({ steps, className }: HorizontalTimelineProps) {
-  const { containerRef, activeStep, progress, justActivated } = useTimelineProgress(steps.length);
+  const { containerRef, activeStep, progress, justActivated, isMobile, goToStep } = 
+    useTimelineProgress(steps.length);
+  
+  // NEU: Swipe-Detection
+  const touchStartX = useRef<number>(0);
+  
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!isMobile) return;
+    
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX.current - touchEndX;
+    
+    // Swipe-Threshold: 50px
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        // Swipe left → nächster Schritt
+        goToStep(activeStep + 1);
+      } else {
+        // Swipe right → vorheriger Schritt
+        goToStep(activeStep - 1);
+      }
+    }
+  };
 
-  // ... im Step Circle:
-  <div
-    className={cn(
-      'relative z-10 w-[120px] h-[120px] rounded-3xl flex flex-col items-center justify-center',
-      'border-2 transition-colors duration-500',
-      isCurrent
-        ? 'bg-primary border-primary shadow-lg shadow-primary/30'
-        : isActive
-        ? 'bg-primary/90 border-primary'
-        : 'bg-card border-border',
-      // Bounce-Animation nur bei Aktivierung
-      justActivated === index && 'animate-bounce-in',
-      // Fallback-Scale wenn keine Animation läuft
-      isCurrent && justActivated !== index && 'scale-110'
-    )}
-  >
+  return (
+    <div 
+      ref={containerRef} 
+      className={cn('relative', className)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Progress Bar - auch auf Mobile sichtbar, Berechnung angepasst */}
+      <div className="absolute top-[60px] left-0 right-0 h-1 bg-border ...">
+        <div style={{ width: `${progress * 100}%` }} />
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-8 md:gap-4 lg:gap-8">
+        {steps.map((step, index) => (
+          <div
+            key={step.number}
+            // NEU: Tap-Handler auf Mobile
+            onClick={() => isMobile && goToStep(index)}
+            className={cn(
+              // NEU: Cursor auf Mobile
+              isMobile && 'cursor-pointer',
+              // ... bestehende Klassen
+            )}
+          >
+            {/* Step Circle */}
+            <div className={cn(
+              // ... bestehende Klassen
+            )}>
+              {/* ... Icon & Number ... */}
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      {/* NEU: Mobile Swipe-Hinweis */}
+      {isMobile && (
+        <p className="text-center text-sm text-muted-foreground mt-6">
+          Tippen oder wischen zum Navigieren
+        </p>
+      )}
+    </div>
+  );
+}
 ```
 
 ---
 
-## Animations-Timing
+## User Experience auf Mobile
 
-| Phase | Zeit | Scale | Beschreibung |
-|-------|------|-------|--------------|
-| Start | 0ms | 1.0 | Ausgangsgröße |
-| Peak | 200ms | 1.15 | Maximale Vergrößerung |
-| Settle | 300ms | 1.05 | Leichte Korrektur |
-| Finish | 500ms | 1.1 | Finale Größe (= isCurrent scale) |
+| Interaktion | Aktion |
+|-------------|--------|
+| **Tap auf Schritt** | Aktiviert diesen Schritt direkt mit Bounce-Animation |
+| **Swipe links** | Wechselt zum nächsten Schritt |
+| **Swipe rechts** | Wechselt zum vorherigen Schritt |
+| **Scrollen** | Scrollt normal durch die Seite (keine Timeline-Steuerung) |
+
+---
 
 ## Ergebnis
 
-- Jeder Schritt "springt" sanft auf, sobald er durch Scrollen aktiviert wird
-- Die Animation ist dezent und passt zum Premium-Design
-- Sie läuft nur einmal pro Aktivierung (nicht beim kontinuierlichen Scrollen)
-- Nach der Animation bleibt der `scale-110` Zustand erhalten
+1. **Entrümpelung-Karte**: Schließt jetzt bündig an den gleichen Rändern ab wie das Bento-Grid darunter
+2. **Mobile Timeline**: Intuitive Touch-Steuerung statt scroll-basierte Animation – der Nutzer tippt auf Schritte oder wischt zwischen ihnen
 
