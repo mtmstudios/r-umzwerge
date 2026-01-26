@@ -42,38 +42,52 @@ export default function ServicePage() {
         <ServiceTrustBar />
         
         {/* Process first - builds trust by showing clear steps */}
-        <SectionDivider variant="wave" fillClassName="fill-secondary/30" />
+        <SectionDivider 
+          variant="gradient" 
+          fromColor="hsl(var(--background))" 
+          toColor="hsl(var(--secondary) / 0.3)" 
+        />
         <ServiceProcess steps={pageData.processSteps} />
         
-        {/* Scenarios - emotional connection */}
-        <SectionDivider variant="curve" direction="up" fillClassName="fill-background" />
+        {/* Scenarios - emotional connection (same bg as Process, no divider needed) */}
         <ScenarioGrid scenarios={pageData.scenarios} />
         
         {/* Scope - what's included */}
-        <SectionDivider variant="angle" direction="up" fillClassName="fill-background" />
+        <SectionDivider 
+          variant="gradient" 
+          fromColor="hsl(var(--secondary) / 0.3)" 
+          toColor="hsl(var(--background))" 
+        />
         <ServiceScope
           included={pageData.scope.included}
           optional={pageData.scope.optional}
         />
         
         {/* Pricing */}
-        <SectionDivider variant="wave" fillClassName="fill-muted" />
+        <SectionDivider 
+          variant="gradient" 
+          fromColor="hsl(var(--background))" 
+          toColor="hsl(var(--secondary) / 0.3)" 
+        />
         <ServicePricing />
         
         {/* Extra Module - transparency/sustainability info */}
-        <SectionDivider variant="curve" direction="up" fillClassName="fill-background" />
+        <SectionDivider 
+          variant="gradient" 
+          fromColor="hsl(var(--secondary) / 0.3)" 
+          toColor="hsl(var(--background))" 
+        />
         <ExtraModule
           title={pageData.extraModule.title}
           subtitle={pageData.extraModule.subtitle}
           points={pageData.extraModule.points}
         />
         
-        {/* FAQ */}
-        <SectionDivider variant="angle" fillClassName="fill-secondary/30" />
+        {/* FAQ (same bg as ExtraModule, no divider needed) */}
         <ServiceFAQ items={pageData.faq} />
         
         {/* Final CTA */}
-        <SectionDivider variant="wave" direction="up" fillClassName="fill-primary" />
+        <SectionDivider variant="angle" fillClassName="fill-primary" />
         <ServiceFinalCTA />
       </main>
       
