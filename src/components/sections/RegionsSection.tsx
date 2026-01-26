@@ -6,12 +6,12 @@ export function RegionsSection() {
   const { ref, isVisible } = useScrollReveal(0.1);
 
   return (
-    <section className="py-16 lg:py-24 bg-secondary/30">
+    <section className="py-8 lg:py-12 bg-secondary/30">
       <div className="container-custom">
         <div
           ref={ref}
           className={cn(
-            "text-center mb-12",
+            "text-center mb-6",
             "scroll-reveal",
             isVisible && "visible"
           )}
