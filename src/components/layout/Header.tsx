@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Home, ChevronDown, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { NAV_ITEMS, getWhatsAppLink, PHONE_LINK } from '@/lib/constants';
+import { NAV_ITEMS, PHONE_LINK } from '@/lib/constants';
 import { cn } from '@/lib/utils';
-import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
+
 import {
   Collapsible,
   CollapsibleContent,
@@ -164,16 +164,16 @@ export function Header() {
               )
             ))}
             
-            {/* Mobile WhatsApp CTA */}
+            {/* Mobile CTA - Jetzt anrufen */}
             <div className="mt-4 pt-4 border-t border-border/50">
               <Button
                 asChild
                 size="lg"
-                className="w-full gap-2.5 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground font-semibold"
+                className="w-full gap-2.5 bg-cta hover:bg-cta-hover text-white font-semibold"
               >
-                <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                  <WhatsAppIcon className="h-5 w-5" />
-                  Foto per WhatsApp senden
+                <a href={PHONE_LINK}>
+                  <Phone className="h-5 w-5" />
+                  Jetzt anrufen
                 </a>
               </Button>
             </div>
