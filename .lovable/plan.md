@@ -1,24 +1,23 @@
 
 
-# Plan: Leistungen-Dropdown im Header
+# Plan: Leistungen-Dropdown auf Hover umstellen und Übersichtsseite entfernen
 
-## Problemanalyse
+## Gewünschte Änderungen
 
-Aktuell verweist der "Leistungen"-Link im Header auf `#leistungen` (Scroll-Anker auf der Startseite). Nutzer können die einzelnen Leistungsseiten nicht direkt über die Navigation erreichen.
+1. Das Dropdown soll bei **Hover** aufklappen (nicht bei Click)
+2. Der Eintrag **"Alle Leistungen"** soll aus dem Dropdown entfernt werden
+3. Die **Route `/leistungen`** (Übersichtsseite) soll entfernt werden
 
-## Lösung: Dropdown-Menü mit allen Leistungen
-
-### Visuelles Konzept
+## Visuelles Konzept
 
 ```text
 ┌─────────────────────────────────────────────────────────────────┐
 │  Räumzwerge    │ Leistungen ▼ │ Preise │ Ablauf │ ... │  CTAs  │
 └─────────────────────────────────────────────────────────────────┘
                        │
+              (öffnet bei Hover)
                        ▼
               ┌─────────────────────────────┐
-              │ Alle Leistungen      →      │
-              ├─────────────────────────────┤
               │ Wohnungsentrümpelung        │
               │ Haushaltsauflösung          │
               │ Keller / Dachboden / Garage │
@@ -27,90 +26,73 @@ Aktuell verweist der "Leistungen"-Link im Header auf `#leistungen` (Scroll-Anker
               └─────────────────────────────┘
 ```
 
-### Mobile: Accordion-Style im Hamburger-Menü
-
-```text
-┌──────────────────────────┐
-│ Leistungen             ▼ │
-│  └─ Wohnungsentrümpelung │
-│  └─ Haushaltsauflösung   │
-│  └─ ...                  │
-│ Preise                   │
-│ Ablauf                   │
-└──────────────────────────┘
-```
-
 ---
 
 ## Technische Umsetzung
 
-### 1. constants.ts anpassen
-
-Die Navigation erhält ein neues Format mit optionalen Sub-Items:
+### 1. constants.ts - "Alle Leistungen" entfernen
 
 ```typescript
-export const NAV_ITEMS = [
-  { 
-    label: "Leistungen", 
-    href: "/leistungen",
-    children: [
-      { label: "Alle Leistungen", href: "/leistungen" },
-      { label: "Wohnungsentrümpelung", href: "/leistungen/wohnungsentruempelung" },
-      { label: "Haushaltsauflösung", href: "/leistungen/haushaltsaufloesung" },
-      { label: "Keller / Dachboden / Garage", href: "/leistungen/keller-dachboden-garage" },
-      { label: "Gewerbe / Büro / Lager", href: "/leistungen/gewerbe-buero-lager" },
-      { label: "Diskrete Reinigung", href: "/leistungen/messie-wohnungen" },
-    ]
-  },
-  { label: "Preise", href: "#preise" },
-  { label: "Ablauf", href: "#ablauf" },
-  { label: "Referenzen", href: "#referenzen" },
-  { label: "FAQ", href: "#faq" },
-];
+// Vorher:
+children: [
+  { label: "Alle Leistungen", href: "/leistungen" },  // ← entfernen
+  { label: "Wohnungsentrümpelung", href: "/leistungen/wohnungsentruempelung" },
+  ...
+]
+
+// Nachher:
+children: [
+  { label: "Wohnungsentrümpelung", href: "/leistungen/wohnungsentruempelung" },
+  { label: "Haushaltsauflösung", href: "/leistungen/haushaltsaufloesung" },
+  { label: "Keller / Dachboden / Garage", href: "/leistungen/keller-dachboden-garage" },
+  { label: "Gewerbe / Büro / Lager", href: "/leistungen/gewerbe-buero-lager" },
+  { label: "Diskrete Reinigung", href: "/leistungen/messie-wohnungen" },
+]
 ```
 
-### 2. Header.tsx erweitern
+### 2. Header.tsx - Hover-Dropdown implementieren
 
-**Desktop: Dropdown mit Hover/Click**
-
-- Radix UI `NavigationMenu` oder custom Popover
-- Dezenter Hover-Effekt, keine wilde Animation
-- Chevron-Icon zeigt Dropdown an
-
-**Mobile: Collapsible im Menü**
-
-- "Leistungen" wird klickbar
-- Sub-Items eingerückt darunter
-- Smooth Expand/Collapse
-
-### 3. Code-Struktur
+Das aktuelle Radix `DropdownMenu` öffnet auf Click. Für Hover-Verhalten verwende ich eine Custom-Lösung mit State:
 
 ```tsx
-// Desktop Navigation mit Dropdown
-<nav className="hidden lg:flex items-center gap-6">
-  {NAV_ITEMS.map((item) => (
-    item.children ? (
-      <DropdownMenu key={item.label}>
-        <DropdownMenuTrigger className="flex items-center gap-1 text-sm font-medium">
-          {item.label}
-          <ChevronDown className="h-4 w-4" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          {item.children.map((child) => (
-            <DropdownMenuItem key={child.href} asChild>
-              <a href={child.href}>{child.label}</a>
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ) : (
-      <a key={item.href} href={item.href}>
-        {item.label}
-      </a>
-    )
-  ))}
-</nav>
+// Hover-State für Desktop
+const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+// Desktop Navigation mit Hover
+<div 
+  className="relative"
+  onMouseEnter={() => setIsDropdownOpen(true)}
+  onMouseLeave={() => setIsDropdownOpen(false)}
+>
+  <button className="flex items-center gap-1 text-sm font-medium">
+    Leistungen
+    <ChevronDown className={cn("h-4 w-4 transition-transform", isDropdownOpen && "rotate-180")} />
+  </button>
+  
+  {isDropdownOpen && (
+    <div className="absolute top-full left-0 mt-2 w-56 bg-popover border rounded-lg shadow-lg">
+      {item.children.map((child) => (
+        <a href={child.href} className="block px-4 py-2 hover:bg-secondary">
+          {child.label}
+        </a>
+      ))}
+    </div>
+  )}
+</div>
 ```
+
+### 3. App.tsx - Route entfernen
+
+```typescript
+// Vorher:
+<Route path="/leistungen" element={<ServicesOverview />} />
+
+// Nachher: Diese Zeile entfernen
+```
+
+### 4. ServicesOverview.tsx - Datei löschen (optional)
+
+Die Datei `src/pages/ServicesOverview.tsx` wird nicht mehr benötigt und kann gelöscht werden.
 
 ---
 
@@ -118,15 +100,16 @@ export const NAV_ITEMS = [
 
 | Datei | Änderung |
 |-------|----------|
-| `src/lib/constants.ts` | `NAV_ITEMS` erweitern mit `children`-Array für Leistungen |
-| `src/components/layout/Header.tsx` | Dropdown für Desktop + Collapsible für Mobile implementieren |
+| `src/lib/constants.ts` | "Alle Leistungen" aus `children` Array entfernen |
+| `src/components/layout/Header.tsx` | Hover-Dropdown statt Click-Dropdown (Desktop) |
+| `src/App.tsx` | Route `/leistungen` entfernen |
+| `src/pages/ServicesOverview.tsx` | Datei löschen |
 
 ---
 
 ## Ergebnis
 
-1. **Desktop**: Hover/Click auf "Leistungen" öffnet Dropdown mit allen Services
-2. **Mobile**: "Leistungen" im Hamburger-Menü aufklappbar mit Sub-Links
-3. **Direkte Verlinkung**: Jede Leistungsseite ist direkt über Navigation erreichbar
-4. **SEO**: Interne Verlinkung verbessert
+1. **Desktop**: Hover über "Leistungen" öffnet Dropdown mit 5 Services (ohne Übersichtslink)
+2. **Mobile**: Accordion bleibt gleich, aber ohne "Alle Leistungen" Eintrag
+3. **Keine Übersichtsseite**: `/leistungen` existiert nicht mehr, nur die einzelnen Unterseiten
 
