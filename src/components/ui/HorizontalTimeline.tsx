@@ -60,7 +60,7 @@ export function HorizontalTimeline({ steps, className }: HorizontalTimelineProps
       </div>
 
       {/* Steps Container */}
-      <div className="grid md:grid-cols-3 gap-8 md:gap-4 lg:gap-8">
+      <div className="grid md:grid-cols-3 gap-6 md:gap-4 lg:gap-8">
         {steps.map((step, index) => {
           const Icon = step.icon;
           const isActive = index <= activeStep;
@@ -80,7 +80,7 @@ export function HorizontalTimeline({ steps, className }: HorizontalTimelineProps
               {/* Step Circle */}
               <div
                 className={cn(
-                  'relative z-10 w-[120px] h-[120px] rounded-3xl flex flex-col items-center justify-center',
+                  'relative z-10 w-24 h-24 sm:w-28 sm:h-28 md:w-[120px] md:h-[120px] rounded-2xl sm:rounded-3xl flex flex-col items-center justify-center',
                   'border-2 transition-colors duration-500',
                   isCurrent
                     ? 'bg-primary border-primary shadow-lg shadow-primary/30'
@@ -96,7 +96,7 @@ export function HorizontalTimeline({ steps, className }: HorizontalTimelineProps
                 {/* Number Badge */}
                 <span
                   className={cn(
-                    'absolute -top-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300',
+                    'absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold transition-all duration-300',
                     isCurrent
                       ? 'bg-cta text-cta-foreground scale-110 shadow-cta'
                       : isActive
@@ -109,7 +109,7 @@ export function HorizontalTimeline({ steps, className }: HorizontalTimelineProps
 
                 <Icon
                   className={cn(
-                    'h-10 w-10 transition-all duration-300',
+                    'h-8 w-8 sm:h-10 sm:w-10 transition-all duration-300',
                     isActive ? 'text-primary-foreground' : 'text-muted-foreground',
                     isCurrent && 'scale-110'
                   )}
@@ -119,13 +119,13 @@ export function HorizontalTimeline({ steps, className }: HorizontalTimelineProps
               {/* Content */}
               <div
                 className={cn(
-                  'mt-6 transition-all duration-500',
+                  'mt-4 sm:mt-6 transition-all duration-500',
                   isCurrent ? 'transform scale-105' : ''
                 )}
               >
                 <h3
                   className={cn(
-                    'font-semibold text-lg mb-2 transition-colors duration-300',
+                    'font-semibold text-base sm:text-lg mb-1 sm:mb-2 transition-colors duration-300',
                     isActive ? 'text-foreground' : 'text-muted-foreground'
                   )}
                 >
@@ -133,7 +133,7 @@ export function HorizontalTimeline({ steps, className }: HorizontalTimelineProps
                 </h3>
                 <p
                   className={cn(
-                    'text-sm max-w-[200px] transition-colors duration-300',
+                    'text-xs sm:text-sm max-w-[180px] sm:max-w-[200px] mx-auto transition-colors duration-300',
                     isActive ? 'text-muted-foreground' : 'text-muted-foreground/60'
                   )}
                 >
@@ -143,7 +143,7 @@ export function HorizontalTimeline({ steps, className }: HorizontalTimelineProps
 
               {/* Mobile Connector Line */}
               {index < steps.length - 1 && (
-                <div className="md:hidden absolute left-1/2 top-[130px] w-0.5 h-8 -translate-x-1/2">
+                <div className="md:hidden absolute left-1/2 top-[105px] sm:top-[120px] w-0.5 h-6 -translate-x-1/2">
                   <div
                     className={cn(
                       'w-full h-full transition-all duration-300',

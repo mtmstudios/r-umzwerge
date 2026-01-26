@@ -58,11 +58,12 @@ export function ProcessSection() {
           <Button
             asChild
             size="lg"
-            className="gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-14 px-8 btn-lift shadow-whatsapp"
+            className="gap-2 sm:gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-12 sm:h-14 px-5 sm:px-8 btn-lift shadow-whatsapp text-sm sm:text-base"
           >
             <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-              <WhatsAppIcon className="h-5 w-5" />
-              Jetzt Foto senden
+              <WhatsAppIcon className="h-5 w-5 flex-shrink-0" />
+              <span className="hidden sm:inline">Jetzt Foto senden</span>
+              <span className="sm:hidden">Foto senden</span>
             </a>
           </Button>
           <p className="text-sm text-muted-foreground mt-4">

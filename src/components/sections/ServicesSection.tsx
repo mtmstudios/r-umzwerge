@@ -48,7 +48,7 @@ export function ServicesSection() {
         {/* Featured Card - Hauptleistung */}
         <div
           className={cn(
-            "group relative bg-primary rounded-3xl p-6 lg:p-8 mb-8 text-center overflow-hidden scroll-reveal glow-hover",
+            "group relative bg-primary rounded-2xl sm:rounded-3xl p-5 sm:p-6 lg:p-8 mb-6 sm:mb-8 text-center overflow-hidden scroll-reveal glow-hover",
             headerVisible && "visible"
           )}
         >
@@ -57,52 +57,53 @@ export function ServicesSection() {
           
           <div className="relative max-w-4xl mx-auto">
             {/* Badge */}
-            <span className="inline-block bg-accent/20 text-accent text-xs font-semibold px-4 py-1.5 rounded-full mb-4 backdrop-blur-sm border border-accent/30">
+            <span className="inline-block bg-accent/20 text-accent text-xs font-semibold px-3 sm:px-4 py-1 sm:py-1.5 rounded-full mb-3 sm:mb-4 backdrop-blur-sm border border-accent/30">
               ⭐ Unsere Kernkompetenz
             </span>
             
-            <h3 className="text-xl lg:text-2xl font-bold text-primary-foreground mb-3">
+            <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-primary-foreground mb-2 sm:mb-3">
               Wohnungsentrümpelung
             </h3>
             
-            <p className="text-primary-foreground/80 mb-6 leading-relaxed text-base">
+            <p className="text-primary-foreground/80 mb-4 sm:mb-6 leading-relaxed text-sm sm:text-base max-w-2xl mx-auto">
               Von der ersten Preiseinschätzung bis zur besenreinen Übergabe – 
               transparent, zuverlässig und respektvoll.
             </p>
             
             {/* USP Pills */}
-            <div className="flex flex-wrap justify-center gap-3 mb-6">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-4 sm:mb-6">
               {[
-                { icon: Check, text: 'Besenreine Übergabe' },
+                { icon: Check, text: 'Besenrein' },
                 { icon: Check, text: 'Festpreis möglich' },
-                { icon: Check, text: 'Antwort unter 24h' },
+                { icon: Check, text: 'Antwort < 24h' },
               ].map(({ icon: Icon, text }) => (
                 <span
                   key={text}
-                  className="flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm px-4 py-2 rounded-full text-primary-foreground/90 text-sm font-medium border border-primary-foreground/10"
+                  className="flex items-center gap-1.5 sm:gap-2 bg-primary-foreground/10 backdrop-blur-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-primary-foreground/90 text-xs sm:text-sm font-medium border border-primary-foreground/10"
                 >
-                  <Icon className="h-4 w-4 text-accent" />
+                  <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent flex-shrink-0" />
                   {text}
                 </span>
               ))}
             </div>
             
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
               <Button
                 asChild
                 size="lg"
-                className="gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-14 px-8 shadow-whatsapp btn-lift"
+                className="w-full sm:w-auto gap-2 sm:gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-12 sm:h-14 px-5 sm:px-8 shadow-whatsapp btn-lift text-sm sm:text-base"
               >
                 <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                  <WhatsAppIcon className="h-5 w-5" />
-                  Foto senden · Preis erhalten
+                  <WhatsAppIcon className="h-5 w-5 flex-shrink-0" />
+                  <span className="hidden sm:inline">Foto senden · Preis erhalten</span>
+                  <span className="sm:hidden">Preis erhalten</span>
                 </a>
               </Button>
               
               <a
                 href="/leistungen/wohnungsentruempelung"
-                className="group/link inline-flex items-center gap-2 text-accent font-medium hover:gap-3 transition-all"
+                className="group/link inline-flex items-center gap-2 text-accent font-medium hover:gap-3 transition-all text-sm sm:text-base"
               >
                 Mehr erfahren
                 <ArrowRight className="h-4 w-4 transition-transform group-hover/link:translate-x-1" />
