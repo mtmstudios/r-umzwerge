@@ -8,7 +8,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-primary text-primary-foreground">
+    <footer className="bg-primary text-primary-foreground pb-20 lg:pb-0">
       {/* CTA Banner */}
       <div className="border-b border-primary-foreground/10">
         <div className="container-custom py-8 lg:py-10">

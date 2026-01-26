@@ -26,9 +26,9 @@ export function BentoCard({
     <a
       href={href}
       className={cn(
-        'group relative overflow-hidden rounded-2xl p-6 lg:p-8 transition-all duration-500 min-h-[180px]',
+        'group relative overflow-hidden rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 transition-all duration-500 min-h-[160px] sm:min-h-[180px]',
         'flex flex-col items-center text-center',
-        'hover:scale-[1.02] hover:-translate-y-1',
+        'hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98]',
         // Style variants
         variant === 'default' && 'bg-card border border-border hover:border-accent/50 hover:shadow-medium',
         variant === 'glass' && 'glass hover:shadow-lg',
@@ -47,7 +47,7 @@ export function BentoCard({
       {/* Icon */}
       <div
         className={cn(
-          'relative w-14 h-14 rounded-2xl flex items-center justify-center mb-4 mx-auto transition-all duration-300',
+          'relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center mb-3 sm:mb-4 mx-auto transition-all duration-300',
           'group-hover:scale-110 group-hover:rotate-3',
           variant === 'accent'
             ? 'bg-accent/20'
@@ -56,17 +56,17 @@ export function BentoCard({
       >
         <Icon
           className={cn(
-            'h-7 w-7 transition-colors duration-300',
+            'h-6 w-6 sm:h-7 sm:w-7 transition-colors duration-300',
             variant === 'accent' ? 'text-accent' : 'text-primary'
           )}
         />
       </div>
 
       {/* Content */}
-      <div className="relative space-y-2 text-center">
+      <div className="relative space-y-1.5 sm:space-y-2 text-center">
         <h3
           className={cn(
-            'font-semibold text-lg',
+            'font-semibold text-base sm:text-lg',
             variant === 'accent' ? 'text-primary-foreground' : 'text-foreground'
           )}
         >

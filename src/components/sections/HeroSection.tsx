@@ -40,25 +40,26 @@ export function HeroSection() {
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-6 max-w-xl">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 max-w-xl">
               <Button
                 asChild
                 size="lg"
-                className="gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground text-base h-14 px-6 btn-lift shadow-whatsapp shrink-0"
+                className="gap-2 sm:gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground text-sm sm:text-base h-12 sm:h-14 px-4 sm:px-6 btn-lift shadow-whatsapp shrink-0"
               >
                 <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                  <WhatsAppIcon className="h-5 w-5" />
-                  Foto senden · Preiseinschätzung erhalten
+                  <WhatsAppIcon className="h-5 w-5 flex-shrink-0" />
+                  <span className="hidden sm:inline">Foto senden · Preiseinschätzung erhalten</span>
+                  <span className="sm:hidden">Foto senden · Preis erhalten</span>
                 </a>
               </Button>
               <Button
                 asChild
                 variant="outline"
                 size="lg"
-                className="gap-2 h-14 px-6 text-base border-2 border-primary hover:bg-cta hover:text-cta-foreground hover:border-cta transition-all duration-300 shrink-0"
+                className="gap-2 h-12 sm:h-14 px-4 sm:px-6 text-sm sm:text-base border-2 border-primary hover:bg-cta hover:text-cta-foreground hover:border-cta transition-all duration-300 shrink-0"
               >
                 <a href={PHONE_LINK}>
-                  <Phone className="h-5 w-5" />
+                  <Phone className="h-5 w-5 flex-shrink-0" />
                   Jetzt anrufen
                 </a>
               </Button>
