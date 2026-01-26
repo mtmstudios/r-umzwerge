@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 export function useTimelineProgress(stepsCount: number) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -6,8 +6,36 @@ export function useTimelineProgress(stepsCount: number) {
   const [progress, setProgress] = useState(0);
   const [justActivated, setJustActivated] = useState<number | null>(null);
   const previousActiveStep = useRef(-1);
+  
+  // Mobile detection
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Touch handler for mobile - navigate to specific step
+  const goToStep = useCallback((stepIndex: number) => {
+    if (stepIndex < 0 || stepIndex >= stepsCount) return;
+    
+    // Trigger bounce animation if different step
+    if (stepIndex !== activeStep) {
+      setJustActivated(stepIndex);
+      setTimeout(() => setJustActivated(null), 500);
+    }
+    
+    setActiveStep(stepIndex);
+    setProgress((stepIndex + 1) / stepsCount);
+    previousActiveStep.current = stepIndex;
+  }, [stepsCount, activeStep]);
+
+  // Scroll-based logic only on desktop
+  useEffect(() => {
+    if (isMobile) return;
+    
     const container = containerRef.current;
     if (!container) return;
 
@@ -20,8 +48,8 @@ export function useTimelineProgress(stepsCount: number) {
       const sectionHeight = rect.height;
       
       // Start when section enters viewport, complete before leaving
-      const scrollStart = windowHeight * 0.8; // Start animation when section is 80% visible
-      const scrollEnd = sectionHeight * 0.6; // End when section is still 60% visible (animation completes earlier)
+      const scrollStart = windowHeight * 0.8;
+      const scrollEnd = sectionHeight * 0.6;
       
       const scrollRange = scrollStart - scrollEnd;
       const currentScroll = scrollStart - sectionTop;
@@ -58,7 +86,21 @@ export function useTimelineProgress(stepsCount: number) {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
     };
-  }, [stepsCount]);
+  }, [stepsCount, isMobile]);
 
-  return { containerRef, activeStep, progress, justActivated };
+  // On mobile, activate first step immediately
+  useEffect(() => {
+    if (isMobile && activeStep === -1) {
+      goToStep(0);
+    }
+  }, [isMobile, activeStep, goToStep]);
+
+  return { 
+    containerRef, 
+    activeStep, 
+    progress, 
+    justActivated,
+    isMobile,
+    goToStep
+  };
 }

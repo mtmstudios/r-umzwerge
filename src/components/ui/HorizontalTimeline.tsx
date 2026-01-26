@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import { LucideIcon } from 'lucide-react';
 import { useTimelineProgress } from '@/hooks/useTimelineProgress';
+import { useRef } from 'react';
 
 interface TimelineStep {
   number: number;
@@ -15,10 +16,41 @@ interface HorizontalTimelineProps {
 }
 
 export function HorizontalTimeline({ steps, className }: HorizontalTimelineProps) {
-  const { containerRef, activeStep, progress, justActivated } = useTimelineProgress(steps.length);
+  const { containerRef, activeStep, progress, justActivated, isMobile, goToStep } = 
+    useTimelineProgress(steps.length);
+  
+  // Swipe detection
+  const touchStartX = useRef<number>(0);
+  
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!isMobile) return;
+    
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX.current - touchEndX;
+    
+    // Swipe threshold: 50px
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        // Swipe left → next step
+        goToStep(activeStep + 1);
+      } else {
+        // Swipe right → previous step
+        goToStep(activeStep - 1);
+      }
+    }
+  };
 
   return (
-    <div ref={containerRef} className={cn('relative', className)}>
+    <div 
+      ref={containerRef} 
+      className={cn('relative', className)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       {/* Progress Bar - Desktop */}
       <div className="hidden md:block absolute top-[60px] left-0 right-0 h-1 bg-border rounded-full mx-auto max-w-3xl">
         <div
@@ -38,9 +70,11 @@ export function HorizontalTimeline({ steps, className }: HorizontalTimelineProps
           return (
             <div
               key={step.number}
+              onClick={() => isMobile && goToStep(index)}
               className={cn(
                 'relative flex flex-col items-center text-center transition-all duration-500',
-                isActive ? 'opacity-100' : 'opacity-40'
+                isActive ? 'opacity-100' : 'opacity-40',
+                isMobile && 'cursor-pointer select-none'
               )}
             >
               {/* Step Circle */}
@@ -122,6 +156,13 @@ export function HorizontalTimeline({ steps, className }: HorizontalTimelineProps
           );
         })}
       </div>
+      
+      {/* Mobile Swipe Hint */}
+      {isMobile && (
+        <p className="text-center text-sm text-muted-foreground mt-6">
+          Tippen oder wischen zum Navigieren
+        </p>
+      )}
     </div>
   );
 }

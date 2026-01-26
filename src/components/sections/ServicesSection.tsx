@@ -55,7 +55,7 @@ export function ServicesSection() {
           {/* Animated gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-primary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
           
-          <div className="relative max-w-2xl mx-auto">
+          <div className="relative max-w-4xl mx-auto">
             {/* Badge */}
             <span className="inline-block bg-accent/20 text-accent text-xs font-semibold px-4 py-1.5 rounded-full mb-4 backdrop-blur-sm border border-accent/30">
               ⭐ Unsere Kernkompetenz
