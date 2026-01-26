@@ -1,7 +1,8 @@
-import { Phone, Mail, MapPin } from 'lucide-react';
+import { Phone, Mail, MapPin, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { SERVICES, REGIONS, PHONE_NUMBER, EMAIL, SERVICE_HOURS, ADDRESS, getWhatsAppLink } from '@/lib/constants';
+import { SERVICES, REGIONS, PHONE_NUMBER, EMAIL, ADDRESS, getWhatsAppLink } from '@/lib/constants';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
+import logoWhite from '@/assets/logo-white.png';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -168,7 +169,14 @@ export function Footer() {
         <div className="container-custom py-5">
           <div className="flex flex-col md:flex-row justify-between items-center gap-3 text-sm text-primary-foreground/50">
             <p>© {currentYear} Räumzwerge. Alle Rechte vorbehalten.</p>
-            <p>{SERVICE_HOURS}</p>
+            <p className="flex items-center gap-1.5">
+              Mit <Heart className="h-4 w-4 text-red-400 fill-red-400" /> erstellt von
+              <img 
+                src={logoWhite} 
+                alt="Logo" 
+                className="h-6 ml-1 object-contain" 
+              />
+            </p>
           </div>
         </div>
       </div>
