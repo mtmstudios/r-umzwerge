@@ -175,7 +175,7 @@ export function Footer() {
                 <img 
                   src={logoWhite} 
                   alt="MTM Studios Logo" 
-                  className="h-8 ml-1 object-contain" 
+                  className="h-12 ml-1 object-contain" 
                 />
               </a>
             </p>
