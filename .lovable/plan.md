@@ -1,123 +1,124 @@
 
-# Umsetzungsplan: 3 Redesigns
+# Plan: Timeline-Timing Fix & Orange Akzente
 
-## 1. Pricing Section Redesign
+## 1. Timeline-Timing korrigieren
 
-**Problem:** Bild ist versteckt hinter Gradienten, CTA schwebt unprofessionell
+### Problem
+Der Hook `useTimelineProgress.ts` berechnet den Progress mit falschen Schwellenwerten:
+- `scrollStart = windowHeight * 0.8` (80% vom Viewport)
+- `scrollEnd = -sectionHeight * 0.3` (30% nach Verlassen)
 
-**Lösung:** Split-Layout mit zwei Spalten
-- **Links:** Headline + Preisfaktoren-Liste
-- **Rechts:** Bild (abgerundet, sichtbar) + CTA-Card darunter
+Das bedeutet: Der letzte Schritt wird erst markiert, wenn die Section fast aus dem Viewport verschwunden ist.
 
-```text
-┌─────────────────────────┐    ┌─────────────────────────┐
-│  So entsteht der Preis  │    │   ┌─────────────────┐   │
-│  ─────────────────────  │    │   │   Foto sichtbar │   │
-│  ✓ Umfang               │    │   └─────────────────┘   │
-│  ✓ Zugänglichkeit       │    │                         │
-│  ✓ Entsorgung           │    │   ┌─────────────────┐   │
-│  ✓ Zusatzleistungen     │    │   │ 📱 WhatsApp CTA │   │
-│                         │    │   └─────────────────┘   │
-└─────────────────────────┘    └─────────────────────────┘
+### Lösung
+Die Schwellenwerte anpassen, damit alle 3 Schritte abgeschlossen sind, **bevor** man das Ende der Section erreicht:
+
+```typescript
+// VORHER (zu langsam)
+const scrollStart = windowHeight * 0.8;
+const scrollEnd = -sectionHeight * 0.3;
+
+// NACHHER (schneller - alle Schritte während Section im View)
+const scrollStart = windowHeight * 0.7;  // Früher starten
+const scrollEnd = sectionHeight * 0.2;   // POSITIV = innerhalb der Section enden
 ```
+
+**Effekt**: Die Timeline ist zu 100% abgeschlossen, wenn die Section noch ca. 20% im Viewport sichtbar ist.
 
 ---
 
-## 2. Services-Grid Layout-Fix
+## 2. Orange Akzente hinzufügen
 
-**Problem:** Eine Karte doppelt so hoch, nicht zentriert, 4 Spalten auf Desktop
+### Aktuelle Situation
+Die `cta`-Farbe (Orange #FF8A3D) ist definiert, wird aber nur beim Hover des "Anrufen"-Buttons verwendet.
 
-**Lösung:** Symmetrisches 2x2 Grid
-- Alle Karten gleiche Größe (kein `row-span-2`)
-- Zentriert mit `max-w-4xl mx-auto`
-- Größere Abstände für Atmung
+### Elemente für Orange-Akzente
 
-```text
-          ┌───────────────┐    ┌───────────────┐
-          │ Haushalts-    │    │ Keller/       │
-          │ auflösung     │    │ Dachboden     │
-          └───────────────┘    └───────────────┘
-          
-          ┌───────────────┐    ┌───────────────┐
-          │ Gewerbe/      │    │ Diskrete      │
-          │ Büro/Lager    │    │ Reinigung     │
-          └───────────────┘    └───────────────┘
+| Element | Änderung |
+|---------|----------|
+| **Timeline Nummern-Badge** | `bg-accent` → `bg-cta` für aktiven Step |
+| **Timeline Progress-Bar** | `from-primary via-accent to-primary` → `from-cta via-accent to-cta` |
+| **Pricing CTA-Card** | Orangener Akzent-Rahmen oder Glow |
+| **Services-Karten Hover** | Dezenter orange Glow statt grün |
+| **Trust Pills Icons** | Einige Icons orange statt nur grün |
+
+### Konkrete Änderungen in HorizontalTimeline.tsx
+
+```tsx
+// Number Badge - Aktiver Step
+isCurrent
+  ? 'bg-cta text-cta-foreground scale-110'
+  : isActive
+  ? 'bg-cta/80 text-cta-foreground'
+  : 'bg-muted text-muted-foreground'
+
+// Progress Bar
+className="bg-gradient-to-r from-cta via-accent to-cta rounded-full"
 ```
+
+### Optionale Erweiterungen
+
+**In ProcessSection.tsx (Haupt-Timeline):**
+- WhatsApp-Button hat schon grün → Orange-Akzent auf den Timeline-Karten als Kontrast
+
+**In BentoCard.tsx (Services-Karten):**
+- Hover-Glow von `accent` → `cta` für wärmeren Look
+
+**In TrustBar.tsx:**
+- Alternierende Icons: Manche grün (`accent`), manche orange (`cta`)
 
 ---
 
-## 3. Footer Redesign (CTA-First)
+## Dateien zu ändern
 
-**Problem:** Standard 4-Spalten-Grid, langweilig, keine Conversion-Chance
-
-**Lösung:** CTA-Bereich oben, Links darunter
-
-```text
-┌─────────────────────────────────────────────────────────────────────────────┐
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │  🏠 RÄUMZWERGE                     Jetzt Preiseinschätzung erhalten  │  │
-│  │     Entrümpelung in Süddeutschland       [📱 WhatsApp schreiben]     │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-│                                                                             │
-│   Leistungen     │   Kontakt        │   Rechtliches   │   Einsatzgebiet    │
-│   ───────────    │   ────────       │   ───────────   │   ─────────────    │
-│   Haushalts...   │   📞 Telefon     │   Impressum     │   Ulm (HQ)         │
-│   Keller...      │   📱 WhatsApp    │   Datenschutz   │   München          │
-│   Gewerbe...     │   ✉️  E-Mail      │                 │   Stuttgart        │
-│   Diskret...     │   📍 Ulm         │                 │   Augsburg...      │
-│                                                                             │
-│   ────────────────────────────────────────────────────────────────────────  │
-│   © 2026 Räumzwerge. Alle Rechte vorbehalten.           Mo–Sa 8–20 Uhr     │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
-
-**Elemente:**
-- CTA-Banner oben mit Glassmorphism-Hintergrund (Accent-Farbe)
-- Logo + Tagline links, WhatsApp-Button rechts
-- 4 Link-Spalten darunter (wie bisher, aber mit Regionen statt Servicezeiten)
-- Bottom-Bar mit Copyright und Öffnungszeiten
+| Datei | Änderung |
+|-------|----------|
+| `src/hooks/useTimelineProgress.ts` | Scroll-Timing anpassen (früher abschließen) |
+| `src/components/ui/HorizontalTimeline.tsx` | Orange Nummern-Badges & Progress-Bar |
+| `src/components/sections/ProcessSection.tsx` | Optional: Orange-Akzent im CTA-Bereich |
+| `src/components/ui/BentoCard.tsx` | Optional: Orange Hover-Glow |
 
 ---
 
 ## Technische Details
 
-### Datei 1: `src/components/sections/PricingSection.tsx`
+### useTimelineProgress.ts (Zeilen 21-22)
 
-Komplette Umstrukturierung:
-- `grid lg:grid-cols-2` statt Hintergrundbild
-- Bild als `<img>` mit `rounded-2xl shadow-lg`
-- CTA-Card mit `glass` Klasse
+```typescript
+// Früher starten (bei 70% Sichtbarkeit) und früher enden (noch 20% im View)
+const scrollStart = windowHeight * 0.7;
+const scrollEnd = sectionHeight * 0.2;  // Positiv = innerhalb der Section
+```
 
-### Datei 2: `src/components/sections/ServicesSection.tsx`
+### HorizontalTimeline.tsx (Zeilen 57-65)
 
-Grid-Änderungen:
-- `grid md:grid-cols-2` statt `lg:grid-cols-4`
-- `max-w-4xl mx-auto` für Zentrierung
-- Entfernen der `isTall`-Logik und `row-span-2`
+```tsx
+<span
+  className={cn(
+    'absolute -top-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300',
+    isCurrent
+      ? 'bg-cta text-cta-foreground scale-110 shadow-cta'
+      : isActive
+      ? 'bg-cta/80 text-cta-foreground'
+      : 'bg-muted text-muted-foreground'
+  )}
+>
+```
 
-### Datei 3: `src/components/ui/BentoCard.tsx`
+### HorizontalTimeline.tsx (Zeilen 23-27)
 
-Optionale Anpassung:
-- `min-h-[180px]` für konsistente Kartenhöhe
-
-### Datei 4: `src/components/layout/Footer.tsx`
-
-Neue Struktur:
-- CTA-Banner-Section oben (neues Element)
-- Link-Grid bleibt ähnlich, aber "Servicezeiten" wird zu "Einsatzgebiet" mit Regionsliste
-- Bottom-Bar mit Servicezeiten rechts
+```tsx
+<div
+  className="absolute top-0 left-0 h-full bg-gradient-to-r from-cta via-accent to-cta rounded-full transition-all duration-300 ease-out"
+  style={{ width: `${progress * 100}%` }}
+/>
+```
 
 ---
 
-## Zusammenfassung
+## Ergebnis
 
-| Änderung | Datei | Aufwand |
-|----------|-------|---------|
-| Pricing Section Split-Layout | PricingSection.tsx | Mittel |
-| Services 2x2 Grid | ServicesSection.tsx, BentoCard.tsx | Klein |
-| CTA-First Footer | Footer.tsx | Mittel |
-
-**Ergebnis:**
-- Professionellere Pricing-Section mit sichtbarem Bild
-- Ausgewogenes Services-Grid ohne asymmetrische Karten
-- Conversion-optimierter Footer mit letzter CTA-Chance
+1. **Besseres Timing**: Alle 3 Timeline-Schritte sind markiert, bevor man zur nächsten Section scrollt
+2. **Konsistente Orange-Akzente**: Der warme CTA-Farbton taucht auf mehreren Elementen auf
+3. **Visueller Zusammenhalt**: Orange verbindet Call-to-Actions (Anrufen, Timeline-Badges)
+4. **Professioneller Look**: Durchdachtes Farbkonzept statt nur Grün-Dominanz
