@@ -27,9 +27,8 @@ export type NavItem = {
 export const NAV_ITEMS: NavItem[] = [
   { 
     label: "Leistungen", 
-    href: "/leistungen",
+    href: "#",
     children: [
-      { label: "Alle Leistungen", href: "/leistungen" },
       { label: "Wohnungsentrümpelung", href: "/leistungen/wohnungsentruempelung" },
       { label: "Haushaltsauflösung", href: "/leistungen/haushaltsaufloesung" },
       { label: "Keller / Dachboden / Garage", href: "/leistungen/keller-dachboden-garage" },
