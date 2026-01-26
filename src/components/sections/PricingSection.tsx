@@ -2,11 +2,13 @@ import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getWhatsAppLink, PRICE_FACTORS } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
+import { useParallax } from '@/hooks/useParallax';
 import { cn } from '@/lib/utils';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 
 export function PricingSection() {
   const { ref, isVisible } = useScrollReveal(0.1);
+  const { ref: parallaxRef, offset } = useParallax(0.3);
 
   return (
     <section id="preise" className="py-16 lg:py-24 bg-background overflow-hidden">
@@ -44,11 +46,17 @@ export function PricingSection() {
           {/* Right column: Image extending to screen edge + floating CTA card */}
           <div className="relative min-h-[320px] lg:min-h-[380px]">
             {/* Background image that extends to the right edge */}
-            <div className="absolute inset-0 lg:-right-[calc(50vw-50%+2rem)] rounded-2xl lg:rounded-l-3xl lg:rounded-r-none overflow-hidden">
+            <div 
+              ref={parallaxRef}
+              className="absolute inset-0 lg:-right-[calc(50vw-50%+2rem)] rounded-2xl lg:rounded-l-3xl lg:rounded-r-none overflow-hidden"
+            >
               <img 
                 src="/images/messiewohnung-bg.jpg"
                 alt="Messie-Wohnung vor der Entrümpelung"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-100 ease-out"
+                style={{ 
+                  transform: `translateY(${offset}px) scale(1.1)`,
+                }}
               />
               {/* Gradient overlay for readability */}
               <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-background/30 lg:from-background/90 lg:via-background/50 lg:to-transparent" />

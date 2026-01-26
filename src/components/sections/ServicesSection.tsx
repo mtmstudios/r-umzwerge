@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { ArrowRight, Users, Warehouse, Building2, Lock, RotateCcw, Check } from 'lucide-react';
-import { SERVICES } from '@/lib/constants';
+import { SERVICES, getWhatsAppLink } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 
 const serviceIcons: Record<string, typeof Users> = {
   'haushaltsaufloesung': Users,
@@ -37,27 +39,65 @@ export function ServicesSection() {
           </h2>
         </div>
 
-        {/* Featured Card */}
+        {/* Featured Card - Hauptleistung */}
         <div
           className={cn(
-            "bg-primary rounded-2xl lg:rounded-3xl p-8 lg:p-12 mb-8 scroll-reveal",
+            "bg-primary rounded-2xl lg:rounded-3xl p-8 lg:p-12 mb-8 text-center scroll-reveal",
             headerVisible && "visible"
           )}
         >
-          <div className="max-w-2xl">
-            <h3 className="text-xl lg:text-2xl font-semibold text-primary-foreground mb-4">
-              Entrümpelung mit System
+          <div className="max-w-2xl mx-auto">
+            {/* Badge */}
+            <span className="inline-block bg-accent/20 text-accent text-sm font-medium px-4 py-1.5 rounded-full mb-4">
+              Unsere Kernkompetenz
+            </span>
+            
+            <h3 className="text-2xl lg:text-3xl font-semibold text-primary-foreground mb-4">
+              Wohnungsentrümpelung
             </h3>
+            
             <p className="text-primary-foreground/80 mb-6 leading-relaxed">
-              Von der ersten Preiseinschätzung bis zur besenreinen Übergabe – transparent, zuverlässig und respektvoll.
+              Von der ersten Preiseinschätzung bis zur besenreinen Übergabe – 
+              transparent, zuverlässig und respektvoll.
             </p>
-            <a
-              href="/leistungen"
-              className="inline-flex items-center gap-2 text-accent font-medium hover:gap-3 transition-all"
-            >
-              Mehr erfahren
-              <ArrowRight className="h-4 w-4" />
-            </a>
+            
+            {/* USP Pills */}
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-8">
+              <span className="flex items-center gap-2 text-primary-foreground/90 text-sm">
+                <Check className="h-4 w-4 text-accent" />
+                Besenreine Übergabe
+              </span>
+              <span className="flex items-center gap-2 text-primary-foreground/90 text-sm">
+                <Check className="h-4 w-4 text-accent" />
+                Festpreis möglich
+              </span>
+              <span className="flex items-center gap-2 text-primary-foreground/90 text-sm">
+                <Check className="h-4 w-4 text-accent" />
+                Antwort unter 24h
+              </span>
+            </div>
+            
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button
+                asChild
+                size="lg"
+                className="gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-12 px-6"
+              >
+                <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
+                  <WhatsAppIcon className="h-5 w-5" />
+                  Foto senden · Preis erhalten
+                </a>
+              </Button>
+              
+              <a
+                href="/leistungen"
+                className="inline-flex items-center gap-2 text-accent font-medium hover:gap-3 transition-all"
+              >
+                Mehr erfahren
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
           </div>
         </div>
 
