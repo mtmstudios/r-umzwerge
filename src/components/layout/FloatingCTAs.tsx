@@ -12,7 +12,7 @@ export const FloatingCTAs = forwardRef<HTMLDivElement>((props, ref) => {
       <div className="flex gap-3">
         <a
           href={PHONE_LINK}
-          className="flex-1 flex items-center justify-center gap-2 py-3.5 px-4 bg-card border border-border rounded-xl shadow-medium text-foreground font-medium transition-all active:scale-95"
+          className="flex-1 flex items-center justify-center gap-2 py-3.5 px-4 bg-card border-2 border-primary rounded-xl shadow-medium text-foreground font-medium transition-all active:scale-95 hover:bg-cta hover:text-cta-foreground hover:border-cta"
           aria-label="Anrufen"
         >
           <Phone className="h-5 w-5 flex-shrink-0" />

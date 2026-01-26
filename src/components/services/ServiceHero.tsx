@@ -67,11 +67,11 @@ export function ServiceHero({ h1, subline, trustPills, imageSrc, imageAlt }: Ser
                 asChild
                 variant="outline"
                 size="lg"
-                className="gap-2.5 h-12 sm:h-14 px-6 sm:px-8 text-sm sm:text-base"
+                className="gap-2.5 h-12 sm:h-14 px-6 sm:px-8 text-sm sm:text-base border-2 border-primary hover:bg-cta hover:text-cta-foreground hover:border-cta transition-all duration-300"
               >
                 <a href={PHONE_LINK}>
                   <Phone className="h-5 w-5" />
-                  Anrufen
+                  Jetzt anrufen
                 </a>
               </Button>
             </div>
