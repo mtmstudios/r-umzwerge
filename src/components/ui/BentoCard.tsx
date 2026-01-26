@@ -7,7 +7,6 @@ interface BentoCardProps {
   description?: string;
   icon: LucideIcon;
   href: string;
-  size?: 'normal' | 'tall' | 'wide';
   variant?: 'default' | 'glass' | 'accent';
   className?: string;
   index?: number;
@@ -19,7 +18,6 @@ export function BentoCard({
   description,
   icon: Icon,
   href,
-  size = 'normal',
   variant = 'default',
   className,
   index = 0,
@@ -28,11 +26,8 @@ export function BentoCard({
     <a
       href={href}
       className={cn(
-        'group relative overflow-hidden rounded-2xl p-6 lg:p-8 transition-all duration-500',
+        'group relative overflow-hidden rounded-2xl p-6 lg:p-8 transition-all duration-500 min-h-[180px]',
         'hover:scale-[1.02] hover:-translate-y-1',
-        // Size variants
-        size === 'tall' && 'md:row-span-2',
-        size === 'wide' && 'md:col-span-2',
         // Style variants
         variant === 'default' && 'bg-card border border-border hover:border-accent/50 hover:shadow-medium',
         variant === 'glass' && 'glass hover:shadow-lg',
