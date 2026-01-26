@@ -5,14 +5,14 @@ import { MapTooltip } from './MapTooltip';
 
 // Coordinates for cities on the uploaded SVG map (595.5 x 842.25 viewBox)
 const cityCoordinates: Record<string, { x: number; y: number }> = {
-  ulm: { x: 290, y: 380 },
-  muenchen: { x: 480, y: 450 },
-  stuttgart: { x: 180, y: 320 },
-  augsburg: { x: 420, y: 400 },
-  heidenheim: { x: 280, y: 340 },
-  aalen: { x: 250, y: 310 },
-  reutlingen: { x: 170, y: 380 },
-  ravensburg: { x: 260, y: 520 },
+  stuttgart: { x: 140, y: 280 },    // Westen, mittig-nord
+  reutlingen: { x: 160, y: 330 },   // Südlich von Stuttgart
+  aalen: { x: 240, y: 260 },        // Östlich von Stuttgart
+  heidenheim: { x: 270, y: 300 },   // Zwischen Aalen und Ulm
+  ulm: { x: 290, y: 350 },          // Zentral (Hauptsitz)
+  augsburg: { x: 380, y: 380 },     // Östlich von Ulm
+  muenchen: { x: 480, y: 420 },     // Ganz im Osten
+  ravensburg: { x: 240, y: 480 },   // Süden, Bodensee-Region
 };
 
 interface InteractiveMapProps {
