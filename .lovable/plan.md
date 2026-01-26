@@ -1,53 +1,159 @@
 
 
-# Plan: Timeline-Animation früher abschließen
+# Plan: Sanfte Bounce-Animation für Timeline-Schritte
 
-## Problem
+## Ziel
 
-Die Scroll-Animation der Prozess-Schritte (HorizontalTimeline) wird erst abgeschlossen, wenn die Section fast komplett aus dem Viewport gescrollt ist. Der Nutzer muss zu weit scrollen, bis alle 3 Schritte aktiviert sind.
+Wenn ein Schritt im Prozess-Timeline aktiviert wird (durch Scrollen), soll eine sanfte Bounce-Animation das Element kurz "aufspringen" lassen. Dies verstärkt die visuelle Rückmeldung und macht die Interaktion lebendiger.
 
-## Aktuelle Konfiguration
+## Design-Vorschau
 
-```typescript
-const scrollStart = windowHeight * 0.7;  // Animation beginnt bei 70% Sichtbarkeit
-const scrollEnd = sectionHeight * 0.2;   // Animation endet bei 20% Rest-Sichtbarkeit
-```
+```text
+Scroll-Aktivierung eines Schritts:
 
-## Lösung
-
-Die Animation soll früher abgeschlossen sein – idealerweise wenn die Section etwa zur Hälfte sichtbar ist:
-
-```typescript
-const scrollStart = windowHeight * 0.8;  // Animation beginnt früher (80% Sichtbarkeit)
-const scrollEnd = sectionHeight * 0.6;   // Animation endet früher (wenn noch 60% sichtbar)
+    ┌─────────┐
+    │    📸   │  ← Normale Größe (scale: 1.0)
+    │         │
+    └─────────┘
+         ↓
+    ┌───────────┐
+    │     📸    │  ← Bounce nach oben (scale: 1.15)
+    │           │
+    └───────────┘
+         ↓
+    ┌──────────┐
+    │    📸    │  ← Zurück + leicht kleiner (scale: 1.05)
+    │          │
+    └──────────┘
+         ↓
+    ┌──────────┐
+    │    📸    │  ← Finale Größe (scale: 1.1)
+    │          │
+    └──────────┘
 ```
 
 ## Dateien die geändert werden
 
-| Datei | Änderung |
-|-------|----------|
-| `src/hooks/useTimelineProgress.ts` | `scrollStart` und `scrollEnd` Werte anpassen |
+| Datei | Aktion | Beschreibung |
+|-------|--------|--------------|
+| `src/index.css` | Erweitern | Neue `@keyframes bounce-in` Animation hinzufügen |
+| `src/hooks/useTimelineProgress.ts` | Erweitern | `justActivated` Array tracken für Bounce-Trigger |
+| `src/components/ui/HorizontalTimeline.tsx` | Anpassen | Bounce-Klasse bei Aktivierung anwenden |
+
+---
 
 ## Technische Details
 
-### Vorher vs. Nachher
+### 1. CSS Keyframes in `index.css`
 
-| Parameter | Vorher | Nachher | Effekt |
-|-----------|--------|---------|--------|
-| `scrollStart` | `windowHeight * 0.7` | `windowHeight * 0.8` | Animation startet etwas früher |
-| `scrollEnd` | `sectionHeight * 0.2` | `sectionHeight * 0.6` | Animation endet deutlich früher |
+Eine sanfte Bounce-Animation, die nicht zu aufdringlich ist:
 
-### Berechnung
+```css
+/* Timeline Step Bounce Animation */
+@keyframes bounce-in {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.15);
+  }
+  60% {
+    transform: scale(1.05);
+  }
+  80% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
 
-Die Änderung von `0.2` auf `0.6` bei `scrollEnd` bedeutet:
-- **Vorher**: Animation ist fertig, wenn nur noch 20% der Section sichtbar sind
-- **Nachher**: Animation ist fertig, wenn noch 60% der Section sichtbar sind
+.animate-bounce-in {
+  animation: bounce-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+```
 
-Das verkürzt den Scroll-Bereich erheblich – alle 3 Schritte sind aktiviert, während der Nutzer die Timeline noch gut sehen kann.
+Die Animation:
+- Dauert 0.5 Sekunden
+- Nutzt einen elastischen Easing-Wert für natürliches Gefühl
+- Endet bei `scale(1.1)` – passend zum bestehenden `scale-110` für `isCurrent`
+
+### 2. Hook erweitern in `useTimelineProgress.ts`
+
+Der Hook muss tracken, welche Schritte gerade neu aktiviert wurden:
+
+```typescript
+export function useTimelineProgress(stepsCount: number) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [activeStep, setActiveStep] = useState(-1); // Start bei -1
+  const [progress, setProgress] = useState(0);
+  const [justActivated, setJustActivated] = useState<number | null>(null);
+  const previousActiveStep = useRef(-1);
+
+  useEffect(() => {
+    // ... bestehende Scroll-Logik ...
+    
+    const newActiveStep = Math.min(Math.floor(stepProgress), stepsCount - 1);
+    
+    // Prüfen ob ein neuer Schritt aktiviert wurde
+    if (newActiveStep > previousActiveStep.current) {
+      setJustActivated(newActiveStep);
+      previousActiveStep.current = newActiveStep;
+      
+      // Animation-Klasse nach 500ms entfernen
+      setTimeout(() => {
+        setJustActivated(null);
+      }, 500);
+    }
+    
+    setActiveStep(newActiveStep);
+  }, [stepsCount]);
+
+  return { containerRef, activeStep, progress, justActivated };
+}
+```
+
+### 3. Timeline-Komponente anpassen
+
+Die Bounce-Animation nur anwenden, wenn der Schritt gerade aktiviert wurde:
+
+```tsx
+export function HorizontalTimeline({ steps, className }: HorizontalTimelineProps) {
+  const { containerRef, activeStep, progress, justActivated } = useTimelineProgress(steps.length);
+
+  // ... im Step Circle:
+  <div
+    className={cn(
+      'relative z-10 w-[120px] h-[120px] rounded-3xl flex flex-col items-center justify-center',
+      'border-2 transition-colors duration-500',
+      isCurrent
+        ? 'bg-primary border-primary shadow-lg shadow-primary/30'
+        : isActive
+        ? 'bg-primary/90 border-primary'
+        : 'bg-card border-border',
+      // Bounce-Animation nur bei Aktivierung
+      justActivated === index && 'animate-bounce-in',
+      // Fallback-Scale wenn keine Animation läuft
+      isCurrent && justActivated !== index && 'scale-110'
+    )}
+  >
+```
+
+---
+
+## Animations-Timing
+
+| Phase | Zeit | Scale | Beschreibung |
+|-------|------|-------|--------------|
+| Start | 0ms | 1.0 | Ausgangsgröße |
+| Peak | 200ms | 1.15 | Maximale Vergrößerung |
+| Settle | 300ms | 1.05 | Leichte Korrektur |
+| Finish | 500ms | 1.1 | Finale Größe (= isCurrent scale) |
 
 ## Ergebnis
 
-- Alle 3 Schritte sind aktiviert, während die Section noch prominent im Viewport ist
-- Bessere User Experience – der Nutzer sieht die komplette Animation ohne exzessives Scrollen
-- Die Progress-Bar füllt sich schneller
+- Jeder Schritt "springt" sanft auf, sobald er durch Scrollen aktiviert wird
+- Die Animation ist dezent und passt zum Premium-Design
+- Sie läuft nur einmal pro Aktivierung (nicht beim kontinuierlichen Scrollen)
+- Nach der Animation bleibt der `scale-110` Zustand erhalten
 
