@@ -152,3 +152,35 @@ export const PRICE_FACTORS = [
   "Sondermüll / Elektro",
   "Termindruck",
 ];
+
+// Google Reviews
+export const GOOGLE_REVIEWS_LINK = "https://www.google.com/maps/place/Entr%C3%BCmpelungszauberer/@48.4271,10.1283,17z";
+
+export const GOOGLE_RATING = {
+  score: 5.0,
+  count: 12,
+};
+
+export const FEATURED_REVIEWS = [
+  {
+    id: 1,
+    author: "Max M.",
+    rating: 5,
+    text: "Sehr professionell und zuverlässig. Die Wohnung wurde besenrein übergeben. Absolute Empfehlung!",
+    date: "vor 2 Wochen",
+  },
+  {
+    id: 2,
+    author: "Anna K.",
+    rating: 5,
+    text: "Schnelle Terminvergabe, faire Preise und super nettes Team. Alles perfekt gelaufen!",
+    date: "vor 1 Monat",
+  },
+  {
+    id: 3,
+    author: "Stefan B.",
+    rating: 5,
+    text: "Top Service! Kellerentrümpelung war in wenigen Stunden erledigt. Sehr empfehlenswert.",
+    date: "vor 1 Monat",
+  },
+];
