@@ -18,8 +18,8 @@ export function useTimelineProgress(stepsCount: number) {
       const sectionHeight = rect.height;
       
       // Start when section enters viewport, complete before leaving
-      const scrollStart = windowHeight * 0.7; // Start animation when section is 70% visible
-      const scrollEnd = sectionHeight * 0.2; // End when section is still 20% visible (positive = inside section)
+      const scrollStart = windowHeight * 0.8; // Start animation when section is 80% visible
+      const scrollEnd = sectionHeight * 0.6; // End when section is still 60% visible (animation completes earlier)
       
       const scrollRange = scrollStart - scrollEnd;
       const currentScroll = scrollStart - sectionTop;
