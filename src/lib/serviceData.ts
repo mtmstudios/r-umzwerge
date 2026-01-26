@@ -22,6 +22,8 @@ export interface ServicePageData {
     h1: string;
     subline: string;
     trustPills: string[];
+    imageSrc?: string;
+    imageAlt?: string;
   };
   scenarios: ServiceScenario[];
   scope: {
@@ -50,6 +52,8 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       h1: 'Wohnungsentrümpelung – sauber, diskret, transparent.',
       subline: 'Von der ersten Preiseinschätzung bis zur besenreinen Übergabe – transparent, zuverlässig und respektvoll.',
       trustPills: ['Besenrein', 'Festpreis nach Einschätzung', 'Keine versteckten Kosten'],
+      imageSrc: '/images/service-wohnungsentruempelung.jpg',
+      imageAlt: 'Leere, saubere Wohnung nach professioneller Entrümpelung',
     },
     scenarios: [
       { 
@@ -130,6 +134,8 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       h1: 'Entrümpelung – sauber, diskret, transparent.',
       subline: 'Preiseinschätzung per WhatsApp-Foto – innerhalb von 24 Stunden (oft schneller).',
       trustPills: ['Besenrein', 'Festpreis nach Einschätzung', 'Keine versteckten Kosten'],
+      imageSrc: '/images/service-entruempelung.jpg',
+      imageAlt: 'Professionelles Team beim Verladen von Kartons in einen Transporter',
     },
     scenarios: [
       { 
@@ -210,6 +216,8 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       h1: 'Haushaltsauflösung – respektvoll und zuverlässig.',
       subline: 'Wir nehmen dir die Organisation ab – transparent, diskret, besenrein.',
       trustPills: ['Keine versteckten Kosten', 'Planbar', 'Diskret'],
+      imageSrc: '/images/service-haushaltsaufloesung.jpg',
+      imageAlt: 'Wohnzimmer wird sorgfältig für die Haushaltsauflösung vorbereitet',
     },
     scenarios: [
       { 
@@ -284,6 +292,8 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       h1: 'Keller, Dachboden oder Garage entrümpeln – schnell wieder Platz.',
       subline: 'Foto senden, Preiseinschätzung < 24h, Termin – fertig.',
       trustPills: ['Auch enge Zugänge', 'Entsorgung inklusive', 'Besenrein'],
+      imageSrc: '/images/service-keller.jpg',
+      imageAlt: 'Leerer, aufgeräumter Kellerraum nach der Entrümpelung',
     },
     scenarios: [
       { 
@@ -358,6 +368,8 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       h1: 'Gewerbe, Büro oder Lager räumen – planbar und effizient.',
       subline: 'Klare Abstimmung, transparente Preise, termintreu – auch außerhalb der Geschäftszeiten.',
       trustPills: ['Minimale Betriebsstörung', 'Termintreu', 'Transparent'],
+      imageSrc: '/images/service-gewerbe.jpg',
+      imageAlt: 'Leeres Büro nach professioneller Gewerberäumung',
     },
     scenarios: [
       { 
@@ -433,6 +445,8 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       h1: 'Diskrete Reinigung & Entrümpelung – respektvoll und geschützt.',
       subline: 'Wir arbeiten diskret, strukturiert und ohne Aufsehen. Preiseinschätzung per Foto möglich – innerhalb von 24 Stunden.',
       trustPills: ['Absolute Diskretion', 'Respektvoll', 'Geschütztes Vorgehen'],
+      imageSrc: '/images/service-messie.jpg',
+      imageAlt: 'Diskretes Team bei der sorgfältigen Arbeit',
     },
     scenarios: [
       { 
