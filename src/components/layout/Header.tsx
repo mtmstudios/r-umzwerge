@@ -5,12 +5,6 @@ import { NAV_ITEMS, getWhatsAppLink, PHONE_LINK, SERVICE_HOURS } from '@/lib/con
 import { cn } from '@/lib/utils';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
@@ -20,6 +14,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isDesktopDropdownOpen, setIsDesktopDropdownOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,25 +54,35 @@ export function Header() {
             <nav className="hidden lg:flex items-center gap-8">
               {NAV_ITEMS.map((item) => (
                 item.children ? (
-                  <DropdownMenu key={item.label}>
-                    <DropdownMenuTrigger className="flex items-center gap-1 text-sm font-medium text-foreground/80 hover:text-primary transition-colors outline-none">
+                  <div
+                    key={item.label}
+                    className="relative"
+                    onMouseEnter={() => setIsDesktopDropdownOpen(true)}
+                    onMouseLeave={() => setIsDesktopDropdownOpen(false)}
+                  >
+                    <button className="flex items-center gap-1 text-sm font-medium text-foreground/80 hover:text-primary transition-colors outline-none">
                       {item.label}
-                      <ChevronDown className="h-4 w-4" />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className="w-56 bg-popover border border-border shadow-lg z-50">
-                      {item.children.map((child, index) => (
-                        <DropdownMenuItem key={child.href} asChild className={index === 0 ? "font-medium" : ""}>
-                          <a 
-                            href={child.href}
-                            className="w-full cursor-pointer"
-                          >
-                            {child.label}
-                            {index === 0 && <span className="ml-auto text-muted-foreground">→</span>}
-                          </a>
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                      <ChevronDown className={cn(
+                        "h-4 w-4 transition-transform duration-200",
+                        isDesktopDropdownOpen && "rotate-180"
+                      )} />
+                    </button>
+                    {isDesktopDropdownOpen && (
+                      <div className="absolute top-full left-0 pt-2 z-50">
+                        <div className="w-56 bg-popover border border-border rounded-lg shadow-lg py-2">
+                          {item.children.map((child) => (
+                            <a
+                              key={child.href}
+                              href={child.href}
+                              className="block px-4 py-2 text-sm text-foreground/80 hover:text-primary hover:bg-secondary transition-colors"
+                            >
+                              {child.label}
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 ) : (
                   <a
                     key={item.href}
@@ -159,14 +164,11 @@ export function Header() {
                     </CollapsibleTrigger>
                     <CollapsibleContent className="overflow-hidden data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
                       <div className="pl-4 flex flex-col gap-1 mt-1">
-                        {item.children.map((child, index) => (
+                        {item.children.map((child) => (
                           <a
                             key={child.href}
                             href={child.href}
-                            className={cn(
-                              "py-2 px-4 text-sm text-foreground/80 hover:text-primary hover:bg-secondary/50 rounded-lg transition-colors",
-                              index === 0 && "font-medium"
-                            )}
+                            className="py-2 px-4 text-sm text-foreground/80 hover:text-primary hover:bg-secondary/50 rounded-lg transition-colors"
                             onClick={() => setIsMobileMenuOpen(false)}
                           >
                             {child.label}
