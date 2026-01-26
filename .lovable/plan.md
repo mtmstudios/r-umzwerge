@@ -1,24 +1,24 @@
 
-# Fix: TrustBar Trennzeichen
+
+# Fix: TrustBar Trennzeichen auf Pipe-Symbol
 
 ## Problem
-Im Screenshot sichtbar: Nach "Besenrein" steht ein **–** (En Dash) als Trenner.
 
-Aber bei allen anderen Elementen auf der Seite wird **·** (Middle Dot) verwendet:
-- `Foto senden · Preiseinschätzung erhalten`
-- `Foto senden · Preis erhalten`
+Du hast recht! Das Trennzeichen soll ein **senkrechter Strich `|`** sein (gerade von oben nach unten), nicht ein Punkt `·` oder ein waagerechter Strich `–`.
 
 ## Lösung
 
 **Datei: `src/components/sections/TrustBar.tsx` (Zeile 33)**
 
 ```tsx
-// VORHER
-<span className="text-accent text-lg">–</span>
-
-// NACHHER
+// VORHER (Middle Dot)
 <span className="text-accent text-lg">·</span>
+
+// NACHHER (Pipe-Symbol - senkrechter Strich)
+<span className="text-accent text-lg">|</span>
 ```
 
 ## Ergebnis
-Das Trennzeichen in der TrustBar ist dann konsistent mit allen anderen "laufenden" Text-Elementen auf der Website.
+
+Das Trennzeichen in der TrustBar wird dann ein gerader senkrechter Strich `|` von oben nach unten sein.
+
