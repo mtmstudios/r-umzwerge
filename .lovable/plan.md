@@ -1,238 +1,156 @@
 
-# Plan: Zwei-Spalten-Layout für Regionen-Sektion
+# Plan: StickyConversionBar entfernen & Mobile-Buttons direkt orange
 
-## Ziel
+## Übersicht
 
-Die aktuelle zentrierte Vollbild-Karte in ein modernes Zwei-Spalten-Layout umwandeln:
-- **Links**: Interaktive SVG-Karte von Süddeutschland
-- **Rechts**: Übersichtliche Städteliste mit Hover-Synchronisation
+Zwei Änderungen:
+1. **StickyConversionBar komplett entfernen** - diese erscheint beim Scrollen unter dem Header
+2. **Mobile-Buttons direkt orange** - auf Touchscreens funktioniert Hover nicht, also muss der "Anruf"-Button auf Mobile sofort orange sein
 
-## Aktuelle Situation
+---
 
-Die `RegionsSection` zeigt die Karte mittig (`max-w-4xl mx-auto`) mit den Städtenamen direkt in der SVG. Das funktioniert, bietet aber wenig Interaktivität und die Labels auf der Karte sind auf Mobile schwer lesbar.
-
-## Geplante Änderungen
-
-### 1. Neue Komponente: `CityList.tsx`
-
-**Datei**: `src/components/regions/CityList.tsx`
-
-Eine neue Komponente für die Städteliste auf der rechten Seite:
-
-```text
-┌─────────────────────────────────┐
-│  📍 Ulm (Hauptsitz)        →   │  ← Primärfarbe, Badge
-├─────────────────────────────────┤
-│  München                    →   │
-├─────────────────────────────────┤
-│  Stuttgart                  →   │
-├─────────────────────────────────┤
-│  Augsburg                   →   │
-├─────────────────────────────────┤
-│  ...weitere Städte...           │
-└─────────────────────────────────┘
-```
-
-**Funktionen**:
-- Listet alle Regionen aus `REGIONS` constant
-- Ulm als Hauptsitz visuell hervorgehoben (Badge + Icon)
-- Hover-State übergibt `activeCity` an Parent
-- Klick führt zu `/region/[slug]`
-- Pfeil-Icon für Interaktivität
-
-### 2. Anpassung: `InteractiveMap.tsx`
-
-**Datei**: `src/components/regions/InteractiveMap.tsx`
-
-**Änderungen**:
-- Neue Props: `activeCity?: string` und `onCityHover?: (slug: string | null) => void`
-- Städte-Labels aus der SVG entfernen (werden jetzt in der Liste angezeigt)
-- Nur noch Punkte auf der Karte
-- Aktiver Stadt-Punkt: größer (r="12") + Glow-Effekt + Pulsier-Animation
-- Inaktive Punkte: dezenter
-
-**Vorher** (Punkt mit Label):
-```tsx
-<circle ... />
-<text>{region.name}</text>  // Wird entfernt
-```
-
-**Nachher** (nur Punkt mit Hover-Sync):
-```tsx
-<circle 
-  cx={coords.x}
-  cy={coords.y}
-  r={activeCity === region.slug ? 12 : 8}
-  className={cn(
-    "fill-primary transition-all duration-300",
-    activeCity === region.slug && "fill-accent drop-shadow-glow"
-  )}
-  onMouseEnter={() => onCityHover?.(region.slug)}
-  onMouseLeave={() => onCityHover?.(null)}
-/>
-```
-
-### 3. Anpassung: `RegionsSection.tsx`
-
-**Datei**: `src/components/sections/RegionsSection.tsx`
-
-**Neues Layout**:
-
-```text
-Desktop (lg+):
-┌────────────────────────────────────────────────────────┐
-│           Unsere Regionen in Süddeutschland            │
-│      Baden-Württemberg & Bayern – schnell vor Ort      │
-├──────────────────────────┬─────────────────────────────┤
-│                          │                             │
-│     [SVG KARTE]          │     [STÄDTELISTE]           │
-│     Süddeutschland       │     • Ulm (Hauptsitz)       │
-│     mit Punkten          │     • München               │
-│                          │     • Stuttgart             │
-│                          │     • Augsburg              │
-│                          │     • Heidenheim            │
-│                          │     • Aalen                 │
-│                          │     • Reutlingen            │
-│                          │     • Ravensburg            │
-│                          │                             │
-├──────────────────────────┴─────────────────────────────┤
-│    Weitere Orte auf Anfrage – wir sind flexibel.       │
-└────────────────────────────────────────────────────────┘
-
-Mobile:
-┌─────────────────────────┐
-│     [ÜBERSCHRIFT]       │
-├─────────────────────────┤
-│     [SVG KARTE]         │
-│     (kompakter)         │
-├─────────────────────────┤
-│     [STÄDTELISTE]       │
-│     (volle Breite)      │
-└─────────────────────────┘
-```
-
-**Code-Struktur**:
-```tsx
-export function RegionsSection() {
-  const [activeCity, setActiveCity] = useState<string | null>(null);
-  
-  return (
-    <section className="py-12 lg:py-16 bg-secondary/30">
-      <div className="container-custom">
-        {/* Header */}
-        <div className="text-center mb-8 lg:mb-12">
-          <h2>Unsere Regionen in Süddeutschland</h2>
-          <p>Baden-Württemberg & Bayern – schnell vor Ort</p>
-        </div>
-        
-        {/* Two-Column Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-          {/* Left: Map */}
-          <div className="lg:sticky lg:top-24">
-            <InteractiveMap 
-              activeCity={activeCity}
-              onCityHover={setActiveCity}
-            />
-          </div>
-          
-          {/* Right: City List */}
-          <CityList 
-            activeCity={activeCity}
-            onCityHover={setActiveCity}
-          />
-        </div>
-        
-        {/* Footer */}
-        <p className="text-center text-sm mt-8">
-          Weitere Orte auf Anfrage...
-        </p>
-      </div>
-    </section>
-  );
-}
-```
-
-### 4. Hover-Synchronisation
-
-**State-Management in RegionsSection**:
-```tsx
-const [activeCity, setActiveCity] = useState<string | null>(null);
-```
-
-**Bidirektionale Synchronisation**:
-1. Hover auf Karten-Punkt → Liste-Eintrag wird hervorgehoben
-2. Hover auf Listen-Eintrag → Karten-Punkt wird hervorgehoben
-
-### 5. Styling-Details
-
-**CityList-Einträge**:
-| Zustand | Styling |
-|---------|---------|
-| Normal | `bg-card border-border` |
-| Hover/Aktiv | `bg-primary/10 border-primary` |
-| Ulm (HQ) | Badge: `bg-primary text-primary-foreground` |
-
-**Karten-Punkte**:
-| Zustand | Styling |
-|---------|---------|
-| Normal | `r="8" fill-primary` |
-| Hover/Aktiv | `r="12" fill-accent drop-shadow-glow scale-110` |
-| Ulm (HQ) | Zusätzlich: Pulsier-Animation |
-
-**Neuer CSS-Glow** (in `index.css`):
-```css
-.drop-shadow-glow {
-  filter: drop-shadow(0 0 8px hsl(var(--accent)));
-}
-```
-
-## Technische Details
+## Teil 1: StickyConversionBar entfernen
 
 ### Dateien, die geändert werden:
 
 | Datei | Aktion |
 |-------|--------|
-| `src/components/regions/CityList.tsx` | Neu erstellen |
-| `src/components/regions/InteractiveMap.tsx` | Anpassen (Props, Labels entfernen) |
-| `src/components/sections/RegionsSection.tsx` | Neues Layout + State |
-| `src/index.css` | Glow-Utility hinzufügen |
+| `src/pages/ServicePage.tsx` | Import und Verwendung von `StickyConversionBar` entfernen |
+| `src/components/services/StickyConversionBar.tsx` | Kann gelöscht werden (optional) |
 
-### Props-Interface:
-
-```typescript
-// InteractiveMap.tsx
-interface InteractiveMapProps {
-  activeCity?: string | null;
-  onCityHover?: (slug: string | null) => void;
-}
-
-// CityList.tsx
-interface CityListProps {
-  activeCity?: string | null;
-  onCityHover?: (slug: string | null) => void;
-}
-```
-
-### Imports benötigt:
+### Änderung in ServicePage.tsx:
 
 ```tsx
-// CityList.tsx
-import { MapPin, ArrowRight } from 'lucide-react';
-import { REGIONS } from '@/lib/constants';
-import { cn } from '@/lib/utils';
+// VORHER (Zeile 5 und 33)
+import { StickyConversionBar } from '@/components/services/StickyConversionBar';
+...
+<StickyConversionBar />
+
+// NACHHER
+// Import und Komponente komplett entfernen
 ```
 
-## Mobile-Optimierung
+---
 
-- Karte und Liste stapeln sich vertikal
-- Liste zeigt kompaktere Einträge
-- Karte behält volle Breite für gute Lesbarkeit
-- Sticky-Verhalten nur auf Desktop (lg+)
+## Teil 2: Mobile-Buttons direkt orange
 
-## Ergebnis
+### Betroffene Komponenten und Buttons:
 
-Ein modernes, interaktives Zwei-Spalten-Layout, das:
-- Geografischen Kontext (Karte) mit detaillierten Infos (Liste) kombiniert
-- Synchronisierte Hover-Effekte für intuitive Interaktion bietet
-- Auf allen Bildschirmgrößen gut funktioniert
-- Die bestehende Markenidentität beibehält
+| Komponente | Button | Aktueller Zustand | Änderung |
+|------------|--------|-------------------|----------|
+| `HeroSection.tsx` | Anruf-Button | Grüner Rahmen, orange bei Hover | Mobile: direkt orange |
+| `ServiceHero.tsx` | Anruf-Button | Grüner Rahmen, orange bei Hover | Mobile: direkt orange |
+| `FloatingCTAs.tsx` | Anruf-Button | Grüner Rahmen, orange bei Hover | Mobile: direkt orange |
+| `FinalCTASection.tsx` | Anruf-Button | Bereits solide orange | ✅ Passt bereits |
+| `ServiceFinalCTA.tsx` | Anruf-Button | Bereits solide orange | ✅ Passt bereits |
+
+### Styling-Strategie:
+
+Responsive Classes verwenden - auf Mobile (`max-lg:`) direkt orange, auf Desktop Hover-Verhalten beibehalten:
+
+```tsx
+// VORHER
+className="border-2 border-primary hover:bg-cta hover:text-cta-foreground hover:border-cta"
+
+// NACHHER
+className="border-2 border-primary hover:bg-cta hover:text-cta-foreground hover:border-cta max-lg:bg-cta max-lg:text-cta-foreground max-lg:border-cta"
+```
+
+### 1. HeroSection.tsx (Zeile 55-65)
+
+```tsx
+// VORHER
+<Button
+  asChild
+  variant="outline"
+  size="lg"
+  className="gap-2 h-12 sm:h-14 px-4 sm:px-6 text-sm sm:text-base border-2 border-primary hover:bg-cta hover:text-cta-foreground hover:border-cta transition-all duration-300 shrink-0"
+>
+
+// NACHHER
+<Button
+  asChild
+  variant="outline"
+  size="lg"
+  className="gap-2 h-12 sm:h-14 px-4 sm:px-6 text-sm sm:text-base border-2 border-primary hover:bg-cta hover:text-cta-foreground hover:border-cta transition-all duration-300 shrink-0 max-lg:bg-cta max-lg:text-cta-foreground max-lg:border-cta"
+>
+```
+
+### 2. ServiceHero.tsx (Zeile 66-76)
+
+```tsx
+// VORHER
+<Button
+  asChild
+  variant="outline"
+  size="lg"
+  className="gap-2.5 h-12 sm:h-14 px-6 sm:px-8 text-sm sm:text-base border-2 border-primary hover:bg-cta hover:text-cta-foreground hover:border-cta transition-all duration-300"
+>
+
+// NACHHER
+<Button
+  asChild
+  variant="outline"
+  size="lg"
+  className="gap-2.5 h-12 sm:h-14 px-6 sm:px-8 text-sm sm:text-base border-2 border-primary hover:bg-cta hover:text-cta-foreground hover:border-cta transition-all duration-300 max-lg:bg-cta max-lg:text-cta-foreground max-lg:border-cta"
+>
+```
+
+### 3. FloatingCTAs.tsx (Zeile 13-20)
+
+Die FloatingCTAs sind **nur auf Mobile sichtbar** (`lg:hidden`), daher sollte der Anruf-Button hier immer direkt orange sein:
+
+```tsx
+// VORHER
+<a
+  href={PHONE_LINK}
+  className="flex-1 flex items-center justify-center gap-2 py-3.5 px-4 bg-card border-2 border-primary rounded-xl shadow-medium text-foreground font-medium transition-all active:scale-95 hover:bg-cta hover:text-cta-foreground hover:border-cta"
+>
+
+// NACHHER (direkt orange, kein Hover nötig)
+<a
+  href={PHONE_LINK}
+  className="flex-1 flex items-center justify-center gap-2 py-3.5 px-4 bg-cta border-2 border-cta rounded-xl shadow-medium text-cta-foreground font-medium transition-all active:scale-95"
+>
+```
+
+---
+
+## Visuelles Ergebnis
+
+```text
+DESKTOP (lg+):
+┌─────────────────────────────────────────────────────┐
+│  Anruf-Button:                                      │
+│  Normal:    [📞 Anrufen]  ← Grüner Rahmen           │
+│  Hover:     [📞 Anrufen]  ← Orange gefüllt          │
+└─────────────────────────────────────────────────────┘
+
+MOBILE (< lg):
+┌─────────────────────────────────────────────────────┐
+│  Anruf-Button:                                      │
+│  Immer:     [📞 Anrufen]  ← Direkt orange           │
+│             (kein Hover auf Touch-Geräten)          │
+└─────────────────────────────────────────────────────┘
+
+FLOATING CTAs (nur Mobile):
+┌─────────────────────────────────────────────────────┐
+│  ┌──────────────┐  ┌──────────────┐                 │
+│  │ 📞 Anrufen   │  │ 💬 WhatsApp  │                 │
+│  │   ORANGE     │  │    GRÜN      │                 │
+│  └──────────────┘  └──────────────┘                 │
+└─────────────────────────────────────────────────────┘
+```
+
+---
+
+## Zusammenfassung der Änderungen
+
+| Datei | Änderung |
+|-------|----------|
+| `src/pages/ServicePage.tsx` | StickyConversionBar Import + Komponente entfernen |
+| `src/components/sections/HeroSection.tsx` | Mobile-Orange für Anruf-Button |
+| `src/components/services/ServiceHero.tsx` | Mobile-Orange für Anruf-Button |
+| `src/components/layout/FloatingCTAs.tsx` | Anruf-Button direkt orange (immer) |
+
+**Optional:** `src/components/services/StickyConversionBar.tsx` löschen (wird nicht mehr verwendet)
