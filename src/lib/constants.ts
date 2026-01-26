@@ -60,6 +60,14 @@ export const REGIONS = [
 // Services
 export const SERVICES = [
   {
+    title: "Wohnungsentrümpelung",
+    description: "Transparent, zuverlässig und respektvoll.",
+    longDescription: "Von der ersten Preiseinschätzung bis zur besenreinen Übergabe – wir kümmern uns um alles. Komplette Räumung, fachgerechte Entsorgung und besenreine Übergabe aus einer Hand.",
+    highlights: ["Besenrein", "Festpreis möglich", "Antwort < 24h"],
+    slug: "wohnungsentruempelung",
+    featured: true,
+  },
+  {
     title: "Haushaltsauflösung",
     description: "Strukturiert, respektvoll und transparent.",
     longDescription: "Bei Erbschaft oder Umzug ins Pflegeheim übernehmen wir die komplette Auflösung – respektvoll und ohne Zeitdruck. Wertgegenstände werden auf Wunsch angerechnet.",

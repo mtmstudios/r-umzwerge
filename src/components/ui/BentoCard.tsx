@@ -8,6 +8,8 @@ interface BentoCardProps {
   icon: LucideIcon;
   href: string;
   variant?: 'default' | 'glass' | 'accent';
+  size?: 'default' | 'large';
+  featured?: boolean;
   className?: string;
   index?: number;
 }
@@ -19,16 +21,24 @@ export function BentoCard({
   icon: Icon,
   href,
   variant = 'default',
+  size = 'default',
+  featured = false,
   className,
   index = 0,
 }: BentoCardProps) {
+  const isLarge = size === 'large';
+
   return (
     <a
       href={href}
       className={cn(
-        'group relative overflow-hidden rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 transition-all duration-500 min-h-[160px] sm:min-h-[180px]',
+        'group relative overflow-hidden rounded-xl sm:rounded-2xl transition-all duration-500',
         'flex flex-col items-center text-center',
         'hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98]',
+        // Size variants
+        isLarge 
+          ? 'p-6 sm:p-8 min-h-[180px] sm:min-h-[200px]' 
+          : 'p-4 sm:p-5 min-h-[140px] sm:min-h-[160px]',
         // Style variants
         variant === 'default' && 'bg-card border border-border hover:border-accent/50 hover:shadow-medium',
         variant === 'glass' && 'glass hover:shadow-lg',
@@ -39,6 +49,13 @@ export function BentoCard({
         animationDelay: `${index * 100}ms`,
       }}
     >
+      {/* Featured Badge */}
+      {featured && (
+        <span className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-accent/20 text-accent text-xs font-semibold px-2.5 py-1 rounded-full backdrop-blur-sm border border-accent/30">
+          ⭐ Kernkompetenz
+        </span>
+      )}
+
       {/* Glow effect on hover - orange accent */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-br from-cta/10 via-transparent to-accent/5" />
@@ -47,8 +64,9 @@ export function BentoCard({
       {/* Icon */}
       <div
         className={cn(
-          'relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center mb-3 sm:mb-4 mx-auto transition-all duration-300',
+          'relative rounded-xl sm:rounded-2xl flex items-center justify-center mb-3 sm:mb-4 mx-auto transition-all duration-300',
           'group-hover:scale-110 group-hover:rotate-3',
+          isLarge ? 'w-14 h-14 sm:w-16 sm:h-16' : 'w-10 h-10 sm:w-12 sm:h-12',
           variant === 'accent'
             ? 'bg-accent/20'
             : 'bg-accent/10 group-hover:bg-accent/20'
@@ -56,17 +74,19 @@ export function BentoCard({
       >
         <Icon
           className={cn(
-            'h-6 w-6 sm:h-7 sm:w-7 transition-colors duration-300',
+            'transition-colors duration-300',
+            isLarge ? 'h-7 w-7 sm:h-8 sm:w-8' : 'h-5 w-5 sm:h-6 sm:w-6',
             variant === 'accent' ? 'text-accent' : 'text-primary'
           )}
         />
       </div>
 
       {/* Content */}
-      <div className="relative space-y-1.5 sm:space-y-2 text-center">
+      <div className="relative space-y-1 sm:space-y-1.5 text-center">
         <h3
           className={cn(
-            'font-semibold text-base sm:text-lg',
+            'font-semibold',
+            isLarge ? 'text-base sm:text-lg' : 'text-sm sm:text-base',
             variant === 'accent' ? 'text-primary-foreground' : 'text-foreground'
           )}
         >
@@ -76,7 +96,7 @@ export function BentoCard({
         {subtitle && (
           <p
             className={cn(
-              'text-sm',
+              'text-xs sm:text-sm',
               variant === 'accent' ? 'text-primary-foreground/70' : 'text-muted-foreground'
             )}
           >
@@ -87,7 +107,8 @@ export function BentoCard({
         {description && (
           <p
             className={cn(
-              'text-sm leading-relaxed',
+              'leading-relaxed',
+              isLarge ? 'text-sm' : 'text-xs sm:text-sm',
               variant === 'accent' ? 'text-primary-foreground/80' : 'text-muted-foreground'
             )}
           >
@@ -99,13 +120,14 @@ export function BentoCard({
       {/* Arrow indicator */}
       <div
         className={cn(
-          'absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 text-sm font-medium transition-all duration-300',
+          'absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 font-medium transition-all duration-300',
           'opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0',
+          isLarge ? 'text-sm' : 'text-xs sm:text-sm',
           variant === 'accent' ? 'text-accent' : 'text-primary'
         )}
       >
         <span>Details</span>
-        <ArrowRight className="h-4 w-4" />
+        <ArrowRight className={cn(isLarge ? 'h-4 w-4' : 'h-3.5 w-3.5')} />
       </div>
     </a>
   );
