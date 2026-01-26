@@ -21,25 +21,45 @@ const Index = () => {
         <HeroSection />
         <TrustBar />
         
-        <SectionDivider variant="curve" fillClassName="fill-background" />
+        <SectionDivider 
+          variant="gradient" 
+          fromColor="hsl(var(--primary))" 
+          toColor="hsl(var(--background))" 
+        />
         <ProcessSection />
         
         <SectionDivider variant="angle" direction="down" fillClassName="fill-secondary/30" />
         <ServicesSection />
         
-        <SectionDivider variant="wave" direction="up" fillClassName="fill-background" />
+        <SectionDivider 
+          variant="gradient" 
+          fromColor="hsl(var(--secondary) / 0.3)" 
+          toColor="hsl(var(--background))" 
+        />
         <PricingSection />
         
-        <SectionDivider variant="curve" fillClassName="fill-muted" />
+        <SectionDivider 
+          variant="gradient" 
+          fromColor="hsl(var(--background))" 
+          toColor="hsl(var(--secondary) / 0.3)" 
+        />
         <BeforeAfterSection />
         
-        <SectionDivider variant="angle" direction="down" fillClassName="fill-background" />
+        <SectionDivider 
+          variant="gradient" 
+          fromColor="hsl(var(--secondary) / 0.3)" 
+          toColor="hsl(var(--background))" 
+        />
         <ReviewsSection />
         
         <SectionDivider variant="wave" fillClassName="fill-secondary/30" />
         <RegionsSection />
         
-        <SectionDivider variant="curve" direction="up" fillClassName="fill-background" />
+        <SectionDivider 
+          variant="gradient" 
+          fromColor="hsl(var(--secondary) / 0.3)" 
+          toColor="hsl(var(--background))" 
+        />
         <FAQSection />
         
         <SectionDivider variant="angle" fillClassName="fill-primary" />
