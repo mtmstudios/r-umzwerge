@@ -1,116 +1,88 @@
 
 
-# Implementierungsplan: FloatingCTAs Scroll-Visibility + Hero-Bilder
+# Plan: SVG-Divider durch Gradient-Fade ersetzen
 
-## Teil 1: FloatingCTAs erst nach Hero-Scroll anzeigen
+## Analyse des Problems
 
-### Änderung in `src/components/layout/FloatingCTAs.tsx`
+Der aktuelle `SectionDivider` vor der BeforeAfterSection verwendet `variant="curve"` mit `fillClassName="fill-muted"`. Da beide Sektionen (PricingSection und BeforeAfterSection) ähnliche helle Hintergrundfarben haben, ist der SVG-Kurven-Divider kaum sichtbar.
 
-Die Komponente wird erweitert um:
-- `useState` für Sichtbarkeitsstatus
-- `useEffect` mit Intersection Observer
-- Animation-Classes für sanftes Ein-/Ausblenden
+**Farbübergänge aktuell:**
+- PricingSection: `bg-background` (Off-White)
+- Divider: `fill-muted` (sehr ähnlich)
+- BeforeAfterSection: `bg-secondary/30` (helles Grün)
 
-```tsx
-import { forwardRef, useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
-// ... restliche imports
+## Lösung: Neuer Gradient-Fade Variant
 
-export const FloatingCTAs = forwardRef<HTMLDivElement>((props, ref) => {
-  const [isVisible, setIsVisible] = useState(false);
+### 1. SectionDivider-Komponente erweitern
 
-  useEffect(() => {
-    const heroSection = document.querySelector('main > section:first-of-type');
-    if (!heroSection) {
-      setIsVisible(true);
-      return;
-    }
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsVisible(!entry.isIntersecting),
-      { threshold: 0, rootMargin: '-100px 0px 0px 0px' }
-    );
-    observer.observe(heroSection);
-    return () => observer.disconnect();
-  }, []);
+Neuer `gradient`-Variant, der statt SVG einen CSS-Gradienten nutzt:
 
-  return (
-    <div 
-      ref={ref}
-      className={cn(
-        "lg:hidden fixed bottom-0 ... ",
-        "transition-all duration-300",
-        isVisible 
-          ? "translate-y-0 opacity-100" 
-          : "translate-y-full opacity-0 pointer-events-none"
-      )}
-    >
-      {/* Buttons bleiben unverändert */}
-    </div>
-  );
-});
+```text
++--------------------------------------------------+
+|  PricingSection (bg-background)                  |
++--------------------------------------------------+
+|  ████████████████████████████████████████████    | ← Gradient-Fade
+|  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓    |   (sanfter Übergang)
+|  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    |
++--------------------------------------------------+
+|  BeforeAfterSection (bg-secondary/30)            |
++--------------------------------------------------+
 ```
 
----
+### 2. Technische Implementierung
 
-## Teil 2: Hero-Bilder für Service-Seiten
+**Datei: `src/components/ui/SectionDivider.tsx`**
 
-### 2.1 Datenstruktur erweitern (`serviceData.ts`)
-
-Interface erweitern:
-
-```typescript
-hero: {
-  h1: string;
-  subline: string;
-  trustPills: string[];
-  imageSrc?: string;   // NEU
-  imageAlt?: string;   // NEU
+```tsx
+interface SectionDividerProps {
+  variant?: 'angle' | 'wave' | 'curve' | 'gradient' | 'glow';  // NEUE Varianten
+  direction?: 'up' | 'down';
+  className?: string;
+  fillClassName?: string;
+  fromColor?: string;  // NEU: Start-Farbe für Gradient
+  toColor?: string;    // NEU: End-Farbe für Gradient
 }
 ```
 
-### 2.2 Bilder generieren (6 Stück)
+**Neue Varianten:**
 
-| Service | Bildmotiv | Dateiname |
-|---------|-----------|-----------|
-| Wohnungsentrümpelung | Leere, helle Wohnung nach Räumung, sauber, Sonnenlicht | `service-wohnungsentruempelung.jpg` |
-| Entrümpelung | Team beim Verladen von Kartons in Transporter | `service-entruempelung.jpg` |
-| Haushaltsauflösung | Aufgeräumtes Wohnzimmer, warme Atmosphäre | `service-haushaltsaufloesung.jpg` |
-| Keller/Dachboden/Garage | Leerer, ordentlicher Kellerraum | `service-keller.jpg` |
-| Gewerbe/Büro/Lager | Leeres Büro, professionelle Atmosphäre | `service-gewerbe.jpg` |
-| Messie-Wohnung | Team in neutraler Kleidung, diskrete Arbeit | `service-messie.jpg` |
+| Variant | Beschreibung | Use Case |
+|---------|-------------|----------|
+| `gradient` | Sanfter linearer Farbübergang (40-60px Höhe) | Standard-Sektionswechsel |
+| `glow` | Gradient mit subtiler Mittellinie (accent-Farbe) | Akzentuierte Übergänge |
 
-Stil: Professionell, sauber, vertrauenswürdig, warme Töne
+### 3. Änderung in Index.tsx
 
-### 2.3 Bilder in serviceData.ts eintragen
-
-Jeder Service bekommt die passenden Bild-Referenzen:
-
-```typescript
-'wohnungsentruempelung': {
-  hero: {
-    h1: '...',
-    subline: '...',
-    trustPills: [...],
-    imageSrc: '/images/service-wohnungsentruempelung.jpg',
-    imageAlt: 'Leere, saubere Wohnung nach professioneller Entrümpelung'
-  },
-  // ...
-}
+**Vorher:**
+```tsx
+<SectionDivider variant="curve" fillClassName="fill-muted" />
+<BeforeAfterSection />
 ```
 
-### 2.4 ServicePage.tsx anpassen
-
-Bild-Props an ServiceHero übergeben:
-
+**Nachher:**
 ```tsx
-<ServiceHero
-  h1={pageData.hero.h1}
-  subline={pageData.hero.subline}
-  trustPills={pageData.hero.trustPills}
-  imageSrc={pageData.hero.imageSrc}
-  imageAlt={pageData.hero.imageAlt}
+<SectionDivider 
+  variant="gradient" 
+  fromColor="hsl(var(--background))" 
+  toColor="hsl(var(--secondary) / 0.3)" 
 />
+<BeforeAfterSection />
 ```
+
+### 4. Alle anderen Divider überprüfen und anpassen
+
+Die anderen SVG-Divider im Projekt können beibehalten oder ebenfalls durch Gradienten ersetzt werden:
+
+| Position | Aktuell | Empfehlung |
+|----------|---------|------------|
+| TrustBar → Process | curve, fill-background | gradient (für Konsistenz) |
+| Process → Services | angle, fill-secondary/30 | beibehalten (sichtbar genug) |
+| Services → Pricing | wave, fill-background | gradient |
+| **Pricing → BeforeAfter** | curve, fill-muted | **gradient** ✓ |
+| BeforeAfter → Reviews | angle, fill-background | gradient |
+| Reviews → Regions | wave, fill-secondary/30 | beibehalten |
+| Regions → FAQ | curve, fill-background | gradient |
+| FAQ → FinalCTA | angle, fill-primary | beibehalten (starker Kontrast) |
 
 ---
 
@@ -118,15 +90,13 @@ Bild-Props an ServiceHero übergeben:
 
 | Datei | Änderung |
 |-------|----------|
-| `src/components/layout/FloatingCTAs.tsx` | Intersection Observer + Visibility-State + Animation |
-| `src/lib/serviceData.ts` | Interface erweitern + imageSrc/imageAlt für alle 6 Services |
-| `src/pages/ServicePage.tsx` | imageSrc und imageAlt Props übergeben |
-| `public/images/` | 6 neue AI-generierte Bilder |
+| `src/components/ui/SectionDivider.tsx` | Neue `gradient` und `glow` Varianten hinzufügen |
+| `src/pages/Index.tsx` | Unsichtbare Divider durch `variant="gradient"` ersetzen |
 
-## Reihenfolge
+## Ergebnis
 
-1. FloatingCTAs mit Scroll-Visibility erweitern
-2. 6 Service-Bilder mit AI generieren und speichern
-3. serviceData.ts erweitern
-4. ServicePage.tsx anpassen
+- Sanfte, sichtbare Übergänge zwischen allen Sektionen
+- Professionellerer, modernerer Look
+- Keine harten Kanten oder unsichtbaren SVGs mehr
+- Optional: `glow`-Variant für besondere Akzente (z.B. vor dem FinalCTA)
 
