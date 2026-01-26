@@ -1,135 +1,166 @@
 
-# Plan: Neues Services-Layout (2 große + 3 kleine Karten)
+# Plan: Highlight-Icons für Service-Karten
 
 ## Ziel
 
-Umgestaltung der Leistungen-Sektion zu einem ausgewogenen Layout mit:
-- **2 größere Karten** (obere Reihe): Wohnungsentrümpelung & Haushaltsauflösung
-- **3 kleinere Karten** (untere Reihe): Keller/Dachboden, Gewerbe/Büro, Diskrete Reinigung
+Jede Service-Karte zeigt ihre Highlights mit passenden Icons an (z.B. Häkchen für "Besenrein", Uhr für "Antwort < 24h").
 
-## Visuelles Layout
+## Aktuelle Situation
+
+Die Highlights sind bereits in `constants.ts` definiert:
+- Wohnungsentrümpelung: "Besenrein", "Festpreis möglich", "Antwort < 24h"
+- Haushaltsauflösung: "Wertanrechnung möglich", "Respektvoller Umgang", etc.
+- usw.
+
+Diese werden jedoch in der BentoCard **nicht angezeigt**.
+
+## Icon-Zuordnung
+
+| Highlight-Text | Icon |
+|----------------|------|
+| Besenrein | `Sparkles` |
+| Festpreis möglich | `BadgeCheck` |
+| Antwort < 24h | `Clock` |
+| Wertanrechnung möglich | `Coins` |
+| Respektvoller Umgang | `Heart` |
+| Komplettservice | `Package` |
+| Enge Zugänge | `DoorOpen` |
+| Entsorgung inklusive | `Trash2` |
+| Kurzfristige Termine | `CalendarCheck` |
+| Außerhalb Geschäftszeiten | `Moon` |
+| Dokumentenvernichtung | `FileX` |
+| Feste Terminplanung | `Calendar` |
+| Neutrale Fahrzeuge | `Truck` |
+| Diskretion garantiert | `EyeOff` |
+| Geschultes Team | `Users` |
+| Standard-Fallback | `Check` |
+
+## Visuelles Design
 
 ```text
-Desktop:
-┌─────────────────────────┐ ┌─────────────────────────┐
-│                         │ │                         │
-│   Wohnungsentrümpelung  │ │   Haushaltsauflösung    │
-│   (groß, mit Badge)     │ │   (groß)                │
-│                         │ │                         │
-└─────────────────────────┘ └─────────────────────────┘
-
-┌───────────────┐ ┌───────────────┐ ┌───────────────┐
-│ Keller/       │ │ Gewerbe/      │ │ Diskrete      │
-│ Dachboden     │ │ Büro/Lager    │ │ Reinigung     │
-└───────────────┘ └───────────────┘ └───────────────┘
-
-Mobile:
-Alle Karten vertikal gestapelt, große Karten zuerst
+┌─────────────────────────────────┐
+│         🏠 (Icon)               │
+│     Wohnungsentrümpelung        │
+│ Transparent, zuverlässig...     │
+│                                 │
+│ ✨ Besenrein  ✓ Festpreis  🕐 <24h │
+└─────────────────────────────────┘
 ```
 
-## Technische Umsetzung
+Die Highlights erscheinen als kompakte Zeile mit kleinen Icons unter der Beschreibung.
 
-### Dateien die geändert werden
+## Dateien die geändert werden
 
 | Datei | Aktion |
 |-------|--------|
-| `src/lib/constants.ts` | Wohnungsentrümpelung zu SERVICES Array hinzufügen |
-| `src/components/sections/ServicesSection.tsx` | Komplettes Redesign der Grid-Struktur |
-| `src/components/ui/BentoCard.tsx` | Neue `size` Prop hinzufügen (large/small) |
+| `src/components/ui/BentoCard.tsx` | Neue `highlights` Prop + Icon-Rendering |
+| `src/components/sections/ServicesSection.tsx` | `highlights` an BentoCard übergeben |
 
-### 1. constants.ts - Wohnungsentrümpelung hinzufügen
+## Technische Details
 
-Wohnungsentrümpelung als erstes Element in das SERVICES Array einfügen:
+### 1. BentoCard.tsx - Highlights-Prop hinzufügen
 
-```typescript
-export const SERVICES = [
-  {
-    title: "Wohnungsentrümpelung",
-    description: "Transparent, zuverlässig und respektvoll.",
-    longDescription: "Von der ersten Preiseinschätzung bis zur besenreinen Übergabe...",
-    highlights: ["Besenrein", "Festpreis möglich", "Antwort < 24h"],
-    slug: "wohnungsentruempelung",
-    featured: true, // Markierung für Badge
-  },
-  // ... bestehende Services
-];
+**Neue Imports:**
+```tsx
+import { 
+  ArrowRight, Sparkles, BadgeCheck, Clock, Coins, Heart, 
+  Package, DoorOpen, Trash2, CalendarCheck, Moon, FileX, 
+  Calendar, Truck, EyeOff, Users, Check
+} from 'lucide-react';
 ```
 
-### 2. BentoCard.tsx - Size Variante
+**Icon-Mapping-Funktion:**
+```tsx
+const getHighlightIcon = (text: string) => {
+  const lower = text.toLowerCase();
+  if (lower.includes('besenrein')) return Sparkles;
+  if (lower.includes('festpreis')) return BadgeCheck;
+  if (lower.includes('24h') || lower.includes('antwort')) return Clock;
+  if (lower.includes('wertanrechnung') || lower.includes('angerechnet')) return Coins;
+  if (lower.includes('respekt')) return Heart;
+  if (lower.includes('komplett')) return Package;
+  if (lower.includes('zugang') || lower.includes('enge')) return DoorOpen;
+  if (lower.includes('entsorgung')) return Trash2;
+  if (lower.includes('kurzfristig')) return CalendarCheck;
+  if (lower.includes('geschäftszeit')) return Moon;
+  if (lower.includes('dokument')) return FileX;
+  if (lower.includes('termin')) return Calendar;
+  if (lower.includes('fahrzeug') || lower.includes('neutral')) return Truck;
+  if (lower.includes('diskret')) return EyeOff;
+  if (lower.includes('team') || lower.includes('geschult')) return Users;
+  return Check;
+};
+```
 
-Neue `size` Prop für unterschiedliche Kartengrößen:
-
-```typescript
+**Interface-Erweiterung:**
+```tsx
 interface BentoCardProps {
   // ... bestehende Props
-  size?: 'default' | 'large';
-  featured?: boolean; // Für Kernkompetenz-Badge
+  highlights?: string[];
 }
 ```
 
-**Große Karten:**
-- Höhere min-height (220px statt 160px)
-- Größeres Icon (64px statt 48px)
-- Mehr Padding
-- Optional: Kernkompetenz-Badge
+**Highlights-Rendering (nach description, vor Arrow):**
+```tsx
+{highlights && highlights.length > 0 && (
+  <div className={cn(
+    "flex flex-wrap justify-center gap-2 mt-3",
+    isLarge ? "gap-3" : "gap-2"
+  )}>
+    {highlights.slice(0, isLarge ? 3 : 2).map((highlight, i) => {
+      const HighlightIcon = getHighlightIcon(highlight);
+      return (
+        <span
+          key={i}
+          className={cn(
+            "inline-flex items-center gap-1 text-xs",
+            "text-muted-foreground/80",
+            variant === 'accent' && "text-primary-foreground/70"
+          )}
+        >
+          <HighlightIcon className="h-3 w-3 text-accent" />
+          <span className="truncate max-w-[100px]">{highlight}</span>
+        </span>
+      );
+    })}
+  </div>
+)}
+```
 
-**Kleine Karten:**
-- Kompakter (140px min-height)
-- Standard Icon-Größe
-- Weniger Padding
+### 2. ServicesSection.tsx - Highlights übergeben
 
-### 3. ServicesSection.tsx - Neues Grid
-
-Entfernung der aktuellen Featured Card, stattdessen ein einheitliches Grid:
+Die `highlights` aus dem Service-Objekt an die BentoCard weitergeben:
 
 ```tsx
-{/* Obere Reihe: 2 große Karten */}
-<div className="grid md:grid-cols-2 gap-5 lg:gap-6 mb-5 lg:mb-6">
-  {SERVICES.slice(0, 2).map((service, index) => (
-    <BentoCard
-      size="large"
-      featured={service.featured}
-      // ... Props
-    />
-  ))}
-</div>
-
-{/* Untere Reihe: 3 kleine Karten */}
-<div className="grid md:grid-cols-3 gap-5 lg:gap-6">
-  {SERVICES.slice(2, 5).map((service, index) => (
-    <BentoCard
-      size="default"
-      // ... Props
-    />
-  ))}
-</div>
+<BentoCard
+  key={service.slug}
+  title={service.title}
+  subtitle={service.subtitle}
+  description={service.description}
+  highlights={service.highlights}  // NEU
+  icon={Icon}
+  href={`/leistungen/${service.slug}`}
+  size="large"
+  featured={service.featured}
+  index={index}
+/>
 ```
+
+### Responsive Anpassungen
+
+| Kartengröße | Anzahl Highlights | Layout |
+|-------------|-------------------|--------|
+| Large | Bis zu 3 | Horizontal, mehr Abstand |
+| Default | Bis zu 2 | Horizontal, kompakt |
 
 ### Styling Details
 
-**Große Karten (Wohnungsentrümpelung & Haushaltsauflösung):**
-- `min-h-[200px] sm:min-h-[220px]`
-- Icon: `w-16 h-16` 
-- Padding: `p-6 sm:p-8`
-- Wohnungsentrümpelung erhält "★ Kernkompetenz" Badge
+- Icons in `text-accent` (grün) für visuellen Akzent
+- Text in `text-muted-foreground/80` für Dezenz
+- Abstand nach oben mit `mt-3`
+- Flexbox mit `flex-wrap` für mobile Umbrüche
+- Text-Truncate für lange Highlights
 
-**Kleine Karten (restliche 3):**
-- `min-h-[140px] sm:min-h-[160px]`
-- Icon: `w-12 h-12`
-- Padding: `p-4 sm:p-5`
-- Kompaktere Texte
+## Ergebnis
 
-### Responsive Verhalten
-
-| Viewport | Obere Reihe | Untere Reihe |
-|----------|-------------|--------------|
-| Mobile   | 1 Spalte    | 1 Spalte     |
-| Tablet   | 2 Spalten   | 3 Spalten    |
-| Desktop  | 2 Spalten   | 3 Spalten    |
-
-## Vorteile
-
-- **Symmetrisches Layout**: 2+3 Karten = keine alleinstehende Karte
-- **Visuelle Hierarchie**: Hauptleistungen sind größer und prominenter
-- **Einheitlicher Code**: Alle Services im gleichen Array, BentoCard handhabt Größen
-- **Mobile-optimiert**: Saubere Stapelreihenfolge auf kleinen Bildschirmen
+Jede Service-Karte zeigt ihre wichtigsten USPs mit passenden Icons an. Die großen Karten (Wohnungsentrümpelung, Haushaltsauflösung) zeigen bis zu 3 Highlights, die kleineren bis zu 2.
