@@ -48,7 +48,7 @@ export function ServicesSection() {
         {/* Featured Card - Hauptleistung */}
         <div
           className={cn(
-            "group relative bg-primary rounded-3xl p-8 lg:p-12 mb-8 text-center overflow-hidden scroll-reveal glow-hover",
+            "group relative bg-primary rounded-3xl p-8 lg:p-12 mb-10 text-center overflow-hidden scroll-reveal glow-hover",
             headerVisible && "visible"
           )}
         >
@@ -111,34 +111,28 @@ export function ServicesSection() {
           </div>
         </div>
 
-        {/* Bento Grid */}
+        {/* Centered 2x2 Bento Grid */}
         <div
           ref={gridRef}
           className={cn(
-            "grid md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5",
+            "max-w-4xl mx-auto grid md:grid-cols-2 gap-5 lg:gap-6",
             "scroll-reveal stagger-animation",
             gridVisible && "visible"
           )}
         >
           {SERVICES.map((service, index) => {
             const Icon = serviceIcons[service.slug] || Users;
-            // Make one card tall for visual interest
-            const isTall = index === 1;
             
             return (
               <BentoCard
                 key={service.slug}
                 title={service.title}
                 subtitle={service.subtitle}
-                description={isTall ? service.longDescription : undefined}
+                description={service.description}
                 icon={Icon}
                 href={`/leistungen/${service.slug}`}
-                size={isTall ? 'tall' : 'normal'}
                 variant={index === 3 ? 'glass' : 'default'}
                 index={index}
-                className={cn(
-                  isTall && 'lg:row-span-2'
-                )}
               />
             );
           })}

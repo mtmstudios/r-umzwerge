@@ -1,5 +1,6 @@
 import { Phone, Mail, MapPin } from 'lucide-react';
-import { NAV_ITEMS, SERVICES, PHONE_NUMBER, EMAIL, SERVICE_HOURS, getWhatsAppLink } from '@/lib/constants';
+import { Button } from '@/components/ui/button';
+import { SERVICES, REGIONS, PHONE_NUMBER, EMAIL, SERVICE_HOURS, getWhatsAppLink } from '@/lib/constants';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 
 export function Footer() {
@@ -7,17 +8,60 @@ export function Footer() {
 
   return (
     <footer className="bg-primary text-primary-foreground">
-      <div className="container-custom py-12 lg:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+      {/* CTA Banner */}
+      <div className="border-b border-primary-foreground/10">
+        <div className="container-custom py-8 lg:py-10">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+            {/* Left - Brand */}
+            <div className="text-center lg:text-left">
+              <span className="text-2xl lg:text-3xl font-bold block">Räumzwerge</span>
+              <p className="text-primary-foreground/70 text-sm mt-1">
+                Entrümpelung in Süddeutschland
+              </p>
+            </div>
+
+            {/* Right - CTA */}
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <span className="text-primary-foreground/80 text-sm hidden sm:block">
+                Jetzt Preiseinschätzung erhalten →
+              </span>
+              <Button
+                asChild
+                size="lg"
+                className="gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-12 px-6 shadow-whatsapp btn-lift"
+              >
+                <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
+                  <WhatsAppIcon className="h-5 w-5" />
+                  WhatsApp schreiben
+                </a>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Link Columns */}
+      <div className="container-custom py-10 lg:py-14">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
           {/* Leistungen */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Leistungen</h3>
-            <ul className="space-y-2">
-              {SERVICES.slice(0, 5).map((service) => (
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 text-primary-foreground/90">
+              Leistungen
+            </h3>
+            <ul className="space-y-2.5">
+              <li>
+                <a
+                  href="/leistungen/wohnungsentruempelung"
+                  className="text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm"
+                >
+                  Wohnungsentrümpelung
+                </a>
+              </li>
+              {SERVICES.map((service) => (
                 <li key={service.slug}>
                   <a
                     href={`/leistungen/${service.slug}`}
-                    className="text-primary-foreground/80 hover:text-primary-foreground transition-colors text-sm"
+                    className="text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm"
                   >
                     {service.title}
                   </a>
@@ -28,12 +72,14 @@ export function Footer() {
 
           {/* Kontakt */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Kontakt</h3>
-            <ul className="space-y-3">
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 text-primary-foreground/90">
+              Kontakt
+            </h3>
+            <ul className="space-y-2.5">
               <li>
                 <a
                   href={`tel:${PHONE_NUMBER.replace(/\s/g, '')}`}
-                  className="flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground transition-colors text-sm"
+                  className="flex items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm"
                 >
                   <Phone className="h-4 w-4 flex-shrink-0" />
                   {PHONE_NUMBER}
@@ -44,7 +90,7 @@ export function Footer() {
                   href={getWhatsAppLink()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground transition-colors text-sm"
+                  className="flex items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm"
                 >
                   <WhatsAppIcon className="h-4 w-4 flex-shrink-0" />
                   WhatsApp
@@ -53,13 +99,13 @@ export function Footer() {
               <li>
                 <a
                   href={`mailto:${EMAIL}`}
-                  className="flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground transition-colors text-sm"
+                  className="flex items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm"
                 >
                   <Mail className="h-4 w-4 flex-shrink-0" />
                   {EMAIL}
                 </a>
               </li>
-              <li className="flex items-center gap-2 text-primary-foreground/80 text-sm">
+              <li className="flex items-center gap-2 text-primary-foreground/70 text-sm">
                 <MapPin className="h-4 w-4 flex-shrink-0" />
                 Ulm (Hauptsitz)
               </li>
@@ -68,12 +114,14 @@ export function Footer() {
 
           {/* Rechtliches */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Rechtliches</h3>
-            <ul className="space-y-2">
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 text-primary-foreground/90">
+              Rechtliches
+            </h3>
+            <ul className="space-y-2.5">
               <li>
                 <a
                   href="/impressum"
-                  className="text-primary-foreground/80 hover:text-primary-foreground transition-colors text-sm"
+                  className="text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm"
                 >
                   Impressum
                 </a>
@@ -81,7 +129,7 @@ export function Footer() {
               <li>
                 <a
                   href="/datenschutz"
-                  className="text-primary-foreground/80 hover:text-primary-foreground transition-colors text-sm"
+                  className="text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm"
                 >
                   Datenschutz
                 </a>
@@ -89,32 +137,38 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Servicezeiten */}
+          {/* Einsatzgebiet */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Servicezeiten</h3>
-            <p className="text-primary-foreground/80 text-sm">{SERVICE_HOURS}</p>
-            <div className="mt-6">
-              <span className="text-2xl font-bold">Räumzwerge</span>
-              <p className="text-primary-foreground/60 text-sm mt-2">
-                Entrümpelung in Süddeutschland
-              </p>
-            </div>
+            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4 text-primary-foreground/90">
+              Einsatzgebiet
+            </h3>
+            <ul className="space-y-2.5">
+              {REGIONS.slice(0, 6).map((region) => (
+                <li key={region.slug}>
+                  <span className="text-primary-foreground/70 text-sm">
+                    {region.name}
+                    {region.isHQ && (
+                      <span className="text-accent ml-1 text-xs">(HQ)</span>
+                    )}
+                  </span>
+                </li>
+              ))}
+              <li>
+                <span className="text-primary-foreground/50 text-sm">
+                  + weitere Regionen
+                </span>
+              </li>
+            </ul>
           </div>
         </div>
+      </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-primary-foreground/20 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-primary-foreground/60">
-          <p>© {currentYear} Räumzwerge. Alle Rechte vorbehalten.</p>
-          <div className="flex items-center gap-4">
-            {NAV_ITEMS.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="hover:text-primary-foreground transition-colors"
-              >
-                {item.label}
-              </a>
-            ))}
+      {/* Bottom Bar */}
+      <div className="border-t border-primary-foreground/10">
+        <div className="container-custom py-5">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-3 text-sm text-primary-foreground/50">
+            <p>© {currentYear} Räumzwerge. Alle Rechte vorbehalten.</p>
+            <p>{SERVICE_HOURS}</p>
           </div>
         </div>
       </div>

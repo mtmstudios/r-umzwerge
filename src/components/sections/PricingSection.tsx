@@ -2,13 +2,11 @@ import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getWhatsAppLink, PRICE_FACTORS } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
-import { useParallax } from '@/hooks/useParallax';
 import { cn } from '@/lib/utils';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 
 export function PricingSection() {
   const { ref, isVisible } = useScrollReveal(0.1);
-  const { ref: parallaxRef, offset } = useParallax(0.3);
 
   return (
     <section id="preise" className="py-16 lg:py-24 bg-background overflow-hidden">
@@ -16,12 +14,12 @@ export function PricingSection() {
         <div
           ref={ref}
           className={cn(
-            "grid lg:grid-cols-2 gap-12 lg:gap-16 items-center",
+            "grid lg:grid-cols-2 gap-10 lg:gap-16 items-start",
             "scroll-reveal",
             isVisible && "visible"
           )}
         >
-          {/* Content */}
+          {/* Left Column - Content */}
           <div>
             <h2 className="text-section-mobile lg:text-section text-foreground mb-6">
               So entsteht der Preis – transparent & nachvollziehbar
@@ -31,7 +29,7 @@ export function PricingSection() {
               Wir erklären die Kosten klar und verständlich. Nach der Einschätzung – häufig per Foto – ist ein Festpreis möglich. Ohne Überraschungen und ohne versteckte Posten.
             </p>
 
-            <div className="space-y-3 mb-8 lg:mb-0">
+            <div className="space-y-3">
               {PRICE_FACTORS.map((factor) => (
                 <div key={factor} className="flex items-center gap-3">
                   <div className="flex-shrink-0 w-6 h-6 bg-accent/20 rounded-full flex items-center justify-center">
@@ -43,37 +41,31 @@ export function PricingSection() {
             </div>
           </div>
 
-          {/* Right column: Image extending to screen edge + floating CTA card */}
-          <div className="relative min-h-[320px] lg:min-h-[380px]">
-            {/* Background image that extends to the right edge */}
-            <div 
-              ref={parallaxRef}
-              className="absolute inset-0 lg:-right-[calc(50vw-50%+2rem)] rounded-2xl lg:rounded-l-3xl lg:rounded-r-none overflow-hidden"
-            >
+          {/* Right Column - Image + CTA Card */}
+          <div className="space-y-6">
+            {/* Visible Image */}
+            <div className="relative rounded-2xl overflow-hidden shadow-lg">
               <img 
                 src="/images/messiewohnung-bg.jpg"
-                alt="Messie-Wohnung vor der Entrümpelung"
-                className="w-full h-full object-cover transition-transform duration-100 ease-out"
-                style={{ 
-                  transform: `translateY(${offset}px) scale(1.1)`,
-                }}
+                alt="Entrümpelung einer vollen Wohnung"
+                className="w-full h-64 lg:h-72 object-cover"
               />
-              {/* Gradient overlay for readability */}
-              <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-background/30 lg:from-background/90 lg:via-background/50 lg:to-transparent" />
+              {/* Subtle overlay for depth */}
+              <div className="absolute inset-0 bg-gradient-to-t from-foreground/20 via-transparent to-transparent" />
             </div>
 
-            {/* Floating CTA Card */}
-            <div className="relative z-20 bg-card/95 backdrop-blur-sm rounded-2xl lg:rounded-3xl p-8 lg:p-10 shadow-medium lg:shadow-[0_24px_48px_-12px_hsl(var(--foreground)/0.2)] border border-border/50">
-              <div className="flex items-start gap-4 mb-6">
+            {/* CTA Card */}
+            <div className="glass rounded-2xl p-6 lg:p-8 border border-border/50">
+              <div className="flex items-start gap-4 mb-5">
                 <div className="flex-shrink-0 w-12 h-12 bg-whatsapp/20 rounded-xl flex items-center justify-center">
                   <WhatsAppIcon className="h-6 w-6 text-whatsapp" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground text-lg mb-2">
+                  <h3 className="font-semibold text-foreground text-lg mb-1">
                     Schnelle Preiseinschätzung
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    WhatsApp-Foto reicht für eine erste Preiseinschätzung – innerhalb von 24 Stunden (oft schneller).
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    WhatsApp-Foto reicht – Antwort innerhalb von 24 Stunden.
                   </p>
                 </div>
               </div>
