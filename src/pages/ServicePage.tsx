@@ -10,7 +10,6 @@ import { ServiceProcess } from '@/components/services/ServiceProcess';
 import { ExtraModule } from '@/components/services/ExtraModule';
 import { ServicePricing } from '@/components/services/ServicePricing';
 import { ServiceFAQ } from '@/components/services/ServiceFAQ';
-import { ServiceRegions } from '@/components/services/ServiceRegions';
 import { ServiceFinalCTA } from '@/components/services/ServiceFinalCTA';
 import { SERVICE_PAGES } from '@/lib/serviceData';
 import { SectionDivider } from '@/components/ui/SectionDivider';
@@ -62,10 +61,7 @@ export default function ServicePage() {
         <SectionDivider variant="wave" direction="up" fillClassName="fill-background" />
         <ServiceFAQ items={pageData.faq} />
         
-        <SectionDivider variant="curve" fillClassName="fill-secondary/30" />
-        <ServiceRegions />
-        
-        <SectionDivider variant="angle" direction="up" fillClassName="fill-primary" />
+        <SectionDivider variant="angle" fillClassName="fill-primary" />
         <ServiceFinalCTA />
       </main>
       

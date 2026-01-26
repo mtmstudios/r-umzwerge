@@ -9,7 +9,7 @@ export function ServiceFinalCTA() {
   const { ref, isVisible } = useScrollReveal(0.1);
 
   return (
-    <section className="py-16 lg:py-24 bg-primary">
+    <section className="py-16 pb-28 lg:py-24 lg:pb-24 bg-primary">
       <div className="container-custom">
         <div
           ref={ref}
