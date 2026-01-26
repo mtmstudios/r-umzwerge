@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowRight, Home, Users, Warehouse, Building2, Truck, ShieldAlert, RotateCcw } from 'lucide-react';
+import { ArrowRight, Home, Users, Warehouse, Building2, Truck, ShieldAlert, RotateCcw, Check } from 'lucide-react';
 import { SERVICES } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
@@ -107,19 +107,28 @@ export function ServicesSection() {
                   </div>
 
                   {/* Back Side */}
-                  <div className="flip-card-back bg-gradient-to-br from-primary to-primary/80 p-6 flex flex-col justify-between shadow-lg">
+                  <div className="flip-card-back bg-gradient-to-br from-primary to-primary/80 p-5 flex flex-col justify-between shadow-lg">
                     <div>
-                      <h3 className="font-semibold text-primary-foreground text-lg mb-3">
+                      <h3 className="font-semibold text-primary-foreground text-base mb-2">
                         {service.title}
                       </h3>
-                      <p className="text-primary-foreground/90 text-sm leading-relaxed">
-                        {service.description}
+                      <p className="text-primary-foreground/90 text-xs leading-relaxed mb-3">
+                        {service.longDescription}
                       </p>
+                      {/* Highlights */}
+                      <ul className="space-y-1.5">
+                        {service.highlights.map((highlight, i) => (
+                          <li key={i} className="flex items-center gap-2 text-primary-foreground/80 text-xs">
+                            <Check className="h-3 w-3 text-accent flex-shrink-0" />
+                            {highlight}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                     <a
                       href={`/leistungen/${service.slug}`}
                       onClick={(e) => e.stopPropagation()}
-                      className="inline-flex items-center justify-center gap-2 bg-accent text-accent-foreground font-medium py-3 px-4 rounded-xl hover:bg-accent/90 transition-colors mt-4"
+                      className="inline-flex items-center justify-center gap-2 bg-accent text-accent-foreground font-medium py-2.5 px-4 rounded-xl hover:bg-accent/90 transition-colors text-sm mt-3"
                     >
                       Mehr erfahren
                       <ArrowRight className="h-4 w-4" />
