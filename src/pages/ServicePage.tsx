@@ -2,7 +2,6 @@ import { useParams, Navigate, Link } from 'react-router-dom';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FloatingCTAs } from '@/components/layout/FloatingCTAs';
-import { StickyConversionBar } from '@/components/services/StickyConversionBar';
 import { ServiceHero } from '@/components/services/ServiceHero';
 import { ServiceTrustBar } from '@/components/services/ServiceTrustBar';
 import { ScenarioGrid } from '@/components/services/ScenarioGrid';
@@ -29,8 +28,6 @@ export default function ServicePage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
-      <StickyConversionBar />
       
       <main>
         <ServiceHero
