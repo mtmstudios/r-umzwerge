@@ -18,8 +18,25 @@ export const EMAIL = "kontakt@raeumzwerge.de";
 export const SERVICE_HOURS = "Mo–Sa 8–20 Uhr";
 
 // Navigation items
-export const NAV_ITEMS = [
-  { label: "Leistungen", href: "#leistungen" },
+export type NavItem = {
+  label: string;
+  href: string;
+  children?: { label: string; href: string }[];
+};
+
+export const NAV_ITEMS: NavItem[] = [
+  { 
+    label: "Leistungen", 
+    href: "/leistungen",
+    children: [
+      { label: "Alle Leistungen", href: "/leistungen" },
+      { label: "Wohnungsentrümpelung", href: "/leistungen/wohnungsentruempelung" },
+      { label: "Haushaltsauflösung", href: "/leistungen/haushaltsaufloesung" },
+      { label: "Keller / Dachboden / Garage", href: "/leistungen/keller-dachboden-garage" },
+      { label: "Gewerbe / Büro / Lager", href: "/leistungen/gewerbe-buero-lager" },
+      { label: "Diskrete Reinigung", href: "/leistungen/messie-wohnungen" },
+    ]
+  },
   { label: "Preise", href: "#preise" },
   { label: "Ablauf", href: "#ablauf" },
   { label: "Referenzen", href: "#referenzen" },
