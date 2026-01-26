@@ -1,174 +1,123 @@
 
-# Plan: Moderner & Bold Header-Redesign
+# Umsetzungsplan: 3 Redesigns
 
-## Aktuelle Probleme
+## 1. Pricing Section Redesign
 
-1. **Zu viel Inhalt**: Utility-Bar + Trust-Line + CTAs = Überladen
-2. **Zu einfaches Design**: Standard-Template-Look ohne Charakter
-3. **Navigation zu klein**: Links sind dezent und unauffällig
+**Problem:** Bild ist versteckt hinter Gradienten, CTA schwebt unprofessionell
 
-## Neues Header-Konzept
+**Lösung:** Split-Layout mit zwei Spalten
+- **Links:** Headline + Preisfaktoren-Liste
+- **Rechts:** Bild (abgerundet, sichtbar) + CTA-Card darunter
+
+```text
+┌─────────────────────────┐    ┌─────────────────────────┐
+│  So entsteht der Preis  │    │   ┌─────────────────┐   │
+│  ─────────────────────  │    │   │   Foto sichtbar │   │
+│  ✓ Umfang               │    │   └─────────────────┘   │
+│  ✓ Zugänglichkeit       │    │                         │
+│  ✓ Entsorgung           │    │   ┌─────────────────┐   │
+│  ✓ Zusatzleistungen     │    │   │ 📱 WhatsApp CTA │   │
+│                         │    │   └─────────────────┘   │
+└─────────────────────────┘    └─────────────────────────┘
+```
+
+---
+
+## 2. Services-Grid Layout-Fix
+
+**Problem:** Eine Karte doppelt so hoch, nicht zentriert, 4 Spalten auf Desktop
+
+**Lösung:** Symmetrisches 2x2 Grid
+- Alle Karten gleiche Größe (kein `row-span-2`)
+- Zentriert mit `max-w-4xl mx-auto`
+- Größere Abstände für Atmung
+
+```text
+          ┌───────────────┐    ┌───────────────┐
+          │ Haushalts-    │    │ Keller/       │
+          │ auflösung     │    │ Dachboden     │
+          └───────────────┘    └───────────────┘
+          
+          ┌───────────────┐    ┌───────────────┐
+          │ Gewerbe/      │    │ Diskrete      │
+          │ Büro/Lager    │    │ Reinigung     │
+          └───────────────┘    └───────────────┘
+```
+
+---
+
+## 3. Footer Redesign (CTA-First)
+
+**Problem:** Standard 4-Spalten-Grid, langweilig, keine Conversion-Chance
+
+**Lösung:** CTA-Bereich oben, Links darunter
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
+│  ┌───────────────────────────────────────────────────────────────────────┐  │
+│  │  🏠 RÄUMZWERGE                     Jetzt Preiseinschätzung erhalten  │  │
+│  │     Entrümpelung in Süddeutschland       [📱 WhatsApp schreiben]     │  │
+│  └───────────────────────────────────────────────────────────────────────┘  │
 │                                                                             │
-│   🏠 RÄUMZWERGE        Leistungen ▼   Preise   Ablauf   FAQ      [WhatsApp] │
-│       Logo/Icon           ↑ Bold, größer                          ↑ Nur 1   │
-│                                                                    Haupt-CTA│
+│   Leistungen     │   Kontakt        │   Rechtliches   │   Einsatzgebiet    │
+│   ───────────    │   ────────       │   ───────────   │   ─────────────    │
+│   Haushalts...   │   📞 Telefon     │   Impressum     │   Ulm (HQ)         │
+│   Keller...      │   📱 WhatsApp    │   Datenschutz   │   München          │
+│   Gewerbe...     │   ✉️  E-Mail      │                 │   Stuttgart        │
+│   Diskret...     │   📍 Ulm         │                 │   Augsburg...      │
+│                                                                             │
+│   ────────────────────────────────────────────────────────────────────────  │
+│   © 2026 Räumzwerge. Alle Rechte vorbehalten.           Mo–Sa 8–20 Uhr     │
 └─────────────────────────────────────────────────────────────────────────────┘
-                    ↓ Beim Scrollen: Glassmorphism + Shadow
 ```
 
-## Änderungen im Detail
+**Elemente:**
+- CTA-Banner oben mit Glassmorphism-Hintergrund (Accent-Farbe)
+- Logo + Tagline links, WhatsApp-Button rechts
+- 4 Link-Spalten darunter (wie bisher, aber mit Regionen statt Servicezeiten)
+- Bottom-Bar mit Copyright und Öffnungszeiten
 
-### 1. Utility-Bar entfernen
-Die obere graue Leiste mit "Mo–Sa 8–20 Uhr" und "Preiseinschätzung per Foto" wird entfernt. Diese Informationen sind bereits im Content der Seite vorhanden.
+---
 
-### 2. Trust-Line entfernen  
-Die unterste Zeile mit "✓ Keine versteckten Kosten" etc. wird entfernt – sie macht den Header zu hoch und die Infos sind redundant (bereits in der TrustBar-Section).
+## Technische Details
 
-### 3. Logo mit Icon aufwerten
-Statt nur "Räumzwerge" als Text:
-- Ein einfaches Haus/Besen-Icon vor dem Namen
-- Größerer, bolderer Font
-- Subtle Accent-Farbe für das Icon
+### Datei 1: `src/components/sections/PricingSection.tsx`
 
-### 4. Navigation größer und auffälliger
-- Font-Größe von `text-sm` auf `text-base` erhöhen
-- Mehr Spacing zwischen Items
-- Hover-Effekt mit Underline-Animation (wie `.story-link`)
-- Active-State mit Accent-Farbe
+Komplette Umstrukturierung:
+- `grid lg:grid-cols-2` statt Hintergrundbild
+- Bild als `<img>` mit `rounded-2xl shadow-lg`
+- CTA-Card mit `glass` Klasse
 
-### 5. Nur ein CTA-Button (WhatsApp)
-- "Anrufen" Button entfernen (bleibt im Footer und als Floating-Button)
-- WhatsApp-Button größer und prominenter
-- Subtle Glow-Animation für Aufmerksamkeit
+### Datei 2: `src/components/sections/ServicesSection.tsx`
 
-### 6. Scroll-Effekt: Glassmorphism
-Beim Scrollen wird der Header nicht nur transparent/blurred, sondern bekommt:
-- Glassmorphism-Effekt (`glass-strong` Klasse)
-- Sanfte Animation für den Übergang
-- Header wird etwas kompakter (weniger Padding)
+Grid-Änderungen:
+- `grid md:grid-cols-2` statt `lg:grid-cols-4`
+- `max-w-4xl mx-auto` für Zentrierung
+- Entfernen der `isTall`-Logik und `row-span-2`
 
-## Visueller Vergleich
+### Datei 3: `src/components/ui/BentoCard.tsx`
 
-**Vorher (3 Ebenen, überladen):**
-```text
-┌──────────────────────────────────────────────┐
-│ Mo-Sa 8-20 Uhr    │    Preiseinschätzung...  │  ← Utility Bar
-├──────────────────────────────────────────────┤
-│ Räumzwerge  │ Links │  [Anrufen] [WhatsApp]  │  ← Main Header
-├──────────────────────────────────────────────┤
-│ ✓ Keine Kosten  ·  ✓ Festpreis  ·  ✓ Sauber │  ← Trust Line
-└──────────────────────────────────────────────┘
-```
+Optionale Anpassung:
+- `min-h-[180px]` für konsistente Kartenhöhe
 
-**Nachher (1 Ebene, clean & bold):**
-```text
-┌──────────────────────────────────────────────────────┐
-│ 🏠 RÄUMZWERGE    Leistungen  Preise  Ablauf  FAQ   [📱 WhatsApp] │
-└──────────────────────────────────────────────────────┘
-```
+### Datei 4: `src/components/layout/Footer.tsx`
 
-## Technische Umsetzung
+Neue Struktur:
+- CTA-Banner-Section oben (neues Element)
+- Link-Grid bleibt ähnlich, aber "Servicezeiten" wird zu "Einsatzgebiet" mit Regionsliste
+- Bottom-Bar mit Servicezeiten rechts
 
-### Header.tsx Änderungen
+---
 
-```tsx
-// Neuer Header - vereinfacht und bold
-export function Header() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  // ... scroll effect logic bleibt
+## Zusammenfassung
 
-  return (
-    <header className={cn(
-      "sticky top-0 z-50 w-full transition-all duration-300",
-      isScrolled 
-        ? "glass-strong shadow-lg py-3" 
-        : "bg-card py-4 lg:py-5"
-    )}>
-      <div className="container-custom">
-        <div className="flex items-center justify-between gap-8">
-          {/* Logo mit Icon */}
-          <a href="/" className="flex items-center gap-2.5 group">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-              <Home className="h-5 w-5 text-primary" />
-            </div>
-            <span className="text-2xl lg:text-3xl font-bold text-foreground">
-              Räumzwerge
-            </span>
-          </a>
+| Änderung | Datei | Aufwand |
+|----------|-------|---------|
+| Pricing Section Split-Layout | PricingSection.tsx | Mittel |
+| Services 2x2 Grid | ServicesSection.tsx, BentoCard.tsx | Klein |
+| CTA-First Footer | Footer.tsx | Mittel |
 
-          {/* Navigation - größer und mit Underline-Animation */}
-          <nav className="hidden lg:flex items-center gap-10">
-            {NAV_ITEMS.map((item) => (
-              // Links mit text-base, story-link Underline, bolderer Hover
-            ))}
-          </nav>
-
-          {/* Nur WhatsApp CTA - größer und prominenter */}
-          <div className="hidden lg:block">
-            <Button 
-              size="lg" 
-              className="gap-3 bg-whatsapp hover:bg-whatsapp-hover text-lg font-semibold px-6 glow-hover"
-            >
-              <WhatsAppIcon className="h-5 w-5" />
-              WhatsApp
-            </Button>
-          </div>
-        </div>
-      </div>
-    </header>
-  );
-}
-```
-
-### Neue CSS-Klassen für Navigation
-
-```css
-/* Navigation Link Animation */
-.nav-link {
-  position: relative;
-  padding-bottom: 4px;
-}
-
-.nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: hsl(var(--accent));
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.3s ease;
-}
-
-.nav-link:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
-}
-```
-
-## Dateien zu ändern
-
-| Datei | Änderung |
-|-------|----------|
-| `src/components/layout/Header.tsx` | Komplettes Redesign |
-| `src/index.css` | Neue `.nav-link` Animation |
-
-## Mobile Header
-
-Der mobile Header bleibt funktional ähnlich, aber:
-- Logo mit Icon
-- Größeres WhatsApp-Button in der ausgeklappten Navigation
-- Cleaner Hamburger-Menü-Style
-
-## Ergebnis
-
-1. **Kompakter**: Von 3 Ebenen auf 1 Ebene
-2. **Bolder**: Größeres Logo, größere Navigation
-3. **Fokussierter**: Nur 1 CTA (WhatsApp) statt 2
-4. **Moderner**: Glassmorphism beim Scrollen, Underline-Animationen
-5. **Professioneller**: Icon im Logo, mehr Whitespace
+**Ergebnis:**
+- Professionellere Pricing-Section mit sichtbarem Bild
+- Ausgewogenes Services-Grid ohne asymmetrische Karten
+- Conversion-optimierter Footer mit letzter CTA-Chance
