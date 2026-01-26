@@ -1,4 +1,4 @@
-import { useParams, Navigate } from 'react-router-dom';
+import { useParams, Navigate, Link } from 'react-router-dom';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FloatingCTAs } from '@/components/layout/FloatingCTAs';
@@ -13,6 +13,14 @@ import { ServiceFAQ } from '@/components/services/ServiceFAQ';
 import { ServiceFinalCTA } from '@/components/services/ServiceFinalCTA';
 import { SERVICE_PAGES } from '@/lib/serviceData';
 import { SectionDivider } from '@/components/ui/SectionDivider';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 
 export default function ServicePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -28,6 +36,32 @@ export default function ServicePage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      
+      {/* Breadcrumb Navigation */}
+      <div className="bg-secondary/30 border-b border-border/50">
+        <div className="container-custom py-3">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link to="/">Startseite</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link to="/#leistungen">Leistungen</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{pageData.title}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
+      </div>
+      
       <StickyConversionBar />
       
       <main>
