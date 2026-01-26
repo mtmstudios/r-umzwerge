@@ -19,46 +19,47 @@ export function ServiceHero({ h1, subline, trustPills, imageSrc, imageAlt }: Ser
   const { ref, isVisible } = useScrollReveal(0.1);
 
   return (
-    <section className="pt-24 pb-16 lg:pt-32 lg:pb-24 bg-background overflow-hidden">
+    <section className="pt-20 pb-12 lg:pt-32 lg:pb-24 bg-background overflow-hidden">
       <div className="container-custom">
         <div
           ref={ref}
           className={cn(
-            "grid lg:grid-cols-2 gap-12 lg:gap-16 items-center",
+            "grid lg:grid-cols-2 gap-8 lg:gap-16 items-center",
             "scroll-reveal",
             isVisible && "visible"
           )}
         >
           {/* Content */}
-          <div>
-            <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-foreground mb-6 leading-tight">
+          <div className="text-center lg:text-left">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-foreground mb-4 lg:mb-6 leading-tight">
               {h1}
             </h1>
             
-            <p className="text-lg lg:text-xl text-muted-foreground mb-8 leading-relaxed">
+            <p className="text-base sm:text-lg lg:text-xl text-muted-foreground mb-6 lg:mb-8 leading-relaxed">
               {subline}
             </p>
 
             {/* Trust Pills */}
-            <div className="flex flex-wrap gap-3 mb-8">
+            <div className="flex flex-wrap justify-center lg:justify-start gap-2 sm:gap-3 mb-6 lg:mb-8">
               {trustPills.map((pill) => (
-                <div key={pill} className="flex items-center gap-2 bg-secondary/50 px-4 py-2 rounded-full">
-                  <Check className="h-4 w-4 text-accent" />
-                  <span className="text-sm font-medium text-foreground">{pill}</span>
+                <div key={pill} className="flex items-center gap-1.5 sm:gap-2 bg-secondary/50 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full">
+                  <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent" />
+                  <span className="text-xs sm:text-sm font-medium text-foreground">{pill}</span>
                 </div>
               ))}
             </div>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-4">
+            <div className="flex flex-col sm:flex-row gap-3 mb-4">
               <Button
                 asChild
                 size="lg"
-                className="gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-14 px-8"
+                className="gap-2.5 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-12 sm:h-14 px-6 sm:px-8 text-sm sm:text-base"
               >
                 <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
                   <WhatsAppIcon className="h-5 w-5" />
-                  Foto senden · Preis erhalten
+                  <span className="hidden sm:inline">Foto senden · Preis erhalten</span>
+                  <span className="sm:hidden">Foto senden</span>
                 </a>
               </Button>
               
@@ -66,7 +67,7 @@ export function ServiceHero({ h1, subline, trustPills, imageSrc, imageAlt }: Ser
                 asChild
                 variant="outline"
                 size="lg"
-                className="gap-3 h-14 px-8"
+                className="gap-2.5 h-12 sm:h-14 px-6 sm:px-8 text-sm sm:text-base"
               >
                 <a href={PHONE_LINK}>
                   <Phone className="h-5 w-5" />
@@ -76,7 +77,7 @@ export function ServiceHero({ h1, subline, trustPills, imageSrc, imageAlt }: Ser
             </div>
 
             {/* Photo Guide */}
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground text-center lg:text-left">
               💡 {PHOTO_GUIDE}
             </p>
           </div>
