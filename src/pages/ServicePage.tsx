@@ -41,12 +41,7 @@ export default function ServicePage() {
         {/* Trust Bar - social proof directly after hero */}
         <ServiceTrustBar />
         
-        {/* Process first - builds trust by showing clear steps */}
-        <SectionDivider 
-          variant="gradient" 
-          fromColor="hsl(var(--background))" 
-          toColor="hsl(var(--secondary) / 0.3)" 
-        />
+        {/* Process - same bg as TrustBar, no divider needed */}
         <ServiceProcess steps={pageData.processSteps} />
         
         {/* Scenarios - emotional connection (same bg as Process, no divider needed) */}
