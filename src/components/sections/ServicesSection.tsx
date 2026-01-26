@@ -1,16 +1,14 @@
 import { useState } from 'react';
-import { ArrowRight, Home, Users, Warehouse, Building2, Truck, ShieldAlert, RotateCcw, Check } from 'lucide-react';
+import { ArrowRight, Users, Warehouse, Building2, Lock, RotateCcw, Check } from 'lucide-react';
 import { SERVICES } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
 
-const serviceIcons: Record<string, typeof Home> = {
-  'wohnungsentruempelung': Home,
+const serviceIcons: Record<string, typeof Users> = {
   'haushaltsaufloesung': Users,
   'keller-dachboden-garage': Warehouse,
   'gewerbe-buero-lager': Building2,
-  'sperrmuell-abtransport': Truck,
-  'messie-wohnungen': ShieldAlert,
+  'messie-wohnungen': Lock,
 };
 
 export function ServicesSection() {
@@ -73,7 +71,7 @@ export function ServicesSection() {
           )}
         >
           {SERVICES.map((service, index) => {
-            const Icon = serviceIcons[service.slug] || Home;
+            const Icon = serviceIcons[service.slug] || Users;
             const isFlipped = flippedCard === service.slug;
             
             return (
