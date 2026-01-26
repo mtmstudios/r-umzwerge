@@ -1,17 +1,20 @@
+import { useState } from 'react';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
 import { InteractiveMap } from '@/components/regions/InteractiveMap';
+import { CityList } from '@/components/regions/CityList';
 
 export function RegionsSection() {
   const { ref, isVisible } = useScrollReveal(0.1);
+  const [activeCity, setActiveCity] = useState<string | null>(null);
 
   return (
-    <section className="py-8 lg:py-12 bg-secondary/30">
+    <section className="py-12 lg:py-16 bg-secondary/30">
       <div className="container-custom">
         <div
           ref={ref}
           className={cn(
-            "text-center mb-6",
+            "text-center mb-8 lg:mb-12",
             "scroll-reveal",
             isVisible && "visible"
           )}
@@ -24,9 +27,21 @@ export function RegionsSection() {
           </p>
         </div>
 
-        {/* Centered Map - Full Width */}
-        <div className="max-w-4xl mx-auto">
-          <InteractiveMap />
+        {/* Two-Column Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+          {/* Left: Map */}
+          <div className="lg:sticky lg:top-24">
+            <InteractiveMap 
+              activeCity={activeCity}
+              onCityHover={setActiveCity}
+            />
+          </div>
+          
+          {/* Right: City List */}
+          <CityList 
+            activeCity={activeCity}
+            onCityHover={setActiveCity}
+          />
         </div>
 
         <p className="text-center text-sm text-muted-foreground mt-8">

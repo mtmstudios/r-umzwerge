@@ -297,6 +297,11 @@
     box-shadow: 0 0 30px hsl(var(--accent) / 0.4);
   }
 
+  /* Drop shadow glow for map markers */
+  .drop-shadow-glow {
+    filter: drop-shadow(0 0 8px hsl(var(--accent)));
+  }
+
   /* Staggered animations */
   .stagger-animation > * {
     opacity: 0;
