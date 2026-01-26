@@ -1,85 +1,66 @@
 
-# Plan: Footer mit "Mit ❤️ erstellt von [Logo]" aktualisieren
+# Plan: Logo größer und lesbarer machen + Website-Link hinzufügen
 
-## Ziel
+## Problem
 
-Die Bottom Bar im Footer soll rechts "Mit ❤️ erstellt von [Logo]" anzeigen statt "Mo–Sa 8–20 Uhr". Das Logo soll klar sichtbar sein und nicht zu klein.
+Das hochgeladene Logo hat sehr viel transparenten Freiraum um den eigentlichen "MTM STUDIOS" Text. Bei der aktuellen Höhe von `h-6` (24px) ist das Logo deshalb kaum lesbar.
 
-## Aktuelle Struktur
+## Lösung
 
-```text
-┌─────────────────────────────────────────────────────────────┐
-│ © 2025 Räumzwerge. Alle Rechte vorbehalten.    Mo–Sa 8–20 Uhr │
-└─────────────────────────────────────────────────────────────┘
-```
+### 1. Logo deutlich größer machen
 
-## Neue Struktur
+Die Logo-Höhe von `h-6` (24px) auf `h-8` (32px) erhöhen. Das macht das Logo proportional zum umgebenden Text sichtbar.
 
-```text
-┌─────────────────────────────────────────────────────────────────────┐
-│ © 2025 Räumzwerge. Alle Rechte vorbehalten.    Mit ❤️ erstellt von [LOGO] │
-└─────────────────────────────────────────────────────────────────────┘
-```
+### 2. Website-Link hinzufügen
 
-## Dateien die geändert werden
+Das Logo wird als klickbarer Link zur Website www.mtmstudios.de umgewandelt.
 
-| Datei | Aktion |
-|-------|--------|
-| `src/assets/logo-white.png` | Logo-Datei ins Projekt kopieren |
-| `src/components/layout/Footer.tsx` | Bottom Bar Text und Logo hinzufügen |
+## Datei die geändert wird
+
+| Datei | Änderung |
+|-------|----------|
+| `src/components/layout/Footer.tsx` | Logo größer machen + Link hinzufügen |
 
 ## Technische Details
 
-### 1. Logo ins Projekt kopieren
-
-Die hochgeladene Datei `user-uploads://LOGO-2-WHITE-TARANSPERNT.png` wird nach `src/assets/logo-white.png` kopiert.
-
-### 2. Footer.tsx anpassen
-
-**Neue Imports hinzufügen:**
-```tsx
-import { Phone, Mail, MapPin, Heart } from 'lucide-react';
-import logoWhite from '@/assets/logo-white.png';
-```
-
-**Import aus constants anpassen (SERVICE_HOURS entfernen):**
-```tsx
-import { SERVICES, REGIONS, PHONE_NUMBER, EMAIL, ADDRESS, getWhatsAppLink } from '@/lib/constants';
-```
-
-**Bottom Bar (Zeilen 166-174) ändern:**
+**Bottom Bar (Zeilen 172-179) ändern:**
 
 Vorher:
 ```tsx
-<div className="flex flex-col md:flex-row justify-between items-center gap-3 text-sm text-primary-foreground/50">
-  <p>© {currentYear} Räumzwerge. Alle Rechte vorbehalten.</p>
-  <p>{SERVICE_HOURS}</p>
-</div>
+<p className="flex items-center gap-1.5">
+  Mit <Heart className="h-4 w-4 text-red-400 fill-red-400" /> erstellt von
+  <img 
+    src={logoWhite} 
+    alt="Logo" 
+    className="h-6 ml-1 object-contain" 
+  />
+</p>
 ```
 
 Nachher:
 ```tsx
-<div className="flex flex-col md:flex-row justify-between items-center gap-3 text-sm text-primary-foreground/50">
-  <p>© {currentYear} Räumzwerge. Alle Rechte vorbehalten.</p>
-  <p className="flex items-center gap-1.5">
-    Mit <Heart className="h-4 w-4 text-red-400 fill-red-400" /> erstellt von
+<p className="flex items-center gap-1.5">
+  Mit <Heart className="h-4 w-4 text-red-400 fill-red-400" /> erstellt von
+  <a href="https://www.mtmstudios.de" target="_blank" rel="noopener noreferrer">
     <img 
       src={logoWhite} 
-      alt="Logo" 
-      className="h-6 ml-1 object-contain" 
+      alt="MTM Studios Logo" 
+      className="h-8 ml-1 object-contain" 
     />
-  </p>
-</div>
+  </a>
+</p>
 ```
 
-**Logo-Styling Details:**
-- `h-6` (24px Höhe) - größer als ursprünglich geplant, damit das Logo trotz des Paddings im Bild gut sichtbar ist
-- `object-contain` - stellt sicher, dass das Logo proportional skaliert wird
-- `ml-1` - kleiner Abstand zwischen "von" und dem Logo
+**Änderungen im Detail:**
+- `h-6` → `h-8` (von 24px auf 32px Höhe) - macht das Logo deutlich größer
+- Logo wird in einen `<a>`-Tag gewrappt mit:
+  - `href="https://www.mtmstudios.de"` - Link zur Website
+  - `target="_blank"` - öffnet in neuem Tab
+  - `rel="noopener noreferrer"` - Sicherheitsattribut für externe Links
+- Alt-Text verbessert zu "MTM Studios Logo"
 
 ## Ergebnis
 
-- Die Footer Bottom Bar zeigt rechts "Mit ❤️ erstellt von [Logo]"
-- Das Herz-Symbol ist rot gefüllt (❤️)
-- Das weiße Logo ist klar sichtbar auf dem dunklen Footer-Hintergrund
-- Die Öffnungszeiten werden an dieser Stelle entfernt
+- Das Logo ist jetzt größer und besser lesbar (32px statt 24px)
+- Ein Klick auf das Logo öffnet www.mtmstudios.de in einem neuen Tab
+- Der Text "Mit ❤️ erstellt von [LOGO]" bleibt optisch ausgewogen
