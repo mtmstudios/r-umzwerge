@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Home, ChevronDown } from 'lucide-react';
+import { Menu, X, Home, ChevronDown, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { NAV_ITEMS, getWhatsAppLink } from '@/lib/constants';
+import { NAV_ITEMS, getWhatsAppLink, PHONE_LINK } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 import {
@@ -90,16 +90,16 @@ export function Header() {
             ))}
           </nav>
 
-          {/* WhatsApp CTA - größer und prominenter */}
+          {/* Desktop CTA - Jetzt anrufen */}
           <div className="hidden lg:block">
             <Button
               asChild
               size="lg"
-              className="gap-2.5 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground font-semibold px-6 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
+              className="gap-2.5 bg-cta hover:bg-cta-hover text-white font-semibold px-6 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
             >
-              <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                <WhatsAppIcon className="h-5 w-5" />
-                WhatsApp
+              <a href={PHONE_LINK}>
+                <Phone className="h-5 w-5" />
+                Jetzt anrufen
               </a>
             </Button>
           </div>
