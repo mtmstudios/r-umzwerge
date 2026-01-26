@@ -1,102 +1,89 @@
 
+# Plan: Gradient-Fade Divider auf allen Seiten konsistent anpassen
 
-# Plan: SVG-Divider durch Gradient-Fade ersetzen
+## Übersicht der Änderung
 
-## Analyse des Problems
+Die `ServicePage.tsx` verwendet aktuell noch die alten SVG-basierten Divider (wave, curve, angle). Diese werden durch die neuen `gradient`-Varianten ersetzt, um das gleiche Design wie auf der Homepage zu erreichen.
 
-Der aktuelle `SectionDivider` vor der BeforeAfterSection verwendet `variant="curve"` mit `fillClassName="fill-muted"`. Da beide Sektionen (PricingSection und BeforeAfterSection) ähnliche helle Hintergrundfarben haben, ist der SVG-Kurven-Divider kaum sichtbar.
+## Sektions-Hintergründe auf Service-Seiten
 
-**Farbübergänge aktuell:**
-- PricingSection: `bg-background` (Off-White)
-- Divider: `fill-muted` (sehr ähnlich)
-- BeforeAfterSection: `bg-secondary/30` (helles Grün)
+| Sektion | Hintergrund |
+|---------|-------------|
+| ServiceHero | bg-primary |
+| ServiceTrustBar | transparent/background |
+| ServiceProcess | bg-secondary/30 |
+| ScenarioGrid | bg-secondary/30 |
+| ServiceScope | bg-background |
+| ServicePricing | bg-secondary/30 |
+| ExtraModule | bg-background |
+| ServiceFAQ | bg-background |
+| ServiceFinalCTA | bg-primary |
 
-## Lösung: Neuer Gradient-Fade Variant
+## Divider-Mapping (Vorher → Nachher)
 
-### 1. SectionDivider-Komponente erweitern
+| Position | Vorher | Nachher |
+|----------|--------|---------|
+| TrustBar → Process | `wave, fill-secondary/30` | `gradient` (background → secondary/30) |
+| Process → Scenarios | `curve, direction="up", fill-background` | Entfernen (beide haben gleiche bg-secondary/30) |
+| Scenarios → Scope | `angle, direction="up", fill-background` | `gradient` (secondary/30 → background) |
+| Scope → Pricing | `wave, fill-muted` | `gradient` (background → secondary/30) |
+| Pricing → ExtraModule | `curve, direction="up", fill-background` | `gradient` (secondary/30 → background) |
+| ExtraModule → FAQ | `angle, fill-secondary/30` | Entfernen oder beibehalten (beide background) |
+| FAQ → FinalCTA | `wave, direction="up", fill-primary` | `angle, fill-primary` (beibehalten - starker Kontrast) |
 
-Neuer `gradient`-Variant, der statt SVG einen CSS-Gradienten nutzt:
+## Implementierung in ServicePage.tsx
 
 ```text
-+--------------------------------------------------+
-|  PricingSection (bg-background)                  |
-+--------------------------------------------------+
-|  ████████████████████████████████████████████    | ← Gradient-Fade
-|  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓    |   (sanfter Übergang)
-|  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░    |
-+--------------------------------------------------+
-|  BeforeAfterSection (bg-secondary/30)            |
-+--------------------------------------------------+
-```
-
-### 2. Technische Implementierung
-
-**Datei: `src/components/ui/SectionDivider.tsx`**
-
-```tsx
-interface SectionDividerProps {
-  variant?: 'angle' | 'wave' | 'curve' | 'gradient' | 'glow';  // NEUE Varianten
-  direction?: 'up' | 'down';
-  className?: string;
-  fillClassName?: string;
-  fromColor?: string;  // NEU: Start-Farbe für Gradient
-  toColor?: string;    // NEU: End-Farbe für Gradient
-}
-```
-
-**Neue Varianten:**
-
-| Variant | Beschreibung | Use Case |
-|---------|-------------|----------|
-| `gradient` | Sanfter linearer Farbübergang (40-60px Höhe) | Standard-Sektionswechsel |
-| `glow` | Gradient mit subtiler Mittellinie (accent-Farbe) | Akzentuierte Übergänge |
-
-### 3. Änderung in Index.tsx
-
-**Vorher:**
-```tsx
-<SectionDivider variant="curve" fillClassName="fill-muted" />
-<BeforeAfterSection />
-```
-
-**Nachher:**
-```tsx
-<SectionDivider 
-  variant="gradient" 
+ServiceHero (bg-primary)
+    ↓
+ServiceTrustBar
+    ↓
+SectionDivider variant="gradient" 
   fromColor="hsl(var(--background))" 
-  toColor="hsl(var(--secondary) / 0.3)" 
-/>
-<BeforeAfterSection />
+  toColor="hsl(var(--secondary) / 0.3)"
+    ↓
+ServiceProcess (bg-secondary/30)
+    ↓
+[KEIN DIVIDER - gleiche Farbe]
+    ↓
+ScenarioGrid (bg-secondary/30)
+    ↓
+SectionDivider variant="gradient"
+  fromColor="hsl(var(--secondary) / 0.3)"
+  toColor="hsl(var(--background))"
+    ↓
+ServiceScope (bg-background)
+    ↓
+SectionDivider variant="gradient"
+  fromColor="hsl(var(--background))"
+  toColor="hsl(var(--secondary) / 0.3)"
+    ↓
+ServicePricing (bg-secondary/30)
+    ↓
+SectionDivider variant="gradient"
+  fromColor="hsl(var(--secondary) / 0.3)"
+  toColor="hsl(var(--background))"
+    ↓
+ExtraModule (bg-background)
+    ↓
+[KEIN DIVIDER - gleiche Farbe]
+    ↓
+ServiceFAQ (bg-background)
+    ↓
+SectionDivider variant="angle" fillClassName="fill-primary"
+    ↓
+ServiceFinalCTA (bg-primary)
 ```
 
-### 4. Alle anderen Divider überprüfen und anpassen
-
-Die anderen SVG-Divider im Projekt können beibehalten oder ebenfalls durch Gradienten ersetzt werden:
-
-| Position | Aktuell | Empfehlung |
-|----------|---------|------------|
-| TrustBar → Process | curve, fill-background | gradient (für Konsistenz) |
-| Process → Services | angle, fill-secondary/30 | beibehalten (sichtbar genug) |
-| Services → Pricing | wave, fill-background | gradient |
-| **Pricing → BeforeAfter** | curve, fill-muted | **gradient** ✓ |
-| BeforeAfter → Reviews | angle, fill-background | gradient |
-| Reviews → Regions | wave, fill-secondary/30 | beibehalten |
-| Regions → FAQ | curve, fill-background | gradient |
-| FAQ → FinalCTA | angle, fill-primary | beibehalten (starker Kontrast) |
-
----
-
-## Zusammenfassung der Änderungen
+## Zusammenfassung
 
 | Datei | Änderung |
 |-------|----------|
-| `src/components/ui/SectionDivider.tsx` | Neue `gradient` und `glow` Varianten hinzufügen |
-| `src/pages/Index.tsx` | Unsichtbare Divider durch `variant="gradient"` ersetzen |
+| `src/pages/ServicePage.tsx` | 7 Divider durch 5 Gradient-Divider + 1 Angle-Divider ersetzen |
 
 ## Ergebnis
 
-- Sanfte, sichtbare Übergänge zwischen allen Sektionen
-- Professionellerer, modernerer Look
-- Keine harten Kanten oder unsichtbaren SVGs mehr
-- Optional: `glow`-Variant für besondere Akzente (z.B. vor dem FinalCTA)
-
+- Einheitliches Divider-Design auf Homepage und allen Service-Seiten
+- Sanfte Gradient-Übergänge zwischen verschiedenfarbigen Sektionen
+- Keine unsichtbaren Divider mehr
+- Unnötige Divider zwischen gleichfarbigen Sektionen entfernt
