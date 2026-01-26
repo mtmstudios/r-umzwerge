@@ -4,6 +4,7 @@ import { Footer } from '@/components/layout/Footer';
 import { FloatingCTAs } from '@/components/layout/FloatingCTAs';
 import { StickyConversionBar } from '@/components/services/StickyConversionBar';
 import { ServiceHero } from '@/components/services/ServiceHero';
+import { ServiceTrustBar } from '@/components/services/ServiceTrustBar';
 import { ScenarioGrid } from '@/components/services/ScenarioGrid';
 import { ServiceScope } from '@/components/services/ServiceScope';
 import { ServiceProcess } from '@/components/services/ServiceProcess';
@@ -29,7 +30,6 @@ export default function ServicePage() {
     <div className="min-h-screen bg-background">
       <Header />
       
-      
       <StickyConversionBar />
       
       <main>
@@ -39,31 +39,42 @@ export default function ServicePage() {
           trustPills={pageData.hero.trustPills}
         />
         
-        <SectionDivider variant="curve" fillClassName="fill-secondary/30" />
+        {/* Trust Bar - social proof directly after hero */}
+        <ServiceTrustBar />
+        
+        {/* Process first - builds trust by showing clear steps */}
+        <SectionDivider variant="wave" fillClassName="fill-secondary/30" />
+        <ServiceProcess steps={pageData.processSteps} />
+        
+        {/* Scenarios - emotional connection */}
+        <SectionDivider variant="curve" direction="up" fillClassName="fill-background" />
         <ScenarioGrid scenarios={pageData.scenarios} />
         
+        {/* Scope - what's included */}
         <SectionDivider variant="angle" direction="up" fillClassName="fill-background" />
         <ServiceScope
           included={pageData.scope.included}
           optional={pageData.scope.optional}
         />
         
-        <SectionDivider variant="wave" fillClassName="fill-secondary/30" />
-        <ServiceProcess steps={pageData.processSteps} />
+        {/* Pricing */}
+        <SectionDivider variant="wave" fillClassName="fill-muted" />
+        <ServicePricing />
         
+        {/* Extra Module - transparency/sustainability info */}
         <SectionDivider variant="curve" direction="up" fillClassName="fill-background" />
         <ExtraModule
           title={pageData.extraModule.title}
+          subtitle={pageData.extraModule.subtitle}
           points={pageData.extraModule.points}
         />
         
-        <SectionDivider variant="angle" fillClassName="fill-muted" />
-        <ServicePricing />
-        
-        <SectionDivider variant="wave" direction="up" fillClassName="fill-background" />
+        {/* FAQ */}
+        <SectionDivider variant="angle" fillClassName="fill-secondary/30" />
         <ServiceFAQ items={pageData.faq} />
         
-        <SectionDivider variant="angle" fillClassName="fill-primary" />
+        {/* Final CTA */}
+        <SectionDivider variant="wave" direction="up" fillClassName="fill-primary" />
         <ServiceFinalCTA />
       </main>
       

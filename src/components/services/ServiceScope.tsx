@@ -1,7 +1,7 @@
 import { Check, Plus } from 'lucide-react';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
-import { SCOPE_BADGES } from '@/lib/serviceData';
+import { COMMON_BADGES } from '@/lib/serviceData';
 
 interface ServiceScopeProps {
   included: string[];
@@ -66,7 +66,7 @@ export function ServiceScope({ included, optional }: ServiceScopeProps) {
 
           {/* Badge row */}
           <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mt-8 lg:mt-12 px-2">
-            {SCOPE_BADGES.map((badge) => (
+            {COMMON_BADGES.map((badge) => (
               <span
                 key={badge}
                 className="inline-flex items-center gap-1.5 sm:gap-2 bg-accent/10 text-accent px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium"

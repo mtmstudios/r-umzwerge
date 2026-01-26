@@ -36,9 +36,8 @@ export function ServiceFinalCTA() {
 
             <Button
               asChild
-              variant="outline"
               size="lg"
-              className="gap-3 h-14 px-8 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+              className="gap-3 h-14 px-8 bg-cta hover:bg-cta-hover text-white transition-all duration-300"
             >
               <a href={PHONE_LINK}>
                 <Phone className="h-5 w-5" />

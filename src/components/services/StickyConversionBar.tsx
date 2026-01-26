@@ -50,11 +50,11 @@ export function StickyConversionBar() {
                 asChild
                 variant="outline"
                 size="sm"
-                className="gap-2 h-9"
+                className="gap-2 h-9 border-2 border-primary hover:bg-cta hover:text-cta-foreground hover:border-cta transition-all duration-300"
               >
                 <a href={PHONE_LINK}>
                   <Phone className="h-4 w-4" />
-                  Anrufen
+                  Jetzt anrufen
                 </a>
               </Button>
             </div>
@@ -86,7 +86,7 @@ export function StickyConversionBar() {
               asChild
               variant="outline"
               size="icon"
-              className="h-12 w-12 flex-shrink-0"
+              className="h-12 w-12 flex-shrink-0 border-2 border-primary hover:bg-cta hover:text-cta-foreground hover:border-cta transition-all duration-300"
             >
               <a href={PHONE_LINK}>
                 <Phone className="h-5 w-5" />

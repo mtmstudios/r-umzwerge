@@ -4,6 +4,8 @@ import { Users, Warehouse, Building2, Lock, Trash2 } from 'lucide-react';
 export interface ServiceScenario {
   title: string;
   description: string;
+  emotionalHook: string;
+  badges?: string[];
 }
 
 export interface ServiceFAQ {
@@ -28,6 +30,7 @@ export interface ServicePageData {
   };
   extraModule: {
     title: string;
+    subtitle?: string;
     points: string[];
   };
   faq: ServiceFAQ[];
@@ -49,11 +52,36 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       trustPills: ['Besenrein', 'Festpreis nach Einschätzung', 'Keine versteckten Kosten'],
     },
     scenarios: [
-      { title: 'Wohnungswechsel / Auszug', description: 'Alles muss raus – schnell und unkompliziert.' },
-      { title: 'Nachlass / Räumung', description: 'Respektvolle Auflösung nach Erbschaft.' },
-      { title: 'Renovierung / Umbau', description: 'Platz schaffen für Neues.' },
-      { title: 'Mietwohnung übergeben', description: 'Besenrein für den Vermieter.' },
-      { title: 'Eigentumswechsel', description: 'Wohnung verkaufsfertig räumen.' },
+      { 
+        title: 'Wohnungswechsel / Auszug', 
+        emotionalHook: '"Alles muss raus – und zwar schnell."',
+        description: 'Schnelle Räumung zum Festpreis, besenrein übergeben.',
+        badges: ['Express möglich', 'Festpreis']
+      },
+      { 
+        title: 'Nachlass / Erbschaft', 
+        emotionalHook: '"So viel zu tun – und so wenig Zeit zum Trauern."',
+        description: 'Respektvolle Auflösung, damit du dich auf das Wesentliche konzentrieren kannst.',
+        badges: ['Einfühlsam', 'Diskret']
+      },
+      { 
+        title: 'Renovierung / Umbau', 
+        emotionalHook: '"Bevor es losgehen kann, muss erst mal Platz her."',
+        description: 'Schnelles Räumen für einen pünktlichen Baustart.',
+        badges: ['Termingerecht']
+      },
+      { 
+        title: 'Mietwohnung übergeben', 
+        emotionalHook: '"Der Vermieter wartet – die Kaution auch."',
+        description: 'Besenrein übergeben, keine bösen Überraschungen.',
+        badges: ['Besenrein garantiert']
+      },
+      { 
+        title: 'Eigentumswechsel', 
+        emotionalHook: '"Der Käufer will einziehen – aber die Wohnung ist noch voll."',
+        description: 'Wohnung verkaufsfertig räumen, reibungslose Übergabe.',
+        badges: ['Übergabeprotokoll']
+      },
     ],
     scope: {
       included: [
@@ -71,10 +99,11 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
     },
     extraModule: {
       title: 'Was passiert mit den Sachen?',
+      subtitle: 'Transparenz ist uns wichtig. Deshalb zeigen wir dir genau, was mit jedem Gegenstand passiert.',
       points: [
-        'Fachgerechte Entsorgung über zertifizierte Partner',
-        'Recyclingfähiges wird getrennt',
-        'Brauchbares kann nach Absprache weitergegeben werden',
+        'Recyclingfähiges wird fachgerecht getrennt',
+        'Brauchbares kann nach Absprache gespendet werden',
+        'Rest wird über zertifizierte Partner entsorgt',
       ],
     },
     faq: [
@@ -103,11 +132,36 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       trustPills: ['Besenrein', 'Festpreis nach Einschätzung', 'Keine versteckten Kosten'],
     },
     scenarios: [
-      { title: 'Wohnungswechsel / Auszug', description: 'Alles muss raus – schnell und unkompliziert.' },
-      { title: 'Nachlass / Räumung', description: 'Respektvolle Auflösung nach Erbschaft.' },
-      { title: 'Renovierung / Umbau', description: 'Platz schaffen für Neues.' },
-      { title: 'Keller/Garage voll', description: 'Endlich wieder nutzbar machen.' },
-      { title: 'Gewerbe-Auflösung', description: 'Effizient und planbar räumen.' },
+      { 
+        title: 'Wohnungswechsel / Auszug', 
+        emotionalHook: '"Die neue Wohnung wartet – aber die alte ist noch voll."',
+        description: 'Schnelle Räumung für einen stressfreien Umzug.',
+        badges: ['Express möglich']
+      },
+      { 
+        title: 'Nachlass / Erbschaft', 
+        emotionalHook: '"Jetzt auch noch das Haus auflösen – wer soll das schaffen?"',
+        description: 'Wir übernehmen das für dich, respektvoll und gründlich.',
+        badges: ['Einfühlsam']
+      },
+      { 
+        title: 'Renovierung / Umbau', 
+        emotionalHook: '"Erst mal muss der ganze Krempel raus."',
+        description: 'Platz schaffen für dein Projekt.',
+        badges: ['Termingerecht']
+      },
+      { 
+        title: 'Keller / Garage voll', 
+        emotionalHook: '"Da kommt man ja nicht mal mehr durch!"',
+        description: 'Endlich wieder nutzbar machen.',
+        badges: ['Auch sperrige Teile']
+      },
+      { 
+        title: 'Gewerbe-Auflösung', 
+        emotionalHook: '"Das Geschäft ist zu – aber die Einrichtung noch da."',
+        description: 'Effiziente Räumung, minimale Betriebsstörung.',
+        badges: ['B2B-erfahren']
+      },
     ],
     scope: {
       included: [
@@ -125,10 +179,11 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
     },
     extraModule: {
       title: 'Was passiert mit den Sachen?',
+      subtitle: 'Transparenz ist uns wichtig.',
       points: [
-        'Fachgerechte Entsorgung über zertifizierte Partner',
-        'Recyclingfähiges wird getrennt',
-        'Brauchbares kann nach Absprache weitergegeben werden',
+        'Recyclingfähiges wird fachgerecht getrennt',
+        'Brauchbares kann nach Absprache gespendet werden',
+        'Rest wird über zertifizierte Partner entsorgt',
       ],
     },
     faq: [
@@ -157,10 +212,30 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       trustPills: ['Keine versteckten Kosten', 'Planbar', 'Diskret'],
     },
     scenarios: [
-      { title: 'Nachlass / Todesfall', description: 'Einfühlsame Auflösung in schwerer Zeit.' },
-      { title: 'Umzug ins Pflegeheim', description: 'Strukturiert und ohne Zeitdruck.' },
-      { title: 'Verkauf / Übergabe', description: 'Immobilie übergabefertig räumen.' },
-      { title: 'Auflösung nach Trennung', description: 'Diskret und unkompliziert.' },
+      { 
+        title: 'Nachlass / Todesfall', 
+        emotionalHook: '"Oma ist gestorben – und jetzt muss alles aufgelöst werden."',
+        description: 'Einfühlsame Auflösung, damit du Zeit zum Trauern hast.',
+        badges: ['Einfühlsam', 'Diskret']
+      },
+      { 
+        title: 'Umzug ins Pflegeheim', 
+        emotionalHook: '"Papa zieht ins Heim – aber wer räumt die Wohnung?"',
+        description: 'Strukturierte Auflösung ohne Zeitdruck.',
+        badges: ['Planbar']
+      },
+      { 
+        title: 'Verkauf / Übergabe', 
+        emotionalHook: '"Das Haus ist verkauft – aber noch komplett eingerichtet."',
+        description: 'Immobilie übergabefertig räumen.',
+        badges: ['Termingerecht']
+      },
+      { 
+        title: 'Auflösung nach Trennung', 
+        emotionalHook: '"Einer muss gehen – und die Sachen auch."',
+        description: 'Diskret und unkompliziert, ohne Drama.',
+        badges: ['Diskret']
+      },
     ],
     scope: {
       included: [
@@ -178,10 +253,11 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
     },
     extraModule: {
       title: 'So läuft die Übergabe',
+      subtitle: 'Klar strukturiert, ohne Überraschungen.',
       points: [
         'Abnahme gemeinsam oder per Schlüssel (nach Absprache)',
         'Besenrein-Standard garantiert',
-        'Transparente Auflistung der Leistungen',
+        'Transparente Auflistung aller Leistungen',
       ],
     },
     faq: [
@@ -210,10 +286,30 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       trustPills: ['Auch enge Zugänge', 'Entsorgung inklusive', 'Besenrein'],
     },
     scenarios: [
-      { title: 'Keller voll mit Sperrmüll', description: 'Endlich wieder nutzbar machen.' },
-      { title: 'Dachboden seit Jahren unberührt', description: 'Platz schaffen, Überblick gewinnen.' },
-      { title: 'Garage nicht mehr nutzbar', description: 'Wieder Stellplatz oder Werkstatt.' },
-      { title: 'Nach Renovierung / Baustellenreste', description: 'Schnell und sauber entsorgen.' },
+      { 
+        title: 'Keller voll mit Sperrmüll', 
+        emotionalHook: '"Da stapelt sich seit Jahren alles – man kommt nicht mehr durch."',
+        description: 'Endlich wieder nutzbar machen.',
+        badges: ['Auch Schwerlast']
+      },
+      { 
+        title: 'Dachboden seit Jahren unberührt', 
+        emotionalHook: '"Wer weiß, was da oben alles liegt..."',
+        description: 'Platz schaffen, Überblick gewinnen.',
+        badges: ['Enge Zugänge kein Problem']
+      },
+      { 
+        title: 'Garage nicht mehr nutzbar', 
+        emotionalHook: '"Das Auto steht draußen – die Garage ist voll."',
+        description: 'Wieder Stellplatz oder Werkstatt.',
+        badges: ['Schnell']
+      },
+      { 
+        title: 'Baustellenreste', 
+        emotionalHook: '"Die Renovierung ist durch – aber der Schutt noch da."',
+        description: 'Schnell und sauber entsorgen.',
+        badges: ['Baumaterial inklusive']
+      },
     ],
     scope: {
       included: [
@@ -231,6 +327,7 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
     },
     extraModule: {
       title: 'Typische Stolpersteine – und wie wir sie lösen',
+      subtitle: 'Wir haben für alles eine Lösung.',
       points: [
         'Enge Treppen, kein Aufzug – kein Problem für unser Team',
         'Parken/Zugang schwierig – wir finden eine Lösung',
@@ -263,10 +360,30 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       trustPills: ['Minimale Betriebsstörung', 'Termintreu', 'Transparent'],
     },
     scenarios: [
-      { title: 'Büroauflösung / Umzug', description: 'Effizient und ohne Unterbrechung.' },
-      { title: 'Lager bereinigen', description: 'Platz schaffen, Ordnung wiederherstellen.' },
-      { title: 'Geschäftsauflösung / Übergabe', description: 'Komplette Räumung bis besenrein.' },
-      { title: 'Renovierung / Flächenreduktion', description: 'Schnell räumen, schnell starten.' },
+      { 
+        title: 'Büroauflösung / Umzug', 
+        emotionalHook: '"Das neue Büro ist fertig – aber das alte noch voller Möbel."',
+        description: 'Effiziente Räumung ohne Unterbrechung des Betriebs.',
+        badges: ['Außerhalb Geschäftszeiten']
+      },
+      { 
+        title: 'Lager bereinigen', 
+        emotionalHook: '"Das Lager quillt über – niemand weiß mehr, was wo ist."',
+        description: 'Platz schaffen, Ordnung wiederherstellen.',
+        badges: ['Inventur-Hilfe']
+      },
+      { 
+        title: 'Geschäftsauflösung', 
+        emotionalHook: '"Der Laden schließt – aber wer räumt alles aus?"',
+        description: 'Komplette Räumung bis besenrein.',
+        badges: ['Alles aus einer Hand']
+      },
+      { 
+        title: 'Flächenreduktion', 
+        emotionalHook: '"Wir brauchen weniger Fläche – aber die alte ist noch voll."',
+        description: 'Schnell räumen für den neuen Mietvertrag.',
+        badges: ['Termingerecht']
+      },
     ],
     scope: {
       included: [
@@ -284,6 +401,7 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
     },
     extraModule: {
       title: 'Ablauf für Unternehmen',
+      subtitle: 'Professionell und planbar.',
       points: [
         'Fotos/Begehung zur Einschätzung',
         'Angebot / Festpreis nach Einschätzung',
@@ -317,10 +435,30 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       trustPills: ['Absolute Diskretion', 'Respektvoll', 'Geschütztes Vorgehen'],
     },
     scenarios: [
-      { title: 'Wohnung wieder bewohnbar machen', description: 'Strukturierte Räumung und Reinigung.' },
-      { title: 'Unterstützung für Angehörige', description: 'Wir helfen einfühlsam und diskret.' },
-      { title: 'Akute Übergabe / Abnahme', description: 'Schnelle Hilfe bei Zeitdruck.' },
-      { title: 'Übergabefähig machen', description: 'Besenrein für Vermieter/Käufer.' },
+      { 
+        title: 'Wohnung wieder bewohnbar machen', 
+        emotionalHook: '"Es ist mir so peinlich – aber ich schaffe es nicht alleine."',
+        description: 'Strukturierte Räumung ohne Wertung, mit Respekt.',
+        badges: ['Ohne Wertung', 'Diskret']
+      },
+      { 
+        title: 'Unterstützung für Angehörige', 
+        emotionalHook: '"Mein Vater braucht Hilfe – aber er lässt niemanden rein."',
+        description: 'Wir helfen einfühlsam und bauen Vertrauen auf.',
+        badges: ['Einfühlsam']
+      },
+      { 
+        title: 'Akute Übergabe / Zeitdruck', 
+        emotionalHook: '"Der Vermieter hat eine Frist gesetzt – und die Zeit läuft."',
+        description: 'Schnelle, diskrete Hilfe bei Zeitdruck.',
+        badges: ['Express möglich']
+      },
+      { 
+        title: 'Übergabefähig machen', 
+        emotionalHook: '"Die Wohnung muss geräumt werden – aber niemand darf es sehen."',
+        description: 'Besenrein für Vermieter/Käufer, ohne Aufsehen.',
+        badges: ['Neutrale Fahrzeuge']
+      },
     ],
     scope: {
       included: [
@@ -338,6 +476,7 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
     },
     extraModule: {
       title: 'Diskret heißt bei uns',
+      subtitle: 'Deine Privatsphäre hat höchste Priorität.',
       points: [
         'Neutrale Kleidung und Fahrzeuge – kein Aufsehen',
         'Leise, respektvolle Kommunikation',
@@ -362,7 +501,12 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
 };
 
 // Common badges for all service pages
-export const SCOPE_BADGES = ['Besenrein', 'Entsorgung', 'Transparent', 'Diskret'];
+export const COMMON_BADGES = [
+  'Besenrein',
+  'Festpreis möglich',
+  'Keine versteckten Kosten',
+  'Antwort < 24h',
+];
 
-// Photo guide text
-export const PHOTO_GUIDE = 'Am besten: 3–6 Fotos (gesamt + Details) + Ort + Etage/Zugang.';
+// Photo guide message
+export const PHOTO_GUIDE = 'Für eine gute Einschätzung brauchen wir 3–6 Fotos: Übersicht + Details, dazu Ort und Etage/Zugang.';
