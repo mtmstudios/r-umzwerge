@@ -30,7 +30,7 @@ export function TrustBar() {
         ))}
         {/* Separator */}
         <div className="px-8">
-          <span className="text-accent text-lg">–</span>
+          <span className="text-accent text-lg">·</span>
         </div>
       </Marquee>
     </section>
