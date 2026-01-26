@@ -3,14 +3,16 @@ import { REGIONS } from '@/lib/constants';
 // Coordinates calibrated to the actual SVG map (viewBox 595.5 x 842.25)
 // Based on Baden-Württemberg (left) and Bayern (right)
 const cityCoordinates: Record<string, { x: number; y: number; labelOffset?: { x: number; y: number } }> = {
-  stuttgart:   { x: 175, y: 175, labelOffset: { x: -90, y: 5 } },    // Northwest BW
-  reutlingen:  { x: 220, y: 230, labelOffset: { x: -95, y: 5 } },    // South of Stuttgart
-  aalen:       { x: 290, y: 145, labelOffset: { x: -55, y: -12 } },  // Northeast BW
-  heidenheim:  { x: 310, y: 185, labelOffset: { x: 12, y: 5 } },     // East of Aalen
-  ulm:         { x: 310, y: 260, labelOffset: { x: 12, y: 5 } },     // Border BW/Bayern
-  augsburg:    { x: 405, y: 285, labelOffset: { x: 12, y: 5 } },     // Western Bavaria
-  muenchen:    { x: 495, y: 350, labelOffset: { x: 12, y: 5 } },     // Central Bavaria
-  ravensburg:  { x: 260, y: 420, labelOffset: { x: 12, y: 5 } },     // Bodensee region
+  // Baden-Württemberg (linker Teil der Karte)
+  stuttgart:   { x: 175, y: 340, labelOffset: { x: -90, y: 5 } },
+  reutlingen:  { x: 195, y: 420, labelOffset: { x: -95, y: 5 } },
+  aalen:       { x: 265, y: 310, labelOffset: { x: 10, y: -8 } },
+  heidenheim:  { x: 285, y: 365, labelOffset: { x: 12, y: 5 } },
+  ulm:         { x: 295, y: 430, labelOffset: { x: 12, y: 5 } },
+  ravensburg:  { x: 240, y: 560, labelOffset: { x: 12, y: 5 } },
+  // Bayern (rechter Teil der Karte)
+  augsburg:    { x: 390, y: 455, labelOffset: { x: 12, y: 5 } },
+  muenchen:    { x: 470, y: 520, labelOffset: { x: 12, y: 5 } },
 };
 
 export function InteractiveMap() {
@@ -49,7 +51,8 @@ export function InteractiveMap() {
                     cx={coords.x}
                     cy={coords.y}
                     r="8"
-                    className="fill-primary transition-all duration-200 group-hover:fill-accent"
+                    className="fill-primary transition-all duration-200 group-hover:fill-accent group-hover:scale-125"
+                    style={{ transformOrigin: `${coords.x}px ${coords.y}px` }}
                   />
                   
                   {/* White border for visibility */}
@@ -57,7 +60,8 @@ export function InteractiveMap() {
                     cx={coords.x}
                     cy={coords.y}
                     r="8"
-                    className="fill-none stroke-white stroke-2"
+                    className="fill-none stroke-white stroke-2 transition-all duration-200 group-hover:scale-125"
+                    style={{ transformOrigin: `${coords.x}px ${coords.y}px` }}
                   />
 
                   {/* City name - responsive text size */}
