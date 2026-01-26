@@ -1,6 +1,6 @@
 import { Phone, Mail, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { SERVICES, REGIONS, PHONE_NUMBER, EMAIL, SERVICE_HOURS, getWhatsAppLink } from '@/lib/constants';
+import { SERVICES, REGIONS, PHONE_NUMBER, EMAIL, SERVICE_HOURS, ADDRESS, getWhatsAppLink } from '@/lib/constants';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 
 export function Footer() {
@@ -107,7 +107,7 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-2 text-primary-foreground/70 text-sm">
                 <MapPin className="h-4 w-4 flex-shrink-0" />
-                Ulm (Hauptsitz)
+                {ADDRESS}
               </li>
             </ul>
           </div>

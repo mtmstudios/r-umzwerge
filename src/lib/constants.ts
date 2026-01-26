@@ -1,5 +1,5 @@
 // WhatsApp configuration
-export const WHATSAPP_NUMBER = "4915XXXXXXXXX"; // Placeholder - replace with actual number
+export const WHATSAPP_NUMBER = "491603080676";
 export const WHATSAPP_MESSAGE = "Hallo Räumzwerge, ich hätte gerne eine Preiseinschätzung. Ort: ____. Ich sende gleich Fotos.";
 
 export const getWhatsAppLink = (customMessage?: string) => {
@@ -8,11 +8,14 @@ export const getWhatsAppLink = (customMessage?: string) => {
 };
 
 // Phone configuration
-export const PHONE_NUMBER = "+49 XXX XXXXXXX"; // Placeholder - replace with actual number
-export const PHONE_LINK = "tel:+49XXXXXXXXX";
+export const PHONE_NUMBER = "+49 160 3080676";
+export const PHONE_LINK = "tel:+491603080676";
 
 // Email
-export const EMAIL = "kontakt@raeumzwerge.de";
+export const EMAIL = "hallo@raeumzwerge.de";
+
+// Address
+export const ADDRESS = "Bibertalstraße 1, 89278 Nersingen";
 
 // Service hours
 export const SERVICE_HOURS = "Mo–Sa 8–20 Uhr";
