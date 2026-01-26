@@ -38,9 +38,9 @@ export function BentoCard({
         animationDelay: `${index * 100}ms`,
       }}
     >
-      {/* Glow effect on hover */}
+      {/* Glow effect on hover - orange accent */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-primary/5" />
+        <div className="absolute inset-0 bg-gradient-to-br from-cta/10 via-transparent to-accent/5" />
       </div>
 
       {/* Icon */}

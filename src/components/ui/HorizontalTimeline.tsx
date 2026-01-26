@@ -22,7 +22,7 @@ export function HorizontalTimeline({ steps, className }: HorizontalTimelineProps
       {/* Progress Bar - Desktop */}
       <div className="hidden md:block absolute top-[60px] left-0 right-0 h-1 bg-border rounded-full mx-auto max-w-3xl">
         <div
-          className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary via-accent to-primary rounded-full transition-all duration-300 ease-out"
+          className="absolute top-0 left-0 h-full bg-gradient-to-r from-cta via-accent to-cta rounded-full transition-all duration-300 ease-out"
           style={{ width: `${progress * 100}%` }}
         />
       </div>
@@ -59,9 +59,9 @@ export function HorizontalTimeline({ steps, className }: HorizontalTimelineProps
                   className={cn(
                     'absolute -top-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300',
                     isCurrent
-                      ? 'bg-accent text-accent-foreground scale-110'
+                      ? 'bg-cta text-cta-foreground scale-110 shadow-cta'
                       : isActive
-                      ? 'bg-accent/80 text-accent-foreground'
+                      ? 'bg-cta/80 text-cta-foreground'
                       : 'bg-muted text-muted-foreground'
                   )}
                 >
