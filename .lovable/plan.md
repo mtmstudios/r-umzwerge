@@ -1,66 +1,93 @@
 
-# Plan: Logo größer und lesbarer machen + Website-Link hinzufügen
+# Plan: Breadcrumb-Navigation auf Service-Unterseiten
 
-## Problem
+## Ziel
 
-Das hochgeladene Logo hat sehr viel transparenten Freiraum um den eigentlichen "MTM STUDIOS" Text. Bei der aktuellen Höhe von `h-6` (24px) ist das Logo deshalb kaum lesbar.
+Hinzufügen einer Breadcrumb-Navigation auf allen Service-Unterseiten (z.B. `/leistungen/wohnungsentruempelung`) für bessere Benutzerorientierung und SEO.
 
-## Lösung
+## Vorhandene Komponenten
 
-### 1. Logo deutlich größer machen
+Die Breadcrumb-UI-Komponente existiert bereits unter `src/components/ui/breadcrumb.tsx` und muss nur eingebunden werden.
 
-Die Logo-Höhe von `h-6` (24px) auf `h-8` (32px) erhöhen. Das macht das Logo proportional zum umgebenden Text sichtbar.
+## Umsetzung
 
-### 2. Website-Link hinzufügen
+### Dateien die geändert werden
 
-Das Logo wird als klickbarer Link zur Website www.mtmstudios.de umgewandelt.
+| Datei | Aktion | Beschreibung |
+|-------|--------|--------------|
+| `src/pages/ServicePage.tsx` | Bearbeiten | Breadcrumb-Navigation einbinden |
 
-## Datei die geändert wird
+### Design der Breadcrumb
 
-| Datei | Änderung |
-|-------|----------|
-| `src/components/layout/Footer.tsx` | Logo größer machen + Link hinzufügen |
+Die Breadcrumb wird direkt unter dem Header und vor der StickyConversionBar angezeigt:
+
+```text
+Startseite  >  Leistungen  >  [Aktueller Service-Name]
+```
+
+Beispiel für Wohnungsentrümpelung:
+```text
+Startseite  >  Leistungen  >  Wohnungsentrümpelung
+```
+
+### Styling
+
+- Dezenter Hintergrund passend zum Design (`bg-secondary/30`)
+- Responsive Abstände (`py-3 px-4`)
+- Links klickbar zu Startseite und Leistungen-Anker
+- Aktuelle Seite nicht klickbar (BreadcrumbPage)
+- Container-Klasse für konsistente Breite
 
 ## Technische Details
 
-**Bottom Bar (Zeilen 172-179) ändern:**
-
-Vorher:
+**Imports hinzufügen (Zeile 1-15):**
 ```tsx
-<p className="flex items-center gap-1.5">
-  Mit <Heart className="h-4 w-4 text-red-400 fill-red-400" /> erstellt von
-  <img 
-    src={logoWhite} 
-    alt="Logo" 
-    className="h-6 ml-1 object-contain" 
-  />
-</p>
+import { Link } from 'react-router-dom';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 ```
 
-Nachher:
+**Breadcrumb-Komponente einfügen (nach Header, vor StickyConversionBar):**
 ```tsx
-<p className="flex items-center gap-1.5">
-  Mit <Heart className="h-4 w-4 text-red-400 fill-red-400" /> erstellt von
-  <a href="https://www.mtmstudios.de" target="_blank" rel="noopener noreferrer">
-    <img 
-      src={logoWhite} 
-      alt="MTM Studios Logo" 
-      className="h-8 ml-1 object-contain" 
-    />
-  </a>
-</p>
+{/* Breadcrumb Navigation */}
+<div className="bg-secondary/30 border-b border-border/50">
+  <div className="container-custom py-3">
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild>
+            <Link to="/">Startseite</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild>
+            <Link to="/#leistungen">Leistungen</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage>{pageData.title}</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  </div>
+</div>
 ```
 
-**Änderungen im Detail:**
-- `h-6` → `h-8` (von 24px auf 32px Höhe) - macht das Logo deutlich größer
-- Logo wird in einen `<a>`-Tag gewrappt mit:
-  - `href="https://www.mtmstudios.de"` - Link zur Website
-  - `target="_blank"` - öffnet in neuem Tab
-  - `rel="noopener noreferrer"` - Sicherheitsattribut für externe Links
-- Alt-Text verbessert zu "MTM Studios Logo"
+## Vorteile
+
+- **Bessere Orientierung**: Nutzer sehen sofort, wo sie sich befinden
+- **Navigation**: Schneller Rückweg zur Startseite oder Leistungsübersicht
+- **SEO**: Strukturierte Navigation verbessert die Indexierung
+- **Konsistenz**: Nutzt vorhandene UI-Komponenten im bestehenden Design
 
 ## Ergebnis
 
-- Das Logo ist jetzt größer und besser lesbar (32px statt 24px)
-- Ein Klick auf das Logo öffnet www.mtmstudios.de in einem neuen Tab
-- Der Text "Mit ❤️ erstellt von [LOGO]" bleibt optisch ausgewogen
+Alle Service-Unterseiten zeigen eine dezente Breadcrumb-Leiste direkt unter dem Header, die den aktuellen Service-Namen dynamisch aus den Seitendaten lädt.
