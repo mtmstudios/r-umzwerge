@@ -27,6 +27,7 @@ export function BentoCard({
       href={href}
       className={cn(
         'group relative overflow-hidden rounded-2xl p-6 lg:p-8 transition-all duration-500 min-h-[180px]',
+        'flex flex-col items-center text-center',
         'hover:scale-[1.02] hover:-translate-y-1',
         // Style variants
         variant === 'default' && 'bg-card border border-border hover:border-accent/50 hover:shadow-medium',
@@ -46,7 +47,7 @@ export function BentoCard({
       {/* Icon */}
       <div
         className={cn(
-          'relative w-14 h-14 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300',
+          'relative w-14 h-14 rounded-2xl flex items-center justify-center mb-4 mx-auto transition-all duration-300',
           'group-hover:scale-110 group-hover:rotate-3',
           variant === 'accent'
             ? 'bg-accent/20'
@@ -62,7 +63,7 @@ export function BentoCard({
       </div>
 
       {/* Content */}
-      <div className="relative space-y-2">
+      <div className="relative space-y-2 text-center">
         <h3
           className={cn(
             'font-semibold text-lg',
@@ -98,8 +99,8 @@ export function BentoCard({
       {/* Arrow indicator */}
       <div
         className={cn(
-          'absolute bottom-6 right-6 flex items-center gap-2 text-sm font-medium transition-all duration-300',
-          'opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0',
+          'absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 text-sm font-medium transition-all duration-300',
+          'opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0',
           variant === 'accent' ? 'text-accent' : 'text-primary'
         )}
       >

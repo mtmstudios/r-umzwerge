@@ -48,7 +48,7 @@ export function ServicesSection() {
         {/* Featured Card - Hauptleistung */}
         <div
           className={cn(
-            "group relative bg-primary rounded-3xl p-8 lg:p-12 mb-10 text-center overflow-hidden scroll-reveal glow-hover",
+            "group relative bg-primary rounded-3xl p-6 lg:p-8 mb-8 text-center overflow-hidden scroll-reveal glow-hover",
             headerVisible && "visible"
           )}
         >
@@ -57,21 +57,21 @@ export function ServicesSection() {
           
           <div className="relative max-w-2xl mx-auto">
             {/* Badge */}
-            <span className="inline-block bg-accent/20 text-accent text-sm font-semibold px-5 py-2 rounded-full mb-6 backdrop-blur-sm border border-accent/30">
+            <span className="inline-block bg-accent/20 text-accent text-xs font-semibold px-4 py-1.5 rounded-full mb-4 backdrop-blur-sm border border-accent/30">
               ⭐ Unsere Kernkompetenz
             </span>
             
-            <h3 className="text-2xl lg:text-4xl font-bold text-primary-foreground mb-4">
+            <h3 className="text-xl lg:text-2xl font-bold text-primary-foreground mb-3">
               Wohnungsentrümpelung
             </h3>
             
-            <p className="text-primary-foreground/80 mb-8 leading-relaxed text-lg">
+            <p className="text-primary-foreground/80 mb-6 leading-relaxed text-base">
               Von der ersten Preiseinschätzung bis zur besenreinen Übergabe – 
               transparent, zuverlässig und respektvoll.
             </p>
             
             {/* USP Pills */}
-            <div className="flex flex-wrap justify-center gap-4 mb-10">
+            <div className="flex flex-wrap justify-center gap-3 mb-6">
               {[
                 { icon: Check, text: 'Besenreine Übergabe' },
                 { icon: Check, text: 'Festpreis möglich' },
