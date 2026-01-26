@@ -38,6 +38,60 @@ export interface ServicePageData {
 }
 
 export const SERVICE_PAGES: Record<string, ServicePageData> = {
+  'wohnungsentruempelung': {
+    slug: 'wohnungsentruempelung',
+    title: 'Wohnungsentrümpelung',
+    metaTitle: 'Wohnungsentrümpelung – sauber, diskret, transparent | Räumzwerge',
+    metaDescription: 'Professionelle Wohnungsentrümpelung in Süddeutschland. Von der Preiseinschätzung bis zur besenreinen Übergabe. Festpreis nach Einschätzung möglich.',
+    hero: {
+      h1: 'Wohnungsentrümpelung – sauber, diskret, transparent.',
+      subline: 'Von der ersten Preiseinschätzung bis zur besenreinen Übergabe – transparent, zuverlässig und respektvoll.',
+      trustPills: ['Besenrein', 'Festpreis nach Einschätzung', 'Keine versteckten Kosten'],
+    },
+    scenarios: [
+      { title: 'Wohnungswechsel / Auszug', description: 'Alles muss raus – schnell und unkompliziert.' },
+      { title: 'Nachlass / Räumung', description: 'Respektvolle Auflösung nach Erbschaft.' },
+      { title: 'Renovierung / Umbau', description: 'Platz schaffen für Neues.' },
+      { title: 'Mietwohnung übergeben', description: 'Besenrein für den Vermieter.' },
+      { title: 'Eigentumswechsel', description: 'Wohnung verkaufsfertig räumen.' },
+    ],
+    scope: {
+      included: [
+        'Sortieren, Tragen, Abtransport',
+        'Fachgerechte Entsorgung',
+        'Besenreine Übergabe',
+        'Terminabstimmung',
+      ],
+      optional: [
+        'Demontage von Möbeln/Einbauten',
+        'Sondermüll / Elektrogeräte',
+        'Dokumentation (Fotos)',
+        'Express-Termin',
+      ],
+    },
+    extraModule: {
+      title: 'Was passiert mit den Sachen?',
+      points: [
+        'Fachgerechte Entsorgung über zertifizierte Partner',
+        'Recyclingfähiges wird getrennt',
+        'Brauchbares kann nach Absprache weitergegeben werden',
+      ],
+    },
+    faq: [
+      { question: 'Wie viele Fotos braucht ihr?', answer: 'Am besten 3–6 Fotos: Gesamtübersicht plus Details. Dazu Ort und Etage/Zugang.' },
+      { question: 'Kann ich auch ohne Vor-Ort-Termin einen Festpreis bekommen?', answer: 'Häufig ja – nach Einschätzung der Fotos ist oft ein Festpreis möglich.' },
+      { question: 'Was ist besenrein genau?', answer: 'Grober Schmutz entfernt, Böden gefegt, alle Gegenstände entfernt. Keine Grundreinigung.' },
+      { question: 'Wie schnell könnt ihr einen Termin machen?', answer: 'Oft innerhalb weniger Tage – abhängig von Umfang und Auslastung.' },
+      { question: 'Muss ich beim Termin dabei sein?', answer: 'Nicht unbedingt – nach Absprache auch per Schlüsselübergabe möglich.' },
+      { question: 'Gibt es versteckte Kosten?', answer: 'Nein. Wir kommunizieren transparent. Was im Angebot steht, gilt.' },
+    ],
+    processSteps: [
+      { title: 'Foto senden', description: 'WhatsApp-Foto mit Ort und kurzer Beschreibung.' },
+      { title: 'Einschätzung < 24h', description: 'Wir melden uns mit einer Preiseinschätzung.' },
+      { title: 'Termin & besenrein', description: 'Durchführung zum Wunschtermin, besenreine Übergabe.' },
+    ],
+  },
+
   'entruempelung': {
     slug: 'entruempelung',
     title: 'Entrümpelung',

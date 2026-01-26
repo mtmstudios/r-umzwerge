@@ -91,7 +91,7 @@ export function ServicesSection() {
               </Button>
               
               <a
-                href="/leistungen"
+                href="/leistungen/wohnungsentruempelung"
                 className="inline-flex items-center gap-2 text-accent font-medium hover:gap-3 transition-all"
               >
                 Mehr erfahren
