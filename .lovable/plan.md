@@ -1,93 +1,135 @@
 
-# Plan: Breadcrumb-Navigation auf Service-Unterseiten
+# Plan: Neues Services-Layout (2 große + 3 kleine Karten)
 
 ## Ziel
 
-Hinzufügen einer Breadcrumb-Navigation auf allen Service-Unterseiten (z.B. `/leistungen/wohnungsentruempelung`) für bessere Benutzerorientierung und SEO.
+Umgestaltung der Leistungen-Sektion zu einem ausgewogenen Layout mit:
+- **2 größere Karten** (obere Reihe): Wohnungsentrümpelung & Haushaltsauflösung
+- **3 kleinere Karten** (untere Reihe): Keller/Dachboden, Gewerbe/Büro, Diskrete Reinigung
 
-## Vorhandene Komponenten
+## Visuelles Layout
 
-Die Breadcrumb-UI-Komponente existiert bereits unter `src/components/ui/breadcrumb.tsx` und muss nur eingebunden werden.
+```text
+Desktop:
+┌─────────────────────────┐ ┌─────────────────────────┐
+│                         │ │                         │
+│   Wohnungsentrümpelung  │ │   Haushaltsauflösung    │
+│   (groß, mit Badge)     │ │   (groß)                │
+│                         │ │                         │
+└─────────────────────────┘ └─────────────────────────┘
 
-## Umsetzung
+┌───────────────┐ ┌───────────────┐ ┌───────────────┐
+│ Keller/       │ │ Gewerbe/      │ │ Diskrete      │
+│ Dachboden     │ │ Büro/Lager    │ │ Reinigung     │
+└───────────────┘ └───────────────┘ └───────────────┘
+
+Mobile:
+Alle Karten vertikal gestapelt, große Karten zuerst
+```
+
+## Technische Umsetzung
 
 ### Dateien die geändert werden
 
-| Datei | Aktion | Beschreibung |
-|-------|--------|--------------|
-| `src/pages/ServicePage.tsx` | Bearbeiten | Breadcrumb-Navigation einbinden |
+| Datei | Aktion |
+|-------|--------|
+| `src/lib/constants.ts` | Wohnungsentrümpelung zu SERVICES Array hinzufügen |
+| `src/components/sections/ServicesSection.tsx` | Komplettes Redesign der Grid-Struktur |
+| `src/components/ui/BentoCard.tsx` | Neue `size` Prop hinzufügen (large/small) |
 
-### Design der Breadcrumb
+### 1. constants.ts - Wohnungsentrümpelung hinzufügen
 
-Die Breadcrumb wird direkt unter dem Header und vor der StickyConversionBar angezeigt:
+Wohnungsentrümpelung als erstes Element in das SERVICES Array einfügen:
 
-```text
-Startseite  >  Leistungen  >  [Aktueller Service-Name]
+```typescript
+export const SERVICES = [
+  {
+    title: "Wohnungsentrümpelung",
+    description: "Transparent, zuverlässig und respektvoll.",
+    longDescription: "Von der ersten Preiseinschätzung bis zur besenreinen Übergabe...",
+    highlights: ["Besenrein", "Festpreis möglich", "Antwort < 24h"],
+    slug: "wohnungsentruempelung",
+    featured: true, // Markierung für Badge
+  },
+  // ... bestehende Services
+];
 ```
 
-Beispiel für Wohnungsentrümpelung:
-```text
-Startseite  >  Leistungen  >  Wohnungsentrümpelung
+### 2. BentoCard.tsx - Size Variante
+
+Neue `size` Prop für unterschiedliche Kartengrößen:
+
+```typescript
+interface BentoCardProps {
+  // ... bestehende Props
+  size?: 'default' | 'large';
+  featured?: boolean; // Für Kernkompetenz-Badge
+}
 ```
 
-### Styling
+**Große Karten:**
+- Höhere min-height (220px statt 160px)
+- Größeres Icon (64px statt 48px)
+- Mehr Padding
+- Optional: Kernkompetenz-Badge
 
-- Dezenter Hintergrund passend zum Design (`bg-secondary/30`)
-- Responsive Abstände (`py-3 px-4`)
-- Links klickbar zu Startseite und Leistungen-Anker
-- Aktuelle Seite nicht klickbar (BreadcrumbPage)
-- Container-Klasse für konsistente Breite
+**Kleine Karten:**
+- Kompakter (140px min-height)
+- Standard Icon-Größe
+- Weniger Padding
 
-## Technische Details
+### 3. ServicesSection.tsx - Neues Grid
 
-**Imports hinzufügen (Zeile 1-15):**
+Entfernung der aktuellen Featured Card, stattdessen ein einheitliches Grid:
+
 ```tsx
-import { Link } from 'react-router-dom';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
-```
+{/* Obere Reihe: 2 große Karten */}
+<div className="grid md:grid-cols-2 gap-5 lg:gap-6 mb-5 lg:mb-6">
+  {SERVICES.slice(0, 2).map((service, index) => (
+    <BentoCard
+      size="large"
+      featured={service.featured}
+      // ... Props
+    />
+  ))}
+</div>
 
-**Breadcrumb-Komponente einfügen (nach Header, vor StickyConversionBar):**
-```tsx
-{/* Breadcrumb Navigation */}
-<div className="bg-secondary/30 border-b border-border/50">
-  <div className="container-custom py-3">
-    <Breadcrumb>
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link to="/">Startseite</Link>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link to="/#leistungen">Leistungen</Link>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage>{pageData.title}</BreadcrumbPage>
-        </BreadcrumbItem>
-      </BreadcrumbList>
-    </Breadcrumb>
-  </div>
+{/* Untere Reihe: 3 kleine Karten */}
+<div className="grid md:grid-cols-3 gap-5 lg:gap-6">
+  {SERVICES.slice(2, 5).map((service, index) => (
+    <BentoCard
+      size="default"
+      // ... Props
+    />
+  ))}
 </div>
 ```
 
+### Styling Details
+
+**Große Karten (Wohnungsentrümpelung & Haushaltsauflösung):**
+- `min-h-[200px] sm:min-h-[220px]`
+- Icon: `w-16 h-16` 
+- Padding: `p-6 sm:p-8`
+- Wohnungsentrümpelung erhält "★ Kernkompetenz" Badge
+
+**Kleine Karten (restliche 3):**
+- `min-h-[140px] sm:min-h-[160px]`
+- Icon: `w-12 h-12`
+- Padding: `p-4 sm:p-5`
+- Kompaktere Texte
+
+### Responsive Verhalten
+
+| Viewport | Obere Reihe | Untere Reihe |
+|----------|-------------|--------------|
+| Mobile   | 1 Spalte    | 1 Spalte     |
+| Tablet   | 2 Spalten   | 3 Spalten    |
+| Desktop  | 2 Spalten   | 3 Spalten    |
+
 ## Vorteile
 
-- **Bessere Orientierung**: Nutzer sehen sofort, wo sie sich befinden
-- **Navigation**: Schneller Rückweg zur Startseite oder Leistungsübersicht
-- **SEO**: Strukturierte Navigation verbessert die Indexierung
-- **Konsistenz**: Nutzt vorhandene UI-Komponenten im bestehenden Design
-
-## Ergebnis
-
-Alle Service-Unterseiten zeigen eine dezente Breadcrumb-Leiste direkt unter dem Header, die den aktuellen Service-Namen dynamisch aus den Seitendaten lädt.
+- **Symmetrisches Layout**: 2+3 Karten = keine alleinstehende Karte
+- **Visuelle Hierarchie**: Hauptleistungen sind größer und prominenter
+- **Einheitlicher Code**: Alle Services im gleichen Array, BentoCard handhabt Größen
+- **Mobile-optimiert**: Saubere Stapelreihenfolge auf kleinen Bildschirmen
