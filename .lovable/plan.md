@@ -1,64 +1,63 @@
 
-# Plan: CTA-Button Orange + Footer-CTA aufräumen
+# Plan: Header-Button zu "Jetzt anrufen" ändern
+
+## Ziel
+
+Den Desktop-Header-Button von "WhatsApp" (grün) zu "Jetzt anrufen" (orange) ändern.
+
+## Aktuelle Situation
+
+Der Desktop-Button (Zeile 94-105):
+- Text: "WhatsApp"
+- Icon: WhatsAppIcon
+- Farbe: `bg-whatsapp` (grün)
+- Link: WhatsApp-Link
 
 ## Änderungen
 
-### 1. FinalCTASection.tsx - Anrufen-Button orange machen
+### Datei: `src/components/layout/Header.tsx`
 
-**Zeile 31-36:** Button-Styling ändern von Outline zu Orange
+**1. Imports anpassen (Zeile 2 + 4):**
 
 | Vorher | Nachher |
 |--------|---------|
-| `variant="outline"` | entfernen |
-| `border-2 border-primary-foreground/50` | entfernen |
-| `text-primary-foreground` | `text-white` |
-| `hover:bg-cta hover:text-cta-foreground hover:border-cta` | `bg-cta hover:bg-cta-hover` |
+| `Menu, X, Home, ChevronDown` | `Menu, X, Home, ChevronDown, Phone` |
+| `NAV_ITEMS, getWhatsAppLink` | `NAV_ITEMS, PHONE_LINK` |
 
-**Neuer Code:**
+**2. Desktop-Button ändern (Zeile 94-105):**
+
 ```tsx
-<Button asChild size="lg" className="gap-2 h-12 sm:h-14 px-5 sm:px-8 bg-cta hover:bg-cta-hover text-white transition-all duration-300 text-sm sm:text-base">
-  <a href={PHONE_LINK}>
-    <Phone className="h-5 w-5 flex-shrink-0" />
-    Anrufen
-  </a>
-</Button>
+{/* Desktop CTA - Jetzt anrufen */}
+<div className="hidden lg:block">
+  <Button
+    asChild
+    size="lg"
+    className="gap-2.5 bg-cta hover:bg-cta-hover text-white font-semibold px-6 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
+  >
+    <a href={PHONE_LINK}>
+      <Phone className="h-5 w-5" />
+      Jetzt anrufen
+    </a>
+  </Button>
+</div>
 ```
 
-### 2. Footer.tsx - CTA-Banner vereinfachen
+**Zusammenfassung der Änderungen:**
 
-**Zeilen 15-39 entfernen/vereinfachen:** Die "Räumzwerge" + "Jetzt Preiseinschätzung erhalten" Zeile löschen
+| Element | Vorher | Nachher |
+|---------|--------|---------|
+| Icon | `WhatsAppIcon` | `Phone` |
+| Text | "WhatsApp" | "Jetzt anrufen" |
+| Farbe | `bg-whatsapp` (grün) | `bg-cta` (orange) |
+| Hover | `hover:bg-whatsapp-hover` | `hover:bg-cta-hover` |
+| Textfarbe | `text-whatsapp-foreground` | `text-white` |
+| Link | `getWhatsAppLink()` | `PHONE_LINK` |
+| Target | `target="_blank"` | entfernt |
 
-Der CTA-Banner-Bereich (Zeilen 13-42) wird entfernt, da die FinalCTASection direkt darüber bereits die gleiche Funktion erfüllt.
-
-**Vorher:**
-```
-┌─────────────────────────────────────────────┐
-│ FinalCTASection (grün, WhatsApp + Anrufen)  │
-├─────────────────────────────────────────────┤
-│ Footer CTA Banner (Räumzwerge + WhatsApp)   │ ← Doppelt, wird entfernt
-├─────────────────────────────────────────────┤
-│ Footer Links (Leistungen, Kontakt, etc.)    │
-└─────────────────────────────────────────────┘
-```
-
-**Nachher:**
-```
-┌─────────────────────────────────────────────┐
-│ FinalCTASection (grün, WhatsApp + Anrufen)  │
-├─────────────────────────────────────────────┤
-│ Footer Links (Leistungen, Kontakt, etc.)    │
-└─────────────────────────────────────────────┘
-```
-
-## Dateien die geändert werden
-
-| Datei | Änderung |
-|-------|----------|
-| `src/components/sections/FinalCTASection.tsx` | Button-Styling: outline → orange |
-| `src/components/layout/Footer.tsx` | CTA-Banner komplett entfernen (Zeilen 12-42) |
+**3. Aufräumen (optional):**
+- `WhatsAppIcon` Import kann entfernt werden, da er im Desktop-Bereich nicht mehr verwendet wird
+- `getWhatsAppLink` Import bleibt, da er im Mobile-Menü noch gebraucht wird
 
 ## Ergebnis
 
-- Der Anrufen-Button ist jetzt orange (#FF8A3D) statt weiß
-- Keine doppelte CTA-Sektion mehr zwischen FinalCTASection und Footer
-- Saubererer, weniger redundanter Aufbau
+Der Header-Button wird orange mit "Jetzt anrufen" und Phone-Icon statt grün mit WhatsApp.
