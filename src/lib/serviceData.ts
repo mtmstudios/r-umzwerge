@@ -1,0 +1,314 @@
+// Service page data for all Leistungsseiten
+import { Users, Warehouse, Building2, Lock, Trash2 } from 'lucide-react';
+
+export interface ServiceScenario {
+  title: string;
+  description: string;
+}
+
+export interface ServiceFAQ {
+  question: string;
+  answer: string;
+}
+
+export interface ServicePageData {
+  slug: string;
+  title: string;
+  metaTitle: string;
+  metaDescription: string;
+  hero: {
+    h1: string;
+    subline: string;
+    trustPills: string[];
+  };
+  scenarios: ServiceScenario[];
+  scope: {
+    included: string[];
+    optional: string[];
+  };
+  extraModule: {
+    title: string;
+    points: string[];
+  };
+  faq: ServiceFAQ[];
+  processSteps: {
+    title: string;
+    description: string;
+  }[];
+}
+
+export const SERVICE_PAGES: Record<string, ServicePageData> = {
+  'entruempelung': {
+    slug: 'entruempelung',
+    title: 'Entrümpelung',
+    metaTitle: 'Entrümpelung – sauber, diskret, transparent | Räumzwerge',
+    metaDescription: 'Professionelle Entrümpelung in Süddeutschland. Preiseinschätzung per WhatsApp-Foto innerhalb von 24h. Besenrein, Festpreis möglich.',
+    hero: {
+      h1: 'Entrümpelung – sauber, diskret, transparent.',
+      subline: 'Preiseinschätzung per WhatsApp-Foto – innerhalb von 24 Stunden (oft schneller).',
+      trustPills: ['Besenrein', 'Festpreis nach Einschätzung', 'Keine versteckten Kosten'],
+    },
+    scenarios: [
+      { title: 'Wohnungswechsel / Auszug', description: 'Alles muss raus – schnell und unkompliziert.' },
+      { title: 'Nachlass / Räumung', description: 'Respektvolle Auflösung nach Erbschaft.' },
+      { title: 'Renovierung / Umbau', description: 'Platz schaffen für Neues.' },
+      { title: 'Keller/Garage voll', description: 'Endlich wieder nutzbar machen.' },
+      { title: 'Gewerbe-Auflösung', description: 'Effizient und planbar räumen.' },
+    ],
+    scope: {
+      included: [
+        'Sortieren, Tragen, Abtransport',
+        'Fachgerechte Entsorgung',
+        'Besenreine Übergabe',
+        'Terminabstimmung',
+      ],
+      optional: [
+        'Demontage von Möbeln/Einbauten',
+        'Sondermüll / Elektrogeräte',
+        'Dokumentation (Fotos)',
+        'Express-Termin',
+      ],
+    },
+    extraModule: {
+      title: 'Was passiert mit den Sachen?',
+      points: [
+        'Fachgerechte Entsorgung über zertifizierte Partner',
+        'Recyclingfähiges wird getrennt',
+        'Brauchbares kann nach Absprache weitergegeben werden',
+      ],
+    },
+    faq: [
+      { question: 'Wie viele Fotos braucht ihr?', answer: 'Am besten 3–6 Fotos: Gesamtübersicht plus Details. Dazu Ort und Etage/Zugang.' },
+      { question: 'Kann ich auch ohne Vor-Ort-Termin einen Festpreis bekommen?', answer: 'Häufig ja – nach Einschätzung der Fotos ist oft ein Festpreis möglich.' },
+      { question: 'Was ist besenrein genau?', answer: 'Grober Schmutz entfernt, Böden gefegt, alle Gegenstände entfernt. Keine Grundreinigung.' },
+      { question: 'Wie schnell könnt ihr einen Termin machen?', answer: 'Oft innerhalb weniger Tage – abhängig von Umfang und Auslastung.' },
+      { question: 'Muss ich beim Termin dabei sein?', answer: 'Nicht unbedingt – nach Absprache auch per Schlüsselübergabe möglich.' },
+      { question: 'Gibt es versteckte Kosten?', answer: 'Nein. Wir kommunizieren transparent. Was im Angebot steht, gilt.' },
+    ],
+    processSteps: [
+      { title: 'Foto senden', description: 'WhatsApp-Foto mit Ort und kurzer Beschreibung.' },
+      { title: 'Einschätzung < 24h', description: 'Wir melden uns mit einer Preiseinschätzung.' },
+      { title: 'Termin & besenrein', description: 'Durchführung zum Wunschtermin, besenreine Übergabe.' },
+    ],
+  },
+
+  'haushaltsaufloesung': {
+    slug: 'haushaltsaufloesung',
+    title: 'Haushaltsauflösung',
+    metaTitle: 'Haushaltsauflösung – respektvoll und zuverlässig | Räumzwerge',
+    metaDescription: 'Haushaltsauflösung bei Nachlass, Umzug ins Pflegeheim oder Immobilienverkauf. Diskret, transparent, besenrein. Preiseinschätzung < 24h.',
+    hero: {
+      h1: 'Haushaltsauflösung – respektvoll und zuverlässig.',
+      subline: 'Wir nehmen dir die Organisation ab – transparent, diskret, besenrein.',
+      trustPills: ['Keine versteckten Kosten', 'Planbar', 'Diskret'],
+    },
+    scenarios: [
+      { title: 'Nachlass / Todesfall', description: 'Einfühlsame Auflösung in schwerer Zeit.' },
+      { title: 'Umzug ins Pflegeheim', description: 'Strukturiert und ohne Zeitdruck.' },
+      { title: 'Verkauf / Übergabe', description: 'Immobilie übergabefertig räumen.' },
+      { title: 'Auflösung nach Trennung', description: 'Diskret und unkompliziert.' },
+    ],
+    scope: {
+      included: [
+        'Terminplanung nach deinen Wünschen',
+        'Sorgfältiges, respektvolles Vorgehen',
+        'Abtransport und Entsorgung',
+        'Besenreine Übergabe',
+      ],
+      optional: [
+        'Wertanrechnung / Weitergabe',
+        'Schlüsselübergabe ohne Anwesenheit',
+        'Enge Zeitfenster / Express',
+        'Dokumentation',
+      ],
+    },
+    extraModule: {
+      title: 'So läuft die Übergabe',
+      points: [
+        'Abnahme gemeinsam oder per Schlüssel (nach Absprache)',
+        'Besenrein-Standard garantiert',
+        'Transparente Auflistung der Leistungen',
+      ],
+    },
+    faq: [
+      { question: 'Wie diskret arbeitet ihr?', answer: 'Sehr diskret. Neutrale Kleidung, keine auffälligen Beschriftungen, respektvoller Umgang.' },
+      { question: 'Wie schnell ist ein Termin möglich?', answer: 'Oft innerhalb weniger Tage – wir versuchen, flexibel auf eure Situation einzugehen.' },
+      { question: 'Kann ich nicht vor Ort sein?', answer: 'Kein Problem – Schlüsselübergabe und Abnahme per Foto/Protokoll möglich.' },
+      { question: 'Was passiert mit Wertgegenständen?', answer: 'Nach Absprache: Wertanrechnung, Weitergabe oder ihr nehmt sie vorher mit.' },
+      { question: 'Wie wird der Preis berechnet?', answer: 'Nach Umfang, Etage, Zugang und Sondermüll. Festpreis nach Einschätzung möglich.' },
+      { question: 'Arbeitet ihr auch am Wochenende?', answer: 'Nach Absprache auch samstags möglich.' },
+    ],
+    processSteps: [
+      { title: 'Kontakt aufnehmen', description: 'WhatsApp-Foto oder Anruf – wir melden uns schnell.' },
+      { title: 'Einschätzung & Planung', description: 'Preiseinschätzung und Terminabstimmung.' },
+      { title: 'Durchführung & Übergabe', description: 'Räumung, besenrein, Schlüsselübergabe.' },
+    ],
+  },
+
+  'keller-dachboden-garage': {
+    slug: 'keller-dachboden-garage',
+    title: 'Keller / Dachboden / Garage',
+    metaTitle: 'Keller, Dachboden oder Garage entrümpeln | Räumzwerge',
+    metaDescription: 'Keller voll? Dachboden zugestellt? Wir schaffen Platz – schnell und unkompliziert. Preiseinschätzung < 24h, besenrein.',
+    hero: {
+      h1: 'Keller, Dachboden oder Garage entrümpeln – schnell wieder Platz.',
+      subline: 'Foto senden, Preiseinschätzung < 24h, Termin – fertig.',
+      trustPills: ['Auch enge Zugänge', 'Entsorgung inklusive', 'Besenrein'],
+    },
+    scenarios: [
+      { title: 'Keller voll mit Sperrmüll', description: 'Endlich wieder nutzbar machen.' },
+      { title: 'Dachboden seit Jahren unberührt', description: 'Platz schaffen, Überblick gewinnen.' },
+      { title: 'Garage nicht mehr nutzbar', description: 'Wieder Stellplatz oder Werkstatt.' },
+      { title: 'Nach Renovierung / Baustellenreste', description: 'Schnell und sauber entsorgen.' },
+    ],
+    scope: {
+      included: [
+        'Tragen und Abtransport',
+        'Fachgerechte Entsorgung',
+        'Besenreine Übergabe',
+        'Terminabstimmung',
+      ],
+      optional: [
+        'Demontage von Regalen/Einbauten',
+        'Sortierhilfe (Behalten/Kann weg)',
+        'Sondermüll / Elektro',
+        'Express-Termin',
+      ],
+    },
+    extraModule: {
+      title: 'Typische Stolpersteine – und wie wir sie lösen',
+      points: [
+        'Enge Treppen, kein Aufzug – kein Problem für unser Team',
+        'Parken/Zugang schwierig – wir finden eine Lösung',
+        'Schwere Gegenstände – wir haben die Ausrüstung',
+      ],
+    },
+    faq: [
+      { question: 'Muss ich vorher sortieren?', answer: 'Nein – sag uns nur, was bleiben soll. Den Rest erledigen wir.' },
+      { question: 'Wie läuft das mit schweren Sachen?', answer: 'Wir haben die Ausrüstung und Erfahrung – auch für sperrige Gegenstände.' },
+      { question: 'Kann das an einem Tag erledigt werden?', answer: 'Oft ja – abhängig vom Umfang. Wir schätzen das vorher ein.' },
+      { question: 'Was kostet das ungefähr?', answer: 'Abhängig von Menge, Etage und Zugang. Festpreis nach Einschätzung möglich.' },
+      { question: 'Nehmt ihr auch Elektrogeräte mit?', answer: 'Ja – Elektro und Sondermüll entsorgen wir fachgerecht.' },
+      { question: 'Wie schnell könnt ihr kommen?', answer: 'Oft innerhalb weniger Tage – je nach Auslastung.' },
+    ],
+    processSteps: [
+      { title: 'Fotos senden', description: '3–6 Fotos vom Keller/Dachboden/Garage + Ort.' },
+      { title: 'Einschätzung < 24h', description: 'Schnelle Rückmeldung mit Preiseinschätzung.' },
+      { title: 'Räumung & fertig', description: 'Termin, Räumung, besenrein – fertig.' },
+    ],
+  },
+
+  'gewerbe-buero-lager': {
+    slug: 'gewerbe-buero-lager',
+    title: 'Gewerbe / Büro / Lager',
+    metaTitle: 'Gewerbe, Büro oder Lager räumen – planbar und effizient | Räumzwerge',
+    metaDescription: 'Büroauflösung, Lagerräumung, Geschäftsauflösung. Zügig, diskret, auch außerhalb der Geschäftszeiten. Festpreis nach Einschätzung.',
+    hero: {
+      h1: 'Gewerbe, Büro oder Lager räumen – planbar und effizient.',
+      subline: 'Klare Abstimmung, transparente Preise, termintreu – auch außerhalb der Geschäftszeiten.',
+      trustPills: ['Minimale Betriebsstörung', 'Termintreu', 'Transparent'],
+    },
+    scenarios: [
+      { title: 'Büroauflösung / Umzug', description: 'Effizient und ohne Unterbrechung.' },
+      { title: 'Lager bereinigen', description: 'Platz schaffen, Ordnung wiederherstellen.' },
+      { title: 'Geschäftsauflösung / Übergabe', description: 'Komplette Räumung bis besenrein.' },
+      { title: 'Renovierung / Flächenreduktion', description: 'Schnell räumen, schnell starten.' },
+    ],
+    scope: {
+      included: [
+        'Terminfensterplanung nach Bedarf',
+        'Zügige, professionelle Abwicklung',
+        'Abtransport und Entsorgung',
+        'Besenreine Übergabe',
+      ],
+      optional: [
+        'Arbeiten außerhalb der Geschäftszeiten',
+        'Datenträger-Hinweise (organisatorisch)',
+        'Dokumentation / Protokoll',
+        'Teilräumung in Etappen',
+      ],
+    },
+    extraModule: {
+      title: 'Ablauf für Unternehmen',
+      points: [
+        'Fotos/Begehung zur Einschätzung',
+        'Angebot / Festpreis nach Einschätzung',
+        'Durchführung in abgestimmten Slots',
+        'Übergabe mit Protokoll (optional)',
+      ],
+    },
+    faq: [
+      { question: 'Könnt ihr außerhalb der Geschäftszeiten arbeiten?', answer: 'Ja – nach Absprache auch abends oder am Wochenende.' },
+      { question: 'Wie schnell könnt ihr starten?', answer: 'Oft kurzfristig möglich – abhängig von Umfang und Planung.' },
+      { question: 'Gibt es Nachweise zur Entsorgung?', answer: 'Auf Wunsch stellen wir Entsorgungsnachweise aus.' },
+      { question: 'Wie läuft die Terminplanung?', answer: 'Wir stimmen Zeitfenster genau ab – minimale Betriebsstörung.' },
+      { question: 'Können auch IT-Geräte entsorgt werden?', answer: 'Ja – Elektrogeräte entsorgen wir fachgerecht. Datenvernichtung obliegt euch.' },
+      { question: 'Bekomme ich einen festen Preis?', answer: 'Nach Einschätzung ist häufig ein Festpreis möglich.' },
+    ],
+    processSteps: [
+      { title: 'Anfrage stellen', description: 'Fotos oder Begehungstermin vereinbaren.' },
+      { title: 'Angebot erhalten', description: 'Klare Preiseinschätzung, oft Festpreis.' },
+      { title: 'Umsetzung & Übergabe', description: 'Termingerechte Räumung, besenrein.' },
+    ],
+  },
+
+  'messie-wohnungen': {
+    slug: 'messie-wohnungen',
+    title: 'Diskrete Reinigung & Entrümpelung',
+    metaTitle: 'Diskrete Reinigung & Entrümpelung – respektvoll und geschützt | Räumzwerge',
+    metaDescription: 'Diskrete Entrümpelung und Reinigung bei sensiblen Situationen. Respektvoll, ohne Aufsehen, mit klarer Kommunikation. Preiseinschätzung < 24h.',
+    hero: {
+      h1: 'Diskrete Reinigung & Entrümpelung – respektvoll und geschützt.',
+      subline: 'Wir arbeiten diskret, strukturiert und ohne Aufsehen. Preiseinschätzung per Foto möglich – innerhalb von 24 Stunden.',
+      trustPills: ['Absolute Diskretion', 'Respektvoll', 'Geschütztes Vorgehen'],
+    },
+    scenarios: [
+      { title: 'Wohnung wieder bewohnbar machen', description: 'Strukturierte Räumung und Reinigung.' },
+      { title: 'Unterstützung für Angehörige', description: 'Wir helfen einfühlsam und diskret.' },
+      { title: 'Akute Übergabe / Abnahme', description: 'Schnelle Hilfe bei Zeitdruck.' },
+      { title: 'Übergabefähig machen', description: 'Besenrein für Vermieter/Käufer.' },
+    ],
+    scope: {
+      included: [
+        'Absolute Diskretion',
+        'Strukturierte Vorgehensweise',
+        'Abtransport und Entsorgung',
+        'Besenreine Übergabe',
+      ],
+      optional: [
+        'Intensivreinigung',
+        'Geruchsneutralisierung / Desinfektion',
+        'Etappenplan (mehrere Termine)',
+        'Begleitung durch Fachpersonal',
+      ],
+    },
+    extraModule: {
+      title: 'Diskret heißt bei uns',
+      points: [
+        'Neutrale Kleidung und Fahrzeuge – kein Aufsehen',
+        'Leise, respektvolle Kommunikation',
+        'Klare Absprachen, keine Überraschungen',
+        'Schutz der Privatsphäre hat höchste Priorität',
+      ],
+    },
+    faq: [
+      { question: 'Wie diskret ist das wirklich?', answer: 'Maximal diskret. Neutrale Fahrzeuge, keine Beschriftungen, respektvolles Auftreten.' },
+      { question: 'Muss die betroffene Person anwesend sein?', answer: 'Nicht unbedingt – wir können auch mit Angehörigen oder Betreuern arbeiten.' },
+      { question: 'Wie wird der Umfang eingeschätzt?', answer: 'Per Fotos oder diskrete Begehung – je nach Situation.' },
+      { question: 'Wie schnell könnt ihr helfen?', answer: 'Bei akuten Situationen versuchen wir, schnell zu reagieren.' },
+      { question: 'Bietet ihr auch Reinigung an?', answer: 'Ja – Intensivreinigung und Desinfektion optional möglich.' },
+      { question: 'Wie läuft die Kommunikation?', answer: 'Klar, respektvoll, ohne Druck. Wir hören zu und planen gemeinsam.' },
+    ],
+    processSteps: [
+      { title: 'Erstkontakt', description: 'Diskreter Kontakt per WhatsApp oder Telefon.' },
+      { title: 'Einschätzung', description: 'Fotos oder Begehung – vertraulich und respektvoll.' },
+      { title: 'Umsetzung', description: 'Strukturierte Räumung, diskret, besenrein.' },
+    ],
+  },
+};
+
+// Common badges for all service pages
+export const SCOPE_BADGES = ['Besenrein', 'Entsorgung', 'Transparent', 'Diskret'];
+
+// Photo guide text
+export const PHOTO_GUIDE = 'Am besten: 3–6 Fotos (gesamt + Details) + Ort + Etage/Zugang.';
