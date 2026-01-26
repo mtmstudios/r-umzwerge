@@ -15,7 +15,7 @@ interface HorizontalTimelineProps {
 }
 
 export function HorizontalTimeline({ steps, className }: HorizontalTimelineProps) {
-  const { containerRef, activeStep, progress } = useTimelineProgress(steps.length);
+  const { containerRef, activeStep, progress, justActivated } = useTimelineProgress(steps.length);
 
   return (
     <div ref={containerRef} className={cn('relative', className)}>
@@ -33,6 +33,7 @@ export function HorizontalTimeline({ steps, className }: HorizontalTimelineProps
           const Icon = step.icon;
           const isActive = index <= activeStep;
           const isCurrent = index === activeStep;
+          const isJustActivated = justActivated === index;
 
           return (
             <div
@@ -45,13 +46,17 @@ export function HorizontalTimeline({ steps, className }: HorizontalTimelineProps
               {/* Step Circle */}
               <div
                 className={cn(
-                  'relative z-10 w-[120px] h-[120px] rounded-3xl flex flex-col items-center justify-center transition-all duration-500',
-                  'border-2',
+                  'relative z-10 w-[120px] h-[120px] rounded-3xl flex flex-col items-center justify-center',
+                  'border-2 transition-colors duration-500',
                   isCurrent
-                    ? 'bg-primary border-primary scale-110 shadow-lg shadow-primary/30'
+                    ? 'bg-primary border-primary shadow-lg shadow-primary/30'
                     : isActive
                     ? 'bg-primary/90 border-primary'
-                    : 'bg-card border-border'
+                    : 'bg-card border-border',
+                  // Bounce animation only when just activated
+                  isJustActivated && 'animate-bounce-in',
+                  // Fallback scale when no animation is running
+                  isCurrent && !isJustActivated && 'scale-110'
                 )}
               >
                 {/* Number Badge */}
