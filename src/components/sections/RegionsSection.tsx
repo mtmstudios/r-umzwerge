@@ -3,18 +3,7 @@ import { MapPin, ArrowRight } from 'lucide-react';
 import { REGIONS } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
-
-// SVG coordinates for cities (approximate positions on a simplified map)
-const cityCoordinates: Record<string, { x: number; y: number }> = {
-  ulm: { x: 200, y: 180 },
-  muenchen: { x: 340, y: 220 },
-  stuttgart: { x: 120, y: 140 },
-  augsburg: { x: 290, y: 200 },
-  heidenheim: { x: 210, y: 150 },
-  aalen: { x: 190, y: 130 },
-  reutlingen: { x: 130, y: 180 },
-  ravensburg: { x: 180, y: 260 },
-};
+import { InteractiveMap } from '@/components/regions/InteractiveMap';
 
 export function RegionsSection() {
   const { ref, isVisible } = useScrollReveal(0.1);
@@ -40,146 +29,11 @@ export function RegionsSection() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-          {/* Map */}
-          <div className="relative bg-card rounded-2xl lg:rounded-3xl p-6 lg:p-8 border border-border">
-            <svg
-              viewBox="0 0 450 350"
-              className="w-full h-auto"
-              aria-label="Karte von Süddeutschland mit Standorten"
-            >
-              {/* Simplified BW + Bavaria outline */}
-              <path
-                d="M 50 50 
-                   L 150 30 L 250 40 L 350 60 L 400 120 
-                   L 420 200 L 380 280 L 300 320 
-                   L 200 330 L 100 300 L 50 250 
-                   L 30 150 Z"
-                fill="hsl(var(--secondary))"
-                stroke="hsl(var(--border))"
-                strokeWidth="2"
-              />
-              
-              {/* State divider line (approximate) */}
-              <path
-                d="M 160 40 Q 180 150 200 320"
-                fill="none"
-                stroke="hsl(var(--border))"
-                strokeWidth="1"
-                strokeDasharray="4 4"
-              />
-
-              {/* State labels */}
-              <text
-                x="100"
-                y="200"
-                className="text-xs fill-muted-foreground font-medium"
-              >
-                Baden-
-              </text>
-              <text
-                x="85"
-                y="215"
-                className="text-xs fill-muted-foreground font-medium"
-              >
-                Württemberg
-              </text>
-              <text
-                x="300"
-                y="170"
-                className="text-xs fill-muted-foreground font-medium"
-              >
-                Bayern
-              </text>
-
-              {/* City markers */}
-              {REGIONS.map((region) => {
-                const coords = cityCoordinates[region.slug];
-                if (!coords) return null;
-                
-                const isHovered = hoveredCity === region.slug;
-                const isHQ = region.isHQ;
-
-                return (
-                  <g
-                    key={region.slug}
-                    onMouseEnter={() => setHoveredCity(region.slug)}
-                    onMouseLeave={() => setHoveredCity(null)}
-                    className="cursor-pointer"
-                  >
-                    {/* Marker */}
-                    <circle
-                      cx={coords.x}
-                      cy={coords.y}
-                      r={isHQ ? 10 : 7}
-                      className={cn(
-                        "transition-all duration-200 marker-glow",
-                        isHQ
-                          ? "fill-destructive stroke-destructive"
-                          : "fill-accent stroke-accent",
-                        isHovered && "stroke-[3]"
-                      )}
-                      strokeWidth="2"
-                    />
-                    
-                    {/* HQ label */}
-                    {isHQ && (
-                      <text
-                        x={coords.x}
-                        y={coords.y - 18}
-                        textAnchor="middle"
-                        className="text-[10px] fill-destructive font-semibold"
-                      >
-                        Hauptsitz
-                      </text>
-                    )}
-
-                    {/* City name on hover */}
-                    {isHovered && (
-                      <g>
-                        <rect
-                          x={coords.x - 60}
-                          y={coords.y + 15}
-                          width="120"
-                          height="36"
-                          rx="8"
-                          className="fill-card stroke-border"
-                          strokeWidth="1"
-                        />
-                        <text
-                          x={coords.x}
-                          y={coords.y + 32}
-                          textAnchor="middle"
-                          className="text-xs fill-foreground font-medium"
-                        >
-                          Entrümpelung in {region.name}
-                        </text>
-                        <text
-                          x={coords.x}
-                          y={coords.y + 46}
-                          textAnchor="middle"
-                          className="text-[10px] fill-primary font-medium"
-                        >
-                          Region ansehen →
-                        </text>
-                      </g>
-                    )}
-                  </g>
-                );
-              })}
-            </svg>
-
-            {/* Legend */}
-            <div className="flex items-center justify-center gap-6 mt-6 text-sm">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-destructive" />
-                <span className="text-muted-foreground">Hauptsitz</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-accent" />
-                <span className="text-muted-foreground">Standort</span>
-              </div>
-            </div>
-          </div>
+          {/* Interactive Map */}
+          <InteractiveMap
+            hoveredCity={hoveredCity}
+            onHover={setHoveredCity}
+          />
 
           {/* City List */}
           <div>
@@ -196,7 +50,8 @@ export function RegionsSection() {
                     "inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-all",
                     region.isHQ
                       ? "bg-destructive/10 border-destructive/30 text-destructive hover:bg-destructive/20"
-                      : "bg-card border-border text-foreground hover:border-accent hover:bg-accent/10"
+                      : "bg-card border-border text-foreground hover:border-accent hover:bg-accent/10",
+                    hoveredCity === region.slug && "ring-2 ring-accent"
                   )}
                   onMouseEnter={() => setHoveredCity(region.slug)}
                   onMouseLeave={() => setHoveredCity(null)}
@@ -220,7 +75,12 @@ export function RegionsSection() {
                 <a
                   key={region.slug}
                   href={`/region/${region.slug}`}
-                  className="flex items-center justify-between p-4 bg-card rounded-xl border border-border hover:border-accent transition-colors group"
+                  className={cn(
+                    "flex items-center justify-between p-4 bg-card rounded-xl border border-border hover:border-accent transition-all group",
+                    hoveredCity === region.slug && "border-accent shadow-md"
+                  )}
+                  onMouseEnter={() => setHoveredCity(region.slug)}
+                  onMouseLeave={() => setHoveredCity(null)}
                 >
                   <div className="flex items-center gap-3">
                     <div className={cn(
