@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { ArrowRight, Users, Warehouse, Building2, Lock, RotateCcw, Check } from 'lucide-react';
+import { ArrowRight, Users, Warehouse, Building2, Lock, Check } from 'lucide-react';
 import { SERVICES, getWhatsAppLink } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
+import { BentoCard } from '@/components/ui/BentoCard';
 
 const serviceIcons: Record<string, typeof Users> = {
   'haushaltsaufloesung': Users,
@@ -16,15 +16,18 @@ const serviceIcons: Record<string, typeof Users> = {
 export function ServicesSection() {
   const { ref: headerRef, isVisible: headerVisible } = useScrollReveal(0.1);
   const { ref: gridRef, isVisible: gridVisible } = useScrollReveal(0.1);
-  const [flippedCard, setFlippedCard] = useState<string | null>(null);
-
-  const handleCardClick = (slug: string) => {
-    setFlippedCard(flippedCard === slug ? null : slug);
-  };
 
   return (
-    <section id="leistungen" className="py-16 lg:py-24 bg-secondary/30">
-      <div className="container-custom">
+    <section id="leistungen" className="py-20 lg:py-28 bg-secondary/30 relative overflow-hidden">
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+        <div className="absolute inset-0" style={{
+          backgroundImage: 'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)',
+          backgroundSize: '40px 40px',
+        }} />
+      </div>
+
+      <div className="container-custom relative">
         {/* Header */}
         <div
           ref={headerRef}
@@ -34,6 +37,9 @@ export function ServicesSection() {
             headerVisible && "visible"
           )}
         >
+          <span className="inline-block text-accent font-medium text-sm uppercase tracking-wider mb-3">
+            Unsere Services
+          </span>
           <h2 className="text-section-mobile lg:text-section text-foreground mb-4">
             Leistungen – professionell & diskret
           </h2>
@@ -42,39 +48,43 @@ export function ServicesSection() {
         {/* Featured Card - Hauptleistung */}
         <div
           className={cn(
-            "bg-primary rounded-2xl lg:rounded-3xl p-8 lg:p-12 mb-8 text-center scroll-reveal",
+            "group relative bg-primary rounded-3xl p-8 lg:p-12 mb-8 text-center overflow-hidden scroll-reveal glow-hover",
             headerVisible && "visible"
           )}
         >
-          <div className="max-w-2xl mx-auto">
+          {/* Animated gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-primary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+          
+          <div className="relative max-w-2xl mx-auto">
             {/* Badge */}
-            <span className="inline-block bg-accent/20 text-accent text-sm font-medium px-4 py-1.5 rounded-full mb-4">
-              Unsere Kernkompetenz
+            <span className="inline-block bg-accent/20 text-accent text-sm font-semibold px-5 py-2 rounded-full mb-6 backdrop-blur-sm border border-accent/30">
+              ⭐ Unsere Kernkompetenz
             </span>
             
-            <h3 className="text-2xl lg:text-3xl font-semibold text-primary-foreground mb-4">
+            <h3 className="text-2xl lg:text-4xl font-bold text-primary-foreground mb-4">
               Wohnungsentrümpelung
             </h3>
             
-            <p className="text-primary-foreground/80 mb-6 leading-relaxed">
+            <p className="text-primary-foreground/80 mb-8 leading-relaxed text-lg">
               Von der ersten Preiseinschätzung bis zur besenreinen Übergabe – 
               transparent, zuverlässig und respektvoll.
             </p>
             
             {/* USP Pills */}
-            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-8">
-              <span className="flex items-center gap-2 text-primary-foreground/90 text-sm">
-                <Check className="h-4 w-4 text-accent" />
-                Besenreine Übergabe
-              </span>
-              <span className="flex items-center gap-2 text-primary-foreground/90 text-sm">
-                <Check className="h-4 w-4 text-accent" />
-                Festpreis möglich
-              </span>
-              <span className="flex items-center gap-2 text-primary-foreground/90 text-sm">
-                <Check className="h-4 w-4 text-accent" />
-                Antwort unter 24h
-              </span>
+            <div className="flex flex-wrap justify-center gap-4 mb-10">
+              {[
+                { icon: Check, text: 'Besenreine Übergabe' },
+                { icon: Check, text: 'Festpreis möglich' },
+                { icon: Check, text: 'Antwort unter 24h' },
+              ].map(({ icon: Icon, text }) => (
+                <span
+                  key={text}
+                  className="flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm px-4 py-2 rounded-full text-primary-foreground/90 text-sm font-medium border border-primary-foreground/10"
+                >
+                  <Icon className="h-4 w-4 text-accent" />
+                  {text}
+                </span>
+              ))}
             </div>
             
             {/* CTAs */}
@@ -82,7 +92,7 @@ export function ServicesSection() {
               <Button
                 asChild
                 size="lg"
-                className="gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-12 px-6"
+                className="gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-14 px-8 shadow-whatsapp btn-lift"
               >
                 <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
                   <WhatsAppIcon className="h-5 w-5" />
@@ -92,94 +102,50 @@ export function ServicesSection() {
               
               <a
                 href="/leistungen/wohnungsentruempelung"
-                className="inline-flex items-center gap-2 text-accent font-medium hover:gap-3 transition-all"
+                className="group/link inline-flex items-center gap-2 text-accent font-medium hover:gap-3 transition-all"
               >
                 Mehr erfahren
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-4 w-4 transition-transform group-hover/link:translate-x-1" />
               </a>
             </div>
           </div>
         </div>
 
-        {/* Services Grid - Flip Cards */}
+        {/* Bento Grid */}
         <div
           ref={gridRef}
           className={cn(
-            "grid md:grid-cols-2 gap-4 lg:gap-6",
-            "scroll-reveal",
+            "grid md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5",
+            "scroll-reveal stagger-animation",
             gridVisible && "visible"
           )}
         >
           {SERVICES.map((service, index) => {
             const Icon = serviceIcons[service.slug] || Users;
-            const isFlipped = flippedCard === service.slug;
+            // Make one card tall for visual interest
+            const isTall = index === 1;
             
             return (
-              <div
+              <BentoCard
                 key={service.slug}
+                title={service.title}
+                subtitle={service.subtitle}
+                description={isTall ? service.longDescription : undefined}
+                icon={Icon}
+                href={`/leistungen/${service.slug}`}
+                size={isTall ? 'tall' : 'normal'}
+                variant={index === 3 ? 'glass' : 'default'}
+                index={index}
                 className={cn(
-                  "flip-card h-64 cursor-pointer",
-                  isFlipped && "flipped"
+                  isTall && 'lg:row-span-2'
                 )}
-                style={{ transitionDelay: `${index * 50}ms` }}
-                onClick={() => handleCardClick(service.slug)}
-              >
-                <div className="flip-card-inner">
-                  {/* Front Side */}
-                  <div className="flip-card-front bg-card border border-border p-6 flex flex-col items-center justify-center shadow-sm">
-                    <div className="w-16 h-16 bg-accent/20 rounded-2xl flex items-center justify-center mb-4 transition-colors group-hover:bg-accent/30">
-                      <Icon className="h-8 w-8 text-primary" />
-                    </div>
-                    <h3 className="font-semibold text-foreground text-center text-lg">
-                      {service.title}
-                    </h3>
-                    {service.subtitle && (
-                      <span className="text-sm text-muted-foreground mt-1">
-                        {service.subtitle}
-                      </span>
-                    )}
-                    <span className="text-xs text-muted-foreground mt-4 flex items-center gap-1.5 opacity-60">
-                      <RotateCcw className="h-3 w-3" />
-                      Details anzeigen
-                    </span>
-                  </div>
-
-                  {/* Back Side */}
-                  <div className="flip-card-back bg-gradient-to-br from-primary to-primary/80 p-5 flex flex-col justify-between shadow-lg">
-                    <div>
-                      <h3 className="font-semibold text-primary-foreground text-base mb-2">
-                        {service.title}
-                      </h3>
-                      <p className="text-primary-foreground/90 text-xs leading-relaxed mb-3">
-                        {service.longDescription}
-                      </p>
-                      {/* Highlights */}
-                      <ul className="space-y-1.5">
-                        {service.highlights.map((highlight, i) => (
-                          <li key={i} className="flex items-center gap-2 text-primary-foreground/80 text-xs">
-                            <Check className="h-3 w-3 text-accent flex-shrink-0" />
-                            {highlight}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <a
-                      href={`/leistungen/${service.slug}`}
-                      onClick={(e) => e.stopPropagation()}
-                      className="inline-flex items-center justify-center gap-2 bg-accent text-accent-foreground font-medium py-2.5 px-4 rounded-xl hover:bg-accent/90 transition-colors text-sm mt-3"
-                    >
-                      Mehr erfahren
-                      <ArrowRight className="h-4 w-4" />
-                    </a>
-                  </div>
-                </div>
-              </div>
+              />
             );
           })}
         </div>
 
         {/* Bottom note */}
-        <p className="text-center text-muted-foreground mt-8">
+        <p className="text-center text-muted-foreground mt-10">
           Wir arbeiten transparent – keine versteckten Kosten.
         </p>
       </div>

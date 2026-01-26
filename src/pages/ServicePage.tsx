@@ -1,4 +1,4 @@
-import { useParams, Navigate, Link } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FloatingCTAs } from '@/components/layout/FloatingCTAs';
@@ -13,14 +13,7 @@ import { ServiceFAQ } from '@/components/services/ServiceFAQ';
 import { ServiceRegions } from '@/components/services/ServiceRegions';
 import { ServiceFinalCTA } from '@/components/services/ServiceFinalCTA';
 import { SERVICE_PAGES } from '@/lib/serviceData';
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbSeparator,
-  BreadcrumbPage,
-} from '@/components/ui/breadcrumb';
+import { SectionDivider } from '@/components/ui/SectionDivider';
 
 export default function ServicePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -38,56 +31,41 @@ export default function ServicePage() {
       <Header />
       <StickyConversionBar />
       
-      {/* Breadcrumb Navigation */}
-      <nav className="container-custom pt-20 pb-4">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to="/">Start</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to="/leistungen">Leistungen</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{pageData.title}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </nav>
-      
-      <main className="pt-4">
+      <main>
         <ServiceHero
           h1={pageData.hero.h1}
           subline={pageData.hero.subline}
           trustPills={pageData.hero.trustPills}
         />
         
+        <SectionDivider variant="curve" fillClassName="fill-secondary/30" />
         <ScenarioGrid scenarios={pageData.scenarios} />
         
+        <SectionDivider variant="angle" direction="up" fillClassName="fill-background" />
         <ServiceScope
           included={pageData.scope.included}
           optional={pageData.scope.optional}
         />
         
+        <SectionDivider variant="wave" fillClassName="fill-secondary/30" />
         <ServiceProcess steps={pageData.processSteps} />
         
+        <SectionDivider variant="curve" direction="up" fillClassName="fill-background" />
         <ExtraModule
           title={pageData.extraModule.title}
           points={pageData.extraModule.points}
         />
         
+        <SectionDivider variant="angle" fillClassName="fill-muted" />
         <ServicePricing />
         
+        <SectionDivider variant="wave" direction="up" fillClassName="fill-background" />
         <ServiceFAQ items={pageData.faq} />
         
+        <SectionDivider variant="curve" fillClassName="fill-secondary/30" />
         <ServiceRegions />
         
+        <SectionDivider variant="angle" direction="up" fillClassName="fill-primary" />
         <ServiceFinalCTA />
       </main>
       
