@@ -68,6 +68,7 @@ export function ServicesSection() {
                   title={service.title}
                   subtitle={service.subtitle}
                   description={service.description}
+                  highlights={service.highlights}
                   icon={Icon}
                   href={`/leistungen/${service.slug}`}
                   size="large"
@@ -89,6 +90,7 @@ export function ServicesSection() {
                   title={service.title}
                   subtitle={service.subtitle}
                   description={service.description}
+                  highlights={service.highlights}
                   icon={Icon}
                   href={`/leistungen/${service.slug}`}
                   size="default"
