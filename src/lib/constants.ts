@@ -43,31 +43,67 @@ export const SERVICES = [
   {
     title: "Wohnungsentrümpelung",
     description: "Schnell, sauber und übergabefertig.",
+    longDescription: "Wir räumen komplette Wohnungen – von Möbeln über Hausrat bis zur besenreinen Übergabe. Ideal bei Umzug, Mieterwechsel oder Nachlass. Schnelle Abwicklung, faire Preise.",
+    highlights: [
+      "Besenreine Übergabe inklusive",
+      "Flexible Terminvereinbarung",
+      "Festpreis nach Einschätzung"
+    ],
     slug: "wohnungsentruempelung",
   },
   {
     title: "Haushaltsauflösung",
     description: "Strukturiert, respektvoll und transparent.",
+    longDescription: "Bei Erbschaft oder Umzug ins Pflegeheim übernehmen wir die komplette Auflösung – respektvoll und ohne Zeitdruck. Wertgegenstände werden auf Wunsch angerechnet.",
+    highlights: [
+      "Wertanrechnung möglich",
+      "Respektvoller Umgang",
+      "Komplettservice aus einer Hand"
+    ],
     slug: "haushaltsaufloesung",
   },
   {
     title: "Keller / Dachboden / Garage",
     description: "Freiraum schaffen – ohne Stress.",
+    longDescription: "Keller voll? Dachboden zugestellt? Wir schaffen Platz – schnell und unkompliziert. Perfekt für Frühjahrsputz, Umzug oder Renovierung.",
+    highlights: [
+      "Auch enge Zugänge kein Problem",
+      "Entsorgung inklusive",
+      "Kurzfristige Termine möglich"
+    ],
     slug: "keller-dachboden-garage",
   },
   {
     title: "Gewerbe / Büro / Lager",
     description: "Zügig, diskret und planbar.",
+    longDescription: "Büroauflösung, Lagerräumung oder Geschäftsaufgabe – wir arbeiten effizient und diskret, auch außerhalb der Geschäftszeiten. Minimale Unterbrechung für Ihren Betrieb.",
+    highlights: [
+      "Arbeiten außerhalb der Geschäftszeiten",
+      "Dokumentenvernichtung möglich",
+      "Feste Terminplanung"
+    ],
     slug: "gewerbe-buero-lager",
   },
   {
     title: "Sperrmüll & Abtransport",
     description: "Fachgerecht entsorgt, sauber abgewickelt.",
+    longDescription: "Einzelne Möbelstücke oder größere Mengen – wir holen ab und entsorgen fachgerecht. Inklusive Elektrogeräte und Sondermüll nach Absprache.",
+    highlights: [
+      "Abholung vor Ort",
+      "Fachgerechte Entsorgung",
+      "Elektro & Sondermüll möglich"
+    ],
     slug: "sperrmuell-abtransport",
   },
   {
     title: "Diskrete Reinigung & Entrümpelung",
     description: "Respektvoll, geschützt und ohne Aufsehen.",
+    longDescription: "Bei sensiblen Situationen arbeiten wir besonders diskret und respektvoll. Neutrale Fahrzeuge, geschultes Personal und absolute Vertraulichkeit – ohne Aufsehen in der Nachbarschaft.",
+    highlights: [
+      "Neutrale Fahrzeuge",
+      "Absolute Diskretion garantiert",
+      "Geschultes, einfühlsames Team"
+    ],
     slug: "messie-wohnungen",
     subtitle: "(Messie-Wohnungen)",
   },
