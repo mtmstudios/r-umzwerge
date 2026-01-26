@@ -1,10 +1,35 @@
 import { cn } from '@/lib/utils';
-import { LucideIcon, ArrowRight } from 'lucide-react';
+import { 
+  LucideIcon, ArrowRight, Sparkles, BadgeCheck, Clock, Coins, Heart, 
+  Package, DoorOpen, Trash2, CalendarCheck, Moon, FileX, 
+  Calendar, Truck, EyeOff, Users, Check
+} from 'lucide-react';
+
+const getHighlightIcon = (text: string): LucideIcon => {
+  const lower = text.toLowerCase();
+  if (lower.includes('besenrein')) return Sparkles;
+  if (lower.includes('festpreis')) return BadgeCheck;
+  if (lower.includes('24h') || lower.includes('antwort')) return Clock;
+  if (lower.includes('wertanrechnung') || lower.includes('angerechnet')) return Coins;
+  if (lower.includes('respekt')) return Heart;
+  if (lower.includes('komplett')) return Package;
+  if (lower.includes('zugang') || lower.includes('enge')) return DoorOpen;
+  if (lower.includes('entsorgung')) return Trash2;
+  if (lower.includes('kurzfristig')) return CalendarCheck;
+  if (lower.includes('geschäftszeit')) return Moon;
+  if (lower.includes('dokument')) return FileX;
+  if (lower.includes('termin')) return Calendar;
+  if (lower.includes('fahrzeug') || lower.includes('neutral')) return Truck;
+  if (lower.includes('diskret')) return EyeOff;
+  if (lower.includes('team') || lower.includes('geschult')) return Users;
+  return Check;
+};
 
 interface BentoCardProps {
   title: string;
   subtitle?: string;
   description?: string;
+  highlights?: string[];
   icon: LucideIcon;
   href: string;
   variant?: 'default' | 'glass' | 'accent';
@@ -18,6 +43,7 @@ export function BentoCard({
   title,
   subtitle,
   description,
+  highlights,
   icon: Icon,
   href,
   variant = 'default',
@@ -114,6 +140,30 @@ export function BentoCard({
           >
             {description}
           </p>
+        )}
+
+        {/* Highlights with icons */}
+        {highlights && highlights.length > 0 && (
+          <div className={cn(
+            "flex flex-wrap justify-center mt-3",
+            isLarge ? "gap-3" : "gap-2"
+          )}>
+            {highlights.slice(0, isLarge ? 3 : 2).map((highlight, i) => {
+              const HighlightIcon = getHighlightIcon(highlight);
+              return (
+                <span
+                  key={i}
+                  className={cn(
+                    "inline-flex items-center gap-1 text-xs",
+                    variant === 'accent' ? "text-primary-foreground/70" : "text-muted-foreground/80"
+                  )}
+                >
+                  <HighlightIcon className="h-3 w-3 text-accent flex-shrink-0" />
+                  <span className="truncate max-w-[100px]">{highlight}</span>
+                </span>
+              );
+            })}
+          </div>
         )}
       </div>
 
