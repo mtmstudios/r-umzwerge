@@ -1,28 +1,28 @@
 import { REGIONS } from '@/lib/constants';
 
-// Coordinates for cities on the SVG map (595.5 x 842.25 viewBox)
-// These will need fine-tuning based on the actual map
+// Coordinates calibrated to the actual SVG map (viewBox 595.5 x 842.25)
+// Based on Baden-Württemberg (left) and Bayern (right)
 const cityCoordinates: Record<string, { x: number; y: number; labelOffset?: { x: number; y: number } }> = {
-  stuttgart:   { x: 120, y: 200, labelOffset: { x: 12, y: 5 } },
-  reutlingen:  { x: 150, y: 260, labelOffset: { x: 12, y: 5 } },
-  aalen:       { x: 200, y: 180, labelOffset: { x: 12, y: 5 } },
-  heidenheim:  { x: 230, y: 220, labelOffset: { x: 12, y: 5 } },
-  ulm:         { x: 260, y: 280, labelOffset: { x: 12, y: 5 } },
-  augsburg:    { x: 350, y: 300, labelOffset: { x: 12, y: 5 } },
-  muenchen:    { x: 450, y: 350, labelOffset: { x: 12, y: 5 } },
-  ravensburg:  { x: 200, y: 400, labelOffset: { x: 12, y: 5 } },
+  stuttgart:   { x: 175, y: 175, labelOffset: { x: -90, y: 5 } },    // Northwest BW
+  reutlingen:  { x: 220, y: 230, labelOffset: { x: -95, y: 5 } },    // South of Stuttgart
+  aalen:       { x: 290, y: 145, labelOffset: { x: -55, y: -12 } },  // Northeast BW
+  heidenheim:  { x: 310, y: 185, labelOffset: { x: 12, y: 5 } },     // East of Aalen
+  ulm:         { x: 310, y: 260, labelOffset: { x: 12, y: 5 } },     // Border BW/Bayern
+  augsburg:    { x: 405, y: 285, labelOffset: { x: 12, y: 5 } },     // Western Bavaria
+  muenchen:    { x: 495, y: 350, labelOffset: { x: 12, y: 5 } },     // Central Bavaria
+  ravensburg:  { x: 260, y: 420, labelOffset: { x: 12, y: 5 } },     // Bodensee region
 };
 
 export function InteractiveMap() {
   return (
-    <div className="relative bg-card rounded-2xl lg:rounded-3xl p-4 lg:p-6 border border-border overflow-hidden">
+    <div className="relative overflow-hidden">
       {/* Map Container */}
       <div className="relative">
         {/* SVG Map as background */}
         <img
           src="/images/sueddeutschland-map.svg"
           alt="Karte von Süddeutschland"
-          className="w-full h-auto opacity-80"
+          className="w-full h-auto"
         />
 
         {/* Overlay for markers */}
@@ -48,7 +48,7 @@ export function InteractiveMap() {
                   <circle
                     cx={coords.x}
                     cy={coords.y}
-                    r="6"
+                    r="8"
                     className="fill-primary transition-all duration-200 group-hover:fill-accent"
                   />
                   
@@ -56,15 +56,15 @@ export function InteractiveMap() {
                   <circle
                     cx={coords.x}
                     cy={coords.y}
-                    r="6"
-                    className="fill-none stroke-white stroke-[1.5]"
+                    r="8"
+                    className="fill-none stroke-white stroke-2"
                   />
 
-                  {/* City name */}
+                  {/* City name - responsive text size */}
                   <text
                     x={coords.x + labelOffset.x}
                     y={coords.y + labelOffset.y}
-                    className="text-[14px] font-medium fill-foreground transition-all duration-200 group-hover:fill-primary"
+                    className="text-[16px] md:text-[18px] font-semibold fill-foreground transition-all duration-200 group-hover:fill-primary"
                     style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
                   >
                     {region.name}
