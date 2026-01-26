@@ -171,11 +171,13 @@ export function Footer() {
             <p>© {currentYear} Räumzwerge. Alle Rechte vorbehalten.</p>
             <p className="flex items-center gap-1.5">
               Mit <Heart className="h-4 w-4 text-red-400 fill-red-400" /> erstellt von
-              <img 
-                src={logoWhite} 
-                alt="Logo" 
-                className="h-6 ml-1 object-contain" 
-              />
+              <a href="https://www.mtmstudios.de" target="_blank" rel="noopener noreferrer">
+                <img 
+                  src={logoWhite} 
+                  alt="MTM Studios Logo" 
+                  className="h-8 ml-1 object-contain" 
+                />
+              </a>
             </p>
           </div>
         </div>
