@@ -1,5 +1,4 @@
 import { Phone, Mail, MapPin, Heart } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { SERVICES, REGIONS, PHONE_NUMBER, EMAIL, ADDRESS, getWhatsAppLink } from '@/lib/constants';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 import logoWhite from '@/assets/logo-white.png';
@@ -9,38 +8,6 @@ export function Footer() {
 
   return (
     <footer className="bg-primary text-primary-foreground pb-20 lg:pb-0">
-      {/* CTA Banner */}
-      <div className="border-b border-primary-foreground/10">
-        <div className="container-custom py-8 lg:py-10">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-            {/* Left - Brand */}
-            <div className="text-center lg:text-left">
-              <span className="text-2xl lg:text-3xl font-bold block">Räumzwerge</span>
-              <p className="text-primary-foreground/70 text-sm mt-1">
-                Entrümpelung in Süddeutschland
-              </p>
-            </div>
-
-            {/* Right - CTA */}
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <span className="text-primary-foreground/80 text-sm hidden sm:block">
-                Jetzt Preiseinschätzung erhalten →
-              </span>
-              <Button
-                asChild
-                size="lg"
-                className="gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-12 px-6 shadow-whatsapp btn-lift"
-              >
-                <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                  <WhatsAppIcon className="h-5 w-5" />
-                  WhatsApp schreiben
-                </a>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Link Columns */}
       <div className="container-custom py-10 lg:py-14">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
