@@ -1,26 +1,19 @@
 import { REGIONS } from '@/lib/constants';
-import { cn } from '@/lib/utils';
-import { PulseDot } from './PulseDot';
-import { MapTooltip } from './MapTooltip';
 
-// Coordinates for cities on the uploaded SVG map (595.5 x 842.25 viewBox)
-const cityCoordinates: Record<string, { x: number; y: number }> = {
-  stuttgart: { x: 140, y: 280 },    // Westen, mittig-nord
-  reutlingen: { x: 160, y: 330 },   // Südlich von Stuttgart
-  aalen: { x: 240, y: 260 },        // Östlich von Stuttgart
-  heidenheim: { x: 270, y: 300 },   // Zwischen Aalen und Ulm
-  ulm: { x: 290, y: 350 },          // Zentral (Hauptsitz)
-  augsburg: { x: 380, y: 380 },     // Östlich von Ulm
-  muenchen: { x: 480, y: 420 },     // Ganz im Osten
-  ravensburg: { x: 240, y: 480 },   // Süden, Bodensee-Region
+// Coordinates for cities on the SVG map (595.5 x 842.25 viewBox)
+// These will need fine-tuning based on the actual map
+const cityCoordinates: Record<string, { x: number; y: number; labelOffset?: { x: number; y: number } }> = {
+  stuttgart:   { x: 120, y: 200, labelOffset: { x: 12, y: 5 } },
+  reutlingen:  { x: 150, y: 260, labelOffset: { x: 12, y: 5 } },
+  aalen:       { x: 200, y: 180, labelOffset: { x: 12, y: 5 } },
+  heidenheim:  { x: 230, y: 220, labelOffset: { x: 12, y: 5 } },
+  ulm:         { x: 260, y: 280, labelOffset: { x: 12, y: 5 } },
+  augsburg:    { x: 350, y: 300, labelOffset: { x: 12, y: 5 } },
+  muenchen:    { x: 450, y: 350, labelOffset: { x: 12, y: 5 } },
+  ravensburg:  { x: 200, y: 400, labelOffset: { x: 12, y: 5 } },
 };
 
-interface InteractiveMapProps {
-  hoveredCity: string | null;
-  onHover: (city: string | null) => void;
-}
-
-export function InteractiveMap({ hoveredCity, onHover }: InteractiveMapProps) {
+export function InteractiveMap() {
   return (
     <div className="relative bg-card rounded-2xl lg:rounded-3xl p-4 lg:p-6 border border-border overflow-hidden">
       {/* Map Container */}
@@ -42,53 +35,45 @@ export function InteractiveMap({ hoveredCity, onHover }: InteractiveMapProps) {
             const coords = cityCoordinates[region.slug];
             if (!coords) return null;
 
-            const isHovered = hoveredCity === region.slug;
-            const isHQ = region.isHQ;
+            const labelOffset = coords.labelOffset || { x: 12, y: 5 };
 
             return (
-              <g
+              <a
                 key={region.slug}
-                onMouseEnter={() => onHover(region.slug)}
-                onMouseLeave={() => onHover(null)}
-                className="cursor-pointer"
+                href={`/region/${region.slug}`}
+                className="group"
               >
-                <PulseDot
-                  cx={coords.x}
-                  cy={coords.y}
-                  isHQ={isHQ}
-                  isHovered={isHovered}
-                />
-
-                {isHovered && (
-                  <MapTooltip
-                    x={coords.x}
-                    y={coords.y}
-                    name={region.name}
-                    isHQ={isHQ}
+                <g className="cursor-pointer">
+                  {/* Simple dot */}
+                  <circle
+                    cx={coords.x}
+                    cy={coords.y}
+                    r="6"
+                    className="fill-primary transition-all duration-200 group-hover:fill-accent"
                   />
-                )}
-              </g>
+                  
+                  {/* White border for visibility */}
+                  <circle
+                    cx={coords.x}
+                    cy={coords.y}
+                    r="6"
+                    className="fill-none stroke-white stroke-[1.5]"
+                  />
+
+                  {/* City name */}
+                  <text
+                    x={coords.x + labelOffset.x}
+                    y={coords.y + labelOffset.y}
+                    className="text-[14px] font-medium fill-foreground transition-all duration-200 group-hover:fill-primary"
+                    style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+                  >
+                    {region.name}
+                  </text>
+                </g>
+              </a>
             );
           })}
         </svg>
-      </div>
-
-      {/* Legend */}
-      <div className="flex items-center justify-center gap-6 mt-4 text-sm">
-        <div className="flex items-center gap-2">
-          <div className="relative">
-            <div className="w-3 h-3 rounded-full bg-destructive" />
-            <div className="absolute inset-0 w-3 h-3 rounded-full bg-destructive animate-ping opacity-75" />
-          </div>
-          <span className="text-muted-foreground">Hauptsitz</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="relative">
-            <div className="w-3 h-3 rounded-full bg-accent" />
-            <div className="absolute inset-0 w-3 h-3 rounded-full bg-accent animate-ping opacity-75" />
-          </div>
-          <span className="text-muted-foreground">Standort</span>
-        </div>
       </div>
     </div>
   );
