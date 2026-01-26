@@ -1,278 +1,174 @@
 
-# Plan: 4 High-Impact UI/UX Changes auf allen Seiten
+# Plan: Moderner & Bold Header-Redesign
 
-## Übersicht der Änderungen
+## Aktuelle Probleme
 
-| Komponente | Beschreibung | Betroffene Seiten |
-|------------|--------------|-------------------|
-| 1. Marquee Trust Bar | Infinite-Scroll Animation der Trust-Badges | Startseite + alle Service-Seiten |
-| 2. Bento-Grid Services | Asymmetrisches Grid mit Glassmorphism | Startseite |
-| 3. Horizontal Timeline | Scroll-triggered Prozess-Anzeige | Startseite + alle Service-Seiten |
-| 4. Diagonal Section-Dividers | SVG-Trenner zwischen Sections | Alle Seiten |
+1. **Zu viel Inhalt**: Utility-Bar + Trust-Line + CTAs = Überladen
+2. **Zu einfaches Design**: Standard-Template-Look ohne Charakter
+3. **Navigation zu klein**: Links sind dezent und unauffällig
 
----
-
-## 1. Marquee Trust Bar (Infinite Scroll)
-
-### Neue Komponente: `src/components/ui/Marquee.tsx`
+## Neues Header-Konzept
 
 ```text
-┌────────────────────────────────────────────────────────────────────────┐
-│ ← Keine versteckten Kosten · Preiseinschätzung < 24h · Festpreis möglich · Diskret & respektvoll · Besenrein · Keine versteckten Kosten · ... →
-└────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                                                             │
+│   🏠 RÄUMZWERGE        Leistungen ▼   Preise   Ablauf   FAQ      [WhatsApp] │
+│       Logo/Icon           ↑ Bold, größer                          ↑ Nur 1   │
+│                                                                    Haupt-CTA│
+└─────────────────────────────────────────────────────────────────────────────┘
+                    ↓ Beim Scrollen: Glassmorphism + Shadow
 ```
 
-**Technische Details:**
-- CSS-basierte Animation (`@keyframes scroll`) für Performance
-- Doppelte Content-Duplizierung für nahtlose Schleife
-- Pause bei Hover (optional)
-- Konfigurierbare Geschwindigkeit und Richtung
-- Responsiv: Etwas langsamer auf Mobile
+## Änderungen im Detail
 
-**Zu erstellende Dateien:**
-- `src/components/ui/Marquee.tsx` - Wiederverwendbare Komponente
+### 1. Utility-Bar entfernen
+Die obere graue Leiste mit "Mo–Sa 8–20 Uhr" und "Preiseinschätzung per Foto" wird entfernt. Diese Informationen sind bereits im Content der Seite vorhanden.
 
-**Zu ändernde Dateien:**
-- `src/components/sections/TrustBar.tsx` - Marquee statt statischer Flex-Container
-- `src/index.css` - Keyframes für Scroll-Animation
+### 2. Trust-Line entfernen  
+Die unterste Zeile mit "✓ Keine versteckten Kosten" etc. wird entfernt – sie macht den Header zu hoch und die Infos sind redundant (bereits in der TrustBar-Section).
 
----
+### 3. Logo mit Icon aufwerten
+Statt nur "Räumzwerge" als Text:
+- Ein einfaches Haus/Besen-Icon vor dem Namen
+- Größerer, bolderer Font
+- Subtle Accent-Farbe für das Icon
 
-## 2. Bento-Grid Services
+### 4. Navigation größer und auffälliger
+- Font-Größe von `text-sm` auf `text-base` erhöhen
+- Mehr Spacing zwischen Items
+- Hover-Effekt mit Underline-Animation (wie `.story-link`)
+- Active-State mit Accent-Farbe
 
-### Neues Layout für ServicesSection
+### 5. Nur ein CTA-Button (WhatsApp)
+- "Anrufen" Button entfernen (bleibt im Footer und als Floating-Button)
+- WhatsApp-Button größer und prominenter
+- Subtle Glow-Animation für Aufmerksamkeit
 
+### 6. Scroll-Effekt: Glassmorphism
+Beim Scrollen wird der Header nicht nur transparent/blurred, sondern bekommt:
+- Glassmorphism-Effekt (`glass-strong` Klasse)
+- Sanfte Animation für den Übergang
+- Header wird etwas kompakter (weniger Padding)
+
+## Visueller Vergleich
+
+**Vorher (3 Ebenen, überladen):**
 ```text
-┌─────────────────────────────────────────────────────────────┐
-│              🏠 Wohnungsentrümpelung (Featured)             │
-│                 Glassmorphism + Hover-Glow                  │
-└─────────────────────────────────────────────────────────────┘
-┌──────────────────────────┐  ┌──────────────────────────────┐
-│   Haushaltsauflösung     │  │                              │
-│        (Normal)          │  │    Keller/Dachboden/Garage   │
-│                          │  │         (Tall Card)          │
-├──────────────────────────┤  │                              │
-│   Gewerbe/Büro/Lager     │  │                              │
-│        (Normal)          │  ├──────────────────────────────┤
-├──────────────────────────┤  │   Diskrete Reinigung         │
-│   (Glassmorphism Grid)   │  │        (With Icon)           │
-└──────────────────────────┘  └──────────────────────────────┘
+┌──────────────────────────────────────────────┐
+│ Mo-Sa 8-20 Uhr    │    Preiseinschätzung...  │  ← Utility Bar
+├──────────────────────────────────────────────┤
+│ Räumzwerge  │ Links │  [Anrufen] [WhatsApp]  │  ← Main Header
+├──────────────────────────────────────────────┤
+│ ✓ Keine Kosten  ·  ✓ Festpreis  ·  ✓ Sauber │  ← Trust Line
+└──────────────────────────────────────────────┘
 ```
 
-**Technische Details:**
-- Asymmetrisches CSS Grid (`grid-template-columns`, `grid-template-rows`)
-- Glassmorphism: `backdrop-blur-xl`, `bg-white/10`, subtile Borders
-- Micro-Interactions: Hover-Scale, Glow-Effect, Icon-Animation
-- Staggered Reveal: Karten erscheinen nacheinander
-
-**Zu erstellende Dateien:**
-- `src/components/ui/BentoCard.tsx` - Einzelne Karte mit Glassmorphism
-
-**Zu ändernde Dateien:**
-- `src/components/sections/ServicesSection.tsx` - Komplett neues Bento-Layout
-- `src/index.css` - Glassmorphism-Utilities, Glow-Keyframes
-
----
-
-## 3. Horizontal Timeline (Scroll-Triggered)
-
-### Neues Prozess-Design
-
+**Nachher (1 Ebene, clean & bold):**
 ```text
-                    Scroll Progress Bar
-    ════════════════════════════════════════════════
-
-    ┌─────────┐      ┌─────────┐      ┌─────────┐
-    │    1    │ ──── │    2    │ ──── │    3    │
-    │ 📸      │      │ ⏱️      │      │ ✨      │
-    │ Foto    │      │ Preis   │      │ Wir     │
-    │ senden  │      │ in 24h  │      │ räumen  │
-    └─────────┘      └─────────┘      └─────────┘
-       ▲ aktiv         inaktiv          inaktiv
+┌──────────────────────────────────────────────────────┐
+│ 🏠 RÄUMZWERGE    Leistungen  Preise  Ablauf  FAQ   [📱 WhatsApp] │
+└──────────────────────────────────────────────────────┘
 ```
 
-**Technische Details:**
-- IntersectionObserver für Scroll-Detection
-- Aktiver Step wird hervorgehoben (Scale, Farbe)
-- Progress-Bar füllt sich mit Scroll
-- Connector-Lines animieren sich zwischen Steps
-- Mobile: Vertikales Layout mit gleicher Animation
+## Technische Umsetzung
 
-**Zu erstellende Dateien:**
-- `src/components/ui/HorizontalTimeline.tsx` - Wiederverwendbare Komponente
+### Header.tsx Änderungen
 
-**Zu ändernde Dateien:**
-- `src/components/sections/ProcessSection.tsx` - Timeline statt Grid
-- `src/components/services/ServiceProcess.tsx` - Gleiche Timeline für Unterseiten
-- `src/hooks/useAnimations.ts` - Neuer Hook `useTimelineProgress`
+```tsx
+// Neuer Header - vereinfacht und bold
+export function Header() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  // ... scroll effect logic bleibt
 
----
+  return (
+    <header className={cn(
+      "sticky top-0 z-50 w-full transition-all duration-300",
+      isScrolled 
+        ? "glass-strong shadow-lg py-3" 
+        : "bg-card py-4 lg:py-5"
+    )}>
+      <div className="container-custom">
+        <div className="flex items-center justify-between gap-8">
+          {/* Logo mit Icon */}
+          <a href="/" className="flex items-center gap-2.5 group">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+              <Home className="h-5 w-5 text-primary" />
+            </div>
+            <span className="text-2xl lg:text-3xl font-bold text-foreground">
+              Räumzwerge
+            </span>
+          </a>
 
-## 4. Diagonal Section-Dividers
+          {/* Navigation - größer und mit Underline-Animation */}
+          <nav className="hidden lg:flex items-center gap-10">
+            {NAV_ITEMS.map((item) => (
+              // Links mit text-base, story-link Underline, bolderer Hover
+            ))}
+          </nav>
 
-### SVG-Trenner zwischen Sections
-
-```text
- Section A (hell)
-────────────────────────────────────
-            ╲                    ╲
-              ╲                    ╲
-                ╲                    ╲
-────────────────────────────────────
- Section B (dunkel)
+          {/* Nur WhatsApp CTA - größer und prominenter */}
+          <div className="hidden lg:block">
+            <Button 
+              size="lg" 
+              className="gap-3 bg-whatsapp hover:bg-whatsapp-hover text-lg font-semibold px-6 glow-hover"
+            >
+              <WhatsAppIcon className="h-5 w-5" />
+              WhatsApp
+            </Button>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
 ```
 
-**Technische Details:**
-- SVG mit `preserveAspectRatio="none"` für Responsivität
-- Variants: `top`, `bottom`, `wave`, `angle`
-- Farbe passt sich automatisch an Section-Hintergrund an
-- Höhe konfigurierbar (60-120px empfohlen)
+### Neue CSS-Klassen für Navigation
 
-**Zu erstellende Dateien:**
-- `src/components/ui/SectionDivider.tsx` - Wiederverwendbare SVG-Komponente
-
-**Zu ändernde Dateien:**
-- `src/pages/Index.tsx` - Dividers zwischen Sections einfügen
-- `src/pages/ServicePage.tsx` - Dividers für Unterseiten
-- `src/index.css` - Utility-Klassen für Divider-Platzierung
-
----
-
-## Implementierungsreihenfolge
-
-### Phase 1: Basis-Komponenten erstellen
-
-| Datei | Beschreibung |
-|-------|--------------|
-| `src/components/ui/Marquee.tsx` | Infinite-Scroll Komponente |
-| `src/components/ui/SectionDivider.tsx` | SVG-Divider mit Varianten |
-| `src/components/ui/BentoCard.tsx` | Glassmorphism-Karte |
-| `src/components/ui/HorizontalTimeline.tsx` | Timeline-Komponente |
-
-### Phase 2: CSS-Erweiterungen
-
-**`src/index.css` Ergänzungen:**
 ```css
-/* Marquee Animation */
-@keyframes marquee-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+/* Navigation Link Animation */
+.nav-link {
+  position: relative;
+  padding-bottom: 4px;
 }
 
-/* Glassmorphism */
-.glass {
-  background: hsl(var(--card) / 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid hsl(var(--border) / 0.5);
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: hsl(var(--accent));
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
 }
 
-/* Glow Effect */
-@keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 20px hsl(var(--accent) / 0.3); }
-  50% { box-shadow: 0 0 40px hsl(var(--accent) / 0.5); }
-}
-```
-
-**`tailwind.config.ts` Ergänzungen:**
-```typescript
-animation: {
-  'marquee': 'marquee-scroll 30s linear infinite',
-  'glow': 'glow-pulse 2s ease-in-out infinite',
+.nav-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 ```
 
-### Phase 3: Seiten aktualisieren
-
-**Startseite (`src/pages/Index.tsx`):**
-```tsx
-<HeroSection />
-<SectionDivider variant="angle" direction="down" />
-<TrustBar />  {/* Mit Marquee */}
-<SectionDivider variant="wave" direction="down" />
-<ProcessSection />  {/* Mit Timeline */}
-<SectionDivider variant="angle" direction="up" />
-<ServicesSection />  {/* Mit Bento-Grid */}
-<SectionDivider variant="wave" direction="down" />
-{/* ... */}
-```
-
-**Service-Seiten (`src/pages/ServicePage.tsx`):**
-```tsx
-<ServiceHero />
-<SectionDivider variant="angle" />
-<ScenarioGrid />
-<SectionDivider variant="wave" />
-<ServiceScope />
-<SectionDivider variant="angle" />
-<ServiceProcess />  {/* Mit Timeline */}
-{/* ... */}
-```
-
-### Phase 4: Breadcrumb entfernen
-
-In `src/pages/ServicePage.tsx`:
-- Breadcrumb-Imports entfernen (Zeilen 16-23)
-- `<nav>` Block entfernen (Zeilen 41-62)
-- `pt-4` vom `<main>` Tag entfernen
-
----
-
-## Neue Hooks
-
-### `src/hooks/useTimelineProgress.ts`
-
-```typescript
-// Hook für scroll-basierte Timeline-Aktivierung
-export function useTimelineProgress(stepsCount: number) {
-  const [activeStep, setActiveStep] = useState(0);
-  const [progress, setProgress] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  // IntersectionObserver + Scroll-Listener
-  // Berechnet welcher Step aktiv ist basierend auf Scroll-Position
-  
-  return { containerRef, activeStep, progress };
-}
-```
-
----
-
-## Dateiübersicht: Neu erstellen
-
-| Datei | Zweck |
-|-------|-------|
-| `src/components/ui/Marquee.tsx` | Infinite-Scroll Container |
-| `src/components/ui/SectionDivider.tsx` | SVG-Trenner |
-| `src/components/ui/BentoCard.tsx` | Glassmorphism-Karte |
-| `src/components/ui/HorizontalTimeline.tsx` | Scroll-Timeline |
-| `src/hooks/useTimelineProgress.ts` | Timeline-State Hook |
-
-## Dateiübersicht: Ändern
+## Dateien zu ändern
 
 | Datei | Änderung |
 |-------|----------|
-| `src/index.css` | Neue Keyframes + Utilities |
-| `tailwind.config.ts` | Neue Animations-Definitionen |
-| `src/components/sections/TrustBar.tsx` | Marquee integrieren |
-| `src/components/sections/ProcessSection.tsx` | Timeline-Layout |
-| `src/components/sections/ServicesSection.tsx` | Bento-Grid statt Flip-Cards |
-| `src/components/services/ServiceProcess.tsx` | Timeline-Layout |
-| `src/pages/Index.tsx` | Dividers einfügen |
-| `src/pages/ServicePage.tsx` | Breadcrumb entfernen + Dividers |
+| `src/components/layout/Header.tsx` | Komplettes Redesign |
+| `src/index.css` | Neue `.nav-link` Animation |
 
----
+## Mobile Header
+
+Der mobile Header bleibt funktional ähnlich, aber:
+- Logo mit Icon
+- Größeres WhatsApp-Button in der ausgeklappten Navigation
+- Cleaner Hamburger-Menü-Style
 
 ## Ergebnis
 
-Nach der Implementierung:
-
-1. **Marquee Trust Bar**: Dynamische, professionelle Badge-Leiste die Aufmerksamkeit erzeugt
-2. **Bento-Grid**: Modernes, asymmetrisches Layout mit Premium-Glassmorphism-Effekt
-3. **Horizontal Timeline**: Interaktive Prozess-Visualisierung die den User "führt"
-4. **Diagonal Dividers**: Visuell ansprechende Trennung die die Seite weniger "blockhaft" erscheinen lässt
-
-Alle Änderungen sind:
-- Performant (CSS-basiert wo möglich)
-- Accessible (keine wichtigen Inhalte in Animationen versteckt)
-- Responsive (Mobile-optimiert)
-- Konsistent (gleiche Patterns auf allen Seiten)
+1. **Kompakter**: Von 3 Ebenen auf 1 Ebene
+2. **Bolder**: Größeres Logo, größere Navigation
+3. **Fokussierter**: Nur 1 CTA (WhatsApp) statt 2
+4. **Moderner**: Glassmorphism beim Scrollen, Underline-Animationen
+5. **Professioneller**: Icon im Logo, mehr Whitespace
