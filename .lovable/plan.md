@@ -1,145 +1,115 @@
 
-# Plan: StickyConversionBar entfernen & Mobile-Buttons direkt orange
 
-## Übersicht
+# Implementierungsplan: FloatingCTAs Scroll-Visibility + Hero-Bilder
 
-Zwei Änderungen:
-1. **StickyConversionBar komplett entfernen** - diese erscheint beim Scrollen unter dem Header
-2. **Mobile-Buttons direkt orange** - auf Touchscreens funktioniert Hover nicht, also muss der "Anruf"-Button auf Mobile sofort orange sein
+## Teil 1: FloatingCTAs erst nach Hero-Scroll anzeigen
 
----
+### Änderung in `src/components/layout/FloatingCTAs.tsx`
 
-## Teil 1: StickyConversionBar entfernen
-
-### Dateien, die geändert werden:
-
-| Datei | Aktion |
-|-------|--------|
-| `src/pages/ServicePage.tsx` | Import und Verwendung von `StickyConversionBar` entfernen |
-| `src/components/services/StickyConversionBar.tsx` | Kann gelöscht werden (optional) |
-
-### Änderung in ServicePage.tsx:
+Die Komponente wird erweitert um:
+- `useState` für Sichtbarkeitsstatus
+- `useEffect` mit Intersection Observer
+- Animation-Classes für sanftes Ein-/Ausblenden
 
 ```tsx
-// VORHER (Zeile 5 und 33)
-import { StickyConversionBar } from '@/components/services/StickyConversionBar';
-...
-<StickyConversionBar />
+import { forwardRef, useState, useEffect } from 'react';
+import { cn } from '@/lib/utils';
+// ... restliche imports
 
-// NACHHER
-// Import und Komponente komplett entfernen
+export const FloatingCTAs = forwardRef<HTMLDivElement>((props, ref) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const heroSection = document.querySelector('main > section:first-of-type');
+    if (!heroSection) {
+      setIsVisible(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(!entry.isIntersecting),
+      { threshold: 0, rootMargin: '-100px 0px 0px 0px' }
+    );
+    observer.observe(heroSection);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div 
+      ref={ref}
+      className={cn(
+        "lg:hidden fixed bottom-0 ... ",
+        "transition-all duration-300",
+        isVisible 
+          ? "translate-y-0 opacity-100" 
+          : "translate-y-full opacity-0 pointer-events-none"
+      )}
+    >
+      {/* Buttons bleiben unverändert */}
+    </div>
+  );
+});
 ```
 
 ---
 
-## Teil 2: Mobile-Buttons direkt orange
+## Teil 2: Hero-Bilder für Service-Seiten
 
-### Betroffene Komponenten und Buttons:
+### 2.1 Datenstruktur erweitern (`serviceData.ts`)
 
-| Komponente | Button | Aktueller Zustand | Änderung |
-|------------|--------|-------------------|----------|
-| `HeroSection.tsx` | Anruf-Button | Grüner Rahmen, orange bei Hover | Mobile: direkt orange |
-| `ServiceHero.tsx` | Anruf-Button | Grüner Rahmen, orange bei Hover | Mobile: direkt orange |
-| `FloatingCTAs.tsx` | Anruf-Button | Grüner Rahmen, orange bei Hover | Mobile: direkt orange |
-| `FinalCTASection.tsx` | Anruf-Button | Bereits solide orange | ✅ Passt bereits |
-| `ServiceFinalCTA.tsx` | Anruf-Button | Bereits solide orange | ✅ Passt bereits |
+Interface erweitern:
 
-### Styling-Strategie:
-
-Responsive Classes verwenden - auf Mobile (`max-lg:`) direkt orange, auf Desktop Hover-Verhalten beibehalten:
-
-```tsx
-// VORHER
-className="border-2 border-primary hover:bg-cta hover:text-cta-foreground hover:border-cta"
-
-// NACHHER
-className="border-2 border-primary hover:bg-cta hover:text-cta-foreground hover:border-cta max-lg:bg-cta max-lg:text-cta-foreground max-lg:border-cta"
+```typescript
+hero: {
+  h1: string;
+  subline: string;
+  trustPills: string[];
+  imageSrc?: string;   // NEU
+  imageAlt?: string;   // NEU
+}
 ```
 
-### 1. HeroSection.tsx (Zeile 55-65)
+### 2.2 Bilder generieren (6 Stück)
 
-```tsx
-// VORHER
-<Button
-  asChild
-  variant="outline"
-  size="lg"
-  className="gap-2 h-12 sm:h-14 px-4 sm:px-6 text-sm sm:text-base border-2 border-primary hover:bg-cta hover:text-cta-foreground hover:border-cta transition-all duration-300 shrink-0"
->
+| Service | Bildmotiv | Dateiname |
+|---------|-----------|-----------|
+| Wohnungsentrümpelung | Leere, helle Wohnung nach Räumung, sauber, Sonnenlicht | `service-wohnungsentruempelung.jpg` |
+| Entrümpelung | Team beim Verladen von Kartons in Transporter | `service-entruempelung.jpg` |
+| Haushaltsauflösung | Aufgeräumtes Wohnzimmer, warme Atmosphäre | `service-haushaltsaufloesung.jpg` |
+| Keller/Dachboden/Garage | Leerer, ordentlicher Kellerraum | `service-keller.jpg` |
+| Gewerbe/Büro/Lager | Leeres Büro, professionelle Atmosphäre | `service-gewerbe.jpg` |
+| Messie-Wohnung | Team in neutraler Kleidung, diskrete Arbeit | `service-messie.jpg` |
 
-// NACHHER
-<Button
-  asChild
-  variant="outline"
-  size="lg"
-  className="gap-2 h-12 sm:h-14 px-4 sm:px-6 text-sm sm:text-base border-2 border-primary hover:bg-cta hover:text-cta-foreground hover:border-cta transition-all duration-300 shrink-0 max-lg:bg-cta max-lg:text-cta-foreground max-lg:border-cta"
->
+Stil: Professionell, sauber, vertrauenswürdig, warme Töne
+
+### 2.3 Bilder in serviceData.ts eintragen
+
+Jeder Service bekommt die passenden Bild-Referenzen:
+
+```typescript
+'wohnungsentruempelung': {
+  hero: {
+    h1: '...',
+    subline: '...',
+    trustPills: [...],
+    imageSrc: '/images/service-wohnungsentruempelung.jpg',
+    imageAlt: 'Leere, saubere Wohnung nach professioneller Entrümpelung'
+  },
+  // ...
+}
 ```
 
-### 2. ServiceHero.tsx (Zeile 66-76)
+### 2.4 ServicePage.tsx anpassen
+
+Bild-Props an ServiceHero übergeben:
 
 ```tsx
-// VORHER
-<Button
-  asChild
-  variant="outline"
-  size="lg"
-  className="gap-2.5 h-12 sm:h-14 px-6 sm:px-8 text-sm sm:text-base border-2 border-primary hover:bg-cta hover:text-cta-foreground hover:border-cta transition-all duration-300"
->
-
-// NACHHER
-<Button
-  asChild
-  variant="outline"
-  size="lg"
-  className="gap-2.5 h-12 sm:h-14 px-6 sm:px-8 text-sm sm:text-base border-2 border-primary hover:bg-cta hover:text-cta-foreground hover:border-cta transition-all duration-300 max-lg:bg-cta max-lg:text-cta-foreground max-lg:border-cta"
->
-```
-
-### 3. FloatingCTAs.tsx (Zeile 13-20)
-
-Die FloatingCTAs sind **nur auf Mobile sichtbar** (`lg:hidden`), daher sollte der Anruf-Button hier immer direkt orange sein:
-
-```tsx
-// VORHER
-<a
-  href={PHONE_LINK}
-  className="flex-1 flex items-center justify-center gap-2 py-3.5 px-4 bg-card border-2 border-primary rounded-xl shadow-medium text-foreground font-medium transition-all active:scale-95 hover:bg-cta hover:text-cta-foreground hover:border-cta"
->
-
-// NACHHER (direkt orange, kein Hover nötig)
-<a
-  href={PHONE_LINK}
-  className="flex-1 flex items-center justify-center gap-2 py-3.5 px-4 bg-cta border-2 border-cta rounded-xl shadow-medium text-cta-foreground font-medium transition-all active:scale-95"
->
-```
-
----
-
-## Visuelles Ergebnis
-
-```text
-DESKTOP (lg+):
-┌─────────────────────────────────────────────────────┐
-│  Anruf-Button:                                      │
-│  Normal:    [📞 Anrufen]  ← Grüner Rahmen           │
-│  Hover:     [📞 Anrufen]  ← Orange gefüllt          │
-└─────────────────────────────────────────────────────┘
-
-MOBILE (< lg):
-┌─────────────────────────────────────────────────────┐
-│  Anruf-Button:                                      │
-│  Immer:     [📞 Anrufen]  ← Direkt orange           │
-│             (kein Hover auf Touch-Geräten)          │
-└─────────────────────────────────────────────────────┘
-
-FLOATING CTAs (nur Mobile):
-┌─────────────────────────────────────────────────────┐
-│  ┌──────────────┐  ┌──────────────┐                 │
-│  │ 📞 Anrufen   │  │ 💬 WhatsApp  │                 │
-│  │   ORANGE     │  │    GRÜN      │                 │
-│  └──────────────┘  └──────────────┘                 │
-└─────────────────────────────────────────────────────┘
+<ServiceHero
+  h1={pageData.hero.h1}
+  subline={pageData.hero.subline}
+  trustPills={pageData.hero.trustPills}
+  imageSrc={pageData.hero.imageSrc}
+  imageAlt={pageData.hero.imageAlt}
+/>
 ```
 
 ---
@@ -148,9 +118,15 @@ FLOATING CTAs (nur Mobile):
 
 | Datei | Änderung |
 |-------|----------|
-| `src/pages/ServicePage.tsx` | StickyConversionBar Import + Komponente entfernen |
-| `src/components/sections/HeroSection.tsx` | Mobile-Orange für Anruf-Button |
-| `src/components/services/ServiceHero.tsx` | Mobile-Orange für Anruf-Button |
-| `src/components/layout/FloatingCTAs.tsx` | Anruf-Button direkt orange (immer) |
+| `src/components/layout/FloatingCTAs.tsx` | Intersection Observer + Visibility-State + Animation |
+| `src/lib/serviceData.ts` | Interface erweitern + imageSrc/imageAlt für alle 6 Services |
+| `src/pages/ServicePage.tsx` | imageSrc und imageAlt Props übergeben |
+| `public/images/` | 6 neue AI-generierte Bilder |
 
-**Optional:** `src/components/services/StickyConversionBar.tsx` löschen (wird nicht mehr verwendet)
+## Reihenfolge
+
+1. FloatingCTAs mit Scroll-Visibility erweitern
+2. 6 Service-Bilder mit AI generieren und speichern
+3. serviceData.ts erweitern
+4. ServicePage.tsx anpassen
+
