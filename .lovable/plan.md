@@ -1,124 +1,170 @@
 
-# Plan: Timeline-Timing Fix & Orange Akzente
+# Plan: TrustBar & Services-Kacheln Anpassungen
 
-## 1. Timeline-Timing korrigieren
+## Übersicht der Änderungen
 
-### Problem
-Der Hook `useTimelineProgress.ts` berechnet den Progress mit falschen Schwellenwerten:
-- `scrollStart = windowHeight * 0.8` (80% vom Viewport)
-- `scrollEnd = -sectionHeight * 0.3` (30% nach Verlassen)
+1. **TrustBar**: Orange Akzente entfernen, Trenner von "." zu "-" ändern
+2. **Services-Section**: Wohnungsentrümpelung-Karte verkleinern, andere Karten zentrieren
 
-Das bedeutet: Der letzte Schritt wird erst markiert, wenn die Section fast aus dem Viewport verschwunden ist.
+---
+
+## 1. TrustBar Änderungen
+
+### Aktuelle Probleme
+- Icons haben alternierende Farben (orange `text-cta` und grün `text-accent`)
+- Trenner ist ein Punkt "•" statt einem Strich "-"
 
 ### Lösung
-Die Schwellenwerte anpassen, damit alle 3 Schritte abgeschlossen sind, **bevor** man das Ende der Section erreicht:
+
+**Datei: `src/components/sections/TrustBar.tsx`**
 
 ```typescript
-// VORHER (zu langsam)
-const scrollStart = windowHeight * 0.8;
-const scrollEnd = -sectionHeight * 0.3;
+// VORHER: Alternierende Farben
+{ icon: ShieldCheck, text: "Keine versteckten Kosten", color: 'text-accent' },
+{ icon: Clock, text: "Preiseinschätzung < 24h", color: 'text-cta' },  // Orange
+...
 
-// NACHHER (schneller - alle Schritte während Section im View)
-const scrollStart = windowHeight * 0.7;  // Früher starten
-const scrollEnd = sectionHeight * 0.2;   // POSITIV = innerhalb der Section enden
+// NACHHER: Alle grün (text-accent)
+{ icon: ShieldCheck, text: "Keine versteckten Kosten" },
+{ icon: Clock, text: "Preiseinschätzung < 24h" },
+...
+// Farbe entfernen, Icon-Klasse zurück auf text-accent
 ```
 
-**Effekt**: Die Timeline ist zu 100% abgeschlossen, wenn die Section noch ca. 20% im Viewport sichtbar ist.
-
----
-
-## 2. Orange Akzente hinzufügen
-
-### Aktuelle Situation
-Die `cta`-Farbe (Orange #FF8A3D) ist definiert, wird aber nur beim Hover des "Anrufen"-Buttons verwendet.
-
-### Elemente für Orange-Akzente
-
-| Element | Änderung |
-|---------|----------|
-| **Timeline Nummern-Badge** | `bg-accent` → `bg-cta` für aktiven Step |
-| **Timeline Progress-Bar** | `from-primary via-accent to-primary` → `from-cta via-accent to-cta` |
-| **Pricing CTA-Card** | Orangener Akzent-Rahmen oder Glow |
-| **Services-Karten Hover** | Dezenter orange Glow statt grün |
-| **Trust Pills Icons** | Einige Icons orange statt nur grün |
-
-### Konkrete Änderungen in HorizontalTimeline.tsx
-
+**Trenner ändern (Zeile 32-34):**
 ```tsx
-// Number Badge - Aktiver Step
-isCurrent
-  ? 'bg-cta text-cta-foreground scale-110'
-  : isActive
-  ? 'bg-cta/80 text-cta-foreground'
-  : 'bg-muted text-muted-foreground'
+// VORHER
+<span className="text-accent text-lg">•</span>
 
-// Progress Bar
-className="bg-gradient-to-r from-cta via-accent to-cta rounded-full"
+// NACHHER
+<span className="text-accent text-lg">–</span>
 ```
-
-### Optionale Erweiterungen
-
-**In ProcessSection.tsx (Haupt-Timeline):**
-- WhatsApp-Button hat schon grün → Orange-Akzent auf den Timeline-Karten als Kontrast
-
-**In BentoCard.tsx (Services-Karten):**
-- Hover-Glow von `accent` → `cta` für wärmeren Look
-
-**In TrustBar.tsx:**
-- Alternierende Icons: Manche grün (`accent`), manche orange (`cta`)
 
 ---
 
-## Dateien zu ändern
+## 2. Services-Section Anpassungen
 
-| Datei | Änderung |
-|-------|----------|
-| `src/hooks/useTimelineProgress.ts` | Scroll-Timing anpassen (früher abschließen) |
-| `src/components/ui/HorizontalTimeline.tsx` | Orange Nummern-Badges & Progress-Bar |
-| `src/components/sections/ProcessSection.tsx` | Optional: Orange-Akzent im CTA-Bereich |
-| `src/components/ui/BentoCard.tsx` | Optional: Orange Hover-Glow |
+### Aktuelle Probleme
+- Wohnungsentrümpelung-Karte dominiert zu stark (großer grüner Block mit viel Text)
+- Andere Service-Karten wirken im Vergleich klein
+- Icons und Text nicht zentriert
+
+### Lösung: Kompaktere Featured-Card + Zentrierte BentoCards
+
+**A) Wohnungsentrümpelung-Card verkleinern**
+
+Änderungen in `ServicesSection.tsx`:
+- Padding reduzieren: `p-8 lg:p-12` → `p-6 lg:p-8`
+- Kleinere Headline: `text-2xl lg:text-4xl` → `text-xl lg:text-2xl`
+- USP-Pills kompakter machen
+- Weniger vertikalen Abstand
+
+**B) BentoCards zentrieren**
+
+Änderungen in `BentoCard.tsx`:
+- Icon und Text zentrieren mit `text-center` und `items-center`
+- Icon-Container zentriert: `mx-auto`
+- Inhalt zentriert: `text-center`
 
 ---
 
 ## Technische Details
 
-### useTimelineProgress.ts (Zeilen 21-22)
-
-```typescript
-// Früher starten (bei 70% Sichtbarkeit) und früher enden (noch 20% im View)
-const scrollStart = windowHeight * 0.7;
-const scrollEnd = sectionHeight * 0.2;  // Positiv = innerhalb der Section
-```
-
-### HorizontalTimeline.tsx (Zeilen 57-65)
+### TrustBar.tsx - Komplette Änderungen
 
 ```tsx
-<span
-  className={cn(
-    'absolute -top-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300',
-    isCurrent
-      ? 'bg-cta text-cta-foreground scale-110 shadow-cta'
-      : isActive
-      ? 'bg-cta/80 text-cta-foreground'
-      : 'bg-muted text-muted-foreground'
-  )}
->
+const trustItems = [
+  { icon: ShieldCheck, text: "Keine versteckten Kosten" },
+  { icon: Clock, text: "Preiseinschätzung < 24h" },
+  { icon: BadgeCheck, text: "Festpreis nach Einschätzung" },
+  { icon: HeartHandshake, text: "Diskret & respektvoll" },
+  { icon: Sparkles, text: "Besenrein" },
+];
+
+// Icon-Klasse ändern von {color} auf statisch text-accent
+<Icon className="h-5 w-5 text-accent flex-shrink-0" />
+
+// Trenner ändern
+<span className="text-accent text-lg">–</span>
 ```
 
-### HorizontalTimeline.tsx (Zeilen 23-27)
+### ServicesSection.tsx - Featured Card kompakter
 
 ```tsx
-<div
-  className="absolute top-0 left-0 h-full bg-gradient-to-r from-cta via-accent to-cta rounded-full transition-all duration-300 ease-out"
-  style={{ width: `${progress * 100}%` }}
-/>
+// Zeile 51: Weniger Padding
+className="... p-6 lg:p-8 mb-8 ..."  // vorher: p-8 lg:p-12 mb-10
+
+// Zeile 60: Kleinerer Badge
+className="... text-xs ... px-4 py-1.5 ... mb-4"  // vorher: text-sm, mb-6
+
+// Zeile 64: Kleinere Headline
+className="text-xl lg:text-2xl ..."  // vorher: text-2xl lg:text-4xl
+
+// Zeile 68: Kürzerer Beschreibungstext
+className="... text-base mb-6"  // vorher: text-lg mb-8
+
+// Zeile 74: Kompaktere USP-Pills
+className="... gap-3 mb-6"  // vorher: gap-4 mb-10
+```
+
+### BentoCard.tsx - Zentriertes Layout
+
+```tsx
+// Zeile 29: Karte zentriert ausrichten
+className="... flex flex-col items-center text-center ..."
+
+// Zeile 47-54: Icon zentrieren
+<div className="... mx-auto mb-4 ...">
+
+// Zeile 65: Content zentrieren
+<div className="relative space-y-2 text-center">
+
+// Zeile 98-108: Arrow-Indikator anpassen (zentriert unten)
+className="... bottom-4 left-1/2 -translate-x-1/2 right-auto ..."
 ```
 
 ---
 
-## Ergebnis
+## Visuelles Ergebnis
 
-1. **Besseres Timing**: Alle 3 Timeline-Schritte sind markiert, bevor man zur nächsten Section scrollt
-2. **Konsistente Orange-Akzente**: Der warme CTA-Farbton taucht auf mehreren Elementen auf
-3. **Visueller Zusammenhalt**: Orange verbindet Call-to-Actions (Anrufen, Timeline-Badges)
-4. **Professioneller Look**: Durchdachtes Farbkonzept statt nur Grün-Dominanz
+```text
+┌─────────────────────────────────────────────────────────────┐
+│  ⭐ Unsere Kernkompetenz                                    │
+│  Wohnungsentrümpelung                                       │
+│  Kurze Beschreibung                                         │
+│  [✓ USP 1] [✓ USP 2] [✓ USP 3]                             │
+│  [📱 WhatsApp CTA]  Mehr erfahren →                        │
+└─────────────────────────────────────────────────────────────┘
+         ↑ Kompakter, weniger dominant
+
+     ┌─────────────────┐    ┌─────────────────┐
+     │      [Icon]     │    │      [Icon]     │
+     │   Haushalts-    │    │   Keller/       │
+     │   auflösung     │    │   Dachboden     │
+     │   Subtitle      │    │   Subtitle      │
+     └─────────────────┘    └─────────────────┘
+     
+     ┌─────────────────┐    ┌─────────────────┐
+     │      [Icon]     │    │      [Icon]     │
+     │   Gewerbe/      │    │   Diskrete      │
+     │   Büro/Lager    │    │   Reinigung     │
+     │   Subtitle      │    │   Subtitle      │
+     └─────────────────┘    └─────────────────┘
+              ↑ Icons und Text zentriert
+```
+
+---
+
+## Zusammenfassung
+
+| Datei | Änderung |
+|-------|----------|
+| `TrustBar.tsx` | Orange `text-cta` entfernen → alle `text-accent`, Trenner "•" → "–" |
+| `ServicesSection.tsx` | Featured Card kompakter (weniger Padding, kleinere Texte) |
+| `BentoCard.tsx` | Layout zentrieren (Icon + Text mittig) |
+
+**Ergebnis:**
+- Einheitlich grüne Icons in der TrustBar (keine Orange-Akzente)
+- Strich-Trenner statt Punkt
+- Wohnungsentrümpelung-Karte ist erkennbar als Hauptleistung, aber nicht überwältigend
+- Service-Kacheln haben zentrierte Icons und Texte für ein aufgeräumtes Design
