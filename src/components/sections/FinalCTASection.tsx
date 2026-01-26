@@ -28,7 +28,7 @@ export function FinalCTASection() {
                 <span className="sm:hidden">Preis erhalten</span>
               </a>
             </Button>
-            <Button asChild variant="outline" size="lg" className="gap-2 h-12 sm:h-14 px-5 sm:px-8 border-2 border-primary-foreground/50 text-primary-foreground hover:bg-cta hover:text-cta-foreground hover:border-cta transition-all duration-300 text-sm sm:text-base">
+            <Button asChild size="lg" className="gap-2 h-12 sm:h-14 px-5 sm:px-8 bg-cta hover:bg-cta-hover text-white transition-all duration-300 text-sm sm:text-base">
               <a href={PHONE_LINK}>
                 <Phone className="h-5 w-5 flex-shrink-0" />
                 Anrufen
