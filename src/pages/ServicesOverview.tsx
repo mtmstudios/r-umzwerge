@@ -8,6 +8,7 @@ import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
 
 const serviceIcons: Record<string, typeof Users> = {
+  'wohnungsentruempelung': Trash2,
   'entruempelung': Trash2,
   'haushaltsaufloesung': Users,
   'keller-dachboden-garage': Warehouse,

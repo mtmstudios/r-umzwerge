@@ -81,9 +81,9 @@ export function ServiceHero({ h1, subline, trustPills, imageSrc, imageAlt }: Ser
             </p>
           </div>
 
-          {/* Image */}
+          {/* Image / Visual */}
           <div className="relative">
-            <div className="aspect-[4/3] rounded-2xl lg:rounded-3xl overflow-hidden bg-secondary">
+            <div className="aspect-[4/3] rounded-2xl lg:rounded-3xl overflow-hidden bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5">
               {imageSrc ? (
                 <img 
                   src={imageSrc}
@@ -91,8 +91,26 @@ export function ServiceHero({ h1, subline, trustPills, imageSrc, imageAlt }: Ser
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                  <span className="text-sm">Bild folgt</span>
+                <div className="w-full h-full flex items-center justify-center relative">
+                  {/* Decorative pattern */}
+                  <div className="absolute inset-0 opacity-10">
+                    <div className="grid grid-cols-4 grid-rows-3 gap-4 p-8 h-full">
+                      {[...Array(12)].map((_, i) => (
+                        <div 
+                          key={i} 
+                          className="bg-primary rounded-xl"
+                          style={{ opacity: 0.3 + (i % 3) * 0.2 }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  {/* Icon cluster */}
+                  <div className="relative z-10 flex flex-col items-center gap-4">
+                    <div className="w-20 h-20 bg-primary/20 rounded-2xl flex items-center justify-center">
+                      <Check className="h-10 w-10 text-primary" />
+                    </div>
+                    <span className="text-sm font-medium text-primary/60">Professionell & Zuverlässig</span>
+                  </div>
                 </div>
               )}
             </div>

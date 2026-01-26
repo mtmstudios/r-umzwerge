@@ -26,8 +26,9 @@ export function ServiceScope({ included, optional }: ServiceScopeProps) {
           </p>
 
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-4xl mx-auto">
-            {/* Included */}
-            <div className="bg-primary/5 border border-primary/20 rounded-2xl p-6 lg:p-8">
+            {/* Included - with accent border */}
+            <div className="bg-primary/5 border border-primary/20 rounded-2xl p-6 lg:p-8 relative overflow-hidden">
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-accent" />
               <h3 className="font-semibold text-foreground mb-6 flex items-center gap-2">
                 <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                   <Check className="h-5 w-5 text-primary-foreground" />

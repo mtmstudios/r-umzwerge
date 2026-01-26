@@ -14,7 +14,7 @@ export function ServiceProcess({ steps }: ServiceProcessProps) {
   const { ref, isVisible } = useScrollReveal(0.1);
 
   return (
-    <section className="py-16 lg:py-24 bg-secondary/30">
+    <section className="py-16 lg:py-24 bg-primary/5">
       <div className="container-custom">
         <div
           ref={ref}
