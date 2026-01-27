@@ -1,264 +1,259 @@
 
+# Plan: SEA-Landingpages 1:1 an Hauptseiten-Design anpassen
 
-# SEA-Landingpages: Conversion-optimiertes Design
+## Zusammenfassung der Probleme
 
-## Strategie
-
-Die SEA-Landingpages folgen bewährten Conversion-Prinzipien:
-- **Minimale Ablenkung**: Kein vollständiges Menü, keine Footer-Links
-- **Ein Ziel**: WhatsApp-Lead oder Anruf
-- **Above-the-fold CTA**: Sofort sichtbar
-- **Trust-Elemente**: Früh und oft wiederholt
-- **Mobile-First**: 70%+ der SEA-Klicks kommen von Mobilgeräten
+1. **Logo zu klein** - Container `h-16` statt `h-20`, Logo `h-28` statt `h-64`
+2. **Buttons unterschiedlich** - Styles weichen von Hauptseiten ab
+3. **Bewertungen viel zu wenig** - Nur 1 Zitat statt 3 Review-Karten + Google-Link
+4. **Keine Hero-Bilder** - Service-Seiten haben Bilder, SEA-Seiten nicht
+5. **Zwei CTA-Sections fast identisch** - SEAMidCTA und SEAFinalCTA sind zu ähnlich
 
 ---
 
-## Technische Architektur
+## Teil 1: Header-Fix (`SEAMinimalHeader.tsx`)
 
-### Routing
+### Aktuell (falsch):
+```tsx
+<div className="h-16 lg:h-20 overflow-hidden flex items-center">
+  <img className="h-28 lg:h-36 w-auto object-contain object-center" />
+</div>
 
-```text
-/lp/haushaltsaufloesung  -> Haushaltsauflösung
-/lp/entruempelung        -> Schnelle Entrümpelung  
-/lp/messie-hilfe         -> Diskrete Messie-Hilfe
+<Button size="sm" className="gap-2 bg-cta hover:bg-cta-hover text-white h-10 px-4">
 ```
 
-### Neue Dateien
+### Neu (wie Hauptseite):
+```tsx
+<div className="h-20 lg:h-24 overflow-hidden flex items-center -ml-8 lg:-ml-12">
+  <img className="h-64 lg:h-80 w-auto object-contain object-left" />
+</div>
 
-| Datei | Beschreibung |
-|-------|--------------|
-| `src/pages/SEALandingPage.tsx` | Hauptseite mit Slug-Routing |
-| `src/lib/seaData.ts` | Daten für alle 3 Varianten |
-| `src/components/sea/SEAMinimalHeader.tsx` | Nur Logo, kein Menü |
-| `src/components/sea/SEAHero.tsx` | Fullscreen Hero mit CTA |
-| `src/components/sea/SEAPainPoints.tsx` | 3 emotionale Problem->Lösung Karten |
-| `src/components/sea/SEASocialProof.tsx` | Google-Rating + Kundenzitat |
-| `src/components/sea/SEAMidCTA.tsx` | Preis-Teaser + CTA |
-| `src/components/sea/SEAMiniFAQ.tsx` | 3-4 Fragen Accordion |
-| `src/components/sea/SEAFinalCTA.tsx` | Full-Width Abschluss |
-| `src/components/sea/SEAMinimalFooter.tsx` | Nur Impressum/Datenschutz |
-
----
-
-## Seitenaufbau (alle 3 Varianten)
-
-```text
-+-------------------------------------------+
-|  MINIMAL HEADER (60px)                    |
-|  [Logo links] .............. [CTA rechts] |
-+-------------------------------------------+
-|                                           |
-|  HERO (90vh mobile / 70vh desktop)        |
-|  ---------------------------------------- |
-|  "Headline mit Keyword + Nutzen"          |
-|  Subline (1-2 Sätze)                      |
-|                                           |
-|  [WhatsApp CTA - gross, grün]             |
-|  [Telefon CTA - sekundär]                 |
-|                                           |
-|  Trust-Pills: ✓ ✓ ✓                       |
-+-------------------------------------------+
-|                                           |
-|  PAIN POINTS (3 Karten)                   |
-|  ---------------------------------------- |
-|  💭 "Dein Problem"                        |
-|  → "Unsere Lösung"                        |
-|                                           |
-+-------------------------------------------+
-|                                           |
-|  SOCIAL PROOF                             |
-|  ---------------------------------------- |
-|  ⭐ 5.0 auf Google (12 Bewertungen)       |
-|  "Kundenzitat hier..."                    |
-|  — Max M.                                 |
-|                                           |
-+-------------------------------------------+
-|                                           |
-|  MID-PAGE CTA                             |
-|  ---------------------------------------- |
-|  "Preiseinschätzung in unter 24h"         |
-|  [WhatsApp] [Anrufen]                     |
-|                                           |
-+-------------------------------------------+
-|                                           |
-|  MINI-FAQ (3-4 Fragen)                    |
-|  ---------------------------------------- |
-|  ▼ Wie läuft das ab?                      |
-|  ▼ Was kostet das?                        |
-|  ▼ Gibt es versteckte Kosten?             |
-|                                           |
-+-------------------------------------------+
-|                                           |
-|  FINAL CTA (Primary BG)                   |
-|  ---------------------------------------- |
-|  "Jetzt unverbindlich anfragen"           |
-|  [WhatsApp] [Telefon]                     |
-|                                           |
-+-------------------------------------------+
-|  MINIMAL FOOTER                           |
-|  Impressum | Datenschutz | ©2025          |
-+-------------------------------------------+
+<Button size="lg" className="gap-2.5 bg-cta hover:bg-cta-hover text-white font-semibold px-6 h-11 lg:h-12 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
 ```
 
 ---
 
-## Variante 1: Haushaltsauflösung
+## Teil 2: Hero mit Bild (`SEAHero.tsx`)
 
-**Zielgruppe**: Angehörige nach Todesfall, Pflegeheim-Umzug
+### Neue Struktur wie ServiceHero:
+- Mobile/Tablet: Fullscreen-Hintergrundbild mit Overlay
+- Desktop: Side-by-side Layout mit Bild rechts
 
-**Headline**: 
-> "Haushaltsauflösung komplett – wir nehmen Ihnen alles ab."
+### Bilder pro Variante:
+| Variante | Bild |
+|----------|------|
+| `haushaltsaufloesung` | `/images/service-haushaltsaufloesung.jpg` |
+| `entruempelung` | `/images/service-entruempelung.jpg` |
+| `messie-hilfe` | `/images/service-messie.jpg` |
 
-**Subline**: 
-> "Einfühlsam, respektvoll und besenrein. Preiseinschätzung per WhatsApp-Foto innerhalb von 24 Stunden."
-
-**Trust-Pills**: `Einfühlsam` | `Festpreis möglich` | `Besenrein`
-
-**Pain Points**:
-1. 💭 "Ein Angehöriger ist verstorben – und jetzt muss alles aufgelöst werden."  
-   → Wir räumen respektvoll, damit Sie Zeit zum Trauern haben.
-
-2. 💭 "Umzug ins Pflegeheim – aber wer kümmert sich um die Wohnung?"  
-   → Strukturierte Auflösung ohne Zeitdruck, alles aus einer Hand.
-
-3. 💭 "Die Immobilie muss verkauft werden – aber sie ist noch voll."  
-   → Übergabefertig in wenigen Tagen, besenrein und dokumentiert.
-
-**FAQ**:
-- Wie schnell bekomme ich einen Termin?
-- Gibt es versteckte Kosten?
-- Was passiert mit Wertgegenständen?
-- Muss ich dabei sein?
-
----
-
-## Variante 2: Entrümpelung
-
-**Zielgruppe**: Schnelle Lösung, preisbewusst
-
-**Headline**: 
-> "Entrümpelung zum Festpreis – schnell, sauber, transparent."
-
-**Subline**: 
-> "Foto senden, Preis erhalten, Termin machen. Besenrein garantiert."
-
-**Trust-Pills**: `Antwort < 24h` | `Besenrein` | `Keine versteckten Kosten`
-
-**Pain Points**:
-1. 💭 "Kein Platz mehr – alles voll, man kommt kaum noch durch."  
-   → Wir schaffen Ordnung – oft an nur einem Tag.
-
-2. 💭 "Keine Zeit, das alles selbst zu machen."  
-   → Wir übernehmen alles: Sortieren, Tragen, Entsorgen.
-
-3. 💭 "Was kostet das überhaupt? Keine Lust auf böse Überraschungen."  
-   → Transparenter Festpreis nach Foto-Einschätzung. Keine versteckten Kosten.
-
-**FAQ**:
-- Wie läuft die Preiseinschätzung ab?
-- Wie schnell könnt ihr kommen?
-- Was ist im Preis enthalten?
-- Gibt es versteckte Kosten?
-
----
-
-## Variante 3: Messie-Hilfe (Diskret)
-
-**Zielgruppe**: Betroffene oder Angehörige, extrem sensibel
-
-**Headline**: 
-> "Diskrete Hilfe bei Messie-Situationen – ohne Vorurteile."
-
-**Subline**: 
-> "Wir verstehen. Keine Verurteilung, keine neugierigen Blicke. 100% diskret und respektvoll."
-
-**Trust-Pills**: `100% Diskret` | `Neutrale Fahrzeuge` | `Ein Ansprechpartner`
-
-**Pain Points**:
-1. 💭 "Ich schäme mich so – niemand darf das sehen."  
-   → Wir arbeiten diskret und ohne jede Wertung. Ihre Privatsphäre ist geschützt.
-
-2. 💭 "Was, wenn die Nachbarn etwas mitbekommen?"  
-   → Neutrale Kleidung, keine Firmenlogos auf Fahrzeugen. Kein Aufsehen.
-
-3. 💭 "Ich weiß nicht, wo ich anfangen soll."  
-   → Wir begleiten Sie Schritt für Schritt. Ein fester Ansprechpartner für alles.
-
-**Besonderheiten dieser Variante**:
-- Wärmere, sanftere Farbgebung (weniger kontrastreich)
-- Keine Bilder von "Vorher"-Zuständen
-- Längere, einfühlsame Texte
-- Empathische Sprache durchgehend
-
-**FAQ**:
-- Wie diskret arbeitet ihr wirklich?
-- Muss die betroffene Person dabei sein?
-- Wie schnell könnt ihr helfen?
-- Bietet ihr auch Reinigung an?
-
----
-
-## Design-Entscheidungen
-
-### Mobile-First (70%+ Traffic)
-
-| Element | Mobile | Desktop |
-|---------|--------|---------|
-| Hero-Höhe | 90vh | 70vh |
-| CTA-Buttons | Full-Width, gestapelt | Nebeneinander |
-| Pain-Points | 1 Spalte | 3 Spalten |
-| Font-Size H1 | 28px | 48px |
-| WhatsApp-CTA | Sticky am Bottom | Im Content |
-
-### CTA-Design
-
-- **WhatsApp (primär)**: Grün (#25D366), gross, mit Icon, Lift-Animation
-- **Telefon (sekundär)**: Orange (#FF8A3D), kleiner
-- **Button-Text optimiert**:
-  - Mobile: "Foto senden"
-  - Desktop: "Foto senden · Preiseinschätzung erhalten"
-
-### Keine Ablenkungen
-
-- Kein Hamburger-Menü
-- Keine Footer-Navigation
-- Keine Scroll-Progress-Bar
-- Keine Floating CTAs (bereits im Content)
-
----
-
-## SEA/Tracking-Vorbereitung
-
-### robots.txt (optional)
-```text
-# Landingpages aus organischer Suche ausschließen
-Disallow: /lp/
+### Neue Datenstruktur (`seaData.ts`):
+```tsx
+export interface SEAData {
+  // ... bestehende Felder
+  heroImage: string;
+  heroImageAlt: string;
+}
 ```
 
-### UTM-ready Links
-Die WhatsApp-Links können mit UTM-Parametern erweitert werden:
-```text
-?utm_source=google&utm_medium=cpc&utm_campaign=haushaltsaufloesung
+### Button-Styling (wie HeroSection):
+```tsx
+// Mobile: Solid orange Call-Button
+// Desktop: Outline mit orange hover
+<Button className="gap-3 h-14 sm:h-16 px-6 sm:px-8 
+  bg-cta text-cta-foreground 
+  sm:bg-transparent sm:border-2 sm:border-primary sm:text-foreground
+  sm:hover:bg-cta sm:hover:text-cta-foreground sm:hover:border-cta 
+  transition-all duration-300">
 ```
-
-### Event-Tracking (Vorbereitung)
-Alle CTA-Buttons erhalten `data-track` Attribute für späteres Analytics-Setup:
-- `data-track="cta-whatsapp-hero"`
-- `data-track="cta-phone-hero"`
-- `data-track="cta-whatsapp-mid"`
-- `data-track="cta-whatsapp-final"`
 
 ---
 
-## Zusammenfassung
+## Teil 3: Social Proof komplett neu (`SEASocialProof.tsx`)
 
-3 fokussierte, schnelle Landingpages:
+### Aktuell:
+- Nur 1 Zitat
+- Kein Google-Icon
+- Kein Link zu Google Reviews
+- Keine Review-Karten
 
-| Route | Fokus | Ton |
-|-------|-------|-----|
-| `/lp/haushaltsaufloesung` | Einfühlsam, respektvoll | Warm, verständnisvoll |
-| `/lp/entruempelung` | Schnell, transparent | Direkt, preisbewusst |
-| `/lp/messie-hilfe` | Extrem diskret | Sanft, ohne Wertung |
+### Neu (wie ReviewsSection):
 
-Wiederverwendbare Komponenten, eine Datenstruktur, drei emotionale Varianten.
+```text
++-------------------------------------------------------+
+|           Was unsere Kunden sagen                     |
+|                                                       |
+|    [G] ★★★★★ 5.0 · 12 Bewertungen                    |
++-------------------------------------------------------+
+|                                                       |
+|  +-------------+  +-------------+  +-------------+    |
+|  | ★★★★★       |  | ★★★★★       |  | ★★★★★       |    |
+|  | "Sehr pro-  |  | "Schnelle   |  | "Top Ser-   |    |
+|  |  fessionell |  |  Termine,   |  |  vice!..."  |    |
+|  |  ..."       |  |  ..."       |  |             |    |
+|  |             |  |             |  |             |    |
+|  | (M) Max M.  |  | (A) Anna K. |  | (S) Stefan  |    |
+|  | vor 2 Wo.   |  | vor 1 Mon.  |  | vor 1 Mon.  |    |
+|  +-------------+  +-------------+  +-------------+    |
+|                                                       |
+|        -> Alle Bewertungen auf Google [extern]        |
++-------------------------------------------------------+
+```
 
+### Imports hinzufugen:
+```tsx
+import { Star, ExternalLink } from 'lucide-react';
+import { GOOGLE_RATING, GOOGLE_REVIEWS_LINK, FEATURED_REVIEWS } from '@/lib/constants';
+```
+
+### Komponenten:
+- GoogleIcon SVG (farbig, wie in ReviewsSection)
+- ReviewCard-Komponente mit Sterne, Text, Avatar, Datum
+- Link zu Google Reviews mit ExternalLink-Icon
+
+---
+
+## Teil 4: CTA-Sections differenzieren
+
+### Problem:
+SEAMidCTA und SEAFinalCTA sind nahezu identisch - beide zeigen:
+- "Preiseinschatzung in unter 24h"
+- Gleiche Headline (`data.ctaHeadline`)
+- Gleiche Buttons (WhatsApp + Anrufen)
+
+### Losung: Unterschiedliche Fokuspunkte
+
+#### SEAMidCTA - "Prozess-fokussiert" (nach Social Proof)
+**Fokus:** Wie es funktioniert - einfacher nachster Schritt
+
+```text
++-------------------------------------------------------+
+|      So einfach geht's: Foto senden, Preis erhalten   |
+|                                                       |
+|   [1] Foto senden  [2] Einschatzung  [3] Termin      |
+|                                                       |
+|   [WhatsApp: Foto senden]  [Lieber anrufen?]         |
++-------------------------------------------------------+
+```
+
+**Anderungen:**
+- Headline: "So einfach geht's" (statisch)
+- 3 Mini-Prozess-Steps inline anzeigen
+- WhatsApp primar, Anruf sekundar (Text-Link statt Button)
+
+#### SEAFinalCTA - "Vertrauen-fokussiert" (am Ende)
+**Fokus:** Letzte Uberzeugung, alle Bedenken ausraumen
+
+```text
++-------------------------------------------------------+
+|        {data.ctaHeadline}                             |
+|        {data.ctaSubline}                              |
+|                                                       |
+|   [WhatsApp CTA groS]      [Anrufen CTA groS]        |
+|                                                       |
+|   [Unverbindlich] [Keine versteckten Kosten] [Besenrein] |
+|                                                       |
+|   Offnungszeiten: Mo-Sa 8-20 Uhr                     |
++-------------------------------------------------------+
+```
+
+**Anderungen:**
+- Dynamische Headline aus data
+- Beide Buttons gleich gros
+- Trust-Badges bleiben
+- Offnungszeiten hinzufugen fur extra Vertrauen
+
+---
+
+## Teil 5: Button-Texte vereinheitlichen
+
+| Komponente | Aktuell | Neu |
+|------------|---------|-----|
+| SEAMidCTA | "Anrufen" | "Lieber anrufen?" (Text-Link) |
+| SEAFinalCTA | "Anrufen" | "Jetzt anrufen" |
+
+---
+
+## Zusammenfassung der Dateiänderungen
+
+| Datei | Anderung |
+|-------|----------|
+| `SEAMinimalHeader.tsx` | Logo groser (h-64/h-80), Button groser mit shadow + hover |
+| `SEAHero.tsx` | Kompletter Umbau: Hero-Bild wie ServiceHero, Button-Styling |
+| `seaData.ts` | `heroImage` + `heroImageAlt` Felder hinzufugen |
+| `SEASocialProof.tsx` | Komplett neu: 3 Review-Karten, Google-Icon, Google-Link |
+| `SEAMidCTA.tsx` | Prozess-fokussiert, Mini-Steps, WhatsApp primar |
+| `SEAFinalCTA.tsx` | Trust-fokussiert, Offnungszeiten, gleich groBe Buttons |
+
+---
+
+## Visuelle Zusammenfassung der Seitenstruktur
+
+```text
++-------------------------------------------+
+| [Logo gross]            [Jetzt anrufen]   |  <- Header fix
++-------------------------------------------+
+|                                           |
+|   [HERO BILD als Hintergrund]             |  <- NEU: Bild
+|                                           |
+|   Headline                                |
+|   Subline                                 |
+|   [WhatsApp] [Anrufen]                   |
+|   Trust Pills                             |
+|                                           |
++-------------------------------------------+
+|                                           |
+|   Schmerzpunkte-Section                   |  <- bleibt
+|                                           |
++-------------------------------------------+
+|                                           |
+|   Was unsere Kunden sagen                 |  <- NEU: 3 Karten
+|   [G] 5.0 Sterne                          |
+|   [Karte 1] [Karte 2] [Karte 3]          |
+|   -> Alle auf Google                      |
+|                                           |
++-------------------------------------------+
+|                                           |
+|   Before/After Slider                     |  <- bleibt
+|                                           |
++-------------------------------------------+
+|                                           |
+|   So einfach geht's                       |  <- NEU: Prozess-fokus
+|   [1] [2] [3]                            |
+|   [WhatsApp]  Lieber anrufen?            |
+|                                           |
++-------------------------------------------+
+|                                           |
+|   FAQ Accordion                           |  <- bleibt
+|                                           |
++-------------------------------------------+
+|                                           |
+|   {ctaHeadline}                          |  <- NEU: Trust-fokus
+|   {ctaSubline}                           |
+|   [WhatsApp groB] [Anrufen groB]         |
+|   Trust Badges                            |
+|   Mo-Sa 8-20 Uhr                         |
+|                                           |
++-------------------------------------------+
+```
+
+---
+
+## Technische Details
+
+### Hero-Bild Responsive Verhalten:
+- **Mobile/Tablet (<xl):** Fullscreen-Hintergrund mit `bg-gradient-to-t from-black/80`
+- **Desktop (xl+):** Side-by-side Grid mit Bild rechts, dekorative Elemente
+
+### Review-Karten Animation:
+```tsx
+style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'forwards' }}
+```
+
+### Prozess-Steps in MidCTA:
+```tsx
+const steps = [
+  { num: '1', label: 'Foto senden' },
+  { num: '2', label: 'Einschatzung erhalten' },
+  { num: '3', label: 'Termin machen' },
+];
+```
