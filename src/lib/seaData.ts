@@ -148,6 +148,10 @@ export const seaData: Record<SEAVariant, SEAData> = {
     tone: 'direct',
     heroImage: '/images/service-entruempelung.jpg',
     heroImageAlt: 'Räumzwerge-Team beim Sortieren von Recycling- und Spende-Kartons im Wohnraum',
+    beforeImage: '/images/entruempelung-vorher.png',
+    beforeImageAlt: 'Wohnung vor der Entrümpelung - voll mit Kartons und Müllsäcken',
+    afterImage: '/images/entruempelung-nachher.png',
+    afterImageAlt: 'Wohnung nach der Entrümpelung - besenrein und leer',
   },
 
   'messie-hilfe': {
