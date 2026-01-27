@@ -1,21 +1,26 @@
 import { Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PHONE_LINK } from '@/lib/constants';
-import logoImage from '@/assets/logo-raeumzwerge.webp';
+import logoImage from '@/assets/logo-raeumzwerge.png';
 
 export function SEAMinimalHeader() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border/50">
       <div className="container-custom">
         <div className="flex items-center justify-between h-16 lg:h-20">
-          {/* Logo - no link to prevent navigation away */}
-<div className="h-20 lg:h-24 overflow-hidden flex items-center -ml-8 lg:-ml-12">
+          {/* Logo - links to main website in new tab */}
+          <a 
+            href="https://www.raeumzwerge.de" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="h-20 lg:h-24 overflow-hidden flex items-center -ml-8 lg:-ml-12 group"
+          >
             <img
               src={logoImage}
               alt="Räumzwerge"
-              className="h-64 lg:h-80 w-auto object-contain object-left"
+              className="h-64 lg:h-80 w-auto object-contain object-left transition-all duration-300 group-hover:scale-[1.03] group-hover:opacity-90"
             />
-          </div>
+          </a>
 
           {/* CTA Button */}
           <Button
