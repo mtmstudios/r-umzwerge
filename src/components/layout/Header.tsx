@@ -30,8 +30,8 @@ export function Header() {
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
         isScrolled
-          ? "glass-strong shadow-lg py-3"
-          : "bg-card py-4 lg:py-5"
+          ? "glass-strong shadow-lg py-2"
+          : "bg-card py-3 lg:py-4"
       )}
     >
       <div className="container-custom">
@@ -41,7 +41,7 @@ export function Header() {
             <img 
               src={logoRaeumzwerge} 
               alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
-              className="h-10 lg:h-12 w-auto"
+              className="h-14 lg:h-20 w-auto"
             />
           </a>
 
