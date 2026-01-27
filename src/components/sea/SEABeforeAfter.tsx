@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { Sparkles, CheckCircle, Truck, Heart, Shield, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { SEAData } from '@/lib/seaData';
+import { seaImages } from '@/lib/seaImages';
+import type { SEAData, SEAVariant } from '@/lib/seaData';
 
 const iconMap: Record<string, React.ElementType> = {
   'Besenrein': Sparkles,
@@ -15,6 +16,32 @@ const iconMap: Record<string, React.ElementType> = {
   'Schritt für Schritt': Users,
 };
 
+// Map slug to correct image set
+const getImagesForVariant = (slug: SEAVariant) => {
+  switch (slug) {
+    case 'haushaltsaufloesung':
+      return {
+        before: seaImages.haushaltsaufloesung.before,
+        after: seaImages.haushaltsaufloesung.after,
+      };
+    case 'entruempelung':
+      return {
+        before: seaImages.entruempelung.before,
+        after: seaImages.entruempelung.after,
+      };
+    case 'messie-hilfe':
+      return {
+        before: seaImages.messie.before,
+        after: seaImages.messie.after,
+      };
+    default:
+      return {
+        before: seaImages.entruempelung.before,
+        after: seaImages.entruempelung.after,
+      };
+  }
+};
+
 interface SEABeforeAfterProps {
   data: SEAData;
 }
@@ -25,7 +52,7 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
   const isDragging = useRef(false);
 
   const isGentleMode = data.tone === 'gentle';
-  const hasRealImages = data.beforeImage && data.afterImage;
+  const images = getImagesForVariant(data.slug);
 
   const handleMouseDown = () => {
     isDragging.current = true;
@@ -70,138 +97,67 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
           {isGentleMode ? 'Ein neuer Anfang – mit uns' : 'Das Ergebnis unserer Arbeit'}
         </h2>
 
-        {/* Slider - Real images or placeholders */}
-        {hasRealImages || isGentleMode ? (
-          // Real Before/After Slider with actual images
+        {/* Before/After Slider */}
+        <div
+          ref={containerRef}
+          className="relative max-w-2xl mx-auto aspect-[4/3] md:aspect-video bg-muted rounded-xl overflow-hidden cursor-ew-resize select-none mb-6"
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+          onTouchMove={handleTouchMove}
+          onMouseLeave={handleMouseUp}
+        >
+          {/* After Image (Base layer - full width) */}
+          <div className="absolute inset-0">
+            <img 
+              src={images.after} 
+              alt={data.afterImageAlt || 'Nachher'}
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          {/* Before Image (Clipped - reveals from left) */}
           <div
-            ref={containerRef}
-            className="relative max-w-2xl mx-auto aspect-[4/3] md:aspect-video bg-muted rounded-xl overflow-hidden cursor-ew-resize select-none mb-6"
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-            onMouseMove={handleMouseMove}
-            onTouchMove={handleTouchMove}
-            onMouseLeave={handleMouseUp}
+            className="absolute inset-0"
+            style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
           >
-            {/* After Image (Base layer - full width) */}
-            <div className="absolute inset-0">
-              <img 
-                src={data.afterImage} 
-                alt={data.afterImageAlt}
-                className="w-full h-full object-cover"
-              />
-            </div>
+            <img 
+              src={images.before} 
+              alt={data.beforeImageAlt || 'Vorher'}
+              className="w-full h-full object-cover"
+            />
+          </div>
 
-            {/* Before Image (Clipped - reveals from left) */}
-            <div
-              className="absolute inset-0"
-              style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
-            >
-              <img 
-                src={data.beforeImage} 
-                alt={data.beforeImageAlt}
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            {/* Slider Handle */}
-            <div
-              className="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg"
-              style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
-            >
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-medium flex items-center justify-center">
-                <svg
-                  className="w-5 h-5 text-foreground"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-                  />
-                </svg>
-              </div>
-            </div>
-
-            {/* Labels */}
-            <div className="absolute bottom-3 left-3 px-2.5 py-1 bg-foreground/80 text-background text-xs font-medium rounded-full">
-              Vorher
-            </div>
-            <div className="absolute bottom-3 right-3 px-2.5 py-1 bg-primary text-primary-foreground text-xs font-medium rounded-full">
-              Nachher
+          {/* Slider Handle */}
+          <div
+            className="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg"
+            style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
+          >
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-medium flex items-center justify-center">
+              <svg
+                className="w-5 h-5 text-foreground"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+                />
+              </svg>
             </div>
           </div>
-        ) : (
-          // Placeholder Mode: Before/After Slider with placeholders
-          <div
-            ref={containerRef}
-            className="relative max-w-2xl mx-auto aspect-[4/3] md:aspect-video bg-muted rounded-xl overflow-hidden cursor-ew-resize select-none mb-6"
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-            onMouseMove={handleMouseMove}
-            onTouchMove={handleTouchMove}
-            onMouseLeave={handleMouseUp}
-          >
-            {/* Before Image (Full Width) */}
-            <div className="absolute inset-0 bg-gradient-to-br from-muted to-muted-foreground/20">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center p-6">
-                  <p className="text-muted-foreground font-medium">VORHER</p>
-                  <p className="text-xs text-muted-foreground/70 mt-1">
-                    Bild-Platzhalter
-                  </p>
-                </div>
-              </div>
-            </div>
 
-            {/* After Image (Clipped) */}
-            <div
-              className="absolute inset-0 bg-gradient-to-br from-accent/20 to-primary/20"
-              style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
-            >
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center p-6">
-                  <p className="text-primary font-medium">NACHHER</p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Bild-Platzhalter
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Slider Handle */}
-            <div
-              className="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg"
-              style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
-            >
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-medium flex items-center justify-center">
-                <svg
-                  className="w-5 h-5 text-foreground"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-                  />
-                </svg>
-              </div>
-            </div>
-
-            {/* Labels */}
-            <div className="absolute bottom-3 left-3 px-2.5 py-1 bg-foreground/80 text-background text-xs font-medium rounded-full">
-              Vorher
-            </div>
-            <div className="absolute bottom-3 right-3 px-2.5 py-1 bg-primary text-primary-foreground text-xs font-medium rounded-full">
-              Nachher
-            </div>
+          {/* Labels */}
+          <div className="absolute bottom-3 left-3 px-2.5 py-1 bg-foreground/80 text-background text-xs font-medium rounded-full">
+            Vorher
           </div>
-        )}
+          <div className="absolute bottom-3 right-3 px-2.5 py-1 bg-primary text-primary-foreground text-xs font-medium rounded-full">
+            Nachher
+          </div>
+        </div>
 
         {/* Outcome Badges */}
         <div className="flex flex-wrap justify-center gap-3">

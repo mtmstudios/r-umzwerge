@@ -3,6 +3,10 @@ import { Sparkles, CheckCircle, Truck } from 'lucide-react';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
 
+// Import images directly for Vite bundling
+import beforeImage from '@/assets/before-after-vorher.png';
+import afterImage from '@/assets/before-after-nachher.png';
+
 const outcomeBadges = [
   { icon: Sparkles, text: "Besenrein" },
   { icon: CheckCircle, text: "Übergabefertig" },
@@ -79,7 +83,7 @@ export function BeforeAfterSection() {
           {/* After Image (Full Width) - Nachher */}
           <div className="absolute inset-0">
             <img 
-              src="/images/before-after-nachher.png" 
+              src={afterImage} 
               alt="Wohnung nach der Entrümpelung - besenrein"
               className="w-full h-full object-cover"
             />
@@ -91,7 +95,7 @@ export function BeforeAfterSection() {
             style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
           >
             <img 
-              src="/images/before-after-vorher.png" 
+              src={beforeImage} 
               alt="Wohnung vor der Entrümpelung - voll mit Kartons und Müll"
               className="w-full h-full object-cover"
             />
