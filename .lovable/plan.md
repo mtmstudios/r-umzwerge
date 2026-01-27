@@ -1,54 +1,32 @@
 
-# Plan: Dialog-Karten mit Mini-CTAs für Pain-Points-Section
+# Plan: Staggered Fade-In Animation für Dialog-Karten
 
 ## Ziel
-Komplettes Redesign der "Wir verstehen Ihre Situation"-Section mit konversionsoptimierten Dialog-Karten nach dem PAS-Framework (Problem-Agitate-Solution).
+Die drei Dialog-Karten in der Pain-Points-Section sollen nacheinander animiert eingeblendet werden, wenn sie beim Scrollen sichtbar werden - für einen professionellen, dynamischen Eindruck.
 
-## Neues Design-Konzept
-
-### Struktur jeder Karte
+## Animations-Konzept
 
 ```text
-+------------------------------------------+
-|  [Sprech-Icon]                           |
-|                                          |
-|  "Emotionales Kundenzitat..."            |
-|  (großer, kursiver Text)                 |
-|                                          |
-+------------------------------------------+
-|  [Grüner Akzent-Streifen links]          |
-|                                          |
-|  Unsere Lösung:                          |
-|  Lösungstext hier...                     |
-|                                          |
-|  [WhatsApp] Jetzt Hilfe anfragen  -->    |
-|                                          |
-+------------------------------------------+
+Zeitlinie beim Scroll-Trigger:
+  
+  0ms    ─────────────────────────────────────────────────
+         │ Karte 1 startet fade-in + slide-up
+         
+  150ms  ─────────────────────────────────────────────────
+         │ Karte 2 startet fade-in + slide-up
+         
+  300ms  ─────────────────────────────────────────────────
+         │ Karte 3 startet fade-in + slide-up
+         
+  ~600ms ─────────────────────────────────────────────────
+         │ Alle Karten vollständig sichtbar
 ```
-
-### Visuelle Verbesserungen
-
-| Element | Aktuell | Neu |
-|---------|---------|-----|
-| Problem-Darstellung | Klein mit Icon | Großes, emotionales Zitat im Fokus |
-| Pfeil-Trenner | Generischer Pfeil | Entfernt (flüssigerer Übergang) |
-| Lösungs-Box | Schwacher Hintergrund | Starker grüner Akzent-Streifen links |
-| CTA | Keiner | WhatsApp Mini-CTA pro Karte |
-| Hover-Effekt | Nur Shadow | Card-Lift + grüner Glow |
-
-### Ton-Anpassungen nach Variante
-
-| Variante | Ton | CTA-Text | Spezielle Behandlung |
-|----------|-----|----------|---------------------|
-| `haushaltsaufloesung` | warm | "Jetzt Hilfe anfragen" | Herzlicher, empathischer Stil |
-| `entruempelung` | direct | "Preis anfragen" | Klarer, action-orientiert |
-| `messie-hilfe` | gentle | "Unverbindlich schreiben" | Sanfter, kein Druck |
 
 ## Technische Umsetzung
 
-### Datei: `src/components/sea/SEAPainPoints.tsx`
+### Änderungen in `src/components/sea/SEAPainPoints.tsx`
 
-**Komplett-Rewrite der Komponente:**
+**1. Import des useScrollReveal Hooks (Zeile 1-7):**
 
 ```tsx
 import { MessageCircle, ArrowRight } from 'lucide-react';
@@ -57,178 +35,83 @@ import { Button } from '@/components/ui/button';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 import { cn } from '@/lib/utils';
 import { getWhatsAppLink } from '@/lib/constants';
+import { useScrollReveal } from '@/hooks/useAnimations';  // NEU
 import type { SEAData } from '@/lib/seaData';
+```
 
-interface SEAPainPointsProps {
-  data: SEAData;
-}
+**2. Hook in der Komponente verwenden (nach Zeile 15):**
 
+```tsx
 export function SEAPainPoints({ data }: SEAPainPointsProps) {
   const isGentle = data.tone === 'gentle';
   const isDirect = data.tone === 'direct';
-
-  // CTA-Text je nach Ton
-  const getCtaText = () => {
-    if (isGentle) return 'Unverbindlich schreiben';
-    if (isDirect) return 'Preis anfragen';
-    return 'Jetzt Hilfe anfragen';
-  };
-
-  // WhatsApp-Nachricht mit Kontext
-  const getWhatsAppMessage = (problem: string) => {
-    return `Hallo Räumzwerge, ${isGentle ? 'ich brauche diskret Hilfe' : 'ich hätte gerne eine Preiseinschätzung'}. Meine Situation: ${problem.substring(0, 50)}... Ort: ____.`;
-  };
-
-  return (
-    <section className={cn(
-      "py-12 lg:py-20",
-      isGentle ? "bg-muted/30" : "bg-muted/50"
-    )}>
-      <div className="container-custom">
-        {/* Header mit angepasstem Text */}
-        <div className="text-center mb-10 lg:mb-14">
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground mb-3">
-            {isGentle ? 'Wir verstehen, wie Sie sich fühlen' : 'Kennen Sie das?'}
-          </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            {isGentle
-              ? 'Sie sind nicht allein. Wir helfen – ohne Druck, ohne Wertung.'
-              : 'Diese Situationen kennen wir. Und wir haben die Lösung.'}
-          </p>
-        </div>
-
-        {/* Dialog-Karten Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-          {data.painPoints.map((point, index) => (
-            <Card
-              key={index}
-              className={cn(
-                "border-none shadow-lg transition-all duration-300",
-                "hover:shadow-xl hover:-translate-y-1",
-                "hover:shadow-primary/10",
-                isGentle ? "bg-background" : "bg-card"
-              )}
-            >
-              <CardContent className="p-6 lg:p-8 flex flex-col h-full">
-                {/* Problem: Emotionales Zitat */}
-                <div className="flex-grow mb-6">
-                  <div className="flex items-start gap-3 mb-4">
-                    <div className={cn(
-                      "flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center",
-                      isGentle ? "bg-primary/10" : "bg-accent/10"
-                    )}>
-                      <MessageCircle className={cn(
-                        "h-5 w-5",
-                        isGentle ? "text-primary/70" : "text-accent"
-                      )} />
-                    </div>
-                    <span className="text-sm text-muted-foreground pt-2.5">
-                      Was wir oft hören:
-                    </span>
-                  </div>
-                  <blockquote className="text-lg lg:text-xl text-foreground/90 italic leading-relaxed pl-2 border-l-2 border-muted">
-                    „{point.problem}"
-                  </blockquote>
-                </div>
-
-                {/* Lösung mit grünem Akzent */}
-                <div className={cn(
-                  "rounded-xl p-4 mb-4",
-                  "bg-gradient-to-r from-primary/10 to-primary/5",
-                  "border-l-4 border-primary"
-                )}>
-                  <p className="text-sm font-medium text-primary/70 mb-1">
-                    Unsere Lösung:
-                  </p>
-                  <p className="text-foreground font-medium leading-relaxed">
-                    {point.solution}
-                  </p>
-                </div>
-
-                {/* WhatsApp Mini-CTA */}
-                <a
-                  href={getWhatsAppLink(getWhatsAppMessage(point.problem))}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group"
-                >
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className={cn(
-                      "w-full justify-between",
-                      "border-primary/30 text-primary",
-                      "hover:bg-primary hover:text-primary-foreground",
-                      "transition-all duration-300",
-                      "group-hover:border-primary"
-                    )}
-                  >
-                    <span className="flex items-center gap-2">
-                      <WhatsAppIcon className="h-4 w-4" />
-                      {getCtaText()}
-                    </span>
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Button>
-                </a>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+  const { ref: sectionRef, isVisible } = useScrollReveal(0.15);  // NEU
 ```
 
-## Änderungen im Detail
+**3. Ref am Grid-Container (Zeile 48):**
 
-### 1. Header-Text angepasst
+```tsx
+<div 
+  ref={sectionRef}  // NEU
+  className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8"
+>
+```
 
-| Tone | Bisherige Headline | Neue Headline |
-|------|-------------------|---------------|
-| gentle | "Wir verstehen Ihre Situation" | "Wir verstehen, wie Sie sich fühlen" |
-| direct/warm | "Wir verstehen Ihre Situation" | "Kennen Sie das?" |
+**4. Staggered Animation auf jeder Card (Zeile 50-57):**
 
-### 2. Problem-Bereich redesigned
+```tsx
+<Card
+  key={index}
+  className={cn(
+    "border-none shadow-lg transition-all duration-300",
+    "hover:shadow-xl hover:-translate-y-1",
+    "hover:shadow-primary/10",
+    isGentle ? "bg-background" : "bg-card",
+    // NEU: Staggered fade-in animation
+    "opacity-0 translate-y-6",
+    isVisible && "opacity-100 translate-y-0"
+  )}
+  style={{
+    transitionDelay: isVisible ? `${index * 150}ms` : '0ms',
+    transitionProperty: 'opacity, transform',
+    transitionDuration: '500ms',
+    transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'
+  }}
+>
+```
 
-- Größerer, prominenterer Zitat-Text (text-lg auf Mobile, text-xl auf Desktop)
-- Linker Border-Akzent statt rundem Icon-Container
-- "Was wir oft hören:" Label für Kontext
-- `<blockquote>` für semantisch korrektes HTML
+## Animations-Parameter
 
-### 3. Lösungs-Box mit starkem Akzent
+| Parameter | Wert | Begründung |
+|-----------|------|------------|
+| Stagger-Delay | 150ms pro Karte | Schnell genug für Dynamik, langsam genug zum Wahrnehmen |
+| Animations-Dauer | 500ms | Snappy aber smooth |
+| Easing | `cubic-bezier(0.16, 1, 0.3, 1)` | "Expo.out" - schneller Start, sanftes Ende |
+| Slide-Distanz | 24px (translate-y-6) | Subtil aber spürbar |
+| Trigger-Threshold | 0.15 (15% sichtbar) | Früh genug für volle Animation |
 
-- Gradient-Hintergrund: `from-primary/10 to-primary/5`
-- 4px grüner Border links (`border-l-4 border-primary`)
-- "Unsere Lösung:" Label für Klarheit
-- Fetter Lösungstext
+## Vorher vs. Nachher
 
-### 4. WhatsApp Mini-CTA pro Karte
+| Aspekt | Vorher | Nachher |
+|--------|--------|---------|
+| Erscheinung | Alle Karten sofort sichtbar | Karten blenden nacheinander ein |
+| Bewegung | Keine | Sanftes Hochgleiten (24px) |
+| Timing | - | 0ms, 150ms, 300ms versetzt |
+| Trigger | - | Beim ersten Sichtbarwerden (15%) |
 
-- Outline-Button mit Primary-Farbe
-- Hover: Solid Primary mit weißem Text
-- Pfeil-Animation beim Hover (translate-x-1)
-- Kontextualisierte WhatsApp-Nachricht mit dem Problem
+## Datei-Änderungen
 
-### 5. Karten-Interaktion
-
-- Hover: Leichter Lift (`-translate-y-1`)
-- Hover: Grüner Schatten (`shadow-primary/10`)
-- Smooth Transition (300ms)
-
-## Abhängigkeiten
-
-| Import | Bereits vorhanden |
-|--------|------------------|
-| `WhatsAppIcon` | Ja |
-| `Button` | Ja |
-| `getWhatsAppLink` | Ja |
-| `Card`, `CardContent` | Ja |
+| Datei | Zeilen | Änderung |
+|-------|--------|----------|
+| `src/components/sea/SEAPainPoints.tsx` | 7 | Import `useScrollReveal` hinzufügen |
+| `src/components/sea/SEAPainPoints.tsx` | 16 | Hook-Aufruf mit `sectionRef` |
+| `src/components/sea/SEAPainPoints.tsx` | 48 | `ref={sectionRef}` am Grid |
+| `src/components/sea/SEAPainPoints.tsx` | 50-58 | Card-Klassen + style-Prop für Animation |
 
 ## Erwartetes Ergebnis
 
-- Emotionalere Ansprache durch prominente Zitate
-- Klare visuelle Hierarchie: Problem -> Lösung -> Aktion
-- Conversion-Point bei jedem Pain-Point (WhatsApp CTA)
-- Ton-spezifische Anpassungen für alle 3 Landingpages
-- Mobile-optimiert mit voller Breite und Touch-freundlichen Buttons
+- Karten erscheinen nacheinander mit 150ms Versatz
+- Jede Karte gleitet 24px nach oben während des Einblendens
+- Animation wird nur einmal ausgelöst (beim ersten Sichtbarwerden)
+- Smooth "expo-out" Easing für professionellen Look
+- Funktioniert auf allen 3 SEA-Landingpages
