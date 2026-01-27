@@ -1,34 +1,66 @@
 
-# Umstellung auf SFTP mit Passwort-Authentifizierung
 
-## Warum ist das einfacher?
+# Fix: Stabileres Deployment mit Retry-Logik und Dependency-Fix
 
-- Kein SSH-Key-Generieren nötig
-- Kein Key-Format-Problem (das aktuelle `error in libcrypto`)
-- Du verwendest einfach deinen SFTP-Benutzernamen und Passwort von Mittwald
+## Problem-Analyse
 
----
+### Problem 1: Netzwerk-Timeouts
+GitHub Runner hatte temporäre Verbindungsprobleme zur npm Registry. Das ist ein bekanntes Problem und kann mit Retry-Logik gelöst werden.
 
-## Änderungen
-
-### 1. GitHub Secrets anpassen
-
-Folgende Secrets werden benötigt (unter Repository → Settings → Secrets → Actions):
-
-| Secret | Beschreibung | Beispiel |
-|--------|--------------|----------|
-| `SFTP_HOST` | Mittwald Server-Adresse | `sshXXX.mwld.net` |
-| `SFTP_USER` | Dein SFTP-Benutzername | `p123456` |
-| `SFTP_PASSWORD` | Dein SFTP-Passwort | `deinPasswort` |
-| `SFTP_PATH` | Zielverzeichnis | `/html/raeumzwerge` |
-
-Die alten SSH-Key-Secrets (`MITTWALD_SSH_KEY`) kannst du danach löschen.
+### Problem 2: Fehlende Peer-Dependency
+`@testing-library/react@16` erwartet `@testing-library/dom@^10.0.0`, aber diese ist nicht installiert.
 
 ---
 
-### 2. Workflow-Datei aktualisieren
+## Lösungen
+
+### Änderung 1: Retry-Logik im Workflow
 
 **Datei:** `.github/workflows/deploy.yml`
+
+```yaml
+- name: Install dependencies
+  run: npm install
+  env:
+    npm_config_retry: 3
+  timeout-minutes: 10
+```
+
+Alternativ mit explizitem Retry:
+
+```yaml
+- name: Install dependencies
+  run: |
+    for i in 1 2 3; do
+      npm install && break
+      echo "Retry $i failed, waiting 10s..."
+      sleep 10
+    done
+```
+
+---
+
+### Änderung 2: Fehlende Dependency hinzufügen
+
+**Datei:** `package.json`
+
+In `devDependencies` hinzufügen:
+
+```json
+"@testing-library/dom": "^10.4.0",
+```
+
+---
+
+### Änderung 3 (Alternative): Testing-Libraries für Prod-Build entfernen
+
+Falls Tests im Deployment nicht benötigt werden, könnte man `npm install --omit=dev` verwenden, um devDependencies zu überspringen. Das würde den Build beschleunigen und die Testing-Library-Probleme umgehen.
+
+---
+
+## Empfohlene Gesamtlösung
+
+### `.github/workflows/deploy.yml`
 
 ```yaml
 name: Deploy to Mittwald
@@ -54,7 +86,8 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --omit=dev
+        timeout-minutes: 10
 
       - name: Build project
         run: npm run build
@@ -74,40 +107,69 @@ jobs:
           exclude: '[]'
 ```
 
+**Wichtig:** `--omit=dev` funktioniert hier NICHT, da Vite und TypeScript in devDependencies sind und für den Build benötigt werden.
+
 ---
 
-## Was ändert sich?
+## Finale Empfehlung
 
-```text
-VORHER (SSH-Key):                    NACHHER (SFTP-Passwort):
-+---------------------------+        +---------------------------+
-| easingthemes/ssh-deploy   |   →    | sand4rt/ftp-deployer      |
-| SSH_PRIVATE_KEY (komplex) |   →    | username + password       |
-| rsync über SSH            |   →    | SFTP-Protokoll            |
-+---------------------------+        +---------------------------+
+### Option A: Retry + DOM-Dependency (robuster)
+
+1. Retry-Logik zum Workflow hinzufügen
+2. `@testing-library/dom` zur package.json hinzufügen
+
+### Option B: Einfach nochmal laufen lassen
+
+Da es ein temporäres Netzwerkproblem war, könnte ein erneuter Push oder manueller Workflow-Trigger ausreichen.
+
+---
+
+## Technische Änderungen
+
+### Datei 1: `.github/workflows/deploy.yml` (Zeile 23-24)
+
+```yaml
+# Vorher
+- name: Install dependencies
+  run: npm install
+
+# Nachher
+- name: Install dependencies
+  run: |
+    for i in 1 2 3; do
+      npm install && break
+      echo "Attempt $i failed, retrying in 15s..."
+      sleep 15
+    done
+  timeout-minutes: 15
+```
+
+### Datei 2: `package.json` (Zeile 70, in devDependencies)
+
+```json
+"@testing-library/dom": "^10.4.0",
+"@testing-library/jest-dom": "^6.6.0",
 ```
 
 ---
 
-## Vorteile dieser Lösung
+## Zusammenfassung
 
-- **Einfacher**: Keine Key-Generierung oder Format-Probleme
-- **Mittwald-kompatibel**: Funktioniert mit Standard-SFTP-Zugangsdaten
-- **Cleanup-Option**: Löscht alte Dateien automatisch (wie `--delete` bei rsync)
+```text
++--------------------------------------------+
+| 1. Retry-Logik für npm install             |
+|    (3 Versuche mit 15s Pause)              |
++--------------------------------------------+
+            |
+            v
++--------------------------------------------+
+| 2. @testing-library/dom hinzufügen         |
+|    (behebt Peer-Dependency-Warnung)        |
++--------------------------------------------+
+            |
+            v
++--------------------------------------------+
+| 3. Commit + Push → Workflow läuft erneut   |
++--------------------------------------------+
+```
 
----
-
-## Nach der Umsetzung
-
-1. Neuen Commit pushen
-2. GitHub Actions läuft automatisch
-3. Bei Erfolg: Die alten SSH-Secrets können gelöscht werden
-
----
-
-## Technische Details
-
-- Die Action `sand4rt/ftp-deployer` unterstützt sowohl FTP als auch SFTP
-- Mit `sftp: true` wird explizit SFTP (SSH File Transfer Protocol) verwendet
-- Port 22 ist der Standard-SSH/SFTP-Port bei Mittwald
-- `cleanup: true` entfernt Dateien auf dem Server, die lokal nicht mehr existieren
