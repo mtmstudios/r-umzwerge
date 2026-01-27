@@ -5,10 +5,12 @@ import { SEAMinimalHeader } from '@/components/sea/SEAMinimalHeader';
 import { SEAHero } from '@/components/sea/SEAHero';
 import { SEAPainPoints } from '@/components/sea/SEAPainPoints';
 import { SEASocialProof } from '@/components/sea/SEASocialProof';
+import { SEABeforeAfter } from '@/components/sea/SEABeforeAfter';
 import { SEAMidCTA } from '@/components/sea/SEAMidCTA';
 import { SEAMiniFAQ } from '@/components/sea/SEAMiniFAQ';
 import { SEAFinalCTA } from '@/components/sea/SEAFinalCTA';
 import { SEAMinimalFooter } from '@/components/sea/SEAMinimalFooter';
+import { FloatingCTAs } from '@/components/layout/FloatingCTAs';
 
 export default function SEALandingPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -38,21 +40,22 @@ export default function SEALandingPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      {/* No ScrollProgress - intentionally minimal */}
-      {/* No FloatingCTAs - already in content */}
-      
       <SEAMinimalHeader />
       
       <main className="flex-1">
         <SEAHero data={data} />
         <SEAPainPoints data={data} />
         <SEASocialProof data={data} />
+        <SEABeforeAfter data={data} />
         <SEAMidCTA data={data} />
         <SEAMiniFAQ data={data} />
         <SEAFinalCTA data={data} />
       </main>
 
       <SEAMinimalFooter />
+      
+      {/* Mobile Sticky CTAs */}
+      <FloatingCTAs />
     </div>
   );
 }

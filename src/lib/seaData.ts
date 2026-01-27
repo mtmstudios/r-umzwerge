@@ -28,6 +28,7 @@ export interface SEAData {
   faqs: SEAFaqItem[];
   ctaHeadline: string;
   ctaSubline: string;
+  outcomeBadges: string[];
   // Variant-specific styling
   tone: 'warm' | 'direct' | 'gentle';
 }
@@ -79,6 +80,7 @@ export const seaData: Record<SEAVariant, SEAData> = {
     ],
     ctaHeadline: 'Jetzt unverbindlich anfragen',
     ctaSubline: 'Foto senden – Preiseinschätzung innerhalb von 24h.',
+    outcomeBadges: ['Besenrein', 'Übergabefertig', 'Respektvoll geräumt'],
     tone: 'warm',
   },
 
@@ -128,6 +130,7 @@ export const seaData: Record<SEAVariant, SEAData> = {
     ],
     ctaHeadline: 'Jetzt Festpreis anfragen',
     ctaSubline: 'Foto senden – in 24h wissen Sie, was es kostet.',
+    outcomeBadges: ['Besenrein', 'Schnell erledigt', 'Fachgerecht entsorgt'],
     tone: 'direct',
   },
 
@@ -177,6 +180,7 @@ export const seaData: Record<SEAVariant, SEAData> = {
     ],
     ctaHeadline: 'Unverbindlich Kontakt aufnehmen',
     ctaSubline: 'Wir hören zu. Kein Druck, keine Wertung.',
+    outcomeBadges: ['Diskret', 'Respektvoll', 'Ein neuer Anfang'],
     tone: 'gentle',
   },
 };
