@@ -1,7 +1,7 @@
-import { Phone, CheckCircle } from 'lucide-react';
+import { Phone, CheckCircle, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
-import { getWhatsAppLink, PHONE_LINK } from '@/lib/constants';
+import { getWhatsAppLink, PHONE_LINK, SERVICE_HOURS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import type { SEAData } from '@/lib/seaData';
 
@@ -21,16 +21,15 @@ export function SEAFinalCTA({ data }: SEAFinalCTAProps) {
     )}>
       <div className="container-custom">
         <div className="max-w-2xl mx-auto text-center">
+          {/* Dynamic Headline */}
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-primary-foreground mb-4">
             {data.ctaHeadline}
           </h2>
           <p className="text-primary-foreground/80 mb-8 text-base lg:text-lg">
-            {isGentle
-              ? 'Wir melden uns diskret und unverbindlich.'
-              : 'Foto senden – Preiseinschätzung innerhalb von 24h.'}
+            {data.ctaSubline}
           </p>
 
-          {/* CTAs */}
+          {/* CTAs - Both equally sized */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8">
             <Button
               asChild
@@ -48,18 +47,18 @@ export function SEAFinalCTA({ data }: SEAFinalCTAProps) {
             <Button
               asChild
               size="lg"
-              className="gap-3 h-14 sm:h-16 px-8 text-base sm:text-lg bg-cta hover:bg-cta-hover text-white transition-all"
+              className="gap-3 h-14 sm:h-16 px-8 text-base sm:text-lg bg-cta hover:bg-cta-hover text-cta-foreground transition-all"
               data-track="cta-phone-final"
             >
               <a href={PHONE_LINK}>
                 <Phone className="h-5 w-5 sm:h-6 sm:w-6" />
-                Anrufen
+                Jetzt anrufen
               </a>
             </Button>
           </div>
 
           {/* Trust Badges */}
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-4 mb-6">
             {trustBadges.map((badge) => (
               <div
                 key={badge}
@@ -69,6 +68,12 @@ export function SEAFinalCTA({ data }: SEAFinalCTAProps) {
                 <span className="text-sm">{badge}</span>
               </div>
             ))}
+          </div>
+
+          {/* Service Hours */}
+          <div className="inline-flex items-center gap-2 text-primary-foreground/70 text-sm">
+            <Clock className="h-4 w-4" />
+            <span>Öffnungszeiten: {SERVICE_HOURS}</span>
           </div>
         </div>
       </div>
