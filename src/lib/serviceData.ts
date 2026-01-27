@@ -369,7 +369,7 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       subline: 'Klare Abstimmung, transparente Preise, termintreu – auch außerhalb der Geschäftszeiten.',
       trustPills: ['Minimale Betriebsstörung', 'Termintreu', 'Transparent'],
       imageSrc: '/images/service-gewerbe.jpg',
-      imageAlt: 'Leeres Büro nach professioneller Gewerberäumung',
+      imageAlt: 'Räumzwerge-Team bei der Büroauflösung mit Aktenkartons',
     },
     scenarios: [
       { 
