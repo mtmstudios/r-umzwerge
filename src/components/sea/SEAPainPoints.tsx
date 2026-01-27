@@ -117,10 +117,10 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
                     size="sm"
                     className={cn(
                       "w-full justify-between",
-                      "border-primary/30 text-primary",
-                      "hover:bg-primary hover:text-primary-foreground",
+                      "border-[#25D366]/30 text-[#25D366]",
+                      "hover:bg-[#25D366] hover:text-white",
                       "transition-all duration-300",
-                      "group-hover:border-primary"
+                      "group-hover:border-[#25D366]"
                     )}
                   >
                     <span className="flex items-center gap-2">
