@@ -40,6 +40,12 @@ export interface ServicePageData {
     title: string;
     description: string;
   }[];
+  // For discrete services like Messie
+  isDiscrete?: boolean;
+  ctaText?: {
+    whatsapp: string;
+    whatsappShort: string;
+  };
 }
 
 export const SERVICE_PAGES: Record<string, ServicePageData> = {
@@ -441,6 +447,11 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
     title: 'Diskrete Reinigung & Entrümpelung',
     metaTitle: 'Diskrete Reinigung & Entrümpelung – respektvoll und geschützt | Räumzwerge',
     metaDescription: 'Diskrete Entrümpelung und Reinigung bei sensiblen Situationen. Respektvoll, ohne Aufsehen, mit klarer Kommunikation. Preiseinschätzung < 24h.',
+    isDiscrete: true,
+    ctaText: {
+      whatsapp: 'Unverbindlich anfragen',
+      whatsappShort: 'Anfragen',
+    },
     hero: {
       h1: 'Diskrete Reinigung & Entrümpelung – respektvoll und geschützt.',
       subline: 'Wir arbeiten diskret, strukturiert und ohne Aufsehen. Preiseinschätzung per Foto möglich – innerhalb von 24 Stunden.',

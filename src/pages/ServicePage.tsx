@@ -36,6 +36,8 @@ export default function ServicePage() {
           trustPills={pageData.hero.trustPills}
           imageSrc={pageData.hero.imageSrc}
           imageAlt={pageData.hero.imageAlt}
+          isDiscrete={pageData.isDiscrete}
+          ctaText={pageData.ctaText}
         />
         
         {/* Trust Bar - social proof directly after hero */}

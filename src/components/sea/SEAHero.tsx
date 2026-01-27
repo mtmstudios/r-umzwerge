@@ -12,6 +12,14 @@ interface SEAHeroProps {
 export function SEAHero({ data }: SEAHeroProps) {
   const isGentle = data.tone === 'gentle';
 
+  // Dynamic CTA text based on tone
+  const getWhatsAppCTAText = () => {
+    if (isGentle) return { long: 'Unverbindlich schreiben', short: 'Schreiben' };
+    return { long: 'Foto senden · Preis erhalten', short: 'Foto senden' };
+  };
+
+  const ctaText = getWhatsAppCTAText();
+
   return (
     <section className="relative overflow-hidden">
       {/* Mobile & Tablet: Fullscreen background with overlay */}
@@ -58,8 +66,8 @@ export function SEAHero({ data }: SEAHeroProps) {
             >
               <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
                 <WhatsAppIcon className="h-5 w-5 flex-shrink-0" />
-                <span className="hidden sm:inline">Foto senden · Preis erhalten</span>
-                <span className="sm:hidden">Foto senden</span>
+                <span className="hidden sm:inline">{ctaText.long}</span>
+                <span className="sm:hidden">{ctaText.short}</span>
               </a>
             </Button>
             <Button
@@ -122,9 +130,9 @@ export function SEAHero({ data }: SEAHeroProps) {
                 className="gap-2.5 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-12 sm:h-14 px-6 sm:px-8 text-sm sm:text-base btn-lift shadow-whatsapp"
                 data-track="cta-whatsapp-hero"
               >
-                <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
+              <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
                   <WhatsAppIcon className="h-5 w-5" />
-                  Foto senden · Preis erhalten
+                  {ctaText.long}
                 </a>
               </Button>
               
