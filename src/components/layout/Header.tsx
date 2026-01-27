@@ -58,7 +58,7 @@ isScrolled
               <img
                 src={logoRaeumzwerge}
                 alt="Räumzwerge - Entrümpelungen, Auflösungen, Service"
-                className="logo-trim h-20 sm:h-24 lg:h-28 w-auto max-w-none object-contain transition-all duration-300 group-hover:scale-[1.04] group-hover:opacity-90"
+                className="logo-trim h-24 sm:h-28 lg:h-32 w-auto max-w-none object-contain transition-all duration-300 group-hover:scale-[1.04] group-hover:opacity-90"
               />
             </div>
           </a>
