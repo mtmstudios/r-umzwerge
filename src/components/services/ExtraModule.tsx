@@ -1,99 +1,133 @@
-import { Check, Recycle, Heart, Truck } from 'lucide-react';
+import { useState } from 'react';
+import { Check, AlertCircle, Lightbulb, ChevronDown } from 'lucide-react';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
+import type { ExtraModulePoint } from '@/lib/serviceData';
 
 interface ExtraModuleProps {
   title: string;
   subtitle?: string;
-  points: string[];
+  points: ExtraModulePoint[];
 }
-
-// Map keywords to icons
-const getPointIcon = (point: string) => {
-  const lowerPoint = point.toLowerCase();
-  if (lowerPoint.includes('recycl') || lowerPoint.includes('getrennt')) return Recycle;
-  if (lowerPoint.includes('spende') || lowerPoint.includes('weitergabe') || lowerPoint.includes('brauchbar')) return Heart;
-  if (lowerPoint.includes('entsor') || lowerPoint.includes('abtransport') || lowerPoint.includes('partner')) return Truck;
-  return Check;
-};
 
 export function ExtraModule({ title, subtitle, points }: ExtraModuleProps) {
   const { ref, isVisible } = useScrollReveal(0.1);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+
+  const toggleExpand = (index: number) => {
+    setExpandedIndex(expandedIndex === index ? null : index);
+  };
 
   return (
-    <section className="py-16 lg:py-24 bg-background">
+    <section className="py-12 lg:py-24 bg-background">
       <div className="container-custom">
         <div
           ref={ref}
           className={cn("scroll-reveal", isVisible && "visible")}
         >
-          <div className="max-w-4xl mx-auto">
-            {/* Split layout card with glassmorphism */}
-            <div className="relative overflow-hidden rounded-2xl lg:rounded-3xl bg-gradient-to-br from-card via-card to-secondary/30 border border-border shadow-lg">
-              {/* Decorative background elements */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-              <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
-              
-              <div className="relative z-10 grid lg:grid-cols-5 gap-6 lg:gap-8 p-6 lg:p-10">
-                {/* Left side: Icon cluster */}
-                <div className="lg:col-span-2 flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
-                  <div className="relative">
-                    {/* Main icon */}
-                    <div className="w-20 h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center mb-4">
-                      <Recycle className="h-10 w-10 lg:h-12 lg:w-12 text-primary" />
-                    </div>
-                    {/* Secondary icons */}
-                    <div className="absolute -top-2 -right-2 w-10 h-10 bg-accent/20 rounded-xl flex items-center justify-center">
-                      <Heart className="h-5 w-5 text-accent" />
-                    </div>
-                    <div className="absolute -bottom-1 -left-3 w-8 h-8 bg-secondary rounded-lg flex items-center justify-center">
-                      <Truck className="h-4 w-4 text-muted-foreground" />
-                    </div>
-                  </div>
-                  
-                  {/* Visual indicators */}
-                  <div className="hidden lg:flex flex-wrap gap-2 mt-6">
-                    <span className="px-3 py-1 bg-primary/10 rounded-full text-xs font-medium text-primary">
-                      Transparent
-                    </span>
-                    <span className="px-3 py-1 bg-accent/10 rounded-full text-xs font-medium text-accent">
-                      Nachhaltig
-                    </span>
-                  </div>
-                </div>
+          <div className="text-center mb-8 lg:mb-12">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-foreground mb-2 lg:mb-3">
+              {title}
+            </h2>
+            {subtitle && (
+              <p className="text-sm sm:text-base text-muted-foreground max-w-xl mx-auto">
+                {subtitle}
+              </p>
+            )}
+          </div>
 
-                {/* Right side: Content */}
-                <div className="lg:col-span-3 text-center lg:text-left">
-                  <h2 className="text-xl lg:text-2xl font-semibold text-foreground mb-2 lg:mb-3">
-                    {title}
-                  </h2>
-                  
-                  {subtitle && (
-                    <p className="text-muted-foreground mb-6 text-sm lg:text-base">
-                      {subtitle}
-                    </p>
+          {/* Expanding Cards Grid */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 max-w-5xl mx-auto">
+            {points.map((point, index) => {
+              const isExpanded = expandedIndex === index;
+              
+              return (
+                <div
+                  key={index}
+                  onClick={() => toggleExpand(index)}
+                  className={cn(
+                    "group relative bg-card border rounded-2xl overflow-hidden cursor-pointer transition-all duration-500",
+                    "hover:shadow-lg hover:border-primary/30",
+                    isExpanded 
+                      ? "border-primary/50 shadow-lg bg-gradient-to-br from-card to-primary/5" 
+                      : "border-border"
                   )}
+                >
+                  {/* Top accent line */}
+                  <div className={cn(
+                    "absolute top-0 left-0 right-0 h-1 transition-all duration-300",
+                    isExpanded 
+                      ? "bg-gradient-to-r from-accent via-primary to-accent" 
+                      : "bg-gradient-to-r from-transparent via-border to-transparent group-hover:via-primary/50"
+                  )} />
                   
-                  <div className="space-y-3">
-                    {points.map((point) => {
-                      const Icon = getPointIcon(point);
-                      return (
-                        <div
-                          key={point}
-                          className="flex items-start gap-3 bg-background/60 backdrop-blur-sm rounded-xl p-4 border border-border/50 hover:border-primary/30 transition-colors duration-200"
-                        >
-                          <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <Icon className="h-4 w-4 text-primary" />
-                          </div>
-                          <span className="text-foreground/90 text-sm lg:text-base pt-1">
-                            {point}
-                          </span>
+                  <div className="p-5 sm:p-6">
+                    {/* Problem Header */}
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className={cn(
+                        "w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300",
+                        isExpanded 
+                          ? "bg-accent/20" 
+                          : "bg-cta/10 group-hover:bg-cta/20"
+                      )}>
+                        {isExpanded ? (
+                          <Lightbulb className="h-4 w-4 sm:h-5 sm:w-5 text-accent" />
+                        ) : (
+                          <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 text-cta" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className={cn(
+                          "font-medium text-sm sm:text-base transition-colors duration-300",
+                          isExpanded ? "text-primary" : "text-foreground"
+                        )}>
+                          {point.problem}
+                        </h3>
+                      </div>
+                      <ChevronDown className={cn(
+                        "h-5 w-5 text-muted-foreground transition-transform duration-300 flex-shrink-0",
+                        isExpanded && "rotate-180 text-primary"
+                      )} />
+                    </div>
+                    
+                    {/* Solution (expandable) */}
+                    <div className={cn(
+                      "overflow-hidden transition-all duration-500",
+                      isExpanded ? "max-h-40 opacity-100 mt-4" : "max-h-0 opacity-0"
+                    )}>
+                      <div className="flex items-start gap-3 pl-0 sm:pl-1">
+                        <div className="w-6 h-6 bg-accent/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Check className="h-3.5 w-3.5 text-accent" />
                         </div>
-                      );
-                    })}
+                        <p className="text-sm sm:text-base text-foreground/80 leading-relaxed">
+                          {point.solution}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* Collapsed hint */}
+                    <div className={cn(
+                      "text-xs text-muted-foreground mt-2 transition-opacity duration-300",
+                      isExpanded ? "opacity-0 h-0" : "opacity-100"
+                    )}>
+                      <span className="hidden sm:inline">Klicken für Lösung</span>
+                      <span className="sm:hidden">Tippen für Lösung</span>
+                    </div>
                   </div>
                 </div>
+              );
+            })}
+          </div>
+
+          {/* Bottom confidence statement */}
+          <div className="mt-8 lg:mt-12 text-center">
+            <div className="inline-flex items-center gap-2 sm:gap-3 bg-primary/5 border border-primary/20 rounded-full px-4 sm:px-6 py-2.5 sm:py-3">
+              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-primary/20 rounded-full flex items-center justify-center">
+                <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
               </div>
+              <span className="text-sm sm:text-base font-medium text-primary">
+                Wir haben für jedes Problem eine Lösung
+              </span>
             </div>
           </div>
         </div>

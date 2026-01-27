@@ -5,7 +5,7 @@ import { FloatingCTAs } from '@/components/layout/FloatingCTAs';
 import { ServiceHero } from '@/components/services/ServiceHero';
 import { ServiceTrustBar } from '@/components/services/ServiceTrustBar';
 import { ScenarioGrid } from '@/components/services/ScenarioGrid';
-import { ServiceScope } from '@/components/services/ServiceScope';
+import { ServiceComparison } from '@/components/services/ServiceComparison';
 import { ServiceProcess } from '@/components/services/ServiceProcess';
 import { ExtraModule } from '@/components/services/ExtraModule';
 import { ServicePricing } from '@/components/services/ServicePricing';
@@ -49,16 +49,13 @@ export default function ServicePage() {
         {/* Scenarios - emotional connection (same bg as Process, no divider needed) */}
         <ScenarioGrid scenarios={pageData.scenarios} />
         
-        {/* Scope - what's included */}
+        {/* Comparison - why us */}
         <SectionDivider 
           variant="gradient" 
           fromColor="hsl(var(--secondary) / 0.3)" 
           toColor="hsl(var(--background))" 
         />
-        <ServiceScope
-          included={pageData.scope.included}
-          optional={pageData.scope.optional}
-        />
+        <ServiceComparison comparison={pageData.comparison} />
         
         {/* Pricing */}
         <SectionDivider 
