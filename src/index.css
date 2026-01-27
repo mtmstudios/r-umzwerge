@@ -61,6 +61,13 @@
 
 /* Räumzwerge Design System */
 
+/* Logo Trim - removes invisible transparent padding */
+.logo-trim {
+  clip-path: inset(8% 6% 8% 6%);
+  transform: scale(1.18);
+  transform-origin: center;
+}
+
 /* Accessibility: Font Scale */
 :root {
   --font-scale: 1;
