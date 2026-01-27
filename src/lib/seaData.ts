@@ -138,7 +138,7 @@ export const seaData: Record<SEAVariant, SEAData> = {
     outcomeBadges: ['Besenrein', 'Schnell erledigt', 'Fachgerecht entsorgt'],
     tone: 'direct',
     heroImage: '/images/service-entruempelung.jpg',
-    heroImageAlt: 'Schnelle Entrümpelung zum Festpreis',
+    heroImageAlt: 'Räumzwerge-Team beim Sortieren von Recycling- und Spende-Kartons im Wohnraum',
   },
 
   'messie-hilfe': {

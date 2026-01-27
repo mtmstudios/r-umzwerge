@@ -217,7 +217,7 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       subline: 'Wir nehmen dir die Organisation ab – transparent, diskret, besenrein.',
       trustPills: ['Keine versteckten Kosten', 'Planbar', 'Diskret'],
       imageSrc: '/images/service-haushaltsaufloesung.jpg',
-      imageAlt: 'Wohnzimmer wird sorgfältig für die Haushaltsauflösung vorbereitet',
+      imageAlt: 'Räumzwerge-Team beim Verladen von Spende- und Müll-Kartons vor einem Wohnhaus',
     },
     scenarios: [
       { 
