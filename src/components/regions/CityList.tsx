@@ -12,7 +12,7 @@ export function CityList() {
         return (
           <a
             key={region.slug}
-            href={`/region/${region.slug}`}
+            href={`/${region.slug}`}
             className={cn(
               "flex items-center justify-between p-3 rounded-lg border transition-all duration-200",
               "group cursor-pointer",

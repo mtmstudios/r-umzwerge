@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import ServicePage from "./pages/ServicePage";
 import SEALandingPage from "./pages/SEALandingPage";
 import Contact from "./pages/Contact";
+import CityPage from "./pages/CityPage";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,8 @@ const App = () => (
           <Route path="/kontakt" element={<Contact />} />
           <Route path="/leistungen/:slug" element={<ServicePage />} />
           <Route path="/lp/:slug" element={<SEALandingPage />} />
+          {/* City landing pages - must be before catch-all */}
+          <Route path="/:citySlug" element={<CityPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
