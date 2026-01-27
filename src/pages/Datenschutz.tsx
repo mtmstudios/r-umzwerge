@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FloatingCTAs } from '@/components/layout/FloatingCTAs';
@@ -6,6 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Phone, Mail, MapPin, ExternalLink, Shield, Lock, Cookie, Users, Server, MessageSquare, BarChart3, Megaphone, Settings } from 'lucide-react';
 import { PHONE_NUMBER, EMAIL } from '@/lib/constants';
 import { useCookieConsent } from '@/components/consent/CookieConsentContext';
+
+const META_TITLE = "Datenschutzerklärung | Räumzwerge";
+const META_DESCRIPTION = "Datenschutzerklärung der Räumzwerge. Informationen zur Datenverarbeitung, Cookies, Google Analytics und Ihren Rechten nach DSGVO.";
 
 function CookieSettingsButton() {
   const { openBanner } = useCookieConsent();
@@ -18,6 +22,16 @@ function CookieSettingsButton() {
 }
 
 export default function Datenschutz() {
+  // SEO: Dynamic title and meta description
+  useEffect(() => {
+    document.title = META_TITLE;
+    
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', META_DESCRIPTION);
+    }
+  }, []);
+
   const tocItems = [
     { id: 'verantwortlicher', label: '1. Verantwortlicher' },
     { id: 'allgemeine-hinweise', label: '2. Allgemeine Hinweise' },

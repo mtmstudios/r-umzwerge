@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FloatingCTAs } from '@/components/layout/FloatingCTAs';
@@ -5,7 +6,20 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Phone, Mail, ExternalLink, Accessibility, CheckCircle2, AlertCircle, MessageSquare, Scale, Monitor, Users } from 'lucide-react';
 import { PHONE_NUMBER, EMAIL } from '@/lib/constants';
 
+const META_TITLE = "Erklärung zur Barrierefreiheit | Räumzwerge";
+const META_DESCRIPTION = "Barrierefreiheitserklärung der Räumzwerge gemäß BFSG und BITV 2.0. Informationen zu Zugänglichkeit und Kontaktmöglichkeiten.";
+
 export default function Barrierefreiheit() {
+  // SEO: Dynamic title and meta description
+  useEffect(() => {
+    document.title = META_TITLE;
+    
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', META_DESCRIPTION);
+    }
+  }, []);
+
   const tocItems = [
     { id: 'geltungsbereich', label: '1. Geltungsbereich' },
     { id: 'stand', label: '2. Stand der Barrierefreiheit' },

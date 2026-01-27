@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FloatingCTAs } from '@/components/layout/FloatingCTAs';
@@ -5,7 +6,20 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Phone, Mail, MapPin, ExternalLink } from 'lucide-react';
 import { PHONE_NUMBER, EMAIL, ADDRESS } from '@/lib/constants';
 
+const META_TITLE = "Impressum | Räumzwerge – Entrümpelung in Süddeutschland";
+const META_DESCRIPTION = "Impressum der Räumzwerge. Angaben gemäß § 5 TMG. Entrümpelung und Haushaltsauflösung in Bayern und Baden-Württemberg.";
+
 export default function Impressum() {
+  // SEO: Dynamic title and meta description
+  useEffect(() => {
+    document.title = META_TITLE;
+    
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', META_DESCRIPTION);
+    }
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
