@@ -35,17 +35,35 @@ isScrolled
       )}
     >
       <div className="container-custom">
-        <div className="flex items-center justify-between gap-6 lg:gap-8">
-          {/* Logo */}
-          <a href="/" className="flex items-center group shrink-0 -ml-8 lg:-ml-12">
+        <div className="grid grid-cols-3 lg:flex lg:justify-between items-center gap-6 lg:gap-8">
+          {/* Mobile Menu Button - links auf Mobil/Tablet */}
+          <div className="lg:hidden flex justify-start">
+            <button
+              className="p-2 -ml-2 rounded-lg hover:bg-secondary transition-colors"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label={isMobileMenuOpen ? "Menü schließen" : "Menü öffnen"}
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
+          </div>
+
+          {/* Logo - zentriert auf Mobil/Tablet, links auf Desktop */}
+          <a href="/" className="flex items-center justify-center lg:justify-start group shrink-0 lg:-ml-12">
             <div className="h-20 lg:h-24 overflow-hidden flex items-center">
-            <img 
-              src={logoRaeumzwerge} 
-              alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
-              className="h-64 lg:h-80 w-auto object-contain object-left transition-all duration-300 group-hover:scale-[1.03] group-hover:opacity-90"
-            />
+              <img 
+                src={logoRaeumzwerge} 
+                alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
+                className="h-64 lg:h-80 w-auto object-contain object-center lg:object-left transition-all duration-300 group-hover:scale-[1.03] group-hover:opacity-90"
+              />
             </div>
           </a>
+
+          {/* Platzhalter rechts für Symmetrie auf Mobil/Tablet */}
+          <div className="lg:hidden" />
 
           {/* Desktop Navigation - größer mit Underline-Animation */}
           <nav className="hidden lg:flex items-center gap-8">
@@ -105,19 +123,6 @@ isScrolled
               </a>
             </Button>
           </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="lg:hidden p-2 -mr-2 rounded-lg hover:bg-secondary transition-colors"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label={isMobileMenuOpen ? "Menü schließen" : "Menü öffnen"}
-          >
-            {isMobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
         </div>
       </div>
 
