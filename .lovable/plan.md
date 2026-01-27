@@ -1,185 +1,268 @@
 
-# Plan: Diskrete CTA-Texte für Messie-Seiten
 
-## Problemstellung
-Bei Messie-Situationen ist "Foto senden" zu direkt und kann Betroffene abschrecken. Die psychologische Barriere, Fotos der eigenen Wohnung zu senden, ist enorm. Wir brauchen sanftere, einladendere Formulierungen.
+# Plan: Redesign "So einfach geht's" Section + Bild-Fix für Messie
 
-## Neue CTA-Texte für `gentle` Tone
+## Zwei Probleme identifiziert
 
-| Aktuell | Neu (diskret) |
-|---------|---------------|
-| "Foto senden" | "Schreiben Sie uns" |
-| "Foto senden · Preis erhalten" | "Unverbindlich schreiben" |
-| "Foto senden · Preiseinschätzung erhalten" | "Unverbindlich anfragen" |
-| Prozess-Schritt "Foto senden" | "Kontakt aufnehmen" |
-| PHOTO_GUIDE Hinweis | Komplett ausblenden für Messie |
+### 1. Messie-Landingpage: Vorher/Nachher-Bilder vertauscht
+In `SEABeforeAfter.tsx` (Zeile 84-102) ist die Logik falsch:
+- Das "Vorher"-Bild liegt im Hintergrund (volle Breite)
+- Das "Nachher"-Bild wird per `clipPath` darüber gelegt
+
+**Problem:** Bei `clipPath: inset(0 ${100 - sliderPosition}% 0 0)` wird von LINKS aufgedeckt. D.h. das "Nachher"-Bild muss links erscheinen, nicht rechts. Aktuell sind die Labels aber umgekehrt positioniert.
+
+**Fix:** Bilder tauschen ODER clipPath-Logik anpassen.
+
+### 2. "So einfach geht's" Section – aktuelles Design
+
+```text
+Aktuell (SEAMidCTA.tsx):
+┌─────────────────────────────────────────────┐
+│              So einfach geht's              │
+│                                             │
+│   [○]          [○]          [○]            │
+│    1            2            3              │
+│  Foto        Einschätzung    Termin        │
+│  senden      erhalten        machen         │
+│                                             │
+│         [WhatsApp Button]                   │
+│         Lieber anrufen?                     │
+└─────────────────────────────────────────────┘
+
+Probleme:
+- Alles auf primär-grünem Hintergrund verschmilzt
+- Kreise (bg-white/20) heben sich kaum ab
+- Nummern (orange) konkurrieren mit Icons
+- Layout wirkt altbacken
+```
+
+---
+
+## Vorschlag: Drei Design-Optionen
+
+### Option A: Horizontale Timeline (wie Hauptseite)
+
+Verwendet die bestehende `HorizontalTimeline`-Komponente mit scroll-triggered Animationen.
+
+```text
+┌─────────────────────────────────────────────┐
+│ bg-background (hell)                        │
+│              So einfach geht's              │
+│                                             │
+│   [1]────────────[2]────────────[3]         │
+│   Foto          Einschätzung    Besenrein   │
+│   senden        in 24h          übergeben   │
+│                                             │
+│         [WhatsApp Button]                   │
+└─────────────────────────────────────────────┘
+```
+
+**Vorteile:**
+- Konsistent mit Hauptseite
+- Scroll-Progress-Animation
+- Bereits getestet und optimiert
+
+**Nachteile:**
+- Könnte auf Landingpages "zu viel" sein (Scroll-Animation)
+
+---
+
+### Option B: Cards mit Icons (modern, clean)
+
+Drei separate Cards mit subtilen Schatten und Hover-Effekten.
+
+```text
+┌─────────────────────────────────────────────┐
+│ bg-secondary/30 (sanftes Grün)              │
+│              So einfach geht's              │
+│                                             │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐    │
+│  │    📷    │ │    ⏱️    │ │    ✨    │    │
+│  │    1     │ │    2     │ │    3     │    │
+│  │  Foto    │ │  Preis   │ │ Besenrein│    │
+│  │  senden  │ │  in 24h  │ │ übergeben│    │
+│  └──────────┘ └──────────┘ └──────────┘    │
+│                                             │
+│         [WhatsApp Button]                   │
+└─────────────────────────────────────────────┘
+```
+
+**Vorteile:**
+- Modern, "airy" Design
+- Hover-States für Interaktivität
+- Staggered Fade-In Animation möglich
+
+**Nachteile:**
+- Mehr vertikaler Platz auf Mobile
+
+---
+
+### Option C: Minimalistisch mit Pfeilen (empfohlen)
+
+Inline-Flow mit dezenten Pfeilen, weniger visuelles Gewicht.
+
+```text
+┌─────────────────────────────────────────────┐
+│ bg-card (weiß) + subtle border              │
+│                                             │
+│   1. Foto senden  →  2. Preis in 24h  →  3. Besenrein  │
+│                                             │
+│         [WhatsApp Button groß]              │
+└─────────────────────────────────────────────┘
+```
+
+**Vorteile:**
+- Super clean, schnell erfassbar
+- Fokus auf CTA-Button
+- Weniger Scroll nötig
+
+**Nachteile:**
+- Weniger visuell ansprechend
+
+---
+
+## Empfehlung: Option B (Cards)
+
+Cards passen zum bestehenden Design-System (Glassmorphism, Hover-Effects) und bieten die beste Balance aus visuellem Appeal und Conversion-Fokus.
+
+---
 
 ## Technische Umsetzung
 
-### 1. SEAHero.tsx – Dynamische Button-Texte
+### 1. Bild-Fix in SEABeforeAfter.tsx
 
-**Aktuelle Zeilen 61-62 und 127:**
-```tsx
-<span className="hidden sm:inline">Foto senden · Preis erhalten</span>
-<span className="sm:hidden">Foto senden</span>
-```
-
-**Änderung:**
-```tsx
-// Neue Hilfsfunktion am Anfang der Komponente:
-const getWhatsAppCTAText = () => {
-  if (isGentle) return { long: 'Unverbindlich schreiben', short: 'Schreiben' };
-  return { long: 'Foto senden · Preis erhalten', short: 'Foto senden' };
-};
-
-// Im Button:
-<span className="hidden sm:inline">{getWhatsAppCTAText().long}</span>
-<span className="sm:hidden">{getWhatsAppCTAText().short}</span>
-```
-
-### 2. SEAMidCTA.tsx – Dynamische Prozess-Schritte
-
-**Aktuelle Zeilen 12-16:**
-```tsx
-const processSteps = [
-  { num: '1', label: 'Foto senden', icon: Camera },
-  { num: '2', label: 'Einschätzung erhalten', icon: MessageCircle },
-  { num: '3', label: 'Termin machen', icon: Calendar },
-];
-```
-
-**Änderung:**
-Die `processSteps` werden dynamisch basierend auf `data.tone`:
+**Zeile 84-102 ändern:**
 
 ```tsx
-const getProcessSteps = () => {
-  if (data.tone === 'gentle') {
-    return [
-      { num: '1', label: 'Kontakt aufnehmen', icon: MessageCircle },
-      { num: '2', label: 'Gemeinsam besprechen', icon: MessageCircle },
-      { num: '3', label: 'Termin nach Wunsch', icon: Calendar },
-    ];
-  }
-  return [
-    { num: '1', label: 'Foto senden', icon: Camera },
-    { num: '2', label: 'Einschätzung erhalten', icon: MessageCircle },
-    { num: '3', label: 'Termin machen', icon: Calendar },
-  ];
-};
+{/* Before Image (LINKS = wird aufgedeckt) */}
+<div className="absolute inset-0">
+  <img 
+    src="/images/messie-nachher.webp"   // ← TAUSCHEN: Nachher zuerst
+    alt="Zimmer nach der Räumung"
+    className="w-full h-full object-cover"
+  />
+</div>
+
+{/* After Image (RECHTS = Basis-Layer) */}
+<div
+  className="absolute inset-0"
+  style={{ clipPath: `inset(0 0 0 ${sliderPosition}%)` }}  // ← ANPASSEN
+>
+  <img 
+    src="/images/messie-vorher.webp"   // ← TAUSCHEN: Vorher als Overlay
+    alt="Zimmer vor der Räumung"
+    className="w-full h-full object-cover"
+  />
+</div>
 ```
 
-Auch der Button-Text wird angepasst:
+**Alternative (einfacher):** Nur die Bild-URLs tauschen.
+
+### 2. SEAMidCTA.tsx Redesign (Option B)
+
 ```tsx
-<span className="hidden sm:inline">
-  {isGentle ? 'Unverbindlich schreiben' : 'Foto senden · Preis erhalten'}
-</span>
-<span className="sm:hidden">
-  {isGentle ? 'Schreiben' : 'Foto senden'}
-</span>
+// Neues Design mit Cards
+<section className="py-12 lg:py-16 bg-secondary/30">
+  <div className="container-custom">
+    <div className="max-w-4xl mx-auto">
+      {/* Headline */}
+      <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground text-center mb-8 lg:mb-10">
+        So einfach geht's
+      </h2>
+
+      {/* Process Cards */}
+      <div 
+        ref={sectionRef}
+        className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6 mb-10"
+      >
+        {processSteps.map((step, index) => {
+          const Icon = step.icon;
+          return (
+            <div
+              key={step.num}
+              className={cn(
+                "relative bg-card rounded-2xl p-6 text-center",
+                "border border-border shadow-sm",
+                "hover:shadow-lg hover:-translate-y-1 transition-all duration-300",
+                "opacity-0 translate-y-4",
+                isVisible && "opacity-100 translate-y-0"
+              )}
+              style={{
+                transitionDelay: isVisible ? `${index * 100}ms` : '0ms',
+              }}
+            >
+              {/* Number Badge */}
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm shadow-md">
+                {step.num}
+              </div>
+              
+              {/* Icon */}
+              <div className="w-14 h-14 mx-auto mb-4 mt-2 rounded-xl bg-secondary/50 flex items-center justify-center">
+                <Icon className="h-7 w-7 text-primary" />
+              </div>
+              
+              {/* Label */}
+              <p className="font-semibold text-foreground">{step.label}</p>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* CTA Centered */}
+      <div className="text-center">
+        <Button ... />
+        <a href={PHONE_LINK} ...>Lieber anrufen?</a>
+      </div>
+    </div>
+  </div>
+</section>
 ```
 
-### 3. SEAFinalCTA.tsx – Bereits korrekt!
-Diese Komponente nutzt bereits `data.ctaHeadline` und `data.ctaSubline` aus seaData.ts, die für Messie bereits korrekt sind:
-- Headline: "Unverbindlich Kontakt aufnehmen"
-- Subline: "Wir hören zu. Kein Druck, keine Wertung."
+---
 
-Nur der Button-Text muss angepasst werden (Zeilen 42-43):
-```tsx
-<span className="hidden sm:inline">
-  {isGentle ? 'Unverbindlich schreiben' : 'Foto senden · Preis erhalten'}
-</span>
-<span className="sm:hidden">
-  {isGentle ? 'Schreiben' : 'Foto senden'}
-</span>
-```
-
-### 4. ServiceHero.tsx – Für Messie-Leistungsseite
-
-Die Komponente benötigt eine neue Prop `isDiscrete` oder `hidePhotoGuide`, um:
-1. Den PHOTO_GUIDE Hinweis auszublenden
-2. Alternative Button-Texte anzuzeigen
-
-**Option A: Prop-basiert**
-```tsx
-interface ServiceHeroProps {
-  // ... existing props
-  isDiscrete?: boolean; // Für Messie-Seiten
-}
-
-// Im Button:
-<span className="hidden sm:inline">
-  {isDiscrete ? 'Unverbindlich anfragen' : 'Foto senden · Preiseinschätzung erhalten'}
-</span>
-
-// Photo Guide ausblenden:
-{!isDiscrete && (
-  <p className="text-sm text-white/70 mb-6">
-    💡 {PHOTO_GUIDE}
-  </p>
-)}
-```
-
-**Option B: Über serviceData.ts konfigurieren (empfohlen)**
-Neue Felder in `ServicePageData`:
-```tsx
-interface ServicePageData {
-  // ... existing fields
-  isDiscrete?: boolean;
-  ctaText?: {
-    whatsapp: string;
-    whatsappShort: string;
-  };
-}
-```
-
-Dann in `messie-wohnungen`:
-```tsx
-isDiscrete: true,
-ctaText: {
-  whatsapp: 'Unverbindlich anfragen',
-  whatsappShort: 'Anfragen',
-},
-```
-
-### 5. ServiceProcess.tsx (indirekt via serviceData.ts)
-
-Die Process-Steps für Messie in `serviceData.ts` (Zeile 509-513) sind bereits gut:
-```tsx
-processSteps: [
-  { title: 'Erstkontakt', description: 'Diskreter Kontakt per WhatsApp oder Telefon.' },
-  { title: 'Einschätzung', description: 'Fotos oder Begehung – vertraulich und respektvoll.' },
-  { title: 'Umsetzung', description: 'Strukturierte Räumung, diskret, besenrein.' },
-],
-```
-Hier steht "Erstkontakt" statt "Foto senden" – das ist bereits korrekt! ✅
-
-## Zusammenfassung der Änderungen
+## Datei-Änderungen
 
 | Datei | Änderung |
 |-------|----------|
-| `src/components/sea/SEAHero.tsx` | Dynamische CTA-Texte basierend auf `tone` |
-| `src/components/sea/SEAMidCTA.tsx` | Dynamische Prozess-Schritte + CTA-Texte für `gentle` |
-| `src/components/sea/SEAFinalCTA.tsx` | Dynamische Button-Texte für `gentle` |
-| `src/lib/serviceData.ts` | Neue Felder `isDiscrete` und `ctaText` für messie-wohnungen |
-| `src/components/services/ServiceHero.tsx` | Prop `isDiscrete` + konditionaler PHOTO_GUIDE |
-| `src/pages/ServicePage.tsx` | `isDiscrete` Prop an ServiceHero weitergeben |
+| `src/components/sea/SEABeforeAfter.tsx` | Zeile 86-102: Bilder tauschen oder clipPath anpassen |
+| `src/components/sea/SEAMidCTA.tsx` | Komplett-Redesign mit Card-Layout |
+
+---
+
+## Vorher vs. Nachher Visualisierung
+
+```text
+VORHER (SEAMidCTA):
+┌───────────────────────────────────┐
+│  bg-primary (dunkles Grün)        │
+│                                   │
+│   (○)    (○)    (○)  ← Kaum      │
+│    1      2      3     sichtbar   │
+│                                   │
+└───────────────────────────────────┘
+
+NACHHER (mit Cards):
+┌───────────────────────────────────┐
+│  bg-secondary/30 (helles Grün)    │
+│                                   │
+│  ┌─────┐ ┌─────┐ ┌─────┐         │
+│  │ (1) │ │ (2) │ │ (3) │ ← Klar  │
+│  │ 📷  │ │ ⏱️  │ │ ✨  │   ab-   │
+│  │     │ │     │ │     │   ge-   │
+│  └─────┘ └─────┘ └─────┘   setzt │
+│                                   │
+│      [  WhatsApp Button  ]        │
+└───────────────────────────────────┘
+```
+
+---
 
 ## Erwartetes Ergebnis
 
-### SEA Messie-Landingpage:
-- Hero-Button: "Unverbindlich schreiben" statt "Foto senden"
-- Prozess-Schritte: "Kontakt aufnehmen → Gemeinsam besprechen → Termin nach Wunsch"
-- Kein Druck auf Fotos – aber sie können natürlich später freiwillig gesendet werden
+1. **Messie-Slider:** Vorher (links) zeigt den unaufgeräumten Zustand, Nachher (rechts) den sauberen Raum
+2. **"So einfach geht's":** Moderne Card-basierte Darstellung mit:
+   - Hellem Hintergrund für bessere Lesbarkeit
+   - Staggered Fade-In Animation
+   - Hover-Effekte für Interaktivität
+   - Klare visuelle Hierarchie
 
-### Leistungsseite Messie:
-- Hero-Button: "Unverbindlich anfragen" statt "Foto senden"
-- PHOTO_GUIDE Hinweis wird nicht angezeigt
-- Prozess-Schritte bleiben wie sie sind (bereits "Erstkontakt")
-
-## Psychologische Begründung
-
-Bei Messie-Situationen:
-1. **Scham ist enorm** – Fotos zu senden fühlt sich wie eine Entblößung an
-2. **Erster Schritt ist schwierig** – "Schreiben" ist niedrigschwelliger als "Foto senden"
-3. **Vertrauen muss aufgebaut werden** – Erst Kontakt, dann Details
-4. **Keine Vorurteile** – Der Prozess kommuniziert: "Wir hören zuerst zu"
