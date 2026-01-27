@@ -51,12 +51,12 @@ export function BeforeAfterSection() {
   }, []);
 
   return (
-    <section className="py-16 lg:py-24 bg-secondary/30">
+    <section className="py-12 md:py-14 lg:py-16 bg-secondary/30">
       <div className="container-custom">
         <div
           ref={ref}
           className={cn(
-            "text-center mb-12",
+            "text-center mb-8 md:mb-10",
             "scroll-reveal",
             isVisible && "visible"
           )}
@@ -134,7 +134,7 @@ export function BeforeAfterSection() {
           </div>
         </div>
 
-        <p className="text-center text-muted-foreground text-sm mb-8">
+        <p className="text-center text-muted-foreground text-sm mb-6">
           Vorher/Nachher-Beispiele folgen in Kürze.
         </p>
 

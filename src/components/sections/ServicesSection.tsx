@@ -21,7 +21,7 @@ export function ServicesSection() {
   const smallServices = SERVICES.slice(2, 5);
 
   return (
-    <section id="leistungen" className="py-20 lg:py-28 bg-secondary/30 relative overflow-hidden">
+    <section id="leistungen" className="py-12 md:py-14 lg:py-16 bg-secondary/30 relative overflow-hidden">
       {/* Subtle background pattern */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
         <div className="absolute inset-0" style={{
@@ -35,7 +35,7 @@ export function ServicesSection() {
         <div
           ref={headerRef}
           className={cn(
-            "text-center mb-12",
+            "text-center mb-8 md:mb-10",
             "scroll-reveal",
             headerVisible && "visible"
           )}
@@ -103,7 +103,7 @@ export function ServicesSection() {
         </div>
 
         {/* Bottom note */}
-        <p className="text-center text-muted-foreground mt-10">
+        <p className="text-center text-muted-foreground mt-8">
           Wir arbeiten transparent – keine versteckten Kosten.
         </p>
       </div>

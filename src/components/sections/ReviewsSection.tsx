@@ -77,13 +77,13 @@ export function ReviewsSection() {
   const { ref, isVisible } = useScrollReveal(0.1);
 
   return (
-    <section id="referenzen" className="py-16 lg:py-24 bg-background">
+    <section id="referenzen" className="py-12 md:py-14 lg:py-16 bg-background">
       <div className="container-custom">
         {/* Header */}
         <div
           ref={ref}
           className={cn(
-            "text-center mb-12",
+            "text-center mb-8 md:mb-10",
             "scroll-reveal",
             isVisible && "visible"
           )}

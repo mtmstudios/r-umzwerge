@@ -25,12 +25,12 @@ export function InteractiveMap({ activeCity, onCityHover }: InteractiveMapProps)
   return (
     <div className="relative overflow-hidden">
       {/* Map Container */}
-      <div className="relative">
+      <div className="relative mx-auto max-w-[560px] lg:max-w-none">
         {/* SVG Map as background */}
         <img
           src="/images/sueddeutschland-map.svg"
           alt="Karte von Süddeutschland"
-          className="w-full h-auto"
+          className="w-full h-auto max-h-[520px] md:max-h-[560px] lg:max-h-[620px] object-contain"
         />
 
         {/* Overlay for markers */}
