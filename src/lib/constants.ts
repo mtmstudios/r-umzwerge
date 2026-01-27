@@ -49,13 +49,13 @@ export const NAV_ITEMS: NavItem[] = [
 // Regions
 export const REGIONS = [
   { name: "Ulm", slug: "ulm", isHQ: true },
-  { name: "München", slug: "muenchen", isHQ: false },
-  { name: "Stuttgart", slug: "stuttgart", isHQ: false },
   { name: "Augsburg", slug: "augsburg", isHQ: false },
   { name: "Heidenheim", slug: "heidenheim", isHQ: false },
-  { name: "Aalen", slug: "aalen", isHQ: false },
-  { name: "Reutlingen", slug: "reutlingen", isHQ: false },
+  { name: "München", slug: "muenchen", isHQ: false },
+  { name: "Nürnberg", slug: "nuernberg", isHQ: false },
   { name: "Ravensburg", slug: "ravensburg", isHQ: false },
+  { name: "Reutlingen", slug: "reutlingen", isHQ: false },
+  { name: "Stuttgart", slug: "stuttgart", isHQ: false },
 ];
 
 // Services
