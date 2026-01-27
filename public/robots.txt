@@ -15,3 +15,5 @@ Allow: /
 User-agent: *
 Disallow: /lp/
 Allow: /
+
+Sitemap: https://raeumzwerge.de/sitemap.xml
