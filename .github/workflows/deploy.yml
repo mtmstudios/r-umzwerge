@@ -36,6 +36,15 @@ jobs:
         run: |
           cp public/.htaccess dist/.htaccess 2>/dev/null || echo ".htaccess already in dist"
 
+      - name: Verify dist contents
+        run: |
+          echo "=== Checking dist folder ==="
+          ls -la dist/
+          echo "=== Checking dist/images folder ==="
+          ls -la dist/images/ || echo "No images folder!"
+          echo "=== Checking dist/assets folder ==="
+          ls -la dist/assets/ || echo "No assets folder!"
+
       - name: Deploy via SFTP
         uses: sand4rt/ftp-deployer@v1.8
         with:
@@ -47,5 +56,5 @@ jobs:
           remote_folder: ${{ secrets.SFTP_PATH }}
           local_folder: './dist'
           cleanup: true
-          include: '[ "*", "**/*", ".*" ]'
+          include: '[ "**/*", "**/**/*", ".*", "**/.*" ]'
           exclude: '[]'
