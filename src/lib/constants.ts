@@ -39,10 +39,10 @@ export const NAV_ITEMS: NavItem[] = [
       { label: "Diskrete Reinigung", href: "/leistungen/messie-wohnungen" },
     ]
   },
-  { label: "Preise", href: "#preise" },
-  { label: "Ablauf", href: "#ablauf" },
-  { label: "Referenzen", href: "#referenzen" },
-  { label: "FAQ", href: "#faq" },
+  { label: "Preise", href: "/#preise" },
+  { label: "Ablauf", href: "/#ablauf" },
+  { label: "Referenzen", href: "/#referenzen" },
+  { label: "FAQ", href: "/#faq" },
   { label: "Kontakt", href: "/kontakt" },
 ];
 
