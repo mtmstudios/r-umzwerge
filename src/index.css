@@ -407,28 +407,6 @@
   pointer-events: none;
 }
 
-/* Timeline Step Bounce Animation */
-@keyframes bounce-in {
-  0% {
-    transform: scale(1);
-  }
-  40% {
-    transform: scale(1.15);
-  }
-  60% {
-    transform: scale(1.05);
-  }
-  80% {
-    transform: scale(1.12);
-  }
-  100% {
-    transform: scale(1.1);
-  }
-}
-
-.animate-bounce-in {
-  animation: bounce-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
 
 /* 3D Flip Card Styles */
 .flip-card {

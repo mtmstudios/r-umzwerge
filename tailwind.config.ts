@@ -120,6 +120,13 @@ export default {
           "0%, 100%": { boxShadow: "0 0 20px hsl(var(--accent) / 0.3)" },
           "50%": { boxShadow: "0 0 40px hsl(var(--accent) / 0.5)" },
         },
+        "bounce-in": {
+          "0%": { transform: "scale(1)" },
+          "40%": { transform: "scale(1.15)" },
+          "60%": { transform: "scale(1.05)" },
+          "80%": { transform: "scale(1.12)" },
+          "100%": { transform: "scale(1.1)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -129,6 +136,7 @@ export default {
         "marquee": "marquee var(--marquee-duration, 25s) linear infinite",
         "marquee-reverse": "marquee-reverse var(--marquee-duration, 25s) linear infinite",
         "glow": "glow-pulse 2s ease-in-out infinite",
+        "bounce-in": "bounce-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
       },
     },
   },
