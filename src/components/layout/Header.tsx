@@ -124,7 +124,7 @@ isScrolled
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="lg:hidden glass-strong border-t border-border/50 animate-fade-in">
-          <nav className="container-custom py-4 flex flex-col gap-1">
+          <nav className="container-custom py-4 flex flex-col items-center gap-1">
             {NAV_ITEMS.map((item) => (
               item.children ? (
                 <Collapsible 
@@ -132,7 +132,7 @@ isScrolled
                   open={isServicesOpen}
                   onOpenChange={setIsServicesOpen}
                 >
-                  <CollapsibleTrigger className="flex items-center justify-between w-full py-3 px-4 text-base font-medium text-foreground hover:bg-secondary/50 rounded-xl transition-colors">
+                  <CollapsibleTrigger className="flex items-center justify-center gap-2 w-full py-3 px-4 text-base font-medium text-foreground hover:bg-secondary/50 rounded-xl transition-colors">
                     {item.label}
                     <ChevronDown className={cn(
                       "h-4 w-4 transition-transform duration-200",
@@ -140,12 +140,12 @@ isScrolled
                     )} />
                   </CollapsibleTrigger>
                   <CollapsibleContent className="overflow-hidden data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
-                    <div className="pl-4 flex flex-col gap-1 mt-1">
+                    <div className="flex flex-col items-center gap-1 mt-1 w-full">
                       {item.children.map((child) => (
                         <a
                           key={child.href}
                           href={child.href}
-                          className="py-2.5 px-4 text-sm font-medium text-foreground/80 hover:text-primary hover:bg-secondary/30 rounded-lg transition-colors"
+                          className="py-2.5 px-4 text-sm font-medium text-foreground/80 hover:text-primary hover:bg-secondary/30 rounded-lg transition-colors text-center"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           {child.label}
@@ -158,7 +158,7 @@ isScrolled
                 <a
                   key={item.href}
                   href={item.href}
-                  className="py-3 px-4 text-base font-medium text-foreground hover:bg-secondary/50 rounded-xl transition-colors"
+                  className="py-3 px-4 text-base font-medium text-foreground hover:bg-secondary/50 rounded-xl transition-colors text-center"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {item.label}
@@ -167,7 +167,7 @@ isScrolled
             ))}
             
             {/* Mobile CTA - Jetzt anrufen */}
-            <div className="mt-4 pt-4 border-t border-border/50">
+            <div className="mt-4 pt-4 border-t border-border/50 w-full max-w-xs">
               <Button
                 asChild
                 size="lg"
