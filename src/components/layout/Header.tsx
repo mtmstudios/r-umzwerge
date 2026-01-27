@@ -38,11 +38,11 @@ isScrolled
         <div className="flex items-center justify-between gap-6 lg:gap-8">
           {/* Logo */}
           <a href="/" className="flex items-center group shrink-0">
-            <div className="h-24 lg:h-28 overflow-hidden flex items-center">
+            <div className="h-32 lg:h-40 overflow-hidden flex items-center">
               <img 
                 src={logoRaeumzwerge} 
                 alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
-                className="h-40 lg:h-56 w-auto object-contain object-left"
+                className="h-44 lg:h-56 w-auto object-contain object-left"
               />
             </div>
           </a>
