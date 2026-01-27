@@ -54,7 +54,7 @@ isScrolled
           {/* Logo - zentriert auf Mobil/Tablet, links auf Desktop */}
           <a href="/" className="flex items-center justify-center lg:justify-start group shrink-0">
             {/* Keep header compact while making the logo look larger by cropping internal whitespace */}
-            <div className="h-20 sm:h-24 lg:h-28 flex items-center justify-center overflow-hidden">
+            <div className="h-24 sm:h-24 lg:h-28 flex items-center justify-center overflow-hidden">
               <img
                 src={logoRaeumzwerge}
                 alt="Räumzwerge - Entrümpelungen, Auflösungen, Service"
