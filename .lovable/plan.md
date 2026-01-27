@@ -1,76 +1,107 @@
 
 
-## SEA Landingpage Hero vereinheitlichen
+## Favicon und Bildproblem beheben
 
-Die SEA Hero-Komponente wird an das Layout der ServiceHero-Komponente angepasst, sodass alle Landingpages ein einheitliches, fullscreen Hero-Design haben.
-
----
-
-## Änderungen im Überblick
-
-| Änderung | Beschreibung |
-|----------|--------------|
-| Neues Hero-Bild | Das hochgeladene Bild wird als gemeinsames Hero-Bild für alle drei LPs verwendet |
-| Layout-Anpassung | Entfernung des Desktop Side-by-Side Layouts zugunsten eines einheitlichen Fullscreen-Layouts |
-| Konsistenz | Angleichung an ServiceHero mit zentriertem Content auf allen Bildschirmgrößen |
+Es gibt zwei separate Aufgaben:
+1. **Favicon aktualisieren** mit dem hochgeladenen Logo
+2. **Bilder auf Mittwald funktionieren nicht** - Root-Cause-Analyse und Lösung
 
 ---
 
-## Umsetzungsschritte
+## Problem-Analyse: Warum Bilder auf Mittwald nicht laden
 
-### 1. Hero-Bild speichern
+### Aktuelle Situation
 
-Das hochgeladene Bild (Räumzwerge-Team beim Beladen des Transporters) wird gespeichert als:
+Die Website verwendet zwei verschiedene Methoden, Bilder einzubinden:
 
-- `public/images/sea-hero-team.png`
+| Methode | Ordner | Beispiel | Vite-Verhalten |
+|---------|--------|----------|----------------|
+| ES6-Import | `src/assets/` | `import heroTeam from '@/assets/hero-team.jpg'` | Wird gehasht und in `dist/assets/` gebündelt |
+| Direkte URL | `public/images/` | `src="/images/sea-hero-team.png"` | Wird 1:1 nach `dist/images/` kopiert |
 
-Dieses Bild zeigt das professionelle Team bei der Arbeit und eignet sich ideal als vertrauensbildendes Hero-Bild für alle SEA-Landingpages.
+### Vermutete Ursachen
 
-### 2. SEAHero Komponente vereinfachen
+1. **SFTP-Sync-Problem**: Das FTP-Deployer-Tool könnte Probleme haben mit:
+   - Großen PNG-Dateien (die neuen Team-Bilder sind mehrere MB)
+   - Sonderzeichen in Dateinamen
+   - Timeout bei großen Dateien
 
-**Datei:** `src/components/sea/SEAHero.tsx`
+2. **Cleanup-Flag**: Im Deploy-Workflow ist `cleanup: true` gesetzt - das löscht den Remote-Ordner vor dem Upload. Wenn der Upload abbricht, fehlen die Bilder.
 
-Die Komponente wird grundlegend vereinfacht:
-
-- Entfernung des separaten Desktop-Layouts (Side-by-Side Grid)
-- Einheitliches Fullscreen-Layout für ALLE Breakpoints (wie ServiceHero)
-- Beibehaltung der dynamischen CTA-Texte basierend auf dem Tone
-
-**Neues Layout (analog zu ServiceHero):**
-```text
-- Fullscreen Hintergrundbild mit Overlay
-- Zentrierter Content (H1, Subline, CTAs, Trust Pills)
-- Einheitliche Höhe: min-h-[85vh] auf Mobile, min-h-[75vh] auf Tablet, min-h-[70vh] auf Desktop
-```
-
-### 3. SEAData aktualisieren
-
-**Datei:** `src/lib/seaData.ts`
-
-Das heroImage für alle drei Varianten wird auf das neue gemeinsame Bild geändert:
-
-```text
-heroImage: '/images/sea-hero-team.png'
-heroImageAlt: 'Räumzwerge-Team beim professionellen Beladen des Transporters'
-```
+3. **Dateiformat**: PNG-Dateien sind deutlich größer als WebP und können zu Upload-Problemen führen.
 
 ---
 
-## Vorher / Nachher Vergleich
+## Lösungsplan
 
-| Aspekt | Vorher (SEAHero) | Nachher |
-|--------|------------------|---------|
-| Desktop-Layout | Side-by-Side (Text links, Bild rechts) | Fullscreen zentriert |
-| Mobile-Layout | Fullscreen zentriert | Fullscreen zentriert (unverändert) |
-| Hintergrund Desktop | Gradient ohne Bild | Fullscreen Bild mit Overlay |
-| Hero-Bilder | Unterschiedliche pro LP | Ein gemeinsames Team-Bild |
+### Schritt 1: Favicon hinzufügen
+
+Das hochgeladene Logo wird als Favicon gespeichert:
+
+- Kopieren nach `public/favicon.png`
+- Aktualisierung der `index.html`:
+  ```html
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  ```
+
+### Schritt 2: Bilder in src/assets verschieben (EMPFOHLEN)
+
+Für eine robustere Lösung werden alle Bilder konsistent über ES6-Imports eingebunden:
+
+**Betroffene Bilder verschieben:**
+- `public/images/sea-hero-team.png` -> `src/assets/sea-hero-team.png`
+- `public/images/before-after-*.png` -> `src/assets/before-after-*.png`
+- Alle neuen `.png` Bilder die nicht laden
+
+**Komponenten anpassen:**
+- `SEAHero.tsx` - Import statt URL-String
+- `SEABeforeAfter.tsx` - Import statt URL-String
+- `BeforeAfterSection.tsx` - Import statt URL-String
+- `seaData.ts` und `serviceData.ts` - Imports verwenden
+
+**Vorteile:**
+- Vite bündelt und optimiert die Bilder
+- Keine Abhängigkeit vom korrekten SFTP-Upload
+- Build-Fehler wenn Bild fehlt (statt 404 auf Produktion)
+
+### Schritt 3: Alternative - WebP-Konvertierung
+
+Falls Schritt 2 zu aufwändig erscheint, können die großen PNG-Dateien zu WebP konvertiert werden:
+
+- Geringere Dateigröße (80% kleiner)
+- Schnellerer Upload via SFTP
+- Bessere Performance auf der Website
+
+---
+
+## Technische Umsetzung
+
+### Dateien die geändert werden
+
+| Datei | Änderung |
+|-------|----------|
+| `public/favicon.png` | Neues Favicon-Bild (Logo) |
+| `index.html` | Favicon-Referenz aktualisieren |
+| `src/components/sections/HeroSection.tsx` | Bereits korrekt mit Import |
+| `src/components/sections/BeforeAfterSection.tsx` | Import statt URL |
+| `src/components/sea/SEAHero.tsx` | Import statt URL |
+| `src/components/sea/SEABeforeAfter.tsx` | Import statt URL |
+| `src/lib/seaData.ts` | Bilder als Imports |
+
+### Empfohlene Reihenfolge
+
+1. Favicon hinzufügen
+2. Bilder nach `src/assets/` verschieben
+3. Imports in Komponenten und Data-Dateien anpassen
+4. Testen im Preview
+5. Deployment erneut durchführen
 
 ---
 
 ## Erwartetes Ergebnis
 
-- Alle drei SEA Landingpages (`/lp/haushaltsaufloesung`, `/lp/entruempelung`, `/lp/messie-hilfe`) haben einen einheitlichen, fullscreen Hero
-- Das neue Team-Bild vermittelt Professionalität und Vertrauen
-- Das Layout entspricht nun dem der ServicePages
-- Die spezifischen CTA-Texte (z.B. "Unverbindlich schreiben" für Messie-Hilfe) bleiben erhalten
+- Favicon wird korrekt im Browser-Tab angezeigt
+- Alle Bilder laden zuverlässig auf raeumzwerge.de
+- Konsistente Bildeinbindung im gesamten Projekt
+- Kein Risiko mehr durch SFTP-Upload-Probleme
 
