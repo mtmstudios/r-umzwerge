@@ -1,36 +1,43 @@
 
-# Plan: Logo vergrößern durch Rand-Entfernung
+## Logo-Größe auf Mobile und Tablet angleichen
 
-## Problem
-Das aktuelle Logo-Bild (`src/assets/logo-raeumzwerge-cropped.png`) enthält noch transparente Ränder. Dadurch erscheint das Logo klein, obwohl der Container bereits `h-20` bis `h-28` groß ist.
+### Problem
+Das Logo erscheint auf Mobile kleiner als auf Tablet, weil der umgebende Container (`overflow-hidden`) unterschiedliche Höhen hat:
+- Mobile: `h-20` (80px) 
+- Tablet: `sm:h-24` (96px)
+- Desktop: `lg:h-28` (112px)
 
-## Lösungsschritte
+Da das Bild durch `overflow-hidden` abgeschnitten wird, zeigt Mobile weniger vom Logo.
 
-### 1. Logo-Asset mit AI bearbeiten
-Ich werde das hochgeladene Logo (`user-uploads://eeee.png`) mit KI-Bildbearbeitung zuschneiden:
-- Transparente/leere Bereiche oben und unten entfernen
-- Nur den sichtbaren Logo-Inhalt behalten
-- Das Ergebnis als neues Asset speichern
+### Lösung
+Den Container auf Mobile ebenfalls auf `h-24` (96px) erhöhen, damit Mobile und Tablet die gleiche sichtbare Logo-Größe haben.
 
-### 2. Header-Code anpassen
-Nach dem Zuschneiden kann das Logo den verfügbaren Platz besser nutzen:
+---
 
-| Gerät | Aktuelle Höhe | Neue Höhe |
-|-------|---------------|-----------|
-| Mobil (390px) | h-20 (80px) | h-16 (64px) → Logo füllt mehr aus |
-| Tablet (768px) | h-24 (96px) | h-20 (80px) → Logo füllt mehr aus |
-| Desktop | h-28 (112px) | h-24 (96px) → Logo füllt mehr aus |
+## Änderungen
 
-Der Header wird kompakter, aber das Logo erscheint **größer**, weil der gesamte Container-Platz genutzt wird.
+### Datei: `src/components/layout/Header.tsx`
 
-### 3. Dateien die geändert werden
+**Container-Höhe anpassen (Zeile 57):**
 
-| Datei | Änderung |
-|-------|----------|
-| `src/assets/logo-raeumzwerge-cropped.png` | Ersetzt durch zugeschnittene Version |
-| `src/components/layout/Header.tsx` | Logo-Container-Höhen optimiert |
+| Breakpoint | Vorher | Nachher |
+|------------|--------|---------|
+| Mobile     | `h-20` (80px) | `h-24` (96px) |
+| Tablet     | `sm:h-24` (96px) | `sm:h-24` (96px) |
+| Desktop    | `lg:h-28` (112px) | `lg:h-28` (112px) |
+
+**Codeänderung:**
+```tsx
+// Vorher:
+<div className="h-20 sm:h-24 lg:h-28 flex items-center justify-center overflow-hidden">
+
+// Nachher:
+<div className="h-24 sm:h-24 lg:h-28 flex items-center justify-center overflow-hidden">
+```
+
+---
 
 ## Ergebnis
-- Logo nutzt 100% des verfügbaren Platzes
-- Keine "verschwendeten" Pixel durch transparente Ränder
-- Header wirkt kompakter, Logo wirkt größer
+- Mobile und Tablet zeigen das Logo in der gleichen Größe
+- Desktop bleibt etwas größer mit 112px Container-Höhe
+- Der Header auf Mobile wird etwas höher (von 80px auf 96px), was zu einer konsistenteren Logo-Darstellung führt
