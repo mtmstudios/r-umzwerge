@@ -49,7 +49,7 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
         {/* Dialog-Karten Grid */}
         <div 
           ref={sectionRef}
-          className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8"
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto"
         >
           {data.painPoints.map((point, index) => (
             <Card
