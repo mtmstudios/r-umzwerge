@@ -17,7 +17,7 @@ export function RegionsSection() {
           )}
         >
           <h2 className="text-section-mobile lg:text-section text-foreground mb-2">
-            Unsere Regionen in Süddeutschland
+            Unsere Teams in Süddeutschland
           </h2>
           <p className="text-muted-foreground">
             Baden-Württemberg & Bayern – schnell vor Ort
