@@ -1,58 +1,55 @@
 
-# Plan: Gradient-Divider Farben korrigieren
+# Plan: Logo im Header vergrößern
 
-## Problem
+## Aktueller Zustand
 
-Der Screenshot zeigt, dass der Gradient-Divider zwischen ServiceTrustBar und ServiceProcess kaum sichtbar ist. Die Analyse zeigt:
+Das Logo hat derzeit folgende Größen:
+- Mobile: `h-10` = 40px
+- Desktop: `h-12` = 48px
 
-| Sektion | Tatsächlicher Hintergrund |
-|---------|---------------------------|
-| ServiceTrustBar | `bg-secondary/30` |
-| Gradient-Divider | `background` → `secondary/30` |
-| ServiceProcess | `bg-secondary/30` |
+## Änderung
 
-Der Divider startet mit `background` (Off-White), aber die TrustBar darüber hat schon `bg-secondary/30` - das erzeugt einen unnatürlichen Sprung.
+**Datei: `src/components/layout/Header.tsx`**
 
-## Lösung
+Die Logo-Höhe wird verdoppelt bis verdreifacht:
 
-Da beide Sektionen (TrustBar und Process) den gleichen Hintergrund `bg-secondary/30` haben, wird der Divider zwischen ihnen entfernt.
+| Breakpoint | Vorher | Nachher |
+|------------|--------|---------|
+| Mobile | h-10 (40px) | h-14 (56px) |
+| Desktop (lg:) | h-12 (48px) | h-20 (80px) |
 
-## Technische Umsetzung
+```tsx
+// Vorher (Zeile 42):
+className="h-10 lg:h-12 w-auto"
 
-**Datei: `src/pages/ServicePage.tsx`**
+// Nachher:
+className="h-14 lg:h-20 w-auto"
+```
 
-```text
-Vorher (Zeilen 41-50):
------------------------------------------
-{/* Trust Bar */}
-<ServiceTrustBar />
+## Zusätzliche Anpassung
 
-{/* Process */}
-<SectionDivider 
-  variant="gradient" 
-  fromColor="hsl(var(--background))" 
-  toColor="hsl(var(--secondary) / 0.3)" 
-/>
-<ServiceProcess steps={pageData.processSteps} />
------------------------------------------
+Da das Logo größer wird, muss auch der Header-Padding leicht angepasst werden:
 
-Nachher:
------------------------------------------
-{/* Trust Bar */}
-<ServiceTrustBar />
+```tsx
+// Vorher (Zeile 27-30):
+isScrolled
+  ? "glass-strong shadow-lg py-3"
+  : "bg-card py-4 lg:py-5"
 
-{/* Process - same bg as TrustBar, no divider needed */}
-<ServiceProcess steps={pageData.processSteps} />
------------------------------------------
+// Nachher (etwas mehr Padding):
+isScrolled
+  ? "glass-strong shadow-lg py-2"
+  : "bg-card py-3 lg:py-4"
 ```
 
 ## Zusammenfassung
 
-| Änderung | Datei |
-|----------|-------|
-| Gradient-Divider zwischen TrustBar und Process entfernen | `src/pages/ServicePage.tsx` |
+| Datei | Änderung |
+|-------|----------|
+| `src/components/layout/Header.tsx` | Logo von h-10/h-12 auf h-14/h-20 vergrößern |
 
 ## Ergebnis
 
-- Kein unnatürlicher Farbsprung mehr
-- Sauberer, konsistenter Übergang zwischen gleichfarbigen Sektionen
+- Logo deutlich sichtbarer und prominenter
+- Bessere Markenwahrnehmung
+- Proportional zum Header-Layout
