@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown, Phone } from 'lucide-react';
-import logoRaeumzwerge from '@/assets/logo-raeumzwerge.webp';
+import logoRaeumzwerge from '@/assets/logo-raeumzwerge.png';
 import { Button } from '@/components/ui/button';
 import { NAV_ITEMS, PHONE_LINK } from '@/lib/constants';
 import { cn } from '@/lib/utils';

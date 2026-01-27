@@ -69,22 +69,71 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
           {isGentleMode ? 'Ein neuer Anfang – mit uns' : 'Das Ergebnis unserer Arbeit'}
         </h2>
 
-        {/* Slider or Single Image */}
+        {/* Slider - Now real for both modes */}
         {isGentleMode ? (
-          // Gentle Mode: Only show "After" image with positive message
-          <div className="max-w-2xl mx-auto aspect-[4/3] md:aspect-video bg-gradient-to-br from-accent/30 to-primary/20 rounded-xl overflow-hidden mb-6">
-            <div className="h-full flex items-center justify-center p-6">
-              <div className="text-center">
-                <Sparkles className="h-10 w-10 text-primary mx-auto mb-3" />
-                <p className="text-primary font-medium text-lg">Sauber, hell, befreit</p>
-                <p className="text-sm text-muted-foreground mt-2">
-                  Ihr Raum – zurückgewonnen
-                </p>
+          // Gentle Mode: Real Before/After Slider for Messie
+          <div
+            ref={containerRef}
+            className="relative max-w-2xl mx-auto aspect-[4/3] md:aspect-video bg-muted rounded-xl overflow-hidden cursor-ew-resize select-none mb-6"
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+            onMouseMove={handleMouseMove}
+            onTouchMove={handleTouchMove}
+            onMouseLeave={handleMouseUp}
+          >
+            {/* Before Image */}
+            <div className="absolute inset-0">
+              <img 
+                src="/images/messie-vorher.webp" 
+                alt="Zimmer vor der Räumung"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            {/* After Image (Clipped) */}
+            <div
+              className="absolute inset-0"
+              style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+            >
+              <img 
+                src="/images/messie-nachher.webp" 
+                alt="Zimmer nach der Räumung"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            {/* Slider Handle */}
+            <div
+              className="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg"
+              style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
+            >
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-medium flex items-center justify-center">
+                <svg
+                  className="w-5 h-5 text-foreground"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+                  />
+                </svg>
               </div>
+            </div>
+
+            {/* Labels */}
+            <div className="absolute bottom-3 left-3 px-2.5 py-1 bg-foreground/80 text-background text-xs font-medium rounded-full">
+              Vorher
+            </div>
+            <div className="absolute bottom-3 right-3 px-2.5 py-1 bg-primary text-primary-foreground text-xs font-medium rounded-full">
+              Nachher
             </div>
           </div>
         ) : (
-          // Standard Mode: Before/After Slider
+          // Standard Mode: Before/After Slider with placeholders
           <div
             ref={containerRef}
             className="relative max-w-2xl mx-auto aspect-[4/3] md:aspect-video bg-muted rounded-xl overflow-hidden cursor-ew-resize select-none mb-6"
