@@ -16,7 +16,7 @@ export function HeroSection() {
   const { ref, isVisible } = useScrollReveal(0.1);
 
   return (
-    <section className="relative overflow-hidden">
+    <section ref={ref} className="relative overflow-hidden">
       {/* Mobile & Tablet: Fullscreen background with overlay */}
       <div className="xl:hidden absolute inset-0">
         <img 
@@ -33,7 +33,6 @@ export function HeroSection() {
       <div className="container-custom relative">
         {/* Mobile & Tablet Layout: Fullscreen with centered content */}
         <div
-          ref={ref}
           className={cn(
             "xl:hidden min-h-[85vh] md:min-h-[75vh] flex flex-col justify-center items-center text-center px-4 py-16 md:py-20",
             "scroll-reveal",
