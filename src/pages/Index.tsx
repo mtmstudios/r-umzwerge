@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FloatingCTAs } from '@/components/layout/FloatingCTAs';
@@ -14,6 +16,20 @@ import { FinalCTASection } from '@/components/sections/FinalCTASection';
 import { SectionDivider } from '@/components/ui/SectionDivider';
 
 const Index = () => {
+  const location = useLocation();
+
+  // Scroll to anchor when navigating from another page
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.querySelector(location.hash);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [location]);
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
