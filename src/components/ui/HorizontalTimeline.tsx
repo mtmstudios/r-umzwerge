@@ -24,7 +24,7 @@ export function HorizontalTimeline({ steps, className }: HorizontalTimelineProps
       className={cn('relative', className)}
     >
       {/* Progress Bar - Desktop */}
-      <div className="hidden md:block absolute top-[60px] left-0 right-0 h-1 bg-border rounded-full mx-auto max-w-3xl">
+      <div className="hidden md:block absolute top-[60px] left-0 right-0 z-0 h-1 bg-border rounded-full mx-auto max-w-3xl">
         <div
           className="absolute top-0 left-0 h-full bg-gradient-to-r from-cta via-accent to-cta rounded-full transition-all duration-300 ease-out"
           style={{ width: `${progress * 100}%` }}
