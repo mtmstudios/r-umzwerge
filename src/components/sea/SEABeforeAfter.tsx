@@ -85,8 +85,8 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
             {/* After Image (Base layer - full width) */}
             <div className="absolute inset-0">
               <img 
-                src={isGentleMode ? "/images/messie-nachher.webp" : data.afterImage} 
-                alt={isGentleMode ? "Zimmer nach der Räumung" : data.afterImageAlt}
+                src={data.afterImage} 
+                alt={data.afterImageAlt}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -97,8 +97,8 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
               style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
             >
               <img 
-                src={isGentleMode ? "/images/messie-vorher.webp" : data.beforeImage} 
-                alt={isGentleMode ? "Zimmer vor der Räumung" : data.beforeImageAlt}
+                src={data.beforeImage} 
+                alt={data.beforeImageAlt}
                 className="w-full h-full object-cover"
               />
             </div>
