@@ -42,7 +42,7 @@ isScrolled
               <img 
                 src={logoRaeumzwerge} 
                 alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
-                className="h-32 lg:h-40 w-auto object-contain object-left"
+                className="h-64 lg:h-80 w-auto object-contain object-left"
               />
             </div>
           </a>
