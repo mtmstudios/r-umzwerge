@@ -127,6 +127,13 @@ export default {
           "80%": { transform: "scale(1.12)" },
           "100%": { transform: "scale(1.1)" },
         },
+        "fade-in": {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
+        },
+      },
+      scale: {
+        '115': '1.15',
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -137,6 +144,7 @@ export default {
         "marquee-reverse": "marquee-reverse var(--marquee-duration, 25s) linear infinite",
         "glow": "glow-pulse 2s ease-in-out infinite",
         "bounce-in": "bounce-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
+        "fade-in": "fade-in 0.3s ease-out forwards",
       },
     },
   },
