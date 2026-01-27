@@ -201,12 +201,12 @@ export default function Datenschutz() {
             </h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
-                Unsere Website wird bei United Domains AG gehostet.
+                Unsere Website wird bei Mittwald CM Service GmbH & Co. KG gehostet.
               </p>
               <div className="bg-muted/50 p-4 rounded-lg text-foreground">
-                <p className="font-medium">United Domains AG</p>
-                <p>Gautinger Str. 10</p>
-                <p>82319 Starnberg, Deutschland</p>
+                <p className="font-medium">Mittwald CM Service GmbH & Co. KG</p>
+                <p>Königsberger Straße 4-6</p>
+                <p>32339 Espelkamp, Deutschland</p>
               </div>
               <p>
                 Wenn Sie unsere Website besuchen, werden automatisch Informationen in sogenannten 
