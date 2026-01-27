@@ -1,6 +1,6 @@
 // WhatsApp configuration
 export const WHATSAPP_NUMBER = "491603080676";
-export const WHATSAPP_MESSAGE = "Hallo liebes Räumzwerge-Team, ich komme von euerer Website.";
+export const WHATSAPP_MESSAGE = "Hallo liebes Raeumzwerge Team, ich komme von eurer Website.";
 
 export const getWhatsAppLink = (customMessage?: string) => {
   const message = encodeURIComponent(customMessage || WHATSAPP_MESSAGE);
@@ -43,16 +43,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "Ablauf", href: "#ablauf" },
   { label: "Referenzen", href: "#referenzen" },
   { label: "FAQ", href: "#faq" },
-  // Temporary: SEA Landing Pages for testing
-  { 
-    label: "🔧 SEA-Test", 
-    href: "#",
-    children: [
-      { label: "LP Haushaltsauflösung", href: "/lp/haushaltsaufloesung" },
-      { label: "LP Entrümpelung", href: "/lp/entruempelung" },
-      { label: "LP Messie-Hilfe", href: "/lp/messie-hilfe" },
-    ]
-  },
+  { label: "Kontakt", href: "/kontakt" },
 ];
 
 // Regions
