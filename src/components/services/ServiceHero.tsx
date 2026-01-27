@@ -19,8 +19,8 @@ export function ServiceHero({ h1, subline, trustPills, imageSrc, imageAlt }: Ser
 
   return (
     <section className="relative overflow-hidden">
-      {/* Mobile: Fullscreen background with overlay */}
-      <div className="lg:hidden absolute inset-0">
+      {/* Mobile & Tablet: Fullscreen background with overlay */}
+      <div className="xl:hidden absolute inset-0">
         {imageSrc ? (
           <img 
             src={imageSrc}
@@ -34,42 +34,43 @@ export function ServiceHero({ h1, subline, trustPills, imageSrc, imageAlt }: Ser
       </div>
 
       {/* Desktop: Standard background */}
-      <div className="hidden lg:block absolute inset-0 bg-gradient-to-br from-secondary/50 via-background to-background" />
+      <div className="hidden xl:block absolute inset-0 bg-gradient-to-br from-secondary/50 via-background to-background" />
 
       <div className="container-custom relative">
-        {/* Mobile Layout: Fullscreen with content at bottom */}
+        {/* Mobile & Tablet Layout: Fullscreen with centered content */}
         <div
           ref={ref}
           className={cn(
-            "lg:hidden min-h-[85vh] flex flex-col justify-end pb-8 pt-24",
+            "xl:hidden min-h-[85vh] md:min-h-[75vh] flex flex-col justify-center items-center text-center px-4 py-16 md:py-20",
             "scroll-reveal",
             isVisible && "visible"
           )}
         >
-          <h1 className="text-3xl font-bold text-white mb-4 text-balance leading-tight">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 md:mb-6 text-balance leading-tight max-w-2xl">
             {h1}
           </h1>
           
-          <p className="text-base text-white/90 mb-6 max-w-xl">
+          <p className="text-base md:text-lg text-white/90 mb-6 md:mb-8 max-w-xl">
             {subline}
           </p>
 
-          {/* Mobile CTAs */}
-          <div className="flex flex-col gap-3 mb-4">
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row gap-3 mb-4 w-full sm:w-auto sm:justify-center">
             <Button
               asChild
               size="lg"
-              className="gap-2 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground text-sm h-12 px-4 btn-lift shadow-whatsapp"
+              className="gap-2 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground text-sm md:text-base h-12 md:h-14 px-4 md:px-6 btn-lift shadow-whatsapp"
             >
               <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
                 <WhatsAppIcon className="h-5 w-5 flex-shrink-0" />
-                Foto senden · Preis erhalten
+                <span className="hidden sm:inline">Foto senden · Preiseinschätzung erhalten</span>
+                <span className="sm:hidden">Foto senden · Preis erhalten</span>
               </a>
             </Button>
             <Button
               asChild
               size="lg"
-              className="gap-2 h-12 px-4 text-sm bg-cta hover:bg-cta-hover text-cta-foreground border-0"
+              className="gap-2 h-12 md:h-14 px-4 md:px-6 text-sm md:text-base bg-cta hover:bg-cta-hover text-cta-foreground border-0"
             >
               <a href={PHONE_LINK}>
                 <Phone className="h-5 w-5 flex-shrink-0" />
@@ -83,8 +84,8 @@ export function ServiceHero({ h1, subline, trustPills, imageSrc, imageAlt }: Ser
             💡 {PHOTO_GUIDE}
           </p>
 
-          {/* Mobile Trust Pills */}
-          <div className="flex flex-wrap gap-2">
+          {/* Trust Pills */}
+          <div className="flex flex-wrap justify-center gap-2">
             {trustPills.map((pill) => (
               <div
                 key={pill}
@@ -97,10 +98,10 @@ export function ServiceHero({ h1, subline, trustPills, imageSrc, imageAlt }: Ser
           </div>
         </div>
 
-        {/* Desktop Layout: Original side-by-side grid */}
+        {/* Desktop Layout: Side-by-side grid */}
         <div
           className={cn(
-            "hidden lg:grid lg:grid-cols-2 gap-16 items-center py-20 lg:py-32",
+            "hidden xl:grid xl:grid-cols-2 gap-16 items-center py-20 xl:py-32",
             "scroll-reveal",
             isVisible && "visible"
           )}
