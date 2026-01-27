@@ -1,57 +1,64 @@
 
 
-# Plan: Dezenter Logo-Hover-Effekt
+# Plan: Mobile Animationen reparieren
 
-## Ziel
+## Identifizierte Probleme
 
-Dem Logo einen subtilen Hover-Effekt hinzufügen, der die Interaktivität signalisiert, ohne die Premium-Ästhetik zu stören. Der Effekt soll dezent sein und gut zum bestehenden Design passen.
+Nach ausführlichem Testen auf Mobile (390x844) wurden folgende Probleme gefunden:
 
-## Gewählter Effekt
+### 1. Timeline-Animation - Bounce-Animation fehlt in Tailwind Config
+Die CSS-Klasse `animate-bounce-in` ist in `src/index.css` definiert (Zeilen 410-431), aber **nicht** in der Tailwind-Konfiguration registriert. Dadurch kann Tailwind die Animation nicht korrekt verarbeiten.
 
-Eine Kombination aus **leichter Skalierung (1.03)** und **Opacity-Übergang** für einen sanften, professionellen Effekt.
+### 2. Mobile Swipe-Interaktion funktioniert, aber kein visuelles Feedback
+Die Swipe-Logik im `HorizontalTimeline` ist korrekt implementiert, aber der `animate-bounce-in` Effekt wird nicht angewendet, da er nicht in Tailwind registriert ist.
+
+### 3. Service-Seiten Timeline - Gleiche Konfiguration fehlt
+Die `ServiceProcess`-Komponente nutzt dieselbe `HorizontalTimeline`, daher ist das Problem identisch.
+
+---
 
 ## Technische Umsetzung
 
-**Datei: `src/components/layout/Header.tsx`**
+### Datei: `tailwind.config.ts`
 
-### Logo-Bild mit Hover-Transition (Zeile 42-46)
+**Änderung 1: Bounce-In Animation zu Keyframes hinzufügen (nach Zeile 122)**
 
-```tsx
-// Vorher:
-<img 
-  src={logoRaeumzwerge} 
-  alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
-  className="h-64 lg:h-80 w-auto object-contain object-left"
-/>
-
-// Nachher:
-<img 
-  src={logoRaeumzwerge} 
-  alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
-  className="h-64 lg:h-80 w-auto object-contain object-left transition-all duration-300 group-hover:scale-[1.03] group-hover:opacity-90"
-/>
+```typescript
+"bounce-in": {
+  "0%": { transform: "scale(1)" },
+  "40%": { transform: "scale(1.15)" },
+  "60%": { transform: "scale(1.05)" },
+  "80%": { transform: "scale(1.12)" },
+  "100%": { transform: "scale(1.1)" },
+},
 ```
 
-## Erklärung der Klassen
+**Änderung 2: Animation-Utility hinzufügen (nach Zeile 131)**
 
-| Klasse | Wirkung |
-|--------|---------|
-| `transition-all duration-300` | Sanfte 300ms Animation für alle Eigenschaften |
-| `group-hover:scale-[1.03]` | Logo wächst bei Hover um 3% (dezent) |
-| `group-hover:opacity-90` | Leichte Opacity-Änderung für visuelles Feedback |
+```typescript
+"bounce-in": "bounce-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
+```
 
-**Hinweis:** Die `group`-Klasse ist bereits auf dem umgebenden `<a>`-Tag vorhanden, daher funktioniert `group-hover` automatisch.
+---
+
+### Datei: `src/index.css`
+
+**Änderung: Redundanten CSS-Code entfernen (Zeilen 410-431)**
+
+Die `@keyframes bounce-in` und `.animate-bounce-in` Definitionen können entfernt werden, da sie nun in Tailwind registriert sind. Dies vermeidet Duplikation.
+
+---
 
 ## Zusammenfassung
 
 | Datei | Änderung |
 |-------|----------|
-| `src/components/layout/Header.tsx` | Hover-Transition-Klassen zum Logo-Bild hinzufügen |
+| `tailwind.config.ts` | `bounce-in` Keyframe und Animation hinzufügen |
+| `src/index.css` | Redundante CSS-Definition entfernen (optional, zur Bereinigung) |
 
 ## Ergebnis
 
-- Dezenter Skalierungseffekt (3%) bei Hover
-- Sanfte 300ms Animation
-- Nutzt bereits vorhandene `group`-Klasse
-- Konsistent mit anderen Hover-Effekten auf der Seite (z.B. CTA-Button)
+- Timeline-Bounce-Animation funktioniert auf Mobile beim Tippen/Wischen
+- Konsistente Animation auf Desktop (Scroll-triggered) und Mobile (Touch-triggered)
+- Sauberere Code-Struktur ohne CSS-Duplikation
 
