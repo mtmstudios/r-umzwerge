@@ -25,7 +25,7 @@ export function RegionsSection() {
         </div>
 
         {/* Zentrierte Stadt-Liste */}
-        <div className="max-w-xl mx-auto">
+        <div className="max-w-2xl mx-auto">
           <CityList />
         </div>
 
