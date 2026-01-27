@@ -7,6 +7,7 @@ import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { CookieConsentProvider } from "@/components/consent/CookieConsentContext";
 import { CookieConsentBanner } from "@/components/consent/CookieConsentBanner";
 import { AccessibilityProvider } from "@/components/accessibility/AccessibilityContext";
+import { FloatingAccessibilityButton } from "@/components/accessibility/FloatingAccessibilityButton";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Impressum from "./pages/Impressum";
@@ -42,6 +43,7 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
+          <FloatingAccessibilityButton />
           <CookieConsentBanner />
         </TooltipProvider>
       </CookieConsentProvider>

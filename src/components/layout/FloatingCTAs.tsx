@@ -33,7 +33,7 @@ export const FloatingCTAs = forwardRef<HTMLDivElement>((props, ref) => {
           : "translate-y-full opacity-0 pointer-events-none"
       )}
     >
-      <div className="flex gap-3">
+      <div className="flex gap-3 ml-14">
         <a
           href={PHONE_LINK}
           className="flex-1 flex items-center justify-center gap-2 py-3.5 px-4 bg-cta border-2 border-cta rounded-xl shadow-medium text-cta-foreground font-medium transition-all active:scale-95"
