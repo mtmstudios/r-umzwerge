@@ -1,35 +1,53 @@
 
-# Plan: Hero-Bild auf der Startseite austauschen
+# Plan: Hero-Bilder für Haushaltsauflösung und SEA Entrümpelung aktualisieren
 
 ## Aufgabe
-Das aktuelle Hero-Bild durch das neue Teambild mit dem Räumzwerge-Transporter ersetzen.
+Zwei neue Hero-Bilder für die Haushaltsauflösung-Seite und die SEA Entrümpelung-Landingpage einsetzen.
 
-## Neues Bild
-Zeigt ein professionelles 3-Personen-Team mit:
-- Gebrandetem Räumzwerge-Transporter mit Rampe
+## Neue Bilder
+
+### Bild 1: Haushaltsauflösung
+**Motiv:** 3-köpfiges Team mit Transporter vor einem Wohnhaus
+- Gebrandeter Räumzwerge-Transporter mit Rampe
 - Kartons beschriftet mit "SPENDE" und "MÜLL"
-- Teamarbeit beim Verladen vor einem Wohnhaus
-- Professionelle Arbeitskleidung mit Firmenlogo
+- Teamarbeit beim Verladen von Möbeln und Kartons
+- Professionelle Arbeitskleidung
+
+### Bild 2: SEA Entrümpelung
+**Motiv:** 3-köpfiges Team beim Sortieren in einem hellen Wohnraum
+- Kartons beschriftet mit "RECYCLING" und "SPENDE"
+- Team beim Verpacken und Sortieren
+- Heller, freundlicher Innenraum mit großem Fenster
+- Transparente Arbeitsweise sichtbar
 
 ## Änderungen
 
-### 1. Bild speichern
-Das hochgeladene Bild wird nach `src/assets/hero-team.jpg` kopiert (überschreibt das alte Bild).
+### 1. Bilder speichern
+| Hochgeladenes Bild | Zielpfad |
+|--------------------|----------|
+| `Gemini_Generated_Image_khiqiskhiqiskhiq-2.png` | `public/images/service-haushaltsaufloesung.jpg` |
+| `Gemini_Generated_Image_r21iwmr21iwmr21i-2.png` | `public/images/service-entruempelung.jpg` |
 
-### 2. Alt-Text anpassen
-Der Alt-Text in `HeroSection.tsx` wird aktualisiert um das neue Bild korrekt zu beschreiben:
+### 2. Alt-Texte aktualisieren
 
-| Stelle | Alt | Neu |
-|--------|-----|-----|
-| Zeile 24 | "Räumzwerge Team bei der Entrümpelung" | "Räumzwerge Team mit Transporter beim Verladen von Kartons" |
-| Zeile 160 | "Räumzwerge Team bei der Entrümpelung – Mitarbeiter verladen Kartons in einen Transporter" | "Räumzwerge Team mit gebrandetem Transporter beim Verladen von Spende- und Müllkartons" |
+**Service-Seite Haushaltsauflösung** (`src/lib/serviceData.ts`):
+- Zeile 238 (ca.): `imageAlt` für haushaltsaufloesung
+- Neu: `"Räumzwerge-Team beim Verladen von Spende- und Müll-Kartons vor einem Wohnhaus"`
 
-## Dateien
+**SEA Landingpage Entrümpelung** (`src/lib/seaData.ts`):
+- Zeile 139: `heroImageAlt` für entruempelung
+- Neu: `"Räumzwerge-Team beim Sortieren von Recycling- und Spende-Kartons im Wohnraum"`
+
+## Technische Details
 
 | Datei | Aktion |
 |-------|--------|
-| `src/assets/hero-team.jpg` | Überschreiben mit neuem Bild |
-| `src/components/sections/HeroSection.tsx` | Alt-Texte anpassen (Zeilen 24 & 160) |
+| `public/images/service-haushaltsaufloesung.jpg` | Überschreiben mit neuem Bild |
+| `public/images/service-entruempelung.jpg` | Überschreiben mit neuem Bild |
+| `src/lib/serviceData.ts` | Alt-Text für Haushaltsauflösung anpassen |
+| `src/lib/seaData.ts` | Alt-Text für SEA Entrümpelung anpassen |
 
 ## Ergebnis
-Die Startseite zeigt im Hero ein neues Teambild mit dem gebrandeten Transporter, das Professionalität und die nachhaltige Arbeitsweise (Spende/Müll-Trennung) kommuniziert.
+- Die Service-Seite "Haushaltsauflösung" zeigt das neue Teambild mit Transporter
+- Die SEA-Landingpage "Entrümpelung" zeigt das Team beim Sortieren im Wohnraum
+- Beide Bilder kommunizieren Professionalität und die nachhaltige Arbeitsweise (Spende/Recycling-Trennung)
