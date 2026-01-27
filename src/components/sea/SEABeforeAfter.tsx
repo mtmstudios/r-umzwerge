@@ -81,26 +81,26 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
             onTouchMove={handleTouchMove}
             onMouseLeave={handleMouseUp}
           >
-            {/* Before Image */}
-            <div className="absolute inset-0">
-              <img 
-                src="/images/messie-vorher.webp" 
-                alt="Zimmer vor der Räumung"
-                className="w-full h-full object-cover"
-              />
-            </div>
+          {/* After Image (Base layer - full width) */}
+          <div className="absolute inset-0">
+            <img 
+              src="/images/messie-nachher.webp" 
+              alt="Zimmer nach der Räumung"
+              className="w-full h-full object-cover"
+            />
+          </div>
 
-            {/* After Image (Clipped) */}
-            <div
-              className="absolute inset-0"
-              style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
-            >
-              <img 
-                src="/images/messie-nachher.webp" 
-                alt="Zimmer nach der Räumung"
-                className="w-full h-full object-cover"
-              />
-            </div>
+          {/* Before Image (Clipped - reveals from left) */}
+          <div
+            className="absolute inset-0"
+            style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+          >
+            <img 
+              src="/images/messie-vorher.webp" 
+              alt="Zimmer vor der Räumung"
+              className="w-full h-full object-cover"
+            />
+          </div>
 
             {/* Slider Handle */}
             <div
