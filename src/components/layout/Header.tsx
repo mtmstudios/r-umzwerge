@@ -30,19 +30,19 @@ export function Header() {
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
 isScrolled
-          ? "glass-strong shadow-lg py-1"
-          : "bg-card py-2 lg:py-3"
+          ? "glass-strong shadow-lg py-0.5 lg:py-1"
+          : "bg-card py-1 lg:py-1.5"
       )}
     >
       <div className="container-custom">
         <div className="flex items-center justify-between gap-6 lg:gap-8">
           {/* Logo */}
           <a href="/" className="flex items-center group shrink-0">
-            <div className="h-32 lg:h-40 overflow-hidden flex items-center">
+            <div className="h-20 lg:h-24 overflow-hidden flex items-center">
               <img 
                 src={logoRaeumzwerge} 
                 alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
-                className="h-44 lg:h-56 w-auto object-contain object-left"
+                className="h-32 lg:h-40 w-auto object-contain object-left"
               />
             </div>
           </a>
