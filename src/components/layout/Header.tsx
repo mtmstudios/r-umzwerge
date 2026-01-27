@@ -39,11 +39,11 @@ isScrolled
           {/* Logo */}
           <a href="/" className="flex items-center group shrink-0 -ml-8 lg:-ml-12">
             <div className="h-20 lg:h-24 overflow-hidden flex items-center">
-              <img 
-                src={logoRaeumzwerge} 
-                alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
-                className="h-64 lg:h-80 w-auto object-contain object-left"
-              />
+            <img 
+              src={logoRaeumzwerge} 
+              alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
+              className="h-64 lg:h-80 w-auto object-contain object-left transition-all duration-300 group-hover:scale-[1.03] group-hover:opacity-90"
+            />
             </div>
           </a>
 
