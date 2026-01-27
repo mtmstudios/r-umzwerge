@@ -1,7 +1,7 @@
 import { Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PHONE_LINK } from '@/lib/constants';
-import logoImage from '@/assets/logo-raeumzwerge.png';
+import logoImage from '@/assets/logo-raeumzwerge.webp';
 
 export function SEAMinimalHeader() {
   return (

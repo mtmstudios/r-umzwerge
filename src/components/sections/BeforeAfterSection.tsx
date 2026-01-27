@@ -79,7 +79,7 @@ export function BeforeAfterSection() {
           {/* Before Image (Full Width) */}
           <div className="absolute inset-0">
             <img 
-              src="/images/before-after-vorher.png" 
+              src="/images/before-after-vorher.webp" 
               alt="Wohnung vor der Entrümpelung - voll mit Kartons und Müll"
               className="w-full h-full object-cover"
             />
@@ -91,7 +91,7 @@ export function BeforeAfterSection() {
             style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
           >
             <img 
-              src="/images/before-after-nachher.png" 
+              src="/images/before-after-nachher.webp" 
               alt="Wohnung nach der Entrümpelung - besenrein"
               className="w-full h-full object-cover"
             />
