@@ -14,7 +14,7 @@ export function ServiceRegions() {
           className={cn("scroll-reveal", isVisible && "visible")}
         >
           <div className="max-w-3xl mx-auto bg-card border border-border rounded-2xl p-6 lg:p-8">
-            <div className="flex items-start gap-4 mb-6">
+            <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4 mb-6 text-center lg:text-left">
               <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
                 <MapPin className="h-6 w-6 text-primary" />
               </div>
@@ -28,7 +28,7 @@ export function ServiceRegions() {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap justify-center lg:justify-start gap-2">
               {REGIONS.map((region) => (
                 <a
                   key={region.slug}

@@ -20,7 +20,7 @@ export function PricingSection() {
           )}
         >
           {/* Left Column - Content */}
-          <div>
+          <div className="text-center lg:text-left">
             <h2 className="text-section-mobile lg:text-section text-foreground mb-6">
               So entsteht der Preis – transparent & nachvollziehbar
             </h2>
@@ -29,7 +29,7 @@ export function PricingSection() {
               Wir erklären die Kosten klar und verständlich. Nach der Einschätzung – häufig per Foto – ist ein Festpreis möglich. Ohne Überraschungen und ohne versteckte Posten.
             </p>
 
-            <div className="space-y-3">
+            <div className="space-y-3 inline-flex flex-col items-center lg:items-start">
               {PRICE_FACTORS.map((factor) => (
                 <div key={factor} className="flex items-center gap-3">
                   <div className="flex-shrink-0 w-6 h-6 bg-accent/20 rounded-full flex items-center justify-center">
@@ -55,8 +55,8 @@ export function PricingSection() {
             </div>
 
             {/* CTA Card */}
-            <div className="glass rounded-2xl p-6 lg:p-8 border border-border/50">
-              <div className="flex items-start gap-4 mb-5">
+            <div className="glass rounded-2xl p-6 lg:p-8 border border-border/50 text-center lg:text-left">
+              <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4 mb-5">
                 <div className="flex-shrink-0 w-12 h-12 bg-whatsapp/20 rounded-xl flex items-center justify-center">
                   <WhatsAppIcon className="h-6 w-6 text-whatsapp" />
                 </div>

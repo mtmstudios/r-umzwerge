@@ -55,9 +55,9 @@ export function ScenarioGrid({ scenarios }: ScenarioGridProps) {
                   {/* Subtle glow effect on hover */}
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
                   
-                  <div className="relative z-10">
+                  <div className="relative z-10 text-center lg:text-left">
                     {/* Header with icon and title */}
-                    <div className="flex items-start gap-4 mb-4">
+                    <div className="flex flex-col lg:flex-row items-center lg:items-start gap-3 lg:gap-4 mb-4">
                       <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-300">
                         <Icon className="h-6 w-6 text-primary" />
                       </div>
@@ -67,7 +67,7 @@ export function ScenarioGrid({ scenarios }: ScenarioGridProps) {
                         </h3>
                         {/* Badges */}
                         {scenario.badges && scenario.badges.length > 0 && (
-                          <div className="flex flex-wrap gap-1.5">
+                          <div className="flex flex-wrap justify-center lg:justify-start gap-1.5">
                             {scenario.badges.map((badge) => (
                               <span 
                                 key={badge}
@@ -82,7 +82,7 @@ export function ScenarioGrid({ scenarios }: ScenarioGridProps) {
                     </div>
 
                     {/* Emotional hook - the "pain point" quote */}
-                    <div className="mb-4 pl-4 border-l-2 border-primary/30">
+                    <div className="mb-4 lg:pl-4 lg:border-l-2 border-primary/30">
                       <p className="text-sm italic text-muted-foreground leading-relaxed">
                         {scenario.emotionalHook}
                       </p>
