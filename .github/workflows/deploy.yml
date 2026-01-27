@@ -21,7 +21,13 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          for i in 1 2 3; do
+            npm install && break
+            echo "Attempt $i failed, retrying in 15s..."
+            sleep 15
+          done
+        timeout-minutes: 15
 
       - name: Build project
         run: npm run build
