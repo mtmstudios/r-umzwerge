@@ -1,41 +1,57 @@
 
 
-# Plan: Logo-Margin noch weiter nach links
+# Plan: Dezenter Logo-Hover-Effekt
 
 ## Ziel
 
-Den negativen linken Margin des Logos vergrößern, damit es noch weiter links im Header erscheint und besser zur rechten CTA-Button-Position passt.
+Dem Logo einen subtilen Hover-Effekt hinzufügen, der die Interaktivität signalisiert, ohne die Premium-Ästhetik zu stören. Der Effekt soll dezent sein und gut zum bestehenden Design passen.
 
-## Aktuelle vs. neue Werte
+## Gewählter Effekt
 
-| Breakpoint | Aktuell | Neu |
-|------------|---------|-----|
-| Mobil | -ml-4 (-16px) | -ml-8 (-32px) |
-| Desktop (lg) | -ml-6 (-24px) | -ml-12 (-48px) |
+Eine Kombination aus **leichter Skalierung (1.03)** und **Opacity-Übergang** für einen sanften, professionellen Effekt.
 
 ## Technische Umsetzung
 
 **Datei: `src/components/layout/Header.tsx`**
 
-### Logo-Link Margin anpassen (Zeile 40)
+### Logo-Bild mit Hover-Transition (Zeile 42-46)
 
 ```tsx
 // Vorher:
-<a href="/" className="flex items-center group shrink-0 -ml-4 lg:-ml-6">
+<img 
+  src={logoRaeumzwerge} 
+  alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
+  className="h-64 lg:h-80 w-auto object-contain object-left"
+/>
 
 // Nachher:
-<a href="/" className="flex items-center group shrink-0 -ml-8 lg:-ml-12">
+<img 
+  src={logoRaeumzwerge} 
+  alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
+  className="h-64 lg:h-80 w-auto object-contain object-left transition-all duration-300 group-hover:scale-[1.03] group-hover:opacity-90"
+/>
 ```
+
+## Erklärung der Klassen
+
+| Klasse | Wirkung |
+|--------|---------|
+| `transition-all duration-300` | Sanfte 300ms Animation für alle Eigenschaften |
+| `group-hover:scale-[1.03]` | Logo wächst bei Hover um 3% (dezent) |
+| `group-hover:opacity-90` | Leichte Opacity-Änderung für visuelles Feedback |
+
+**Hinweis:** Die `group`-Klasse ist bereits auf dem umgebenden `<a>`-Tag vorhanden, daher funktioniert `group-hover` automatisch.
 
 ## Zusammenfassung
 
 | Datei | Änderung |
 |-------|----------|
-| `src/components/layout/Header.tsx` | Margin von `-ml-4 lg:-ml-6` auf `-ml-8 lg:-ml-12` erhöhen |
+| `src/components/layout/Header.tsx` | Hover-Transition-Klassen zum Logo-Bild hinzufügen |
 
 ## Ergebnis
 
-- Logo erscheint doppelt so weit links wie zuvor
-- Stärkere visuelle Balance zum rechten CTA-Button
-- Alle anderen Header-Elemente bleiben unverändert
+- Dezenter Skalierungseffekt (3%) bei Hover
+- Sanfte 300ms Animation
+- Nutzt bereits vorhandene `group`-Klasse
+- Konsistent mit anderen Hover-Effekten auf der Seite (z.B. CTA-Button)
 
