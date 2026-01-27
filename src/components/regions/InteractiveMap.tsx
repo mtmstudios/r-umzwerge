@@ -30,12 +30,12 @@ export function InteractiveMap({ activeCity, onCityHover }: InteractiveMapProps)
         <img
           src="/images/sueddeutschland-map.svg"
           alt="Karte von Süddeutschland"
-          className="w-full h-auto max-h-[520px] md:max-h-[560px] lg:max-h-[620px] object-contain"
+          className="w-full h-auto"
         />
 
         {/* Overlay for markers */}
         <svg
-          viewBox="0 0 595.5 842.25"
+          viewBox="100 240 450 400"
           className="absolute inset-0 w-full h-full"
           preserveAspectRatio="xMidYMid meet"
         >
