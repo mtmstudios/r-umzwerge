@@ -1,87 +1,76 @@
 
 
-## Vorher/Nachher-Bilder für Haushaltsauflösung LP einbauen
+## SEA Landingpage Hero vereinheitlichen
 
-Die hochgeladenen Bilder werden in den interaktiven Slider auf der SEA Landingpage `/lp/haushaltsaufloesung` eingebaut.
+Die SEA Hero-Komponente wird an das Layout der ServiceHero-Komponente angepasst, sodass alle Landingpages ein einheitliches, fullscreen Hero-Design haben.
 
 ---
 
-## Bilderzuordnung
+## Änderungen im Überblick
 
-| Bild | Verwendung | Beschreibung |
-|------|------------|--------------|
-| Gemini_Generated_Image_mytcoqmytcoqmytc-2.png | **VORHER** | Unordentliche Wohnung mit Kartons, Müllsäcken |
-| Gemini_Generated_Image_xel2kcxel2kcxel2-2.png | **NACHHER** | Leere, aufgeräumte Räume mit Holzboden |
+| Änderung | Beschreibung |
+|----------|--------------|
+| Neues Hero-Bild | Das hochgeladene Bild wird als gemeinsames Hero-Bild für alle drei LPs verwendet |
+| Layout-Anpassung | Entfernung des Desktop Side-by-Side Layouts zugunsten eines einheitlichen Fullscreen-Layouts |
+| Konsistenz | Angleichung an ServiceHero mit zentriertem Content auf allen Bildschirmgrößen |
 
 ---
 
 ## Umsetzungsschritte
 
-### 1. Bilder in public/images/ kopieren
+### 1. Hero-Bild speichern
 
-Die hochgeladenen Bilder werden mit aussagekräftigen Namen gespeichert:
+Das hochgeladene Bild (Räumzwerge-Team beim Beladen des Transporters) wird gespeichert als:
 
-- `public/images/haushaltsaufloesung-vorher.png` (unordentlich)
-- `public/images/haushaltsaufloesung-nachher.png` (aufgeräumt)
+- `public/images/sea-hero-team.png`
 
-### 2. SEAData Interface erweitern
+Dieses Bild zeigt das professionelle Team bei der Arbeit und eignet sich ideal als vertrauensbildendes Hero-Bild für alle SEA-Landingpages.
+
+### 2. SEAHero Komponente vereinfachen
+
+**Datei:** `src/components/sea/SEAHero.tsx`
+
+Die Komponente wird grundlegend vereinfacht:
+
+- Entfernung des separaten Desktop-Layouts (Side-by-Side Grid)
+- Einheitliches Fullscreen-Layout für ALLE Breakpoints (wie ServiceHero)
+- Beibehaltung der dynamischen CTA-Texte basierend auf dem Tone
+
+**Neues Layout (analog zu ServiceHero):**
+```text
+- Fullscreen Hintergrundbild mit Overlay
+- Zentrierter Content (H1, Subline, CTAs, Trust Pills)
+- Einheitliche Höhe: min-h-[85vh] auf Mobile, min-h-[75vh] auf Tablet, min-h-[70vh] auf Desktop
+```
+
+### 3. SEAData aktualisieren
 
 **Datei:** `src/lib/seaData.ts`
 
-Neue optionale Felder zum Interface hinzufügen:
+Das heroImage für alle drei Varianten wird auf das neue gemeinsame Bild geändert:
 
 ```text
-export interface SEAData {
-  // ... bestehende Felder ...
-  beforeImage?: string;
-  beforeImageAlt?: string;
-  afterImage?: string;
-  afterImageAlt?: string;
-}
+heroImage: '/images/sea-hero-team.png'
+heroImageAlt: 'Räumzwerge-Team beim professionellen Beladen des Transporters'
 ```
 
-### 3. Haushaltsauflösung-Daten aktualisieren
+---
 
-**Datei:** `src/lib/seaData.ts`
+## Vorher / Nachher Vergleich
 
-Bildpfade für haushaltsaufloesung hinzufügen:
-
-```text
-'haushaltsaufloesung': {
-  // ... bestehende Daten ...
-  beforeImage: '/images/haushaltsaufloesung-vorher.png',
-  beforeImageAlt: 'Wohnung vor der Haushaltsauflösung - voller Kartons und Gegenstände',
-  afterImage: '/images/haushaltsaufloesung-nachher.png',
-  afterImageAlt: 'Wohnung nach der Haushaltsauflösung - besenrein und übergabefertig',
-}
-```
-
-### 4. SEABeforeAfter Komponente anpassen
-
-**Datei:** `src/components/sea/SEABeforeAfter.tsx`
-
-Die Komponente wird so geändert, dass sie:
-- Prüft ob `data.beforeImage` und `data.afterImage` vorhanden sind
-- Falls ja: echte Bilder im Slider anzeigt
-- Falls nein: weiterhin Platzhalter verwendet
-
-```text
-// Statt nur auf isGentleMode zu prüfen:
-const hasRealImages = data.beforeImage && data.afterImage;
-
-{hasRealImages ? (
-  // Echter Before/After Slider mit data.beforeImage und data.afterImage
-) : (
-  // Platzhalter-Slider wie bisher
-)}
-```
+| Aspekt | Vorher (SEAHero) | Nachher |
+|--------|------------------|---------|
+| Desktop-Layout | Side-by-Side (Text links, Bild rechts) | Fullscreen zentriert |
+| Mobile-Layout | Fullscreen zentriert | Fullscreen zentriert (unverändert) |
+| Hintergrund Desktop | Gradient ohne Bild | Fullscreen Bild mit Overlay |
+| Hero-Bilder | Unterschiedliche pro LP | Ein gemeinsames Team-Bild |
 
 ---
 
 ## Erwartetes Ergebnis
 
-- Die Landingpage `/lp/haushaltsaufloesung` zeigt echte Vorher/Nachher-Bilder
-- Der interaktive Slider funktioniert wie bei der Messie-Seite
-- Andere Landingpages (entruempelung) zeigen weiterhin Platzhalter bis Bilder hinzugefügt werden
-- Bestehende Messie-Bilder bleiben unverändert
+- Alle drei SEA Landingpages (`/lp/haushaltsaufloesung`, `/lp/entruempelung`, `/lp/messie-hilfe`) haben einen einheitlichen, fullscreen Hero
+- Das neue Team-Bild vermittelt Professionalität und Vertrauen
+- Das Layout entspricht nun dem der ServicePages
+- Die spezifischen CTA-Texte (z.B. "Unverbindlich schreiben" für Messie-Hilfe) bleiben erhalten
 
