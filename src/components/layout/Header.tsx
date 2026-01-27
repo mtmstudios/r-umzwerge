@@ -37,7 +37,7 @@ isScrolled
       <div className="container-custom">
         <div className="flex items-center justify-between gap-6 lg:gap-8">
           {/* Logo */}
-          <a href="/" className="flex items-center group shrink-0 -ml-4 lg:-ml-6">
+          <a href="/" className="flex items-center group shrink-0 -ml-8 lg:-ml-12">
             <div className="h-20 lg:h-24 overflow-hidden flex items-center">
               <img 
                 src={logoRaeumzwerge} 
