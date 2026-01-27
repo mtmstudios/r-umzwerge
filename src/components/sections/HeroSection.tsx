@@ -17,8 +17,8 @@ export function HeroSection() {
 
   return (
     <section ref={ref} className="relative overflow-hidden">
-      {/* Mobile & Tablet: Fullscreen background with overlay */}
-      <div className="xl:hidden absolute inset-0">
+      {/* Fullscreen background for ALL breakpoints */}
+      <div className="absolute inset-0">
         <img 
           src={heroTeamImage} 
           alt="Räumzwerge-Team mit gebrandetem Transporter beim Verladen von Möbeln und Kartons vor einem Wohnhaus"
@@ -26,24 +26,21 @@ export function HeroSection() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30" />
       </div>
-
-      {/* Desktop: Standard background */}
-      <div className="hidden xl:block absolute inset-0 bg-gradient-to-br from-secondary/50 via-background to-background" />
       
       <div className="container-custom relative">
-        {/* Mobile & Tablet Layout: Fullscreen with centered content */}
+        {/* Unified Layout: Fullscreen with centered content for ALL breakpoints */}
         <div
           className={cn(
-            "xl:hidden min-h-[85vh] md:min-h-[75vh] flex flex-col justify-center items-center text-center px-4 py-16 md:py-20",
+            "min-h-[85vh] md:min-h-[75vh] xl:min-h-[70vh] flex flex-col justify-center items-center text-center px-4 py-16 md:py-20 xl:py-24",
             "scroll-reveal",
             isVisible && "visible"
           )}
         >
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 md:mb-6 text-balance leading-tight max-w-2xl">
+          <h1 className="text-3xl md:text-4xl xl:text-5xl 2xl:text-6xl font-bold text-white mb-4 md:mb-6 text-balance leading-tight max-w-4xl">
             Entrümpelung ohne Stress – sauber, diskret, transparent.
           </h1>
           
-          <p className="text-base md:text-lg text-white/90 mb-6 md:mb-8 max-w-xl">
+          <p className="text-base md:text-lg xl:text-xl text-white/90 mb-6 md:mb-8 max-w-2xl">
             Wohnung, Haus, Keller, Garage oder Gewerbe: Wir räumen fachgerecht und besenrein. Preiseinschätzung per WhatsApp-Foto – innerhalb von 24 Stunden.
           </p>
 
@@ -52,10 +49,10 @@ export function HeroSection() {
             <Button
               asChild
               size="lg"
-              className="gap-2 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground text-sm md:text-base h-12 md:h-14 px-4 md:px-6 btn-lift shadow-whatsapp"
+              className="gap-2 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground text-sm md:text-base xl:text-lg h-12 md:h-14 xl:h-16 px-4 md:px-6 xl:px-8 btn-lift shadow-whatsapp"
             >
               <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                <WhatsAppIcon className="h-5 w-5 flex-shrink-0" />
+                <WhatsAppIcon className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
                 <span className="hidden sm:inline">Foto senden · Preiseinschätzung erhalten</span>
                 <span className="sm:hidden">Foto senden · Preis erhalten</span>
               </a>
@@ -63,107 +60,30 @@ export function HeroSection() {
             <Button
               asChild
               size="lg"
-              className="gap-2 h-12 md:h-14 px-4 md:px-6 text-sm md:text-base bg-cta hover:bg-cta-hover text-cta-foreground border-0"
+              className="gap-2 h-12 md:h-14 xl:h-16 px-4 md:px-6 xl:px-8 text-sm md:text-base xl:text-lg bg-cta hover:bg-cta-hover text-cta-foreground border-0"
             >
               <a href={PHONE_LINK}>
-                <Phone className="h-5 w-5 flex-shrink-0" />
+                <Phone className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
                 Jetzt anrufen
               </a>
             </Button>
           </div>
 
-          <p className="text-sm text-white/70 mb-6">
+          <p className="text-sm xl:text-base text-white/70 mb-6">
             Unverbindlich. Keine versteckten Kosten.
           </p>
 
           {/* Trust Pills */}
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex flex-wrap justify-center gap-2 xl:gap-3">
             {trustPills.map((pill) => (
               <div
                 key={pill}
-                className="flex items-center gap-2 px-3 py-1.5 bg-white/15 backdrop-blur-sm rounded-full text-xs font-medium text-white border border-white/10"
+                className="flex items-center gap-2 px-3 py-1.5 xl:px-4 xl:py-2 bg-white/15 backdrop-blur-sm rounded-full text-xs xl:text-sm font-medium text-white border border-white/10"
               >
-                <CheckCircle className="h-3.5 w-3.5 text-accent" />
+                <CheckCircle className="h-3.5 w-3.5 xl:h-4 xl:w-4 text-accent" />
                 {pill}
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Desktop Layout: Original side-by-side grid */}
-        <div
-          className={cn(
-            "hidden xl:grid xl:grid-cols-2 gap-16 items-center py-20",
-            "scroll-reveal",
-            isVisible && "visible"
-          )}
-        >
-          {/* Content */}
-          <div>
-            <h1 className="text-hero text-foreground mb-6 text-balance">
-              Entrümpelung ohne Stress – sauber, diskret, transparent.
-            </h1>
-            
-            <p className="text-lg text-muted-foreground mb-8 max-w-xl">
-              Wohnung, Haus, Keller, Garage oder Gewerbe: Wir räumen fachgerecht und besenrein. Preiseinschätzung per WhatsApp-Foto – innerhalb von 24 Stunden (oft schneller).
-            </p>
-
-            {/* Desktop CTAs */}
-            <div className="flex flex-row gap-4 mb-6 max-w-xl">
-              <Button
-                asChild
-                size="lg"
-                className="gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground text-base h-14 px-6 btn-lift shadow-whatsapp shrink-0"
-              >
-                <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                  <WhatsAppIcon className="h-5 w-5 flex-shrink-0" />
-                  Foto senden · Preiseinschätzung erhalten
-                </a>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="gap-2 h-14 px-6 text-base border-2 border-primary hover:bg-cta hover:text-cta-foreground hover:border-cta transition-all duration-300 shrink-0"
-              >
-                <a href={PHONE_LINK}>
-                  <Phone className="h-5 w-5 flex-shrink-0" />
-                  Jetzt anrufen
-                </a>
-              </Button>
-            </div>
-
-            <p className="text-sm text-muted-foreground mb-8">
-              Unverbindlich. Keine versteckten Kosten.
-            </p>
-
-            {/* Desktop Trust Pills */}
-            <div className="flex flex-wrap gap-3">
-              {trustPills.map((pill) => (
-                <div
-                  key={pill}
-                  className="flex items-center gap-2 px-4 py-2 bg-secondary rounded-full text-sm font-medium text-secondary-foreground"
-                >
-                  <CheckCircle className="h-4 w-4 text-accent" />
-                  {pill}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Hero Visual (Desktop only) */}
-          <div className="relative">
-            <div className="aspect-square rounded-3xl overflow-hidden shadow-soft">
-              <img
-                src={heroTeamImage}
-                alt="Räumzwerge-Team mit gebrandetem Transporter beim Verladen von Möbeln und Kartons vor einem Wohnhaus"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            
-            {/* Decorative elements */}
-            <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-accent/20 rounded-2xl -z-10" />
-            <div className="absolute -top-4 -right-4 w-16 h-16 bg-primary/10 rounded-xl -z-10" />
           </div>
         </div>
       </div>
