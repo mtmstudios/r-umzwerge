@@ -27,37 +27,37 @@ export function ServiceScope({ included, optional }: ServiceScopeProps) {
 
           <div className="grid md:grid-cols-2 gap-4 sm:gap-6 lg:gap-12 max-w-4xl mx-auto">
             {/* Included - with accent border */}
-            <div className="bg-primary/5 border border-primary/20 rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 relative overflow-hidden">
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-accent" />
-              <h3 className="font-semibold text-foreground mb-4 sm:mb-6 flex items-center gap-2 text-sm sm:text-base">
+            <div className="bg-primary/5 border border-primary/20 rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 relative overflow-hidden text-center lg:text-left">
+              <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-1 bg-accent" />
+              <h3 className="font-semibold text-foreground mb-4 sm:mb-6 flex flex-col lg:flex-row items-center lg:items-start gap-2 text-sm sm:text-base">
                 <div className="w-7 h-7 sm:w-8 sm:h-8 bg-primary rounded-lg flex items-center justify-center">
                   <Check className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" />
                 </div>
                 Inklusive
               </h3>
-              <ul className="space-y-3 sm:space-y-4">
+              <ul className="space-y-3 sm:space-y-4 inline-flex flex-col items-center lg:items-start">
                 {included.map((item) => (
                   <li key={item} className="flex items-start gap-2.5 sm:gap-3">
                     <Check className="h-4 w-4 sm:h-5 sm:w-5 text-accent flex-shrink-0 mt-0.5" />
-                    <span className="text-sm sm:text-base text-foreground">{item}</span>
+                    <span className="text-sm sm:text-base text-foreground text-left">{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
             {/* Optional */}
-            <div className="bg-secondary/50 border border-border rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8">
-              <h3 className="font-semibold text-foreground mb-4 sm:mb-6 flex items-center gap-2 text-sm sm:text-base">
+            <div className="bg-secondary/50 border border-border rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 text-center lg:text-left">
+              <h3 className="font-semibold text-foreground mb-4 sm:mb-6 flex flex-col lg:flex-row items-center lg:items-start gap-2 text-sm sm:text-base">
                 <div className="w-7 h-7 sm:w-8 sm:h-8 bg-secondary rounded-lg flex items-center justify-center">
                   <Plus className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
                 </div>
                 Optional
               </h3>
-              <ul className="space-y-3 sm:space-y-4">
+              <ul className="space-y-3 sm:space-y-4 inline-flex flex-col items-center lg:items-start">
                 {optional.map((item) => (
                   <li key={item} className="flex items-start gap-2.5 sm:gap-3">
                     <Plus className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
-                    <span className="text-sm sm:text-base text-muted-foreground">{item}</span>
+                    <span className="text-sm sm:text-base text-muted-foreground text-left">{item}</span>
                   </li>
                 ))}
               </ul>

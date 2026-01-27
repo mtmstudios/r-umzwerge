@@ -88,10 +88,13 @@ export function useTimelineProgress(stepsCount: number) {
     };
   }, [stepsCount, isMobile]);
 
-  // On mobile, activate first step immediately
+  // On mobile, activate first step with delay to ensure bounce animation triggers
   useEffect(() => {
     if (isMobile && activeStep === -1) {
-      goToStep(0);
+      const timer = setTimeout(() => {
+        goToStep(0);
+      }, 100);
+      return () => clearTimeout(timer);
     }
   }, [isMobile, activeStep, goToStep]);
 

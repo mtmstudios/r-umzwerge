@@ -36,7 +36,7 @@ export function ExtraModule({ title, subtitle, points }: ExtraModuleProps) {
               
               <div className="relative z-10 grid lg:grid-cols-5 gap-6 lg:gap-8 p-6 lg:p-10">
                 {/* Left side: Icon cluster */}
-                <div className="lg:col-span-2 flex flex-col justify-center items-center lg:items-start">
+                <div className="lg:col-span-2 flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
                   <div className="relative">
                     {/* Main icon */}
                     <div className="w-20 h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center mb-4">
@@ -63,7 +63,7 @@ export function ExtraModule({ title, subtitle, points }: ExtraModuleProps) {
                 </div>
 
                 {/* Right side: Content */}
-                <div className="lg:col-span-3">
+                <div className="lg:col-span-3 text-center lg:text-left">
                   <h2 className="text-xl lg:text-2xl font-semibold text-foreground mb-2 lg:mb-3">
                     {title}
                   </h2>
