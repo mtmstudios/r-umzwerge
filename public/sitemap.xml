@@ -28,6 +28,13 @@
     <priority>0.3</priority>
   </url>
   
+  <!-- Barrierefreiheit -->
+  <url>
+    <loc>https://raeumzwerge.de/barrierefreiheit</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  
   <!-- Leistungsseiten -->
   <url>
     <loc>https://raeumzwerge.de/leistungen/wohnungsentruempelung</loc>
