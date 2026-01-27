@@ -293,7 +293,7 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       subline: 'Foto senden, Preiseinschätzung < 24h, Termin – fertig.',
       trustPills: ['Auch enge Zugänge', 'Entsorgung inklusive', 'Besenrein'],
       imageSrc: '/images/service-keller.jpg',
-      imageAlt: 'Leerer, aufgeräumter Kellerraum nach der Entrümpelung',
+      imageAlt: 'Räumzwerge-Team beim Sortieren und Verladen von Kartons in einer Garage',
     },
     scenarios: [
       { 
