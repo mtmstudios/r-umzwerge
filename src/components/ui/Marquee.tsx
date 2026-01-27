@@ -26,7 +26,7 @@ export function Marquee({
     <div
       className={cn(
         'marquee-container overflow-hidden',
-        pauseOnHover && 'hover:[&_.marquee-track]:pause',
+        pauseOnHover && '[&:hover_.marquee-track]:[animation-play-state:paused]',
         className
       )}
     >
