@@ -10,7 +10,7 @@ interface CityListProps {
 
 export function CityList({ activeCity, onCityHover }: CityListProps) {
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex flex-col gap-1">
       {REGIONS.map((region) => {
         const isActive = activeCity === region.slug;
         const isHQ = region.isHQ;
@@ -22,7 +22,7 @@ export function CityList({ activeCity, onCityHover }: CityListProps) {
             onMouseEnter={() => onCityHover?.(region.slug)}
             onMouseLeave={() => onCityHover?.(null)}
             className={cn(
-              "flex items-center justify-between p-3 md:p-3.5 rounded-lg border transition-all duration-200",
+              "flex items-center justify-between p-2 md:p-2.5 rounded-lg border transition-all duration-200",
               "group cursor-pointer",
               isActive
                 ? "bg-primary/10 border-primary shadow-sm"
