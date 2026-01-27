@@ -1,49 +1,66 @@
 
-
-# Plan: Logo noch größer machen und mehr vom Bild zeigen
+# Plan: Header-Höhe reduzieren für kompakteres Design
 
 ## Ziel
 
-Das Logo soll größer werden und mehr vom Originalbild sichtbar sein (weniger Zuschnitt).
+Die Header-Höhe auf Desktop und Mobil reduzieren, während das Logo weiterhin prominent und gut sichtbar bleibt.
 
 ## Aktuelle Werte
 
 | Element | Mobil | Desktop |
 |---------|-------|---------|
-| Logo-Container | h-24 (96px) | h-28 (112px) |
-| Logo-Bild | h-40 (160px) | h-56 (224px) |
-| **Sichtbarer Anteil** | ~60% | ~50% |
+| Logo-Container | h-32 (128px) | h-40 (160px) |
+| Logo-Bild | h-44 (176px) | h-56 (224px) |
+| Header-Padding (normal) | py-2 (16px) | py-3 (24px) |
+| Header-Padding (scrolled) | py-1 (8px) | py-1 (8px) |
+| **Geschätzte Gesamthöhe** | ~144px | ~184px |
 
-## Neue Werte
+## Neue Werte (kompakter)
 
 | Element | Mobil | Desktop |
 |---------|-------|---------|
-| Logo-Container | h-32 (128px) | h-40 (160px) |
-| Logo-Bild | h-44 (176px) | h-56 (224px) |
-| **Sichtbarer Anteil** | ~73% | ~71% |
+| Logo-Container | h-20 (80px) | h-24 (96px) |
+| Logo-Bild | h-32 (128px) | h-40 (160px) |
+| Header-Padding (normal) | py-1 (8px) | py-1.5 (12px) |
+| Header-Padding (scrolled) | py-0.5 (4px) | py-1 (8px) |
+| **Geschätzte Gesamthöhe** | ~88px | ~108px |
 
 ## Technische Umsetzung
 
 **Datei: `src/components/layout/Header.tsx`**
 
-### Logo-Container und Bild anpassen (Zeile 41-46)
+### 1. Header-Padding reduzieren (Zeile 32-34)
 
 ```tsx
 // Vorher:
-<div className="h-24 lg:h-28 overflow-hidden flex items-center">
-  <img 
-    src={logoRaeumzwerge} 
-    alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
-    className="h-40 lg:h-56 w-auto object-contain object-left"
-  />
-</div>
+isScrolled
+  ? "glass-strong shadow-lg py-1"
+  : "bg-card py-2 lg:py-3"
 
 // Nachher:
+isScrolled
+  ? "glass-strong shadow-lg py-0.5 lg:py-1"
+  : "bg-card py-1 lg:py-1.5"
+```
+
+### 2. Logo-Container und Bild verkleinern (Zeile 41-46)
+
+```tsx
+// Vorher:
 <div className="h-32 lg:h-40 overflow-hidden flex items-center">
   <img 
     src={logoRaeumzwerge} 
     alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
     className="h-44 lg:h-56 w-auto object-contain object-left"
+  />
+</div>
+
+// Nachher:
+<div className="h-20 lg:h-24 overflow-hidden flex items-center">
+  <img 
+    src={logoRaeumzwerge} 
+    alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
+    className="h-32 lg:h-40 w-auto object-contain object-left"
   />
 </div>
 ```
@@ -52,12 +69,12 @@ Das Logo soll größer werden und mehr vom Originalbild sichtbar sein (weniger Z
 
 | Datei | Änderung |
 |-------|----------|
-| `src/components/layout/Header.tsx` | Container von h-24/h-28 auf h-32/h-40; Bild auf h-44/h-56 anpassen |
+| `src/components/layout/Header.tsx` | Logo-Container von h-32/h-40 auf h-20/h-24; Logo-Bild von h-44/h-56 auf h-32/h-40; Header-Padding reduzieren |
 
 ## Ergebnis
 
-- Container wird deutlich größer (128px mobil / 160px Desktop)
-- Mehr vom Logo wird sichtbar (~70% statt ~50-60%)
-- Logo erscheint prominenter und vollständiger
-- Header-Höhe steigt entsprechend für maximale Logo-Präsenz
-
+- Header wird ca. 50-75px niedriger auf beiden Gerätetypen
+- Logo bleibt prominent durch den Overflow-Crop-Effekt
+- Kompakteres, professionelleres Erscheinungsbild
+- Mehr Platz für den eigentlichen Seiteninhalt
+- Verhältnis Container:Bild bleibt ähnlich (~60% sichtbar)
