@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import Impressum from "./pages/Impressum";
 import ServicePage from "./pages/ServicePage";
 import SEALandingPage from "./pages/SEALandingPage";
 import Contact from "./pages/Contact";
@@ -23,6 +24,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/kontakt" element={<Contact />} />
+          <Route path="/impressum" element={<Impressum />} />
           <Route path="/leistungen/:slug" element={<ServicePage />} />
           <Route path="/lp/:slug" element={<SEALandingPage />} />
           {/* City landing pages - must be before catch-all */}
