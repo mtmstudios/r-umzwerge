@@ -2,8 +2,20 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FloatingCTAs } from '@/components/layout/FloatingCTAs';
 import { Card, CardContent } from '@/components/ui/card';
-import { Phone, Mail, MapPin, ExternalLink, Shield, Lock, Cookie, Users, Server, MessageSquare, BarChart3, Megaphone } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Phone, Mail, MapPin, ExternalLink, Shield, Lock, Cookie, Users, Server, MessageSquare, BarChart3, Megaphone, Settings } from 'lucide-react';
 import { PHONE_NUMBER, EMAIL } from '@/lib/constants';
+import { useCookieConsent } from '@/components/consent/CookieConsentContext';
+
+function CookieSettingsButton() {
+  const { openBanner } = useCookieConsent();
+  return (
+    <Button onClick={openBanner} variant="outline" className="gap-2">
+      <Cookie className="h-4 w-4" />
+      Cookie-Einstellungen öffnen
+    </Button>
+  );
+}
 
 export default function Datenschutz() {
   const tocItems = [
@@ -17,6 +29,7 @@ export default function Datenschutz() {
     { id: 'schriftarten', label: '8. Schriftarten' },
     { id: 'cookies', label: '9. Cookies' },
     { id: 'betroffenenrechte', label: '10. Betroffenenrechte' },
+    { id: 'cookie-einstellungen', label: '11. Cookie-Einstellungen ändern' },
   ];
 
   return (
@@ -581,6 +594,27 @@ export default function Datenschutz() {
                 >
                   {EMAIL}
                 </a>
+              </p>
+            </div>
+          </section>
+
+          {/* 11. Cookie-Einstellungen ändern */}
+          <section id="cookie-einstellungen" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Settings className="h-5 w-5 text-primary" />
+              11. Cookie-Einstellungen ändern
+            </h2>
+            <div className="space-y-4 text-muted-foreground">
+              <p>
+                Sie können Ihre Cookie-Einstellungen jederzeit ändern oder widerrufen. 
+                Klicken Sie auf die Schaltfläche unten, um das Cookie-Banner erneut zu öffnen 
+                und Ihre Präferenzen anzupassen.
+              </p>
+              <CookieSettingsButton />
+              <p className="text-sm">
+                Ihre aktuellen Einstellungen werden in Ihrem Browser gespeichert und bleiben 
+                auch nach dem Schließen des Browsers erhalten, bis Sie sie ändern oder die 
+                Browserdaten löschen.
               </p>
             </div>
           </section>
