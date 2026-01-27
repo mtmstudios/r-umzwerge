@@ -1,279 +1,284 @@
 
-# Datenschutzerklaerung erstellen (DSGVO-konform)
+
+# Cookie-Consent-Banner und Barrierefreiheit
 
 ## Uebersicht
 
-Erstellung einer vollstaendigen, DSGVO-konformen Datenschutzerklaerung fuer raeumzwerge.de nach deutschem Recht. N8N Cloud wird als Auftragsverarbeiter fuer das Kontaktformular dokumentiert.
+Implementierung eines TTDSG-konformen Cookie-Consent-Banners sowie einer Barrierefreiheitserklaerung nach deutschem Recht (BFSG/BITV 2.0) mit integriertem Barrierefreiheits-Widget zur Anpassung von Schriftgroesse, Kontrast und weiteren Einstellungen.
 
 ---
 
-## Zu dokumentierende Dienste
+## Teil 1: Cookie-Consent-Banner (TTDSG § 25)
 
-| Dienst | Kategorie | Rechtsgrundlage |
-|--------|-----------|-----------------|
-| United Domains Hosting | Infrastruktur | Art. 6 Abs. 1 lit. f DSGVO |
-| N8N Cloud | Auftragsverarbeitung (Kontaktformular) | Art. 6 Abs. 1 lit. b + Art. 28 DSGVO |
-| Google Analytics 4 | Webanalyse | Art. 6 Abs. 1 lit. a DSGVO (Einwilligung) |
-| Google Ads Conversion Tracking | Marketing | Art. 6 Abs. 1 lit. a DSGVO (Einwilligung) |
-| WhatsApp Business | Kommunikation | Art. 6 Abs. 1 lit. b DSGVO |
-| Lokale Schriftarten | Design | Keine Datenuebermittlung |
+### Rechtliche Anforderungen
+
+| Anforderung | Umsetzung |
+|-------------|-----------|
+| Opt-in vor Tracking | Google Analytics und Ads werden erst nach Einwilligung geladen |
+| Granulare Auswahl | Getrennte Kategorien: Notwendig, Statistik, Marketing |
+| Widerrufbarkeit | Jederzeit ueber Footer-Link oder erneutes Oeffnen des Banners |
+| Dokumentation | Consent-Status wird in localStorage gespeichert |
+| Gleichwertige Buttons | "Alle akzeptieren" und "Nur Notwendige" gleich prominent |
+
+### Cookie-Kategorien
+
+| Kategorie | Cookies | Erforderlich |
+|-----------|---------|--------------|
+| Notwendig | consent_status, accessibility_settings | Immer aktiv |
+| Statistik | Google Analytics (_ga, _ga_*) | Einwilligung |
+| Marketing | Google Ads (_gcl_au) | Einwilligung |
+
+### Komponenten-Architektur
+
+```text
+src/components/consent/
+  CookieConsentBanner.tsx    # Haupt-Banner mit Kategorien
+  CookieConsentContext.tsx   # React Context fuer globalen Consent-Status
+  consentUtils.ts            # Hilfsfunktionen (localStorage, gtag-Integration)
+```
+
+### Funktionsweise
+
+1. **Beim ersten Besuch**: Banner wird angezeigt
+2. **Nutzer waehlt**: "Alle akzeptieren", "Nur Notwendige" oder individuelle Auswahl
+3. **Nach Einwilligung**: 
+   - Consent wird in localStorage gespeichert
+   - Bei Statistik/Marketing: Google-Scripts werden dynamisch geladen
+4. **Widerruf**: Ueber Footer-Link oder Barrierefreiheits-Widget
+
+### Banner-Design
+
+```text
++--------------------------------------------------+
+|  Cookie-Einstellungen                            |
+|                                                  |
+|  Wir nutzen Cookies, um unsere Website zu        |
+|  verbessern und Ihnen relevante Inhalte          |
+|  anzuzeigen.                                     |
+|                                                  |
+|  [v] Notwendig (immer aktiv)                     |
+|  [ ] Statistik (Google Analytics)                |
+|  [ ] Marketing (Google Ads)                      |
+|                                                  |
+|  [Nur Notwendige]  [Auswahl speichern]  [Alle]   |
+|                                                  |
+|  Mehr in unserer Datenschutzerklaerung           |
++--------------------------------------------------+
+```
+
+---
+
+## Teil 2: Barrierefreiheitserklaerung (BFSG/BITV 2.0)
+
+### Rechtliche Anforderungen nach BFSG
+
+Das Barrierefreiheitsstaerkungsgesetz (BFSG) tritt am 28.06.2025 in Kraft. Fuer B2C-Webshops und Dienstleistungswebsites gelten folgende Anforderungen:
+
+| Anforderung | Standard |
+|-------------|----------|
+| Technische Basis | WCAG 2.1 Level AA |
+| Barrierefreiheitserklaerung | Pflicht (nach EU-Richtlinie) |
+| Feedback-Mechanismus | Kontaktmoeglichkeit fuer Barrieren melden |
+| Durchsetzungsstelle | Angabe der zustaendigen Behoerde |
+
+### Inhalt der Erklaerung
+
+1. **Stand der Barrierefreiheit**: Selbstbewertung (teilweise/vollstaendig konform)
+2. **Bekannte Einschraenkungen**: Dokumentierte Barrieren
+3. **Feedback-Moeglichkeit**: E-Mail/Telefon fuer Meldungen
+4. **Durchsetzungsverfahren**: Link zur Schlichtungsstelle
+5. **Technische Informationen**: Unterstuetzte Browser, assistive Technologien
+
+### Neue Seite: /barrierefreiheit
+
+Struktur analog zu Impressum/Datenschutz mit folgenden Abschnitten:
+
+```text
+1. Geltungsbereich
+2. Stand der Barrierefreiheit
+3. Bekannte Einschraenkungen
+4. Erstellung dieser Erklaerung
+5. Feedback und Kontakt
+6. Durchsetzungsverfahren
+7. Technische Anforderungen
+```
+
+---
+
+## Teil 3: Barrierefreiheits-Widget
+
+### Funktionen
+
+| Einstellung | Optionen | Speicherung |
+|-------------|----------|-------------|
+| Schriftgroesse | Normal / Gross / Sehr gross | localStorage |
+| Kontrast | Normal / Hoch | localStorage |
+| Animationen | An / Reduziert | localStorage |
+| Cookie-Einstellungen | Button zum erneuten Oeffnen | - |
+
+### Widget-Design
+
+```text
++----------------------------------+
+|  Barrierefreiheit         [X]   |
+|                                  |
+|  Schriftgroesse                  |
+|  [Normal] [Gross] [Sehr gross]   |
+|                                  |
+|  Kontrast                        |
+|  [Normal] [Hoch]                 |
+|                                  |
+|  Animationen                     |
+|  [An] [Reduziert]                |
+|                                  |
+|  [Cookie-Einstellungen aendern]  |
++----------------------------------+
+```
+
+### Technische Umsetzung
+
+- **Trigger-Button**: Im Footer, evtl. auch als kleine Schaltflaeche (Accessibility-Icon) am Seitenrand
+- **CSS-Variablen**: Schriftgroesse und Kontrast werden ueber CSS Custom Properties gesteuert
+- **prefers-reduced-motion**: Respektiert Systemeinstellungen
+
+### CSS-Implementierung fuer Schriftgroesse
+
+```css
+:root {
+  --font-scale: 1;
+}
+
+:root.font-large {
+  --font-scale: 1.15;
+}
+
+:root.font-xlarge {
+  --font-scale: 1.3;
+}
+
+body {
+  font-size: calc(1rem * var(--font-scale));
+}
+```
 
 ---
 
 ## Dateiaenderungen
 
-| Datei | Aktion | Beschreibung |
-|-------|--------|--------------|
-| `src/pages/Datenschutz.tsx` | NEU | Vollstaendige Datenschutzerklaerung (~450 Zeilen) |
-| `src/App.tsx` | AENDERN | Route `/datenschutz` + Import hinzufuegen |
-| `public/sitemap.xml` | AENDERN | URL `/datenschutz` eintragen |
+### Neue Dateien
 
-**Hinweis**: Der Footer-Link ist bereits vorhanden (Zeile 99-103).
+| Datei | Beschreibung |
+|-------|--------------|
+| `src/components/consent/CookieConsentBanner.tsx` | Cookie-Banner mit Kategorien-Auswahl |
+| `src/components/consent/CookieConsentContext.tsx` | React Context fuer Consent-Status |
+| `src/components/consent/consentUtils.ts` | localStorage-Funktionen, gtag-Integration |
+| `src/components/accessibility/AccessibilityWidget.tsx` | Barrierefreiheits-Widget |
+| `src/components/accessibility/AccessibilityContext.tsx` | React Context fuer Einstellungen |
+| `src/pages/Barrierefreiheit.tsx` | Barrierefreiheitserklaerung (~250 Zeilen) |
 
----
+### Zu aendernde Dateien
 
-## Seitenstruktur
-
-Die Datenschutzerklaerung wird folgende Abschnitte enthalten:
-
-### Inhaltsverzeichnis (mit Sprungmarken)
-
-1. Verantwortlicher
-2. Allgemeine Hinweise und Pflichtinformationen
-3. Hosting
-4. Kontaktformular (N8N Cloud)
-5. WhatsApp-Kommunikation
-6. Google Analytics 4
-7. Google Ads Conversion Tracking
-8. Schriftarten
-9. Cookies
-10. Betroffenenrechte
-
----
-
-## Inhalt der Abschnitte
-
-### 1. Verantwortlicher
-
-```text
-Raeumzwerge
-Inhaber: Adem Kekec
-Bibertalstrasse 1
-89278 Nersingen
-Deutschland
-
-Telefon: +49 160 3080676
-E-Mail: hallo@raeumzwerge.de
-```
-
-### 2. Allgemeine Hinweise
-
-- SSL/TLS-Verschluesselung
-- Hinweise zur Datenverarbeitung auf dieser Website
-- Widerruf erteilter Einwilligungen (Art. 7 Abs. 3 DSGVO)
-- Beschwerderecht bei Aufsichtsbehoerde (BayLDA)
-- Recht auf Datenuebertragbarkeit (Art. 20 DSGVO)
-
-### 3. Hosting (United Domains)
-
-```text
-Anbieter: United Domains AG
-Gautinger Str. 10, 82319 Starnberg, Deutschland
-
-Erfasste Daten:
-- IP-Adresse
-- Browser-Typ und -Version
-- Betriebssystem
-- Referrer-URL
-- Zeitpunkt des Zugriffs
-
-Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse)
-Speicherdauer: Server-Logfiles werden nach 30 Tagen geloescht
-```
-
-### 4. Kontaktformular (N8N Cloud)
-
-```text
-Anbieter: n8n GmbH
-Borsigstrasse 27, 10115 Berlin, Deutschland
-
-Verarbeitung: Formulardaten werden ueber N8N Cloud 
-              als Auftragsverarbeiter weitergeleitet
-Erfasste Daten: Name, E-Mail, Nachricht, Telefonnummer (falls angegeben)
-Zweck: Bearbeitung Ihrer Kontaktanfrage
-
-Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragsanbahnung)
-Auftragsverarbeitung: Vertrag nach Art. 28 DSGVO mit n8n GmbH
-
-Speicherdauer: Daten werden nach Abschluss der Anfrage 
-               und Ablauf gesetzlicher Aufbewahrungsfristen geloescht
-```
-
-### 5. WhatsApp-Kommunikation
-
-```text
-Anbieter: WhatsApp Ireland Limited
-4 Grand Canal Square, Dublin 2, Irland
-(Muttergesellschaft: Meta Platforms, Inc., USA)
-
-Erfasste Daten: Telefonnummer, Nachrichteninhalt, Zeitstempel
-Datenuebermittlung: USA (EU-US Data Privacy Framework)
-
-Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragsanbahnung)
-Hinweis: Bei Nutzung gelten die Datenschutzbestimmungen von Meta
-```
-
-### 6. Google Analytics 4
-
-```text
-Anbieter: Google Ireland Limited
-Gordon House, Barrow Street, Dublin 4, Irland
-
-Zweck: Analyse des Nutzerverhaltens zur Website-Optimierung
-Erfasste Daten:
-- Seitenaufrufe und Verweildauer
-- Geraeteinformationen (Geraetetyp, Browser, Bildschirmaufloesung)
-- Ungefaehrer Standort (Land/Stadt, keine genaue IP)
-- Referrer (woher der Besucher kam)
-
-IP-Anonymisierung: Aktiv (GA4 speichert keine vollstaendigen IP-Adressen)
-Datenuebermittlung: USA (EU-US Data Privacy Framework)
-
-Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO (Einwilligung erforderlich)
-
-Cookies:
-- _ga: Unterscheidung von Nutzern (Laufzeit: 2 Jahre)
-- _ga_*: Sitzungszustand (Laufzeit: 2 Jahre)
-
-Opt-Out: Browser-Add-on unter tools.google.com/dlpage/gaoptout
-Weitere Infos: policies.google.com/privacy
-```
-
-### 7. Google Ads Conversion Tracking
-
-```text
-Anbieter: Google Ireland Limited
-Gordon House, Barrow Street, Dublin 4, Irland
-
-Zweck: Messung der Werbewirksamkeit, Conversion-Erfassung
-Erfasste Daten: Aktionen nach Klick auf Google-Werbeanzeige
-                (z.B. Formular-Absendung, Anruf-Klick)
-
-Datenuebermittlung: USA (EU-US Data Privacy Framework)
-Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO (Einwilligung erforderlich)
-
-Cookies:
-- _gcl_au: Conversion-Linker (Laufzeit: 90 Tage)
-
-Opt-Out: Personalisierte Werbung unter adssettings.google.com
-Weitere Infos: policies.google.com/privacy
-```
-
-### 8. Schriftarten (Lokal gehostet)
-
-```text
-Schriftart: Inter (Open Font License)
-Hosting: Lokal auf unserem Server
-
-Datenuebermittlung: Keine
-Hinweis: Es werden KEINE externen Schriftarten-Dienste 
-         wie Google Fonts verwendet. Die Schriften sind 
-         vollstaendig auf unserem Server gespeichert.
-```
-
-### 9. Cookies
-
-| Cookie | Anbieter | Zweck | Laufzeit | Einwilligung |
-|--------|----------|-------|----------|--------------|
-| _ga | Google | Analytics - Nutzerunterscheidung | 2 Jahre | Ja |
-| _ga_* | Google | Analytics - Sitzungsstatus | 2 Jahre | Ja |
-| _gcl_au | Google | Ads - Conversion-Tracking | 90 Tage | Ja |
-
-### 10. Betroffenenrechte (DSGVO Art. 15-21)
-
-- **Auskunftsrecht (Art. 15)**: Sie haben das Recht, eine Bestaetigung darueber zu verlangen, ob personenbezogene Daten verarbeitet werden.
-
-- **Recht auf Berichtigung (Art. 16)**: Sie haben das Recht, die Berichtigung unrichtiger Daten zu verlangen.
-
-- **Recht auf Loeschung (Art. 17)**: Sie haben das Recht, die Loeschung Ihrer Daten zu verlangen ("Recht auf Vergessenwerden").
-
-- **Recht auf Einschraenkung (Art. 18)**: Sie haben das Recht, die Einschraenkung der Verarbeitung zu verlangen.
-
-- **Recht auf Datenuebertragbarkeit (Art. 20)**: Sie haben das Recht, Ihre Daten in einem maschinenlesbaren Format zu erhalten.
-
-- **Widerspruchsrecht (Art. 21)**: Sie haben das Recht, aus Gruenden, die sich aus Ihrer besonderen Situation ergeben, jederzeit gegen die Verarbeitung Widerspruch einzulegen.
-
-### Aufsichtsbehoerde
-
-```text
-Bayerisches Landesamt fuer Datenschutzaufsicht (BayLDA)
-Promenade 18
-91522 Ansbach
-Deutschland
-
-E-Mail: poststelle@lda.bayern.de
-Web: www.lda.bayern.de
-```
-
----
-
-## Design der Seite
-
-- Gleiches Layout wie Impressum-Seite
-- Header + Footer + FloatingCTAs
-- Card-Komponenten fuer Verantwortlichen und Kontakt
-- Inhaltsverzeichnis mit klickbaren Sprungmarken (Anchor-Links)
-- Tabellen fuer Cookie-Uebersicht
-- Stand-Datum: Januar 2026
-- Responsive fuer Mobile und Desktop
+| Datei | Aenderung |
+|-------|-----------|
+| `src/App.tsx` | Context-Provider einbinden, Route hinzufuegen |
+| `src/index.css` | CSS-Variablen fuer Schriftgroesse/Kontrast |
+| `src/components/layout/Footer.tsx` | Links fuer Cookie-Einstellungen und Barrierefreiheit |
+| `public/sitemap.xml` | URL `/barrierefreiheit` hinzufuegen |
+| `src/pages/Datenschutz.tsx` | Abschnitt "11. Cookie-Einstellungen aendern" hinzufuegen |
 
 ---
 
 ## Technische Details
 
-### src/pages/Datenschutz.tsx
+### CookieConsentContext
 
-```text
-Aufbau:
-1. Imports (Header, Footer, FloatingCTAs, Card, Icons)
-2. Inhaltsverzeichnis mit Sprungmarken
-3. Abschnitte mit IDs fuer Anchor-Navigation
-4. Konsistentes Styling mit Impressum-Seite
+```typescript
+interface ConsentState {
+  necessary: boolean;    // immer true
+  statistics: boolean;   // Google Analytics
+  marketing: boolean;    // Google Ads
+  timestamp: string;     // Zeitpunkt der Einwilligung
+}
+
+// Funktionen
+- getConsent(): ConsentState
+- setConsent(consent: ConsentState): void
+- resetConsent(): void  // Loescht und zeigt Banner erneut
 ```
 
-### src/App.tsx
+### Google Analytics/Ads Integration
 
-```text
-Aenderungen:
-- Import: import Datenschutz from "./pages/Datenschutz";
-- Route: <Route path="/datenschutz" element={<Datenschutz />} />
+```typescript
+// Wird nur geladen wenn consent.statistics === true
+const loadGoogleAnalytics = (measurementId: string) => {
+  const script = document.createElement('script');
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+  script.async = true;
+  document.head.appendChild(script);
+  
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function() { dataLayer.push(arguments); };
+  gtag('js', new Date());
+  gtag('config', measurementId, { anonymize_ip: true });
+};
 ```
 
-### public/sitemap.xml
+### AccessibilityContext
+
+```typescript
+interface AccessibilitySettings {
+  fontSize: 'normal' | 'large' | 'xlarge';
+  highContrast: boolean;
+  reducedMotion: boolean;
+}
+
+// Wird beim Start aus localStorage geladen
+// Aenderungen werden sofort auf document.documentElement angewendet
+```
+
+---
+
+## Footer-Ergaenzungen
+
+Neuer Abschnitt im Footer "Rechtliches":
 
 ```text
-Neue URL:
-<url>
-  <loc>https://raeumzwerge.de/datenschutz</loc>
-  <changefreq>yearly</changefreq>
-  <priority>0.3</priority>
-</url>
+- Impressum
+- Datenschutz
+- Barrierefreiheit (NEU)
+- Cookie-Einstellungen (NEU - oeffnet Banner)
 ```
 
 ---
 
 ## Zusammenfassung
 
-| Datei | Aktion | Zeilen |
-|-------|--------|--------|
-| `src/pages/Datenschutz.tsx` | NEU | ~450 |
-| `src/App.tsx` | +2 Zeilen | Import + Route |
-| `public/sitemap.xml` | +6 Zeilen | URL-Eintrag |
+| Datei | Aktion | Zeilen (ca.) |
+|-------|--------|--------------|
+| `src/components/consent/CookieConsentBanner.tsx` | NEU | ~180 |
+| `src/components/consent/CookieConsentContext.tsx` | NEU | ~80 |
+| `src/components/consent/consentUtils.ts` | NEU | ~60 |
+| `src/components/accessibility/AccessibilityWidget.tsx` | NEU | ~150 |
+| `src/components/accessibility/AccessibilityContext.tsx` | NEU | ~70 |
+| `src/pages/Barrierefreiheit.tsx` | NEU | ~280 |
+| `src/App.tsx` | AENDERN | +15 |
+| `src/index.css` | AENDERN | +40 |
+| `src/components/layout/Footer.tsx` | AENDERN | +20 |
+| `public/sitemap.xml` | AENDERN | +6 |
+| `src/pages/Datenschutz.tsx` | AENDERN | +30 |
 
-**Gesamt: 3 Dateien (1 neu, 2 Aenderungen)**
+**Gesamt: 11 Dateien (6 neue, 5 Aenderungen)**
 
 ---
 
-## Naechster Schritt nach Implementierung
+## Reihenfolge der Implementierung
 
-Optional: **Cookie-Consent-Banner** implementieren, der vor dem Laden von Google Analytics 4 und Google Ads Conversion Tracking die Einwilligung des Nutzers einholt (TTDSG § 25).
+1. **Consent-System**: Context, Utils, Banner
+2. **App.tsx**: Provider einbinden
+3. **Accessibility-System**: Context, Widget
+4. **CSS-Variablen**: index.css erweitern
+5. **Barrierefreiheitserklaerung**: Neue Seite erstellen
+6. **Footer**: Links ergaenzen
+7. **Datenschutz**: Cookie-Abschnitt aktualisieren
+8. **Sitemap**: URL hinzufuegen
+
