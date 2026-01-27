@@ -53,7 +53,7 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       subline: 'Von der ersten Preiseinschätzung bis zur besenreinen Übergabe – transparent, zuverlässig und respektvoll.',
       trustPills: ['Besenrein', 'Festpreis nach Einschätzung', 'Keine versteckten Kosten'],
       imageSrc: '/images/service-wohnungsentruempelung.jpg',
-      imageAlt: 'Leere, saubere Wohnung nach professioneller Entrümpelung',
+      imageAlt: 'Professionelles Räumzwerge-Team bei der Wohnungsentrümpelung',
     },
     scenarios: [
       { 
