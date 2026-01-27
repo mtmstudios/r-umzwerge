@@ -10,11 +10,11 @@ export function ContactHero() {
           alt="Aufgeräumtes Wohnzimmer nach Entrümpelung"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30" />
+        <div className="absolute inset-0 bg-black/50" />
       </div>
 
       {/* Content */}
-      <div className="container mx-auto px-4 md:px-6 relative z-10 py-20 pt-28">
+      <div className="container mx-auto px-4 md:px-6 relative z-10 py-20 pt-28 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -23,7 +23,7 @@ export function ContactHero() {
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
             Wir sind für Sie da
           </h1>
-          <p className="text-lg md:text-xl text-white/90 max-w-xl">
+          <p className="text-lg md:text-xl text-white/90 max-w-xl mx-auto">
             Wählen Sie Ihren Kontaktweg – wir melden uns schnell und unverbindlich zurück.
           </p>
         </motion.div>
