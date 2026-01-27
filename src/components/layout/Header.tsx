@@ -29,20 +29,22 @@ export function Header() {
     <header
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
-        isScrolled
-          ? "glass-strong shadow-lg py-2"
-          : "bg-card py-3 lg:py-4"
+isScrolled
+          ? "glass-strong shadow-lg py-1"
+          : "bg-card py-2 lg:py-3"
       )}
     >
       <div className="container-custom">
         <div className="flex items-center justify-between gap-6 lg:gap-8">
           {/* Logo */}
           <a href="/" className="flex items-center group">
-            <img 
-              src={logoRaeumzwerge} 
-              alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
-              className="h-20 lg:h-28 w-auto"
-            />
+            <div className="h-14 lg:h-16 overflow-hidden flex items-center">
+              <img 
+                src={logoRaeumzwerge} 
+                alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
+                className="h-24 lg:h-32 w-auto object-contain"
+              />
+            </div>
           </a>
 
           {/* Desktop Navigation - größer mit Underline-Animation */}
