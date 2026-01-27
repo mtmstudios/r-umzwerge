@@ -77,30 +77,24 @@ export function BeforeAfterSection() {
           onMouseLeave={handleMouseUp}
         >
           {/* Before Image (Full Width) */}
-          <div className="absolute inset-0 bg-gradient-to-br from-muted to-muted-foreground/20">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center p-8">
-                <p className="text-muted-foreground font-medium">VORHER</p>
-                <p className="text-sm text-muted-foreground/70 mt-2">
-                  Bild-Platzhalter
-                </p>
-              </div>
-            </div>
+          <div className="absolute inset-0">
+            <img 
+              src="/images/before-after-vorher.png" 
+              alt="Wohnung vor der Entrümpelung - voll mit Kartons und Müll"
+              className="w-full h-full object-cover"
+            />
           </div>
 
           {/* After Image (Clipped) */}
           <div
-            className="absolute inset-0 bg-gradient-to-br from-accent/20 to-primary/20"
+            className="absolute inset-0"
             style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
           >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center p-8">
-                <p className="text-primary font-medium">NACHHER</p>
-                <p className="text-sm text-muted-foreground mt-2">
-                  Bild-Platzhalter
-                </p>
-              </div>
-            </div>
+            <img 
+              src="/images/before-after-nachher.png" 
+              alt="Wohnung nach der Entrümpelung - besenrein"
+              className="w-full h-full object-cover"
+            />
           </div>
 
           {/* Slider Handle */}
@@ -134,9 +128,6 @@ export function BeforeAfterSection() {
           </div>
         </div>
 
-        <p className="text-center text-muted-foreground text-sm mb-6">
-          Vorher/Nachher-Beispiele folgen in Kürze.
-        </p>
 
         {/* Outcome Badges */}
         <div className="flex flex-wrap justify-center gap-4">
