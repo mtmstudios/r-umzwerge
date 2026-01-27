@@ -1,66 +1,166 @@
 
 
-# Plan: "Wir verstehen" Section zentrieren
+# Plan: Alle 3 Themen umsetzen
 
-## Aktuelles Problem
+## Übersicht
 
-Das Grid mit den Pain-Point-Karten nimmt die volle Container-Breite ein und ist nicht optimal zentriert. Auf sehr breiten Bildschirmen kann das Layout zu breit wirken.
+| # | Thema | Datei |
+|---|-------|-------|
+| 1 | WhatsApp-Link Update | `src/lib/constants.ts` |
+| 2 | Mobile Carousel Pain-Points | `src/components/sea/SEAPainPoints.tsx` |
+| 3 | Vorher/Nachher-Bilder tauschen | `src/components/sections/BeforeAfterSection.tsx` |
 
-```text
-Aktuell:
-┌─────────────────────────────────────────────────────────────┐
-│                    Container-Custom                          │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐            │
-│  │   Card 1    │ │   Card 2    │ │   Card 3    │            │
-│  └─────────────┘ └─────────────┘ └─────────────┘            │
-│  <── Grid nimmt volle Breite ──────────────────>            │
-└─────────────────────────────────────────────────────────────┘
+---
 
-Gewünscht:
-┌─────────────────────────────────────────────────────────────┐
-│                    Container-Custom                          │
-│       ┌──────────┐ ┌──────────┐ ┌──────────┐                │
-│       │  Card 1  │ │  Card 2  │ │  Card 3  │                │
-│       └──────────┘ └──────────┘ └──────────┘                │
-│       <── max-w-5xl mx-auto ──>                             │
-└─────────────────────────────────────────────────────────────┘
+## 1. WhatsApp-Link Update
+
+### Datei: `src/lib/constants.ts`
+
+**Zeile 3 ändern:**
+
+```typescript
+// Von:
+export const WHATSAPP_MESSAGE = "Hallo Räumzwerge, ich hätte gerne eine Preiseinschätzung. Ort: ____. Ich sende gleich Fotos.";
+
+// Zu:
+export const WHATSAPP_MESSAGE = "Hallo liebes Räumzwerge-Team, ich komme von euerer Website.";
 ```
 
-## Lösung
+Alle WhatsApp-Buttons auf allen Seiten nutzen automatisch den neuen Text.
 
-Füge dem Grid-Container eine maximale Breite und `mx-auto` hinzu, um die Cards zu zentrieren.
+---
 
-## Technische Umsetzung
+## 2. Mobile Carousel für Pain-Points Section
 
 ### Datei: `src/components/sea/SEAPainPoints.tsx`
 
-**Zeile 50-53 ändern:**
-
-Von:
+**Imports erweitern (Zeile 1):**
 ```tsx
-<div 
-  ref={sectionRef}
-  className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8"
->
+import { useState, useEffect } from 'react';
+import { MessageCircle, ArrowRight } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
+import { cn } from '@/lib/utils';
+import { getWhatsAppLink } from '@/lib/constants';
+import { useScrollReveal } from '@/hooks/useAnimations';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { 
+  Carousel, 
+  CarouselContent, 
+  CarouselItem,
+  type CarouselApi 
+} from '@/components/ui/carousel';
+import type { SEAData } from '@/lib/seaData';
 ```
 
-Zu:
+**State hinzufügen (nach Zeile 17):**
 ```tsx
-<div 
-  ref={sectionRef}
-  className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto"
->
+const isMobile = useIsMobile();
+const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+const [currentSlide, setCurrentSlide] = useState(0);
+
+useEffect(() => {
+  if (!carouselApi) return;
+  
+  const onSelect = () => {
+    setCurrentSlide(carouselApi.selectedScrollSnap());
+  };
+  
+  carouselApi.on('select', onSelect);
+  return () => { carouselApi.off('select', onSelect); };
+}, [carouselApi]);
 ```
 
-## Änderung
+**Grid durch konditionelles Rendering ersetzen (Zeile 49-136):**
 
-| Datei | Änderung |
-|-------|----------|
-| `src/components/sea/SEAPainPoints.tsx` | Zeile 52: `max-w-5xl mx-auto` zum Grid hinzufügen |
+Mobile: Carousel mit Peek-Effekt und Dot-Navigation
+Desktop: Bestehendes Grid-Layout
+
+```text
+Mobile Layout:
+┌─────────────────────────────────┐
+│  ┌───────────┐                  │
+│  │  Card 1   │ Card 2 (peek)    │  ← Swipe
+│  └───────────┘                  │
+│                                 │
+│        ●━━ ○ ○  ← Dots          │
+└─────────────────────────────────┘
+```
+
+---
+
+## 3. Vorher/Nachher-Bilder tauschen (Startseite)
+
+### Aktuelles Problem
+
+Das Clip-Path `inset(0 ${100 - sliderPosition}% 0 0)` zeigt das geclippte Bild von **links**. Aktuell ist das Nachher-Bild geclippt (links sichtbar) und das Vorher-Bild im Hintergrund (rechts sichtbar).
+
+**Das ist verkehrt herum!** Links sollte "Vorher" sein, rechts "Nachher".
+
+### Datei: `src/components/sections/BeforeAfterSection.tsx`
+
+**Bilder tauschen (Zeilen 79-98):**
+
+```tsx
+{/* Before Image (Full Width) - wird zu NACHHER */}
+<div className="absolute inset-0">
+  <img 
+    src="/images/before-after-nachher.webp"  // War: vorher.webp
+    alt="Wohnung nach der Entrümpelung - besenrein"
+    className="w-full h-full object-cover"
+  />
+</div>
+
+{/* After Image (Clipped) - wird zu VORHER */}
+<div
+  className="absolute inset-0"
+  style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+>
+  <img 
+    src="/images/before-after-vorher.webp"  // War: nachher.webp
+    alt="Wohnung vor der Entrümpelung - voll mit Kartons und Müll"
+    className="w-full h-full object-cover"
+  />
+</div>
+```
+
+**Kommentare aktualisieren (Zeilen 79, 88):**
+- Zeile 79: `{/* After Image (Full Width) - Nachher */}`
+- Zeile 88: `{/* Before Image (Clipped from left) - Vorher */}`
+
+### Ergebnis nach Änderung
+
+```text
+Slider bei 50%:
+┌─────────────────────────────────┐
+│  VORHER   │ Slider │  NACHHER  │
+│  (geclippt)   ↔    │  (Hintergrund)
+│                                 │
+│  "Vorher" │        │ "Nachher" │
+│   Label   │        │   Label   │
+└─────────────────────────────────┘
+```
+
+Die Labels bleiben an der richtigen Position (links "Vorher", rechts "Nachher").
+
+---
+
+## Zusammenfassung der Änderungen
+
+| Datei | Zeilen | Änderung |
+|-------|--------|----------|
+| `src/lib/constants.ts` | 3 | WHATSAPP_MESSAGE aktualisieren |
+| `src/components/sea/SEAPainPoints.tsx` | 1-17, 49-136 | Imports + State + Mobile Carousel |
+| `src/components/sections/BeforeAfterSection.tsx` | 79-98 | Bild-URLs und Kommentare tauschen |
+
+---
 
 ## Erwartetes Ergebnis
 
-- Die Pain-Point-Cards sind auf allen 3 Landingpages horizontal zentriert
-- Auf sehr breiten Bildschirmen bleiben die Cards in einer angenehmen Lesebreite
-- Auf Mobile und Tablet ändert sich nichts (volle Breite innerhalb des Paddings)
+1. **WhatsApp**: Alle Buttons öffnen `https://wa.me/491603080676?text=Hallo%20liebes%20R%C3%A4umzwerge-Team%2C%20ich%20komme%20von%20euerer%20Website.`
+
+2. **Pain-Points Mobile**: Horizontales Swipe-Carousel mit 85% Card-Breite (Peek-Effekt) und animierten Dot-Indicators
+
+3. **Before/After Slider**: Links = Vorher (unordentlich), Rechts = Nachher (sauber)
 
