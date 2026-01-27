@@ -1,146 +1,234 @@
 
-# Plan: Alle 3 offenen Aufgaben umsetzen
+# Plan: Dialog-Karten mit Mini-CTAs für Pain-Points-Section
 
-## Übersicht
+## Ziel
+Komplettes Redesign der "Wir verstehen Ihre Situation"-Section mit konversionsoptimierten Dialog-Karten nach dem PAS-Framework (Problem-Agitate-Solution).
 
-Dieses Update behebt das Logo-Problem und fügt zwei neue Features hinzu:
+## Neues Design-Konzept
 
-1. Logo-Transparenz wiederherstellen (PNG statt WebP)
-2. Logo auf SEA-Landingpages zur Hauptseite verlinken
-3. Interaktiver Vorher/Nachher-Slider für Messie SEA-Landingpage
+### Struktur jeder Karte
 
----
-
-## Aufgabe 1: Logo-Transparenz wiederherstellen
-
-### Problem
-Die WebP-Konvertierung hat die Alpha-Transparenz der Logos nicht korrekt übertragen, wodurch ein schwarzer Hintergrund erscheint.
-
-### Lösung
-Logo-Importe zurück auf PNG ändern (originale Dateien existieren noch).
-
-### Änderungen
-
-| Datei | Zeile | Änderung |
-|-------|-------|----------|
-| `src/components/layout/Header.tsx` | 3 | `logo-raeumzwerge.webp` → `logo-raeumzwerge.png` |
-| `src/components/layout/Footer.tsx` | 4 | `logo-white.webp` → `logo-white.png` |
-| `src/components/sea/SEAMinimalHeader.tsx` | 4 | `logo-raeumzwerge.webp` → `logo-raeumzwerge.png` |
-
----
-
-## Aufgabe 2: Logo-Link auf SEA-Landingpages
-
-### Aktueller Zustand
-Das Logo ist ein `<div>` ohne Link (Zeile 12-18 in SEAMinimalHeader.tsx).
-
-### Neue Struktur
-Das `<div>` wird durch einen `<a>`-Tag ersetzt:
-
-```tsx
-<a 
-  href="https://www.raeumzwerge.de" 
-  target="_blank" 
-  rel="noopener noreferrer"
-  className="h-20 lg:h-24 overflow-hidden flex items-center -ml-8 lg:-ml-12 group"
->
-  <img
-    src={logoImage}
-    alt="Räumzwerge"
-    className="h-64 lg:h-80 w-auto object-contain object-left transition-all duration-300 group-hover:scale-[1.03] group-hover:opacity-90"
-  />
-</a>
+```text
++------------------------------------------+
+|  [Sprech-Icon]                           |
+|                                          |
+|  "Emotionales Kundenzitat..."            |
+|  (großer, kursiver Text)                 |
+|                                          |
++------------------------------------------+
+|  [Grüner Akzent-Streifen links]          |
+|                                          |
+|  Unsere Lösung:                          |
+|  Lösungstext hier...                     |
+|                                          |
+|  [WhatsApp] Jetzt Hilfe anfragen  -->    |
+|                                          |
++------------------------------------------+
 ```
 
-| Attribut | Zweck |
-|----------|-------|
-| `target="_blank"` | Öffnet in neuem Tab, Landingpage bleibt offen |
-| `rel="noopener noreferrer"` | Sicherheit bei externen Links |
-| `group-hover` Effekte | Visuelles Feedback wie im Haupt-Header |
+### Visuelle Verbesserungen
 
----
+| Element | Aktuell | Neu |
+|---------|---------|-----|
+| Problem-Darstellung | Klein mit Icon | Großes, emotionales Zitat im Fokus |
+| Pfeil-Trenner | Generischer Pfeil | Entfernt (flüssigerer Übergang) |
+| Lösungs-Box | Schwacher Hintergrund | Starker grüner Akzent-Streifen links |
+| CTA | Keiner | WhatsApp Mini-CTA pro Karte |
+| Hover-Effekt | Nur Shadow | Card-Lift + grüner Glow |
 
-## Aufgabe 3: Vorher/Nachher-Slider für Messie-Seite
+### Ton-Anpassungen nach Variante
 
-### Hochgeladene Bilder
+| Variante | Ton | CTA-Text | Spezielle Behandlung |
+|----------|-----|----------|---------------------|
+| `haushaltsaufloesung` | warm | "Jetzt Hilfe anfragen" | Herzlicher, empathischer Stil |
+| `entruempelung` | direct | "Preis anfragen" | Klarer, action-orientiert |
+| `messie-hilfe` | gentle | "Unverbindlich schreiben" | Sanfter, kein Druck |
 
-| Datei | Beschreibung | Verwendung |
-|-------|--------------|------------|
-| `Gemini_Generated_Image_4r6zkr4r6zkr4r6z-2.png` | Überladenes Zimmer mit Kartons, Kleidung | **Vorher** |
-| `Gemini_Generated_Image_12l94a12l94a12l9-2.png` | Dasselbe Zimmer - leer, besenrein | **Nachher** |
+## Technische Umsetzung
 
-### Neue Bilder erstellen
+### Datei: `src/components/sea/SEAPainPoints.tsx`
 
-| Quelle | Ziel |
-|--------|------|
-| `user-uploads://Gemini_Generated_Image_4r6zkr4r6zkr4r6z-2.png` | `public/images/messie-vorher.webp` |
-| `user-uploads://Gemini_Generated_Image_12l94a12l94a12l9-2.png` | `public/images/messie-nachher.webp` |
-
-### Komponenten-Änderung
-
-**Datei:** `src/components/sea/SEABeforeAfter.tsx`
-
-Der "Gentle Mode" Block (Zeile 73-85) zeigt aktuell nur einen statischen Platzhalter. Dieser wird durch einen echten interaktiven Slider mit den Messie-Bildern ersetzt:
+**Komplett-Rewrite der Komponente:**
 
 ```tsx
-{isGentleMode ? (
-  // Gentle Mode: Real Before/After Slider for Messie
-  <div
-    ref={containerRef}
-    className="relative max-w-2xl mx-auto aspect-[4/3] md:aspect-video bg-muted rounded-xl overflow-hidden cursor-ew-resize select-none mb-6"
-    onMouseDown={handleMouseDown}
-    onMouseUp={handleMouseUp}
-    onMouseMove={handleMouseMove}
-    onTouchMove={handleTouchMove}
-    onMouseLeave={handleMouseUp}
-  >
-    {/* Before Image */}
-    <div className="absolute inset-0">
-      <img 
-        src="/images/messie-vorher.webp" 
-        alt="Zimmer vor der Räumung"
-        className="w-full h-full object-cover"
-      />
-    </div>
+import { MessageCircle, ArrowRight } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
+import { cn } from '@/lib/utils';
+import { getWhatsAppLink } from '@/lib/constants';
+import type { SEAData } from '@/lib/seaData';
 
-    {/* After Image (Clipped) */}
-    <div
-      className="absolute inset-0"
-      style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
-    >
-      <img 
-        src="/images/messie-nachher.webp" 
-        alt="Zimmer nach der Räumung"
-        className="w-full h-full object-cover"
-      />
-    </div>
+interface SEAPainPointsProps {
+  data: SEAData;
+}
 
-    {/* Slider Handle + Labels (identisch zum Standard-Modus) */}
-    ...
-  </div>
-) : (
-  // Standard Mode: Placeholder slider
-  ...
-)}
+export function SEAPainPoints({ data }: SEAPainPointsProps) {
+  const isGentle = data.tone === 'gentle';
+  const isDirect = data.tone === 'direct';
+
+  // CTA-Text je nach Ton
+  const getCtaText = () => {
+    if (isGentle) return 'Unverbindlich schreiben';
+    if (isDirect) return 'Preis anfragen';
+    return 'Jetzt Hilfe anfragen';
+  };
+
+  // WhatsApp-Nachricht mit Kontext
+  const getWhatsAppMessage = (problem: string) => {
+    return `Hallo Räumzwerge, ${isGentle ? 'ich brauche diskret Hilfe' : 'ich hätte gerne eine Preiseinschätzung'}. Meine Situation: ${problem.substring(0, 50)}... Ort: ____.`;
+  };
+
+  return (
+    <section className={cn(
+      "py-12 lg:py-20",
+      isGentle ? "bg-muted/30" : "bg-muted/50"
+    )}>
+      <div className="container-custom">
+        {/* Header mit angepasstem Text */}
+        <div className="text-center mb-10 lg:mb-14">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground mb-3">
+            {isGentle ? 'Wir verstehen, wie Sie sich fühlen' : 'Kennen Sie das?'}
+          </h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">
+            {isGentle
+              ? 'Sie sind nicht allein. Wir helfen – ohne Druck, ohne Wertung.'
+              : 'Diese Situationen kennen wir. Und wir haben die Lösung.'}
+          </p>
+        </div>
+
+        {/* Dialog-Karten Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+          {data.painPoints.map((point, index) => (
+            <Card
+              key={index}
+              className={cn(
+                "border-none shadow-lg transition-all duration-300",
+                "hover:shadow-xl hover:-translate-y-1",
+                "hover:shadow-primary/10",
+                isGentle ? "bg-background" : "bg-card"
+              )}
+            >
+              <CardContent className="p-6 lg:p-8 flex flex-col h-full">
+                {/* Problem: Emotionales Zitat */}
+                <div className="flex-grow mb-6">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className={cn(
+                      "flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center",
+                      isGentle ? "bg-primary/10" : "bg-accent/10"
+                    )}>
+                      <MessageCircle className={cn(
+                        "h-5 w-5",
+                        isGentle ? "text-primary/70" : "text-accent"
+                      )} />
+                    </div>
+                    <span className="text-sm text-muted-foreground pt-2.5">
+                      Was wir oft hören:
+                    </span>
+                  </div>
+                  <blockquote className="text-lg lg:text-xl text-foreground/90 italic leading-relaxed pl-2 border-l-2 border-muted">
+                    „{point.problem}"
+                  </blockquote>
+                </div>
+
+                {/* Lösung mit grünem Akzent */}
+                <div className={cn(
+                  "rounded-xl p-4 mb-4",
+                  "bg-gradient-to-r from-primary/10 to-primary/5",
+                  "border-l-4 border-primary"
+                )}>
+                  <p className="text-sm font-medium text-primary/70 mb-1">
+                    Unsere Lösung:
+                  </p>
+                  <p className="text-foreground font-medium leading-relaxed">
+                    {point.solution}
+                  </p>
+                </div>
+
+                {/* WhatsApp Mini-CTA */}
+                <a
+                  href={getWhatsAppLink(getWhatsAppMessage(point.problem))}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group"
+                >
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className={cn(
+                      "w-full justify-between",
+                      "border-primary/30 text-primary",
+                      "hover:bg-primary hover:text-primary-foreground",
+                      "transition-all duration-300",
+                      "group-hover:border-primary"
+                    )}
+                  >
+                    <span className="flex items-center gap-2">
+                      <WhatsAppIcon className="h-4 w-4" />
+                      {getCtaText()}
+                    </span>
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </a>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 ```
 
----
+## Änderungen im Detail
 
-## Zusammenfassung aller Änderungen
+### 1. Header-Text angepasst
 
-| Kategorie | Dateien | Aktion |
-|-----------|---------|--------|
-| **Logo-Import** | Header.tsx, Footer.tsx, SEAMinimalHeader.tsx | `.webp` → `.png` |
-| **Logo-Link** | SEAMinimalHeader.tsx | `<div>` → `<a href="...">` |
-| **Neue Bilder** | public/images/messie-vorher.webp, messie-nachher.webp | Erstellen |
-| **Slider-Logik** | SEABeforeAfter.tsx | Gentle-Mode mit echten Bildern |
+| Tone | Bisherige Headline | Neue Headline |
+|------|-------------------|---------------|
+| gentle | "Wir verstehen Ihre Situation" | "Wir verstehen, wie Sie sich fühlen" |
+| direct/warm | "Wir verstehen Ihre Situation" | "Kennen Sie das?" |
 
-**Gesamt: 4 Dateien ändern + 2 neue Bilder erstellen**
+### 2. Problem-Bereich redesigned
 
----
+- Größerer, prominenterer Zitat-Text (text-lg auf Mobile, text-xl auf Desktop)
+- Linker Border-Akzent statt rundem Icon-Container
+- "Was wir oft hören:" Label für Kontext
+- `<blockquote>` für semantisch korrektes HTML
+
+### 3. Lösungs-Box mit starkem Akzent
+
+- Gradient-Hintergrund: `from-primary/10 to-primary/5`
+- 4px grüner Border links (`border-l-4 border-primary`)
+- "Unsere Lösung:" Label für Klarheit
+- Fetter Lösungstext
+
+### 4. WhatsApp Mini-CTA pro Karte
+
+- Outline-Button mit Primary-Farbe
+- Hover: Solid Primary mit weißem Text
+- Pfeil-Animation beim Hover (translate-x-1)
+- Kontextualisierte WhatsApp-Nachricht mit dem Problem
+
+### 5. Karten-Interaktion
+
+- Hover: Leichter Lift (`-translate-y-1`)
+- Hover: Grüner Schatten (`shadow-primary/10`)
+- Smooth Transition (300ms)
+
+## Abhängigkeiten
+
+| Import | Bereits vorhanden |
+|--------|------------------|
+| `WhatsAppIcon` | Ja |
+| `Button` | Ja |
+| `getWhatsAppLink` | Ja |
+| `Card`, `CardContent` | Ja |
 
 ## Erwartetes Ergebnis
 
-- Logos zeigen wieder transparenten Hintergrund auf allen Seiten
-- Das Logo auf SEA-Landingpages verlinkt zur Hauptwebsite (neuer Tab)
-- Die Messie SEA-Landingpage zeigt einen interaktiven Vorher/Nachher-Slider mit emotionalem Beweis der Transformation
+- Emotionalere Ansprache durch prominente Zitate
+- Klare visuelle Hierarchie: Problem -> Lösung -> Aktion
+- Conversion-Point bei jedem Pain-Point (WhatsApp CTA)
+- Ton-spezifische Anpassungen für alle 3 Landingpages
+- Mobile-optimiert mit voller Breite und Touch-freundlichen Buttons
