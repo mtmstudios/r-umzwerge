@@ -43,6 +43,16 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "Ablauf", href: "#ablauf" },
   { label: "Referenzen", href: "#referenzen" },
   { label: "FAQ", href: "#faq" },
+  // Temporary: SEA Landing Pages for testing
+  { 
+    label: "🔧 SEA-Test", 
+    href: "#",
+    children: [
+      { label: "LP Haushaltsauflösung", href: "/lp/haushaltsaufloesung" },
+      { label: "LP Entrümpelung", href: "/lp/entruempelung" },
+      { label: "LP Messie-Hilfe", href: "/lp/messie-hilfe" },
+    ]
+  },
 ];
 
 // Regions
