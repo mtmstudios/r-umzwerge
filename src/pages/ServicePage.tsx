@@ -1,4 +1,5 @@
 import { useParams, Navigate, Link } from 'react-router-dom';
+import { useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FloatingCTAs } from '@/components/layout/FloatingCTAs';
@@ -20,6 +21,21 @@ export default function ServicePage() {
   // Get page data
   const pageData = slug ? SERVICE_PAGES[slug] : null;
   
+  // SEO: Dynamic title and meta description (must be before early return)
+  useEffect(() => {
+    if (pageData) {
+      document.title = pageData.metaTitle;
+      
+      const metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription) {
+        metaDescription.setAttribute('content', pageData.metaDescription);
+      }
+
+      // Scroll to top on mount
+      window.scrollTo(0, 0);
+    }
+  }, [pageData]);
+
   // Redirect to 404 if not found
   if (!pageData) {
     return <Navigate to="/404" replace />;
