@@ -2,6 +2,7 @@ import { Phone, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 import { getWhatsAppLink, PHONE_LINK } from '@/lib/constants';
+import { seaImages } from '@/lib/seaImages';
 import type { SEAData } from '@/lib/seaData';
 
 interface SEAHeroProps {
@@ -24,7 +25,7 @@ export function SEAHero({ data }: SEAHeroProps) {
       {/* Fullscreen background for ALL breakpoints */}
       <div className="absolute inset-0">
         <img 
-          src={data.heroImage}
+          src={seaImages.heroTeam}
           alt={data.heroImageAlt}
           className="w-full h-full object-cover"
         />
