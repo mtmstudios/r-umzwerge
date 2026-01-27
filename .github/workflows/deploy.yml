@@ -27,7 +27,7 @@ jobs:
         run: npm run build
 
       - name: Deploy to Mittwald via SSH
-        uses: easingthemes/ssh-deploy@v5
+        uses: easingthemes/ssh-deploy@v5.1.0
         with:
           SSH_PRIVATE_KEY: ${{ secrets.MITTWALD_SSH_KEY }}
           REMOTE_HOST: ${{ secrets.MITTWALD_SSH_HOST }}
