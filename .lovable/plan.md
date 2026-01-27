@@ -1,106 +1,113 @@
 
+# Umstellung auf SFTP mit Passwort-Authentifizierung
 
-# Fix: package-lock.json Synchronisation und Workflow-Stabilisierung
+## Warum ist das einfacher?
 
-## Problem
-
-Der Workflow schlaegt beim Schritt `npm ci` fehl:
-
-```
-npm ci can only install packages when your package.json and package-lock.json are in sync.
-Missing: @testing-library/dom@10.4.1 from lock file
-Invalid: lock file's picomatch@2.3.1 does not satisfy picomatch@4.0.3
-...
-```
-
-Die `package-lock.json` ist nicht mehr synchron mit der `package.json`. Das passiert haeufig, wenn Lovable Pakete aktualisiert, aber die Lockfile nicht vollstaendig neu generiert wird.
+- Kein SSH-Key-Generieren nötig
+- Kein Key-Format-Problem (das aktuelle `error in libcrypto`)
+- Du verwendest einfach deinen SFTP-Benutzernamen und Passwort von Mittwald
 
 ---
 
-## Loesung in zwei Schritten
+## Änderungen
 
-### Schritt 1: Workflow temporaer auf `npm install` umstellen
+### 1. GitHub Secrets anpassen
 
-Damit der Build sofort funktioniert, wird `npm ci` durch `npm install` ersetzt.
+Folgende Secrets werden benötigt (unter Repository → Settings → Secrets → Actions):
+
+| Secret | Beschreibung | Beispiel |
+|--------|--------------|----------|
+| `SFTP_HOST` | Mittwald Server-Adresse | `sshXXX.mwld.net` |
+| `SFTP_USER` | Dein SFTP-Benutzername | `p123456` |
+| `SFTP_PASSWORD` | Dein SFTP-Passwort | `deinPasswort` |
+| `SFTP_PATH` | Zielverzeichnis | `/html/raeumzwerge` |
+
+Die alten SSH-Key-Secrets (`MITTWALD_SSH_KEY`) kannst du danach löschen.
+
+---
+
+### 2. Workflow-Datei aktualisieren
 
 **Datei:** `.github/workflows/deploy.yml`
 
-| Zeile | Alt | Neu |
-|-------|-----|-----|
-| 24 | `run: npm ci` | `run: npm install` |
-
----
-
-### Schritt 2: package-lock.json neu generieren
-
-Die `package-lock.json` muss lokal oder per Workflow neu erstellt werden.
-
-**Option A - Lokal (empfohlen):**
-```bash
-rm package-lock.json node_modules -rf
-npm install
-git add package-lock.json
-git commit -m "fix: regenerate package-lock.json"
-git push
-```
-
-**Option B - Per Workflow (Einmal-Fix):**
-Ein temporaerer Workflow-Step kann die Lockfile auch im CI generieren. Allerdings ist Option A sauberer.
-
----
-
-### Schritt 3: Zurueck auf `npm ci` (nach erfolgreichem Fix)
-
-Nachdem die Lockfile synchron ist, wird `npm install` wieder zu `npm ci` geaendert fuer schnellere, deterministische Builds.
-
----
-
-## Aenderungsdetails
-
-### Sofortige Aenderung (Schritt 1)
-
 ```yaml
-# .github/workflows/deploy.yml - Zeile 23-24
+name: Deploy to Mittwald
 
-# Vorher
-- name: Install dependencies
-  run: npm ci
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
-# Nachher
-- name: Install dependencies
-  run: npm install
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy via SFTP
+        uses: sand4rt/ftp-deployer@v1.8
+        with:
+          sftp: true
+          host: ${{ secrets.SFTP_HOST }}
+          port: 22
+          username: ${{ secrets.SFTP_USER }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          remote_folder: ${{ secrets.SFTP_PATH }}
+          local_folder: './dist'
+          cleanup: true
+          include: '[ "*", "**/*" ]'
+          exclude: '[]'
 ```
 
 ---
 
-## Zusammenfassung der Schritte
+## Was ändert sich?
 
 ```text
-+-------------------------------------------+
-| 1. deploy.yml: npm ci -> npm install      |
-|    (sofort, per Lovable)                  |
-+-------------------------------------------+
-            |
-            v
-+-------------------------------------------+
-| 2. Lokal: rm -rf node_modules             |
-|           rm package-lock.json            |
-|           npm install                     |
-|           git push                        |
-+-------------------------------------------+
-            |
-            v
-+-------------------------------------------+
-| 3. deploy.yml: npm install -> npm ci      |
-|    (nachdem Lockfile gepusht ist)         |
-+-------------------------------------------+
+VORHER (SSH-Key):                    NACHHER (SFTP-Passwort):
++---------------------------+        +---------------------------+
+| easingthemes/ssh-deploy   |   →    | sand4rt/ftp-deployer      |
+| SSH_PRIVATE_KEY (komplex) |   →    | username + password       |
+| rsync über SSH            |   →    | SFTP-Protokoll            |
++---------------------------+        +---------------------------+
 ```
 
 ---
 
-## Technische Hinweise
+## Vorteile dieser Lösung
 
-- `npm ci` ist strenger als `npm install` - es erfordert eine exakt synchrone Lockfile
-- Nach dem Regenerieren der Lockfile sollte `npm ci` wieder aktiviert werden, da es schneller und reproduzierbarer ist
-- Die Lockfile ist ca. 8000 Zeilen lang und wird vollstaendig von npm verwaltet
+- **Einfacher**: Keine Key-Generierung oder Format-Probleme
+- **Mittwald-kompatibel**: Funktioniert mit Standard-SFTP-Zugangsdaten
+- **Cleanup-Option**: Löscht alte Dateien automatisch (wie `--delete` bei rsync)
 
+---
+
+## Nach der Umsetzung
+
+1. Neuen Commit pushen
+2. GitHub Actions läuft automatisch
+3. Bei Erfolg: Die alten SSH-Secrets können gelöscht werden
+
+---
+
+## Technische Details
+
+- Die Action `sand4rt/ftp-deployer` unterstützt sowohl FTP als auch SFTP
+- Mit `sftp: true` wird explizit SFTP (SSH File Transfer Protocol) verwendet
+- Port 22 ist der Standard-SSH/SFTP-Port bei Mittwald
+- `cleanup: true` entfernt Dateien auf dem Server, die lokal nicht mehr existieren
