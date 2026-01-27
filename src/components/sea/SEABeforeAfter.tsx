@@ -25,6 +25,7 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
   const isDragging = useRef(false);
 
   const isGentleMode = data.tone === 'gentle';
+  const hasRealImages = data.beforeImage && data.afterImage;
 
   const handleMouseDown = () => {
     isDragging.current = true;
@@ -69,9 +70,9 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
           {isGentleMode ? 'Ein neuer Anfang – mit uns' : 'Das Ergebnis unserer Arbeit'}
         </h2>
 
-        {/* Slider - Now real for both modes */}
-        {isGentleMode ? (
-          // Gentle Mode: Real Before/After Slider for Messie
+        {/* Slider - Real images or placeholders */}
+        {hasRealImages || isGentleMode ? (
+          // Real Before/After Slider with actual images
           <div
             ref={containerRef}
             className="relative max-w-2xl mx-auto aspect-[4/3] md:aspect-video bg-muted rounded-xl overflow-hidden cursor-ew-resize select-none mb-6"
@@ -81,26 +82,26 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
             onTouchMove={handleTouchMove}
             onMouseLeave={handleMouseUp}
           >
-          {/* After Image (Base layer - full width) */}
-          <div className="absolute inset-0">
-            <img 
-              src="/images/messie-nachher.webp" 
-              alt="Zimmer nach der Räumung"
-              className="w-full h-full object-cover"
-            />
-          </div>
+            {/* After Image (Base layer - full width) */}
+            <div className="absolute inset-0">
+              <img 
+                src={isGentleMode ? "/images/messie-nachher.webp" : data.afterImage} 
+                alt={isGentleMode ? "Zimmer nach der Räumung" : data.afterImageAlt}
+                className="w-full h-full object-cover"
+              />
+            </div>
 
-          {/* Before Image (Clipped - reveals from left) */}
-          <div
-            className="absolute inset-0"
-            style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
-          >
-            <img 
-              src="/images/messie-vorher.webp" 
-              alt="Zimmer vor der Räumung"
-              className="w-full h-full object-cover"
-            />
-          </div>
+            {/* Before Image (Clipped - reveals from left) */}
+            <div
+              className="absolute inset-0"
+              style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+            >
+              <img 
+                src={isGentleMode ? "/images/messie-vorher.webp" : data.beforeImage} 
+                alt={isGentleMode ? "Zimmer vor der Räumung" : data.beforeImageAlt}
+                className="w-full h-full object-cover"
+              />
+            </div>
 
             {/* Slider Handle */}
             <div
@@ -133,7 +134,7 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
             </div>
           </div>
         ) : (
-          // Standard Mode: Before/After Slider with placeholders
+          // Placeholder Mode: Before/After Slider with placeholders
           <div
             ref={containerRef}
             className="relative max-w-2xl mx-auto aspect-[4/3] md:aspect-video bg-muted rounded-xl overflow-hidden cursor-ew-resize select-none mb-6"
