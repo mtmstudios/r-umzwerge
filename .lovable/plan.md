@@ -1,61 +1,173 @@
 
-# Fix: Timeline-Linie geht durch die Karten
+# Impressum-Seite erstellen (DSGVO & TMG konform)
 
-## Problem-Analyse
+## Rechtliche Grundlagen
 
-Die horizontale Verbindungslinie im Prozess-Abschnitt ("In 3 Schritten zum freien Raum") schneidet visuell durch die Ecken der Karten, anstatt dahinter zu verlaufen. Dies betrifft die `HorizontalTimeline`-Komponente, die auf folgenden Seiten verwendet wird:
+Das Impressum muss folgenden deutschen Gesetzen entsprechen:
 
-- **Startseite** (`ProcessSection.tsx`)
-- **Service-Seiten** (`ServiceProcess.tsx`)
-- **Städte-Seiten** (`CityPage.tsx` via `ServiceProcess`)
+- **TMG § 5** (Telemediengesetz) - Allgemeine Informationspflichten
+- **DDG § 5** (Digitale-Dienste-Gesetz, ersetzt teilweise TMG seit 2024)
+- **DSGVO Art. 13/14** - Informationspflichten bei Datenerhebung
+- **RStV § 55 Abs. 2** - Verantwortlicher fuer journalistisch-redaktionelle Inhalte
 
-## Ursache
+---
 
-In `src/components/ui/HorizontalTimeline.tsx`:
-- Die Progress-Linie (Zeile 27-32) hat keinen `z-index` definiert
-- Die Step-Circles haben `z-10` (Zeile 53)
-- Da die Linie absolut positioniert ist (`absolute top-[60px]`), wird sie manchmal visuell vor den Karten gerendert
-- Der `border-radius` der Karten (`rounded-2xl/3xl`) lässt die Linie an den Ecken durchscheinen
+## Pflichtangaben fuer Einzelunternehmen
 
-## Loesung
+| Angabe | Wert | Rechtsgrundlage |
+|--------|------|-----------------|
+| Unternehmensname | Raeumzwerge | TMG § 5 Abs. 1 Nr. 1 |
+| Inhaber (vollstaendiger Name) | Adem Kekec | TMG § 5 Abs. 1 Nr. 1 |
+| Anschrift (keine Postfach) | Bibertalstrasse 1, 89278 Nersingen | TMG § 5 Abs. 1 Nr. 1 |
+| E-Mail-Adresse | hallo@raeumzwerge.de | TMG § 5 Abs. 1 Nr. 2 |
+| Telefonnummer | +49 160 3080676 | TMG § 5 Abs. 1 Nr. 2 |
+| USt-IdNr. | Entfaellt (keine vorhanden) | TMG § 5 Abs. 1 Nr. 6 |
+| Handelsregister | Nicht eingetragen (Kleingewerbe) | TMG § 5 Abs. 1 Nr. 4 |
+| Verantwortlich (Inhalt) | Adem Kekec, gleiche Anschrift | RStV § 55 Abs. 2 |
 
-Die Progress-Linie bekommt `z-0`, damit sie definitiv **hinter** den Karten mit `z-10` liegt.
+---
+
+## Inhalt der Impressum-Seite
+
+### 1. Angaben gemaess § 5 TMG / § 5 DDG
+
+```text
+Raeumzwerge
+Inhaber: Adem Kekec
+
+Bibertalstrasse 1
+89278 Nersingen
+Deutschland
+```
+
+### 2. Kontakt
+
+```text
+Telefon: +49 160 3080676
+E-Mail: hallo@raeumzwerge.de
+```
+
+### 3. Umsatzsteuer-Identifikationsnummer
+
+```text
+Eine Umsatzsteuer-Identifikationsnummer gemaess § 27a 
+Umsatzsteuergesetz liegt nicht vor.
+```
+
+### 4. Verantwortlich fuer den Inhalt nach § 55 Abs. 2 RStV
+
+```text
+Adem Kekec
+Bibertalstrasse 1
+89278 Nersingen
+```
+
+### 5. EU-Streitschlichtung (Pflicht seit 2016)
+
+```text
+Die Europaeische Kommission stellt eine Plattform zur 
+Online-Streitbeilegung (OS) bereit: 
+https://ec.europa.eu/consumers/odr/
+
+Unsere E-Mail-Adresse finden Sie oben im Impressum.
+
+Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren 
+vor einer Verbraucherschlichtungsstelle teilzunehmen.
+```
+
+### 6. Haftung fuer Inhalte (Disclaimer)
+
+- Haftungsausschluss fuer eigene Inhalte nach § 7 Abs. 1 TMG
+- Haftungsausschluss fuer Links nach § 7 Abs. 2 TMG
+- Urheberrechtshinweis
 
 ---
 
 ## Technische Umsetzung
 
-### Datei: `src/components/ui/HorizontalTimeline.tsx`
+### Neue Dateien
 
-**Zeile 27** - z-index zur Progress-Linie hinzufuegen:
+| Datei | Beschreibung |
+|-------|--------------|
+| `src/pages/Impressum.tsx` | Komplette Impressum-Seite mit allen Pflichtangaben |
 
-```tsx
-// VORHER:
-<div className="hidden md:block absolute top-[60px] left-0 right-0 h-1 bg-border rounded-full mx-auto max-w-3xl">
+### Zu aendernde Dateien
 
-// NACHHER:
-<div className="hidden md:block absolute top-[60px] left-0 right-0 z-0 h-1 bg-border rounded-full mx-auto max-w-3xl">
+| Datei | Aenderung |
+|-------|-----------|
+| `src/App.tsx` | Route `/impressum` hinzufuegen |
+| `src/components/layout/Footer.tsx` | Link zum Impressum hinzufuegen |
+| `public/sitemap.xml` | URL `/impressum` eintragen |
+
+---
+
+## Seitenstruktur
+
+```text
++------------------------------------------+
+|              Header                       |
++------------------------------------------+
+|                                          |
+|  Impressum                               |
+|  =========                               |
+|                                          |
+|  [Card: Angaben gemaess § 5 TMG]         |
+|    - Firmenname                          |
+|    - Inhaber                             |
+|    - Anschrift                           |
+|                                          |
+|  [Card: Kontakt]                         |
+|    - Telefon                             |
+|    - E-Mail                              |
+|                                          |
+|  [Abschnitt: Umsatzsteuer-ID]            |
+|                                          |
+|  [Abschnitt: Verantwortlich nach RStV]   |
+|                                          |
+|  [Abschnitt: EU-Streitschlichtung]       |
+|                                          |
+|  [Abschnitt: Haftungsausschluss]         |
+|    - Haftung fuer Inhalte                |
+|    - Haftung fuer Links                  |
+|    - Urheberrecht                        |
+|                                          |
++------------------------------------------+
+|              Footer                       |
+|  (mit Link zu Impressum & Datenschutz)   |
++------------------------------------------+
 ```
 
-Diese minimale Aenderung stellt sicher, dass die Linie (z-0) immer hinter den Karten (z-10) gerendert wird.
+---
+
+## Design
+
+- Verwendet bestehendes Layout (Header, Footer, FloatingCTAs)
+- Saubere Typografie mit klaren Abschnitten
+- Responsive fuer Mobile und Desktop
+- Card-Design fuer wichtige Kontaktdaten
+- Konsistent mit dem restlichen Website-Design
 
 ---
 
-## Betroffene Seiten (automatisch gefixt)
+## Zusammenfassung der Dateiaenderungen
 
-Da alle Timeline-Sections die zentrale `HorizontalTimeline`-Komponente verwenden, wird dieser Fix global wirksam:
+| Datei | Aktion | Zeilen (ca.) |
+|-------|--------|--------------|
+| `src/pages/Impressum.tsx` | NEU | ~150 |
+| `src/App.tsx` | Route hinzufuegen | +2 |
+| `src/components/layout/Footer.tsx` | Link hinzufuegen | +5 |
+| `public/sitemap.xml` | URL hinzufuegen | +5 |
 
-1. Startseite - Ablauf-Section
-2. Alle 5 Service-Seiten (Wohnungsentruempelung, Haushaltsaufloesung, etc.)
-3. Alle 8 Staedte-Seiten (Ulm, Muenchen, Stuttgart, etc.)
-4. SEA-Landingpages (verwenden eigene Card-Variante ohne Linie - nicht betroffen)
+**Gesamt: 4 Dateien, davon 1 neu**
 
 ---
 
-## Zusammenfassung
+## Naechster Schritt
 
-| Aenderung | Datei | Zeile |
-|-----------|-------|-------|
-| `z-0` hinzufuegen zur Progress-Linie | `HorizontalTimeline.tsx` | 27 |
-
-**1 Datei, 1 Zeile geaendert** - minimaler Eingriff mit maximalem Effekt.
+Nach dem Impressum folgt die **Datenschutzerklaerung** mit:
+- Google Analytics / Google Ads Tracking
+- Cookie-Hinweise
+- Kontaktformular-Datenverarbeitung
+- WhatsApp-Nutzung
+- Hosting-Informationen
+- Betroffenenrechte (DSGVO Art. 15-21)
