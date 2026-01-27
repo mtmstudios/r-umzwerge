@@ -1,70 +1,102 @@
 
-# Plan: Logo auf Tablet und Mobil zentrieren
 
-## Aktuelle Situation
+# Plan: Logo-Ränder per CSS abschneiden
 
-Der Header verwendet ein einfaches Flexbox-Layout mit `justify-between`:
-- Logo links (`-ml-8`)
-- Navigation in der Mitte (nur Desktop sichtbar)
-- CTA-Button rechts (nur Desktop sichtbar)
-- Menü-Button rechts (nur Mobil/Tablet sichtbar)
+## Aktuelles Problem
 
-## Lösungsansatz
+Das Logo-Bild (`logo-raeumzwerge.png`) enthält große transparente Ränder um den eigentlichen Logo-Inhalt. Auch bei starker Skalierung (`h-[28rem]`) bleibt das sichtbare Logo klein, weil die transparenten Bereiche den Platz einnehmen.
 
-Das Layout wird auf Mobil/Tablet in ein 3-Spalten-Grid umgewandelt, bei dem das Logo in der Mitte zentriert wird:
+## Lösung: CSS clip-path
+
+Mit `clip-path: inset()` schneiden wir die transparenten Ränder ab, sodass nur der eigentliche Logo-Inhalt sichtbar ist. Dies funktioniert ohne neue Datei.
+
+## Visuelle Darstellung
 
 ```text
-Desktop (ab lg):     [Logo] [Navigation] [CTA-Button]
-Tablet/Mobil:        [Menü-Button] [Logo zentriert] [Platzhalter]
+Vorher (mit transparenten Rändern):
+┌─────────────────────────────────┐
+│                                 │
+│    ┌───────────────────┐        │
+│    │   RÄUMZWERGE      │        │
+│    │   [Logo-Grafik]   │        │
+│    └───────────────────┘        │
+│                                 │
+└─────────────────────────────────┘
+
+Nachher (mit clip-path):
+┌───────────────────┐
+│   RÄUMZWERGE      │
+│   [Logo-Grafik]   │
+└───────────────────┘
 ```
 
 ## Technische Änderungen
 
 ### Datei: `src/components/layout/Header.tsx`
 
-1. **Container-Layout ändern** (Zeile 38):
-   - Von: `flex items-center justify-between`
-   - Zu: Grid-basiertes Layout für Mobil/Tablet, Flex für Desktop
-
-2. **Menü-Button nach links verschieben** (Zeile 109-120):
-   - Position: erste Spalte (links)
-   - Nur auf Mobil/Tablet sichtbar (`lg:hidden`)
-
-3. **Logo zentrieren** (Zeile 39-48):
-   - Entfernen des negativen Margins auf Mobil (`-ml-8`)
-   - Zentrierte Ausrichtung in der mittleren Spalte
-
-4. **Platzhalter für rechte Spalte** (nur Mobil/Tablet):
-   - Leerer Bereich für symmetrisches Layout
-
-### Code-Struktur (vereinfacht):
+**Zeile 55-62 - Logo-Container anpassen:**
 
 ```tsx
-<div className="grid grid-cols-3 lg:flex lg:justify-between items-center">
-  {/* Links: Menü-Button (nur mobil) */}
-  <div className="lg:hidden flex justify-start">
-    <button>...</button>
+// Von:
+<a href="/" className="flex items-center justify-center lg:justify-start group shrink-0 lg:-ml-12">
+  <div className="h-24 lg:h-24 overflow-hidden flex items-center">
+    <img 
+      src={logoRaeumzwerge} 
+      alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
+      className="h-[28rem] lg:h-80 w-auto object-contain object-center lg:object-left transition-all duration-300 group-hover:scale-[1.03] group-hover:opacity-90"
+    />
   </div>
-  
-  {/* Mitte: Logo (zentriert auf mobil, links auf desktop) */}
-  <a className="flex justify-center lg:justify-start">
-    <img src={logo} />
-  </a>
-  
-  {/* Rechts: Navigation + CTA (desktop) oder Platzhalter (mobil) */}
-  <div className="hidden lg:flex">...</div>
-  <div className="lg:hidden" /> {/* Platzhalter für Symmetrie */}
-</div>
+</a>
+
+// Zu:
+<a href="/" className="flex items-center justify-center lg:justify-start group shrink-0 lg:-ml-4">
+  <div className="h-16 flex items-center">
+    <img 
+      src={logoRaeumzwerge} 
+      alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
+      className="h-40 w-auto object-contain transition-all duration-300 group-hover:scale-[1.03] group-hover:opacity-90"
+      style={{ clipPath: 'inset(32% 5% 32% 5%)' }}
+    />
+  </div>
+</a>
 ```
 
-## Visuelles Ergebnis
+### Änderungen im Detail
 
-| Gerät | Layout |
-|-------|--------|
-| Desktop (1024px+) | Logo links, Navigation Mitte, CTA rechts |
-| Tablet (768px-1023px) | Menü links, Logo zentriert, - |
-| Mobil (unter 768px) | Menü links, Logo zentriert, - |
+| Element | Vorher | Nachher | Begründung |
+|---------|--------|---------|------------|
+| Container-Höhe | `h-24` | `h-16` (64px) | Kompakter, da Logo nach Crop weniger Platz braucht |
+| `overflow-hidden` | Ja | Entfernt | Nicht mehr nötig, clip-path übernimmt das |
+| Bild-Höhe | `h-[28rem]` | `h-40` (160px) | Echte Größe statt Überskalierung |
+| `object-center/left` | Ja | Entfernt | Crop macht das Bild symmetrisch |
+| `clip-path` | - | `inset(32% 5% 32% 5%)` | Schneidet 32% oben/unten, 5% links/rechts |
+| Desktop-Margin | `lg:-ml-12` | `lg:-ml-4` | Weniger Ausgleich nötig |
 
-## Zusammenfassung
+### clip-path Werte erklärt
 
-Eine Umstrukturierung des Header-Layouts von reinem Flexbox zu einem responsiven Grid/Flex-Hybrid ermöglicht die Zentrierung des Logos auf kleineren Bildschirmen, während das Desktop-Layout unverändert bleibt.
+```text
+clip-path: inset(32% 5% 32% 5%)
+                  ↑   ↑   ↑   ↑
+                  │   │   │   └── 5% von links
+                  │   │   └────── 32% von unten
+                  │   └────────── 5% von rechts  
+                  └────────────── 32% von oben
+
+Die Werte sind moderat gewählt, damit nichts vom
+eigentlichen Logo-Inhalt verloren geht.
+```
+
+## Ergebnis
+
+- Logo erscheint deutlich größer und prominenter
+- Transparente Ränder werden unsichtbar
+- Gilt für alle Geräte (Mobil, Tablet, Desktop)
+- Keine neue Logo-Datei erforderlich
+- Header-Höhe bleibt kompakt
+
+## Feinabstimmung
+
+Falls das Logo nach der Implementierung zu stark oder zu wenig beschnitten ist, können die `inset()`-Werte leicht angepasst werden:
+- **Weniger Crop:** `inset(28% 3% 28% 3%)`
+- **Mehr Crop:** `inset(36% 8% 36% 8%)`
+
