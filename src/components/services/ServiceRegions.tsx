@@ -32,7 +32,7 @@ export function ServiceRegions() {
               {REGIONS.map((region) => (
                 <a
                   key={region.slug}
-                  href={`/region/${region.slug}`}
+                  href={`/${region.slug}`}
                   className={cn(
                     "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors",
                     region.isHQ
