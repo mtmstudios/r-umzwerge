@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Home, ChevronDown, Phone } from 'lucide-react';
+import { Menu, X, ChevronDown, Phone } from 'lucide-react';
+import logoRaeumzwerge from '@/assets/logo-raeumzwerge.png';
 import { Button } from '@/components/ui/button';
 import { NAV_ITEMS, PHONE_LINK } from '@/lib/constants';
 import { cn } from '@/lib/utils';
@@ -35,14 +36,13 @@ export function Header() {
     >
       <div className="container-custom">
         <div className="flex items-center justify-between gap-6 lg:gap-8">
-          {/* Logo mit Icon */}
-          <a href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 lg:w-10 lg:h-10 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-              <Home className="h-4 w-4 lg:h-5 lg:w-5 text-primary" />
-            </div>
-            <span className="text-xl lg:text-2xl font-bold text-foreground tracking-tight">
-              Räumzwerge
-            </span>
+          {/* Logo */}
+          <a href="/" className="flex items-center group">
+            <img 
+              src={logoRaeumzwerge} 
+              alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
+              className="h-10 lg:h-12 w-auto"
+            />
           </a>
 
           {/* Desktop Navigation - größer mit Underline-Animation */}
