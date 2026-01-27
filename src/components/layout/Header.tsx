@@ -15,7 +15,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
-  const [isDesktopDropdownOpen, setIsDesktopDropdownOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,19 +54,19 @@ isScrolled
                 <div
                   key={item.label}
                   className="relative"
-                  onMouseEnter={() => setIsDesktopDropdownOpen(true)}
-                  onMouseLeave={() => setIsDesktopDropdownOpen(false)}
+                  onMouseEnter={() => setOpenDropdown(item.label)}
+                  onMouseLeave={() => setOpenDropdown(null)}
                 >
                   <button className="nav-link flex items-center gap-1.5 text-base font-medium text-foreground/80 hover:text-foreground transition-colors outline-none">
                     {item.label}
                     <ChevronDown className={cn(
                       "h-4 w-4 transition-transform duration-200",
-                      isDesktopDropdownOpen && "rotate-180"
+                      openDropdown === item.label && "rotate-180"
                     )} />
                   </button>
-                  {isDesktopDropdownOpen && (
+                  {openDropdown === item.label && (
                     <div className="absolute top-full left-0 pt-2 z-50">
-                      <div className="w-56 glass-strong rounded-xl shadow-lg py-2">
+                      <div className="w-56 bg-card border border-border rounded-xl shadow-lg py-2">
                         {item.children.map((child) => (
                           <a
                             key={child.href}
