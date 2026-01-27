@@ -1,100 +1,74 @@
 
+# Plan: Abstände in der RegionsSection reduzieren
 
-# Plan: Mobile/Tablet Menü zentrieren
+## Problem
 
-## Aktuelle Situation
+Zwischen dem Header ("Unsere Regionen in Süddeutschland" + Subtext) und dem Karten-Grid ist ein zu großer Abstand. Die aktuellen Werte:
 
-Das Mobile-Menü ist derzeit **linksbündig** ausgerichtet:
-- Menüpunkte haben `px-4` Padding aber keinen `text-center`
-- Der CTA-Button ist zwar `w-full`, aber der Container ist nicht zentriert
+| Element | Aktuell |
+|---------|---------|
+| Header margin-bottom | `mb-8` (32px) / `lg:mb-12` (48px) |
+| Section padding | `py-12` (48px) / `lg:py-16` (64px) |
+| Grid gap | `gap-8` (32px) / `lg:gap-12` (48px) |
 
 ## Lösung
 
-Das gesamte Mobile-Menü zentrieren – sowohl die Navigationslinks als auch den CTA-Button.
+Abstände deutlich reduzieren für ein kompakteres Layout.
 
 ---
 
 ## Technische Umsetzung
 
-### Datei: `src/components/layout/Header.tsx`
+### Datei: `src/components/sections/RegionsSection.tsx`
 
-**Änderung 1: Navigation Container zentrieren (Zeile 127)**
+**Änderung 1: Section Padding reduzieren (Zeile 12)**
 
 ```tsx
 // ALT
-<nav className="container-custom py-4 flex flex-col gap-1">
+<section className="py-12 lg:py-16 bg-secondary/30">
 
-// NEU - items-center für zentrierte Ausrichtung
-<nav className="container-custom py-4 flex flex-col items-center gap-1">
+// NEU - kompakter
+<section className="py-8 lg:py-12 bg-secondary/30">
 ```
 
-**Änderung 2: Collapsible Trigger zentrieren (Zeile 135)**
+**Änderung 2: Header Margin reduzieren (Zeile 17)**
 
 ```tsx
 // ALT
-<CollapsibleTrigger className="flex items-center justify-between w-full py-3 px-4 text-base font-medium ...">
+"text-center mb-8 lg:mb-12",
 
-// NEU - justify-center für zentrierten Text, ChevronDown daneben
-<CollapsibleTrigger className="flex items-center justify-center gap-2 w-full py-3 px-4 text-base font-medium ...">
+// NEU - viel näher am Content
+"text-center mb-4 lg:mb-6",
 ```
 
-**Änderung 3: Submenu-Einträge zentrieren (Zeile 143-154)**
+**Änderung 3: Grid Gap reduzieren (Zeile 31)**
 
 ```tsx
 // ALT
-<div className="pl-4 flex flex-col gap-1 mt-1">
-  <a ... className="py-2.5 px-4 text-sm font-medium ...">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
 
-// NEU - pl-4 entfernen, text-center hinzufügen
-<div className="flex flex-col items-center gap-1 mt-1">
-  <a ... className="py-2.5 px-4 text-sm font-medium text-center ...">
-```
-
-**Änderung 4: Normale Menüpunkte zentrieren (Zeile 158-165)**
-
-```tsx
-// ALT
-<a ... className="py-3 px-4 text-base font-medium ...">
-
-// NEU - text-center hinzufügen
-<a ... className="py-3 px-4 text-base font-medium text-center ...">
-```
-
-**Änderung 5: CTA-Container zentrieren (Zeile 170)**
-
-```tsx
-// ALT
-<div className="mt-4 pt-4 border-t border-border/50">
-
-// NEU - w-full für volle Breite des zentrierten Containers
-<div className="mt-4 pt-4 border-t border-border/50 w-full max-w-xs">
+// NEU - kompakter
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start">
 ```
 
 ---
 
 ## Vorher/Nachher
 
-| Element | Vorher | Nachher |
-|---------|--------|---------|
-| Menüpunkte | Linksbündig | Zentriert |
-| Submenu-Einträge | Links eingerückt | Zentriert |
-| Leistungen + Chevron | justify-between | justify-center mit gap |
-| CTA-Button | Volle Breite | Zentriert, max-w-xs |
-
----
-
-## Betroffene Dateien
-
-| Datei | Änderung |
-|-------|----------|
-| `src/components/layout/Header.tsx` | Mobile Menü zentrieren (5 Stellen) |
+| Element | Vorher | Nachher | Ersparnis |
+|---------|--------|---------|-----------|
+| Section padding (mobile) | 48px | 32px | -16px |
+| Section padding (desktop) | 64px | 48px | -16px |
+| Header margin (mobile) | 32px | 16px | -16px |
+| Header margin (desktop) | 48px | 24px | -24px |
+| Grid gap (mobile) | 32px | 24px | -8px |
+| Grid gap (desktop) | 48px | 32px | -16px |
 
 ---
 
 ## Ergebnis
 
-- Alle Menüpunkte **zentriert** auf Mobile/Tablet
-- Submenu-Einträge ebenfalls zentriert
-- CTA-Button kompakter und zentriert
-- Professionelleres, ausgewogenes Erscheinungsbild
-
+- Deutlich kompakteres Layout
+- Karte näher am Titel
+- Bessere visuelle Verbindung zwischen Header und Inhalt
+- Konsistent auf Desktop, Tablet und Mobile
