@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 import { cn } from '@/lib/utils';
 import { getWhatsAppLink } from '@/lib/constants';
+import { useScrollReveal } from '@/hooks/useAnimations';
 import type { SEAData } from '@/lib/seaData';
 
 interface SEAPainPointsProps {
@@ -13,6 +14,7 @@ interface SEAPainPointsProps {
 export function SEAPainPoints({ data }: SEAPainPointsProps) {
   const isGentle = data.tone === 'gentle';
   const isDirect = data.tone === 'direct';
+  const { ref: sectionRef, isVisible } = useScrollReveal(0.15);
 
   // CTA-Text je nach Ton
   const getCtaText = () => {
@@ -45,16 +47,27 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
         </div>
 
         {/* Dialog-Karten Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div 
+          ref={sectionRef}
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8"
+        >
           {data.painPoints.map((point, index) => (
             <Card
               key={index}
               className={cn(
-                "border-none shadow-lg transition-all duration-300",
+                "border-none shadow-lg",
                 "hover:shadow-xl hover:-translate-y-1",
                 "hover:shadow-primary/10",
-                isGentle ? "bg-background" : "bg-card"
+                isGentle ? "bg-background" : "bg-card",
+                "opacity-0 translate-y-6",
+                isVisible && "opacity-100 translate-y-0"
               )}
+              style={{
+                transitionDelay: isVisible ? `${index * 150}ms` : '0ms',
+                transitionProperty: 'opacity, transform',
+                transitionDuration: '500ms',
+                transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'
+              }}
             >
               <CardContent className="p-6 lg:p-8 flex flex-col h-full">
                 {/* Problem: Emotionales Zitat */}
