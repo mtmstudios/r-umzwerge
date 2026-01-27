@@ -1,33 +1,35 @@
 
-# Plan: Hero-Bild für Wohnungsentrümpelung austauschen
+# Plan: Hero-Bild auf der Startseite austauschen
 
 ## Aufgabe
-Das aktuelle Hero-Bild der Wohnungsentrümpelung-Seite durch das neue Teambild ersetzen.
+Das aktuelle Hero-Bild durch das neue Teambild mit dem Räumzwerge-Transporter ersetzen.
 
 ## Neues Bild
-Zeigt ein professionelles 3-Personen-Team in einheitlichen dunkelblauen Polo-Shirts mit Firmenlogo beim:
-- Tragen von Umzugskartons (beschriftet mit "SPENDE", "RECYCLING")
-- Sortieren von Gegenständen
-- Professionelle Arbeitsumgebung mit Sackkarre
+Zeigt ein professionelles 3-Personen-Team mit:
+- Gebrandetem Räumzwerge-Transporter mit Rampe
+- Kartons beschriftet mit "SPENDE" und "MÜLL"
+- Teamarbeit beim Verladen vor einem Wohnhaus
+- Professionelle Arbeitskleidung mit Firmenlogo
 
 ## Änderungen
 
 ### 1. Bild speichern
-Das hochgeladene Bild wird nach `public/images/service-wohnungsentruempelung.jpg` kopiert (überschreibt das alte Bild).
+Das hochgeladene Bild wird nach `src/assets/hero-team.jpg` kopiert (überschreibt das alte Bild).
 
-### 2. Alt-Text anpassen (serviceData.ts)
-Der Alt-Text wird aktualisiert um das neue Bild zu beschreiben:
+### 2. Alt-Text anpassen
+Der Alt-Text in `HeroSection.tsx` wird aktualisiert um das neue Bild korrekt zu beschreiben:
 
-| Feld | Alt | Neu |
-|------|-----|-----|
-| `imageAlt` | "Leere, saubere Wohnung nach professioneller Entrümpelung" | "Professionelles Räumzwerge-Team bei der Wohnungsentrümpelung" |
+| Stelle | Alt | Neu |
+|--------|-----|-----|
+| Zeile 24 | "Räumzwerge Team bei der Entrümpelung" | "Räumzwerge Team mit Transporter beim Verladen von Kartons" |
+| Zeile 160 | "Räumzwerge Team bei der Entrümpelung – Mitarbeiter verladen Kartons in einen Transporter" | "Räumzwerge Team mit gebrandetem Transporter beim Verladen von Spende- und Müllkartons" |
 
 ## Dateien
 
 | Datei | Aktion |
 |-------|--------|
-| `public/images/service-wohnungsentruempelung.jpg` | Überschreiben mit neuem Bild |
-| `src/lib/serviceData.ts` | Alt-Text in Zeile 56 anpassen |
+| `src/assets/hero-team.jpg` | Überschreiben mit neuem Bild |
+| `src/components/sections/HeroSection.tsx` | Alt-Texte anpassen (Zeilen 24 & 160) |
 
 ## Ergebnis
-Die Wohnungsentrümpelung-Seite zeigt im Hero ein authentisches Teambild, das Professionalität und Vertrauen vermittelt.
+Die Startseite zeigt im Hero ein neues Teambild mit dem gebrandeten Transporter, das Professionalität und die nachhaltige Arbeitsweise (Spende/Müll-Trennung) kommuniziert.
