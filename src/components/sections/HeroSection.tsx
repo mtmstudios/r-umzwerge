@@ -21,7 +21,7 @@ export function HeroSection() {
       <div className="xl:hidden absolute inset-0">
         <img 
           src={heroTeamImage} 
-          alt="Räumzwerge Team mit Transporter beim Verladen von Kartons"
+          alt="Räumzwerge-Team mit gebrandetem Transporter beim Verladen von Möbeln und Kartons vor einem Wohnhaus"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30" />
@@ -157,7 +157,7 @@ export function HeroSection() {
             <div className="aspect-square rounded-3xl overflow-hidden shadow-soft">
               <img
                 src={heroTeamImage}
-                alt="Räumzwerge Team mit gebrandetem Transporter beim Verladen von Spende- und Müllkartons"
+                alt="Räumzwerge-Team mit gebrandetem Transporter beim Verladen von Möbeln und Kartons vor einem Wohnhaus"
                 className="w-full h-full object-cover"
               />
             </div>
