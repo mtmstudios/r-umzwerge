@@ -76,23 +76,23 @@ export function BeforeAfterSection() {
           onTouchMove={handleTouchMove}
           onMouseLeave={handleMouseUp}
         >
-          {/* Before Image (Full Width) */}
+          {/* After Image (Full Width) - Nachher */}
           <div className="absolute inset-0">
             <img 
-              src="/images/before-after-vorher.webp" 
-              alt="Wohnung vor der Entrümpelung - voll mit Kartons und Müll"
+              src="/images/before-after-nachher.webp" 
+              alt="Wohnung nach der Entrümpelung - besenrein"
               className="w-full h-full object-cover"
             />
           </div>
 
-          {/* After Image (Clipped) */}
+          {/* Before Image (Clipped from left) - Vorher */}
           <div
             className="absolute inset-0"
             style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
           >
             <img 
-              src="/images/before-after-nachher.webp" 
-              alt="Wohnung nach der Entrümpelung - besenrein"
+              src="/images/before-after-vorher.webp" 
+              alt="Wohnung vor der Entrümpelung - voll mit Kartons und Müll"
               className="w-full h-full object-cover"
             />
           </div>

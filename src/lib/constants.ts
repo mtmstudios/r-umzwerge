@@ -1,6 +1,6 @@
 // WhatsApp configuration
 export const WHATSAPP_NUMBER = "491603080676";
-export const WHATSAPP_MESSAGE = "Hallo Räumzwerge, ich hätte gerne eine Preiseinschätzung. Ort: ____. Ich sende gleich Fotos.";
+export const WHATSAPP_MESSAGE = "Hallo liebes Räumzwerge-Team, ich komme von euerer Website.";
 
 export const getWhatsAppLink = (customMessage?: string) => {
   const message = encodeURIComponent(customMessage || WHATSAPP_MESSAGE);
