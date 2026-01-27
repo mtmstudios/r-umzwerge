@@ -1,55 +1,41 @@
 
 
-# Plan: Logo weiter nach links positionieren
+# Plan: Logo-Margin noch weiter nach links
 
-## Problem
+## Ziel
 
-Das Logo erscheint durch die Verdoppelung der Größe zwar größer, aber der `overflow-hidden` Container schneidet das Bild so ab, dass es nicht am linken Rand des Headers beginnt. Es sollte bündig zur linken Kante des Headers sein, um symmetrisch zum "Jetzt anrufen" Button auf der rechten Seite zu wirken.
+Den negativen linken Margin des Logos vergrößern, damit es noch weiter links im Header erscheint und besser zur rechten CTA-Button-Position passt.
 
-## Lösung
+## Aktuelle vs. neue Werte
 
-Ein negativer linker Margin wird auf den Logo-Container angewendet, um das Logo über den normalen Container-Rand hinaus nach links zu verschieben.
+| Breakpoint | Aktuell | Neu |
+|------------|---------|-----|
+| Mobil | -ml-4 (-16px) | -ml-8 (-32px) |
+| Desktop (lg) | -ml-6 (-24px) | -ml-12 (-48px) |
 
 ## Technische Umsetzung
 
 **Datei: `src/components/layout/Header.tsx`**
 
-### Logo-Container mit negativem Margin (Zeile 40-48)
+### Logo-Link Margin anpassen (Zeile 40)
 
 ```tsx
 // Vorher:
-<a href="/" className="flex items-center group shrink-0">
-  <div className="h-20 lg:h-24 overflow-hidden flex items-center">
-    <img 
-      src={logoRaeumzwerge} 
-      alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
-      className="h-64 lg:h-80 w-auto object-contain object-left"
-    />
-  </div>
-</a>
+<a href="/" className="flex items-center group shrink-0 -ml-4 lg:-ml-6">
 
 // Nachher:
-<a href="/" className="flex items-center group shrink-0 -ml-4 lg:-ml-6">
-  <div className="h-20 lg:h-24 overflow-hidden flex items-center">
-    <img 
-      src={logoRaeumzwerge} 
-      alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
-      className="h-64 lg:h-80 w-auto object-contain object-left"
-    />
-  </div>
-</a>
+<a href="/" className="flex items-center group shrink-0 -ml-8 lg:-ml-12">
 ```
 
 ## Zusammenfassung
 
 | Datei | Änderung |
 |-------|----------|
-| `src/components/layout/Header.tsx` | `-ml-4 lg:-ml-6` zum Logo-Link hinzufügen |
+| `src/components/layout/Header.tsx` | Margin von `-ml-4 lg:-ml-6` auf `-ml-8 lg:-ml-12` erhöhen |
 
 ## Ergebnis
 
-- Logo erscheint weiter links im Header
-- Bessere visuelle Balance zum CTA-Button auf der rechten Seite
-- Das Logo nutzt den Platz am linken Rand optimal aus
-- Header-Höhe und andere Elemente bleiben unverändert
+- Logo erscheint doppelt so weit links wie zuvor
+- Stärkere visuelle Balance zum rechten CTA-Button
+- Alle anderen Header-Elemente bleiben unverändert
 
