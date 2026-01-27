@@ -1,10 +1,8 @@
 import { useState } from 'react';
-import { Phone, Mail, MapPin, Heart, Accessibility } from 'lucide-react';
+import { Phone, Mail, MapPin, Accessibility } from 'lucide-react';
 import { SERVICES, REGIONS, PHONE_NUMBER, EMAIL, ADDRESS, getWhatsAppLink } from '@/lib/constants';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 import { AccessibilityWidget } from '@/components/accessibility/AccessibilityWidget';
-import logoWhite from '@/assets/logo-white.png';
-
 export function Footer() {
   const currentYear = new Date().getFullYear();
   const [isAccessibilityOpen, setIsAccessibilityOpen] = useState(false);
@@ -153,18 +151,8 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-primary-foreground/10">
           <div className="container-custom py-5">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-3 text-sm text-primary-foreground/50">
+          <div className="flex flex-col md:flex-row justify-center items-center gap-3 text-sm text-primary-foreground/50">
               <p>© {currentYear} Räumzwerge. Alle Rechte vorbehalten.</p>
-              <p className="flex items-center gap-1.5">
-                Mit <Heart className="h-4 w-4 text-red-400 fill-red-400" /> erstellt von
-                <a href="https://www.mtmstudios.de" target="_blank" rel="noopener noreferrer">
-                  <img 
-                    src={logoWhite} 
-                    alt="MTM Studios Logo" 
-                    className="h-16 ml-1 object-contain" 
-                  />
-                </a>
-              </p>
             </div>
           </div>
         </div>
