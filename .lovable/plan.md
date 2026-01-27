@@ -1,107 +1,58 @@
 
 
-# GitHub Actions Workflow fuer Mittwald Deployment
+# Fix: GitHub Actions Workflow Version korrigieren
 
-## Uebersicht
+## Problem
 
-Eine GitHub Actions Workflow-Datei wird erstellt, die bei jedem Push zum `main`-Branch automatisch die Website baut und zu Mittwald deployed.
-
----
-
-## Workflow-Datei
-
-**Neue Datei:** `.github/workflows/deploy.yml`
-
-```yaml
-name: Deploy to Mittwald
-
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
-
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build project
-        run: npm run build
-
-      - name: Deploy to Mittwald via SSH
-        uses: easingthemes/ssh-deploy@v5
-        with:
-          SSH_PRIVATE_KEY: ${{ secrets.MITTWALD_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.MITTWALD_SSH_HOST }}
-          REMOTE_USER: ${{ secrets.MITTWALD_SSH_USER }}
-          SOURCE: "dist/"
-          TARGET: ${{ secrets.MITTWALD_DEPLOY_PATH }}
-          ARGS: "-avz --delete"
+Der Workflow schlägt fehl mit der Meldung:
+```
+Unable to resolve action `easingthemes/ssh-deploy@v5`, unable to find version `v5`
 ```
 
----
+## Ursache
 
-## Workflow-Funktionen
-
-| Feature | Beschreibung |
-|---------|--------------|
-| **Trigger** | Push zu `main` oder manueller Start |
-| **Node.js** | Version 20 mit npm-Caching |
-| **Build** | `npm ci` + `npm run build` |
-| **Deploy** | rsync via SSH mit `--delete` Flag |
+Die Version `v5` existiert nicht als Git-Tag. Die korrekte Versionsangabe ist `v5.1.0`.
 
 ---
 
-## Erforderliche GitHub Secrets
+## Loesung
 
-Diese muessen im GitHub Repository unter **Settings → Secrets → Actions** angelegt werden:
+Die Zeile im Workflow muss von:
 
-| Secret | Beschreibung | Beispielwert |
-|--------|--------------|--------------|
-| `MITTWALD_SSH_HOST` | SSH-Server | `ssh123.mittwaldserver.info` |
-| `MITTWALD_SSH_USER` | Benutzername | `p123456` |
-| `MITTWALD_SSH_KEY` | Privater SSH-Key | `-----BEGIN OPENSSH PRIVATE KEY-----...` |
-| `MITTWALD_DEPLOY_PATH` | Zielverzeichnis | `/html` |
+```yaml
+uses: easingthemes/ssh-deploy@v5
+```
 
----
+geaendert werden zu:
 
-## Was wird deployed?
-
-Der `dist/`-Ordner nach dem Build enthaelt:
-
-- `index.html` - Einstiegspunkt
-- `.htaccess` - SPA-Routing + Caching
-- `sitemap.xml` - 19 indexierbare Seiten
-- `robots.txt` - Blockiert `/lp/` Landingpages
-- `assets/` - JS, CSS, Bilder, Fonts
-- Alle Routen (organisch + SEA-Landingpages)
-
----
-
-## Ablauf
-
-```text
-Push zu main → Checkout → Node.js Setup → npm ci → npm run build → rsync zu Mittwald
+```yaml
+uses: easingthemes/ssh-deploy@v5.1.0
 ```
 
 ---
 
 ## Dateiaenderung
 
-| Datei | Aenderung |
-|-------|-----------|
-| `.github/workflows/deploy.yml` | Neue Datei erstellen |
+**Datei:** `.github/workflows/deploy.yml`
+
+| Zeile | Alt | Neu |
+|-------|-----|-----|
+| 28 | `uses: easingthemes/ssh-deploy@v5` | `uses: easingthemes/ssh-deploy@v5.1.0` |
+
+---
+
+## Alternative Optionen
+
+| Option | Version | Beschreibung |
+|--------|---------|--------------|
+| **Empfohlen** | `@v5.1.0` | Stabile, getestete Version |
+| Alternativ | `@main` | Immer die neueste Version (kann instabil sein) |
+
+---
+
+## Nach der Korrektur
+
+1. Push den Fix zu GitHub
+2. Der Workflow startet automatisch neu
+3. Ueberpruefe den Actions-Tab auf gruenes Haekchen
 
