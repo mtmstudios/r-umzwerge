@@ -1,52 +1,36 @@
 
-
-# Plan: Logo auf Mobil noch größer machen (h-110)
-
-## Aktuelle Situation
-
-Das Logo verwendet derzeit:
-- **Mobil/Tablet**: `h-80` (320px) für das Bild
-- **Desktop**: `h-64` (256px) für das Bild
+# Plan: Logo vergrößern durch Rand-Entfernung
 
 ## Problem
+Das aktuelle Logo-Bild (`src/assets/logo-raeumzwerge-cropped.png`) enthält noch transparente Ränder. Dadurch erscheint das Logo klein, obwohl der Container bereits `h-20` bis `h-28` groß ist.
 
-Tailwind CSS hat keine Standard-Klasse `h-110`. Die höchste Standard-Höhenklasse ist `h-96` (384px).
+## Lösungsschritte
 
-## Lösung
+### 1. Logo-Asset mit AI bearbeiten
+Ich werde das hochgeladene Logo (`user-uploads://eeee.png`) mit KI-Bildbearbeitung zuschneiden:
+- Transparente/leere Bereiche oben und unten entfernen
+- Nur den sichtbaren Logo-Inhalt behalten
+- Das Ergebnis als neues Asset speichern
 
-Wir verwenden Tailwinds **Arbitrary Value Syntax** mit `h-[27.5rem]` (entspricht 440px, was h-110 wäre).
+### 2. Header-Code anpassen
+Nach dem Zuschneiden kann das Logo den verfügbaren Platz besser nutzen:
 
-## Technische Änderungen
+| Gerät | Aktuelle Höhe | Neue Höhe |
+|-------|---------------|-----------|
+| Mobil (390px) | h-20 (80px) | h-16 (64px) → Logo füllt mehr aus |
+| Tablet (768px) | h-24 (96px) | h-20 (80px) → Logo füllt mehr aus |
+| Desktop | h-28 (112px) | h-24 (96px) → Logo füllt mehr aus |
 
-### Datei: `src/components/layout/Header.tsx`
+Der Header wird kompakter, aber das Logo erscheint **größer**, weil der gesamte Container-Platz genutzt wird.
 
-**Zeile 56-60 - Bild-Höhe auf Mobil erhöhen:**
+### 3. Dateien die geändert werden
 
-| Element | Aktuell | Neu |
-|---------|---------|-----|
-| Container-Höhe Mobil | `h-24` (96px) | `h-28` (112px) |
-| Bild-Höhe Mobil | `h-80` (320px) | `h-[27.5rem]` (440px) |
-| Desktop | Unverändert | Unverändert |
-
-```tsx
-// Von:
-<div className="h-24 lg:h-20 flex items-center">
-  <img 
-    className="h-80 lg:h-64 ..."
-  />
-</div>
-
-// Zu:
-<div className="h-28 lg:h-20 flex items-center">
-  <img 
-    className="h-[27.5rem] lg:h-64 ..."
-  />
-</div>
-```
+| Datei | Änderung |
+|-------|----------|
+| `src/assets/logo-raeumzwerge-cropped.png` | Ersetzt durch zugeschnittene Version |
+| `src/components/layout/Header.tsx` | Logo-Container-Höhen optimiert |
 
 ## Ergebnis
-
-- **Mobil/Tablet**: Logo wird ~37% größer (320px → 440px)
-- **Desktop**: Bleibt unverändert bei 256px
-- Container wächst leicht mit (96px → 112px) um das größere Logo aufzunehmen
-
+- Logo nutzt 100% des verfügbaren Platzes
+- Keine "verschwendeten" Pixel durch transparente Ränder
+- Header wirkt kompakter, Logo wirkt größer
