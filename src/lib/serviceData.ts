@@ -147,8 +147,8 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       h1: 'Entrümpelung – sauber, diskret, transparent.',
       subline: 'Preiseinschätzung per WhatsApp-Foto – innerhalb von 24 Stunden (oft schneller).',
       trustPills: ['Besenrein', 'Festpreis nach Einschätzung', 'Keine versteckten Kosten'],
-      imageSrc: '/images/service-entruempelung.jpg',
-      imageAlt: 'Professionelles Team beim Verladen von Kartons in einen Transporter',
+      imageSrc: '/images/service-entruempelung-hero.png',
+      imageAlt: 'Raeumzwerge-Team beim Demontieren von Moebeln und Sortieren in einem Wohnraum',
     },
     scenarios: [
       { 
