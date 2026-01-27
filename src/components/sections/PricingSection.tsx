@@ -46,7 +46,7 @@ export function PricingSection() {
             {/* Visible Image */}
             <div className="relative rounded-2xl overflow-hidden shadow-lg">
               <img 
-                src="/images/messiewohnung-bg.jpg"
+                src="/images/messiewohnung-bg.webp"
                 alt="Entrümpelung einer vollen Wohnung"
                 className="w-full h-64 lg:h-72 object-cover"
               />

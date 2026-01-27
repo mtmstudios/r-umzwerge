@@ -1,7 +1,7 @@
 import { Phone, Mail, MapPin, Heart } from 'lucide-react';
 import { SERVICES, REGIONS, PHONE_NUMBER, EMAIL, ADDRESS, getWhatsAppLink } from '@/lib/constants';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
-import logoWhite from '@/assets/logo-white.png';
+import logoWhite from '@/assets/logo-white.webp';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
