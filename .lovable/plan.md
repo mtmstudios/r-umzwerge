@@ -1,55 +1,33 @@
 
-# Plan: Logo im Header vergrößern
-
-## Aktueller Zustand
-
-Das Logo hat derzeit folgende Größen:
-- Mobile: `h-10` = 40px
-- Desktop: `h-12` = 48px
+# Plan: Logo noch größer machen
 
 ## Änderung
 
 **Datei: `src/components/layout/Header.tsx`**
 
-Die Logo-Höhe wird verdoppelt bis verdreifacht:
+Die Logo-Höhe wird weiter erhöht:
 
-| Breakpoint | Vorher | Nachher |
-|------------|--------|---------|
-| Mobile | h-10 (40px) | h-14 (56px) |
-| Desktop (lg:) | h-12 (48px) | h-20 (80px) |
+| Breakpoint | Aktuell | Neu |
+|------------|---------|-----|
+| Mobile | h-14 (56px) | h-20 (80px) |
+| Desktop (lg:) | h-20 (80px) | h-28 (112px) |
 
 ```tsx
-// Vorher (Zeile 42):
-className="h-10 lg:h-12 w-auto"
+// Zeile 43 - Vorher:
+className="h-14 lg:h-20 w-auto"
 
 // Nachher:
-className="h-14 lg:h-20 w-auto"
-```
-
-## Zusätzliche Anpassung
-
-Da das Logo größer wird, muss auch der Header-Padding leicht angepasst werden:
-
-```tsx
-// Vorher (Zeile 27-30):
-isScrolled
-  ? "glass-strong shadow-lg py-3"
-  : "bg-card py-4 lg:py-5"
-
-// Nachher (etwas mehr Padding):
-isScrolled
-  ? "glass-strong shadow-lg py-2"
-  : "bg-card py-3 lg:py-4"
+className="h-20 lg:h-28 w-auto"
 ```
 
 ## Zusammenfassung
 
 | Datei | Änderung |
 |-------|----------|
-| `src/components/layout/Header.tsx` | Logo von h-10/h-12 auf h-14/h-20 vergrößern |
+| `src/components/layout/Header.tsx` | Logo-Höhe auf h-20 / lg:h-28 setzen |
 
 ## Ergebnis
 
-- Logo deutlich sichtbarer und prominenter
-- Bessere Markenwahrnehmung
-- Proportional zum Header-Layout
+- Logo fast doppelt so groß wie aktuell
+- Mobile: 80px Höhe
+- Desktop: 112px Höhe
