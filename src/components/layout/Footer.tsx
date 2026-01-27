@@ -111,21 +111,19 @@ export function Footer() {
               Einsatzgebiet
             </h3>
             <ul className="space-y-2.5">
-              {REGIONS.slice(0, 6).map((region) => (
+              {REGIONS.map((region) => (
                 <li key={region.slug}>
-                  <span className="text-primary-foreground/70 text-sm">
+                  <a
+                    href={`/${region.slug}`}
+                    className="text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm"
+                  >
                     {region.name}
                     {region.isHQ && (
                       <span className="text-accent ml-1 text-xs">(HQ)</span>
                     )}
-                  </span>
+                  </a>
                 </li>
               ))}
-              <li>
-                <span className="text-primary-foreground/50 text-sm">
-                  + weitere Regionen
-                </span>
-              </li>
             </ul>
           </div>
         </div>
