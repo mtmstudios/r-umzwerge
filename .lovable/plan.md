@@ -1,40 +1,65 @@
 
+# Plan: Homepage-Texte lokalisieren
 
-# Plan: Hero-Bild-Pfade korrigieren
-
-## Problem
-
-| Service | Aktueller Pfad | Richtiger Pfad | Status |
-|---------|----------------|----------------|--------|
-| Entruempelung | `/images/service-entruempelung-hero.png` | `/images/service-entruempelung-hero.png` | Korrekt |
-| Haushaltsaufloesung | `/images/service-haushaltsaufloesung.jpg` | `/images/service-haushaltsaufloesung-hero.png` | Falsch |
-
-Das Entruempelung-Bild sollte eigentlich korrekt angezeigt werden, da der Pfad stimmt. Das Haushaltsaufloesung-Bild hat jedoch noch den falschen Pfad.
+## Ziel
+Klare Verankerung als lokales Unternehmen aus Ulm mit Teams in ganz Süddeutschland – weg vom "Portal-Gefühl", hin zu echtem Vertrauen.
 
 ---
 
-## Loesung
+## Änderungen
 
-### Datei: `src/lib/serviceData.ts`
+### 1. Hero-Section (`src/components/sections/HeroSection.tsx`)
 
-**Zeile 232 aendern:**
-
+**H1-Überschrift (Zeile 25):**
 ```
-Vorher:  imageSrc: '/images/service-haushaltsaufloesung.jpg',
-Nachher: imageSrc: '/images/service-haushaltsaufloesung-hero.png',
+Vorher:  Entrümpelung ohne Stress – sauber, diskret, transparent.
+Nachher: Entrümpelung ohne Stress – mit unseren Teams in ganz Süddeutschland.
 ```
 
+**Untertitel (Zeile 28-29):**
+```
+Vorher:  Wohnung, Haus, Keller, Garage oder Gewerbe: Wir räumen fachgerecht 
+         und besenrein. Preiseinschätzung per WhatsApp-Foto – innerhalb von 24 Stunden.
+
+Nachher: Von Ulm aus koordinieren wir Entrümpelungen in ganz Baden-Württemberg 
+         und Bayern. Preiseinschätzung per WhatsApp-Foto – innerhalb von 24 Stunden.
+```
+
 ---
 
-## Zusammenfassung
+### 2. Trust Bar (`src/components/sections/TrustBar.tsx`)
 
-| Datei | Aenderung |
-|-------|-----------|
-| `src/lib/serviceData.ts` | Zeile 232: Pfad von `.jpg` auf `-hero.png` aendern |
+**Neuen Trust-Pill hinzufügen (Zeile 5):**
+```
+{ icon: MapPin, text: "Hauptsitz Ulm · Teams vor Ort" }
+```
+
+Dieser erscheint dann im laufenden Marquee-Banner unter der Hero-Section.
 
 ---
 
-## Hinweis
+## Vorher / Nachher Übersicht
 
-Falls das Entruempelung-Bild trotz korrektem Pfad nicht angezeigt wird, koennte es sich um ein Browser-Caching-Problem handeln. Nach der Aenderung bitte einmal die Seite neu laden (Strg+F5 / Cmd+Shift+R).
+| Element | Vorher | Nachher |
+|---------|--------|---------|
+| H1 | "...sauber, diskret, transparent" | "...mit unseren Teams in ganz Süddeutschland" |
+| Subline | Allgemeine Leistungsbeschreibung | Ulm als Zentrale + regionale Präsenz |
+| Trust Bar | Keine lokale Verankerung | Neuer Pill "Hauptsitz Ulm · Teams vor Ort" |
 
+---
+
+## Ergebnis
+
+- Sofort klar: Lokales Unternehmen, kein anonymes Portal
+- Ulm als Hauptsitz = Vertrauen und Greifbarkeit
+- "Teams in ganz Süddeutschland" = Professionalität und Reichweite
+- Trust Bar verstärkt die lokale Botschaft
+
+---
+
+## Betroffene Dateien
+
+| Datei | Änderung |
+|-------|----------|
+| `src/components/sections/HeroSection.tsx` | H1 und Subline anpassen |
+| `src/components/sections/TrustBar.tsx` | Neuen Trust-Pill mit MapPin hinzufügen |
