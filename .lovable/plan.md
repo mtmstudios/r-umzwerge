@@ -1,166 +1,173 @@
 
+# Plan: Bilder-Problem beheben (IntersectionObserver Bug)
 
-# Plan: Alle 3 Themen umsetzen
+## Problem-Analyse
 
-## Übersicht
+Das Problem ist NICHT die Bildformate - die Bilder werden korrekt geladen (Status 200). Das Problem liegt beim **IntersectionObserver** in Kombination mit responsiven Layouts.
 
-| # | Thema | Datei |
-|---|-------|-------|
-| 1 | WhatsApp-Link Update | `src/lib/constants.ts` |
-| 2 | Mobile Carousel Pain-Points | `src/components/sea/SEAPainPoints.tsx` |
-| 3 | Vorher/Nachher-Bilder tauschen | `src/components/sections/BeforeAfterSection.tsx` |
+### Ursache
 
----
-
-## 1. WhatsApp-Link Update
-
-### Datei: `src/lib/constants.ts`
-
-**Zeile 3 ändern:**
+In der `HeroSection.tsx` (und wahrscheinlich anderen Komponenten):
 
 ```typescript
-// Von:
-export const WHATSAPP_MESSAGE = "Hallo Räumzwerge, ich hätte gerne eine Preiseinschätzung. Ort: ____. Ich sende gleich Fotos.";
-
-// Zu:
-export const WHATSAPP_MESSAGE = "Hallo liebes Räumzwerge-Team, ich komme von euerer Website.";
-```
-
-Alle WhatsApp-Buttons auf allen Seiten nutzen automatisch den neuen Text.
-
----
-
-## 2. Mobile Carousel für Pain-Points Section
-
-### Datei: `src/components/sea/SEAPainPoints.tsx`
-
-**Imports erweitern (Zeile 1):**
-```tsx
-import { useState, useEffect } from 'react';
-import { MessageCircle, ArrowRight } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
-import { cn } from '@/lib/utils';
-import { getWhatsAppLink } from '@/lib/constants';
-import { useScrollReveal } from '@/hooks/useAnimations';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { 
-  Carousel, 
-  CarouselContent, 
-  CarouselItem,
-  type CarouselApi 
-} from '@/components/ui/carousel';
-import type { SEAData } from '@/lib/seaData';
-```
-
-**State hinzufügen (nach Zeile 17):**
-```tsx
-const isMobile = useIsMobile();
-const [carouselApi, setCarouselApi] = useState<CarouselApi>();
-const [currentSlide, setCurrentSlide] = useState(0);
-
-useEffect(() => {
-  if (!carouselApi) return;
-  
-  const onSelect = () => {
-    setCurrentSlide(carouselApi.selectedScrollSnap());
-  };
-  
-  carouselApi.on('select', onSelect);
-  return () => { carouselApi.off('select', onSelect); };
-}, [carouselApi]);
-```
-
-**Grid durch konditionelles Rendering ersetzen (Zeile 49-136):**
-
-Mobile: Carousel mit Peek-Effekt und Dot-Navigation
-Desktop: Bestehendes Grid-Layout
-
-```text
-Mobile Layout:
-┌─────────────────────────────────┐
-│  ┌───────────┐                  │
-│  │  Card 1   │ Card 2 (peek)    │  ← Swipe
-│  └───────────┘                  │
-│                                 │
-│        ●━━ ○ ○  ← Dots          │
-└─────────────────────────────────┘
-```
-
----
-
-## 3. Vorher/Nachher-Bilder tauschen (Startseite)
-
-### Aktuelles Problem
-
-Das Clip-Path `inset(0 ${100 - sliderPosition}% 0 0)` zeigt das geclippte Bild von **links**. Aktuell ist das Nachher-Bild geclippt (links sichtbar) und das Vorher-Bild im Hintergrund (rechts sichtbar).
-
-**Das ist verkehrt herum!** Links sollte "Vorher" sein, rechts "Nachher".
-
-### Datei: `src/components/sections/BeforeAfterSection.tsx`
-
-**Bilder tauschen (Zeilen 79-98):**
-
-```tsx
-{/* Before Image (Full Width) - wird zu NACHHER */}
-<div className="absolute inset-0">
-  <img 
-    src="/images/before-after-nachher.webp"  // War: vorher.webp
-    alt="Wohnung nach der Entrümpelung - besenrein"
-    className="w-full h-full object-cover"
-  />
-</div>
-
-{/* After Image (Clipped) - wird zu VORHER */}
+// Zeile 35-41: Mobile Layout hat das ref
 <div
-  className="absolute inset-0"
-  style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+  ref={ref}  // <-- IntersectionObserver beobachtet DIESES Element
+  className="xl:hidden ..."  // <-- Auf Desktop AUSGEBLENDET!
 >
-  <img 
-    src="/images/before-after-vorher.webp"  // War: nachher.webp
-    alt="Wohnung vor der Entrümpelung - voll mit Kartons und Müll"
-    className="w-full h-full object-cover"
-  />
-</div>
 ```
 
-**Kommentare aktualisieren (Zeilen 79, 88):**
-- Zeile 79: `{/* After Image (Full Width) - Nachher */}`
-- Zeile 88: `{/* Before Image (Clipped from left) - Vorher */}`
-
-### Ergebnis nach Änderung
-
-```text
-Slider bei 50%:
-┌─────────────────────────────────┐
-│  VORHER   │ Slider │  NACHHER  │
-│  (geclippt)   ↔    │  (Hintergrund)
-│                                 │
-│  "Vorher" │        │ "Nachher" │
-│   Label   │        │   Label   │
-└─────────────────────────────────┘
+```typescript
+// Zeile 95-100: Desktop Layout nutzt isVisible, hat aber KEIN ref
+<div
+  className="hidden xl:grid ..."  // <-- Auf Desktop SICHTBAR
+  // KEIN ref hier!
+>
 ```
 
-Die Labels bleiben an der richtigen Position (links "Vorher", rechts "Nachher").
+**Auf Desktop (1280px+):**
+- Das Element mit dem `ref` ist durch `xl:hidden` versteckt
+- Der IntersectionObserver kann versteckte Elemente nicht beobachten
+- `isVisible` bleibt `false`
+- Beide Layouts behalten `opacity: 0` (unsichtbar)
 
 ---
 
-## Zusammenfassung der Änderungen
+## Loesung
 
-| Datei | Zeilen | Änderung |
-|-------|--------|----------|
-| `src/lib/constants.ts` | 3 | WHATSAPP_MESSAGE aktualisieren |
-| `src/components/sea/SEAPainPoints.tsx` | 1-17, 49-136 | Imports + State + Mobile Carousel |
-| `src/components/sections/BeforeAfterSection.tsx` | 79-98 | Bild-URLs und Kommentare tauschen |
+Das `ref` muss auf einem **immer sichtbaren Container** platziert werden, nicht auf einem responsiv ausgeblendeten Element.
+
+### Betroffene Komponenten
+
+1. `src/components/sections/HeroSection.tsx`
+2. `src/components/services/ServiceHero.tsx`
+3. Moeglicherweise weitere Komponenten mit demselben Pattern
+
+### Aenderungen pro Datei
+
+#### 1. HeroSection.tsx
+
+**Aktuell (fehlerhaft):**
+```tsx
+return (
+  <section className="relative overflow-hidden">
+    ...
+    <div className="container-custom relative">
+      <div
+        ref={ref}  // ref auf Mobile-only Container
+        className="xl:hidden ..."
+      >
+        ...
+      </div>
+      
+      <div
+        className="hidden xl:grid ..."  // kein ref
+      >
+        ...
+      </div>
+    </div>
+  </section>
+);
+```
+
+**Korrigiert:**
+```tsx
+return (
+  <section ref={ref} className="relative overflow-hidden">  // ref auf Section
+    ...
+    <div className="container-custom relative">
+      <div
+        className={cn(
+          "xl:hidden ...",
+          "scroll-reveal",
+          isVisible && "visible"
+        )}
+      >
+        ...
+      </div>
+      
+      <div
+        className={cn(
+          "hidden xl:grid ...",
+          "scroll-reveal",
+          isVisible && "visible"
+        )}
+      >
+        ...
+      </div>
+    </div>
+  </section>
+);
+```
+
+Das `ref` wird auf das `<section>` Element verschoben, das IMMER sichtbar ist (unabhaengig vom Breakpoint).
+
+#### 2. ServiceHero.tsx
+
+Dieselbe Korrektur: `ref` auf das `<section>` Element verschieben.
 
 ---
 
-## Erwartetes Ergebnis
+## Technische Details
 
-1. **WhatsApp**: Alle Buttons öffnen `https://wa.me/491603080676?text=Hallo%20liebes%20R%C3%A4umzwerge-Team%2C%20ich%20komme%20von%20euerer%20Website.`
+| Datei | Aenderung |
+|-------|-----------|
+| `src/components/sections/HeroSection.tsx` | `ref` von Mobile-div auf `<section>` verschieben |
+| `src/components/services/ServiceHero.tsx` | `ref` von Mobile-div auf `<section>` verschieben |
 
-2. **Pain-Points Mobile**: Horizontales Swipe-Carousel mit 85% Card-Breite (Peek-Effekt) und animierten Dot-Indicators
+### Code-Aenderungen
 
-3. **Before/After Slider**: Links = Vorher (unordentlich), Rechts = Nachher (sauber)
+**HeroSection.tsx - Zeile 19:**
+```tsx
+// Alt:
+<section className="relative overflow-hidden">
+
+// Neu:
+<section ref={ref} className="relative overflow-hidden">
+```
+
+**HeroSection.tsx - Zeile 35-36:**
+```tsx
+// Alt:
+<div
+  ref={ref}
+  className={cn(...)}
+>
+
+// Neu:
+<div
+  className={cn(...)}  // ref entfernt
+>
+```
+
+**ServiceHero.tsx - analog:**
+```tsx
+// ref auf <section> verschieben
+// ref aus Mobile-Container entfernen
+```
+
+---
+
+## Zusaetzlich: WebP-Bilder in SEABeforeAfter
+
+Die Datei `src/components/sea/SEABeforeAfter.tsx` referenziert noch `.webp` Bilder:
+- `/images/messie-nachher.webp`
+- `/images/messie-vorher.webp`
+
+Diese Bilder existieren **NUR als WebP** (keine JPG-Alternativen vorhanden). Falls diese nicht geladen werden, muessen entweder:
+1. JPG-Versionen der Bilder hinzugefuegt werden, oder
+2. Die WebP-Referenzen beibehalten werden (WebP wird von modernen Browsern unterstuetzt)
+
+Da die messie-webp Bilder im Network-Log mit Status 200 geladen werden, ist dies kein Problem.
+
+---
+
+## Zusammenfassung
+
+| Aufgabe | Beschreibung |
+|---------|--------------|
+| **Fix IntersectionObserver** | `ref` auf immer sichtbare Container verschieben |
+| **Betroffene Dateien** | HeroSection.tsx, ServiceHero.tsx |
+| **Aenderungsumfang** | 2 Dateien, minimale Code-Aenderungen |
+| **Erwartetes Ergebnis** | Alle Sections werden sichtbar, scroll-reveal funktioniert |
 
