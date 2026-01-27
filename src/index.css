@@ -63,8 +63,8 @@
 
 /* Logo Trim - removes invisible transparent padding */
 .logo-trim {
-  clip-path: inset(8% 6% 8% 6%);
-  transform: scale(1.18);
+  clip-path: inset(10% 8% 10% 8%);
+  transform: scale(1.25);
   transform-origin: center;
 }
 
