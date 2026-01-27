@@ -34,6 +34,11 @@ export interface SEAData {
   // Hero image
   heroImage: string;
   heroImageAlt: string;
+  // Before/After images (optional)
+  beforeImage?: string;
+  beforeImageAlt?: string;
+  afterImage?: string;
+  afterImageAlt?: string;
 }
 
 export const seaData: Record<SEAVariant, SEAData> = {
@@ -87,6 +92,10 @@ export const seaData: Record<SEAVariant, SEAData> = {
     tone: 'warm',
     heroImage: '/images/service-haushaltsaufloesung.jpg',
     heroImageAlt: 'Professionelle Haushaltsauflösung durch Räumzwerge',
+    beforeImage: '/images/haushaltsaufloesung-vorher.png',
+    beforeImageAlt: 'Wohnung vor der Haushaltsauflösung - voller Kartons und Gegenstände',
+    afterImage: '/images/haushaltsaufloesung-nachher.png',
+    afterImageAlt: 'Wohnung nach der Haushaltsauflösung - besenrein und übergabefertig',
   },
 
   'entruempelung': {
