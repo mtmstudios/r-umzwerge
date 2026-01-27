@@ -14,6 +14,13 @@
     <priority>0.8</priority>
   </url>
   
+  <!-- Impressum -->
+  <url>
+    <loc>https://raeumzwerge.de/impressum</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  
   <!-- Leistungsseiten -->
   <url>
     <loc>https://raeumzwerge.de/leistungen/wohnungsentruempelung</loc>
