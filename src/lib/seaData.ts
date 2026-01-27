@@ -85,7 +85,7 @@ export const seaData: Record<SEAVariant, SEAData> = {
     ctaSubline: 'Foto senden – Preiseinschätzung innerhalb von 24h.',
     outcomeBadges: ['Besenrein', 'Übergabefertig', 'Respektvoll geräumt'],
     tone: 'warm',
-    heroImage: '/images/service-haushaltsaufloesung.webp',
+    heroImage: '/images/service-haushaltsaufloesung.jpg',
     heroImageAlt: 'Professionelle Haushaltsauflösung durch Räumzwerge',
   },
 
@@ -137,7 +137,7 @@ export const seaData: Record<SEAVariant, SEAData> = {
     ctaSubline: 'Foto senden – in 24h wissen Sie, was es kostet.',
     outcomeBadges: ['Besenrein', 'Schnell erledigt', 'Fachgerecht entsorgt'],
     tone: 'direct',
-    heroImage: '/images/service-entruempelung.webp',
+    heroImage: '/images/service-entruempelung.jpg',
     heroImageAlt: 'Räumzwerge-Team beim Sortieren von Recycling- und Spende-Kartons im Wohnraum',
   },
 
@@ -189,7 +189,7 @@ export const seaData: Record<SEAVariant, SEAData> = {
     ctaSubline: 'Wir hören zu. Kein Druck, keine Wertung.',
     outcomeBadges: ['Diskret', 'Respektvoll', 'Ein neuer Anfang'],
     tone: 'gentle',
-    heroImage: '/images/service-messie.webp',
+    heroImage: '/images/service-messie.jpg',
     heroImageAlt: 'Diskrete Hilfe bei Messie-Situationen',
   },
 };

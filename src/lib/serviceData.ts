@@ -13,6 +13,16 @@ export interface ServiceFAQ {
   answer: string;
 }
 
+export interface ComparisonData {
+  others: string[];
+  raeumzwerge: string[];
+}
+
+export interface ExtraModulePoint {
+  problem: string;
+  solution: string;
+}
+
 export interface ServicePageData {
   slug: string;
   title: string;
@@ -26,14 +36,11 @@ export interface ServicePageData {
     imageAlt?: string;
   };
   scenarios: ServiceScenario[];
-  scope: {
-    included: string[];
-    optional: string[];
-  };
+  comparison: ComparisonData;
   extraModule: {
     title: string;
     subtitle?: string;
-    points: string[];
+    points: ExtraModulePoint[];
   };
   faq: ServiceFAQ[];
   processSteps: {
@@ -58,7 +65,7 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       h1: 'Wohnungsentrümpelung – sauber, diskret, transparent.',
       subline: 'Von der ersten Preiseinschätzung bis zur besenreinen Übergabe – transparent, zuverlässig und respektvoll.',
       trustPills: ['Besenrein', 'Festpreis nach Einschätzung', 'Keine versteckten Kosten'],
-      imageSrc: '/images/service-wohnungsentruempelung.webp',
+      imageSrc: '/images/service-wohnungsentruempelung.jpg',
       imageAlt: 'Professionelles Räumzwerge-Team bei der Wohnungsentrümpelung',
     },
     scenarios: [
@@ -93,27 +100,27 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
         badges: ['Übergabeprotokoll']
       },
     ],
-    scope: {
-      included: [
-        'Sortieren, Tragen, Abtransport',
-        'Fachgerechte Entsorgung',
-        'Besenreine Übergabe',
-        'Terminabstimmung',
+    comparison: {
+      others: [
+        'Unklare Preisgestaltung',
+        'Lange Wartezeiten auf Angebot',
+        'Keine Garantie auf besenrein',
+        'Versteckte Zusatzkosten',
       ],
-      optional: [
-        'Demontage von Möbeln/Einbauten',
-        'Sondermüll / Elektrogeräte',
-        'Dokumentation (Fotos)',
-        'Express-Termin',
+      raeumzwerge: [
+        'Festpreis nach Foto-Einschätzung',
+        'Antwort innerhalb 24h',
+        'Besenrein garantiert',
+        'Transparente Kommunikation',
       ],
     },
     extraModule: {
-      title: 'Was passiert mit den Sachen?',
-      subtitle: 'Transparenz ist uns wichtig. Deshalb zeigen wir dir genau, was mit jedem Gegenstand passiert.',
+      title: 'Typische Stolpersteine',
+      subtitle: 'Und wie wir sie für Sie lösen',
       points: [
-        'Recyclingfähiges wird fachgerecht getrennt',
-        'Brauchbares kann nach Absprache gespendet werden',
-        'Rest wird über zertifizierte Partner entsorgt',
+        { problem: 'Zeitdruck durch Vermieter', solution: 'Express-Termine möglich, wir schaffen das!' },
+        { problem: 'Was passiert mit meinen Sachen?', solution: 'Recycling, Spende oder Entsorgung – transparent dokumentiert.' },
+        { problem: 'Zugang schwierig (Etage, Aufzug)', solution: 'Unser Team ist darauf spezialisiert.' },
       ],
     },
     faq: [
@@ -140,7 +147,7 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       h1: 'Entrümpelung – sauber, diskret, transparent.',
       subline: 'Preiseinschätzung per WhatsApp-Foto – innerhalb von 24 Stunden (oft schneller).',
       trustPills: ['Besenrein', 'Festpreis nach Einschätzung', 'Keine versteckten Kosten'],
-      imageSrc: '/images/service-entruempelung.webp',
+      imageSrc: '/images/service-entruempelung.jpg',
       imageAlt: 'Professionelles Team beim Verladen von Kartons in einen Transporter',
     },
     scenarios: [
@@ -175,27 +182,27 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
         badges: ['B2B-erfahren']
       },
     ],
-    scope: {
-      included: [
-        'Sortieren, Tragen, Abtransport',
-        'Fachgerechte Entsorgung',
-        'Besenreine Übergabe',
-        'Terminabstimmung',
+    comparison: {
+      others: [
+        'Pauschale ohne Besichtigung',
+        'Termine oft verschoben',
+        'Müll bleibt zurück',
+        'Keine Entsorgungsnachweise',
       ],
-      optional: [
-        'Demontage von Möbeln/Einbauten',
-        'Sondermüll / Elektrogeräte',
-        'Dokumentation (Fotos)',
-        'Express-Termin',
+      raeumzwerge: [
+        'Individuelle Einschätzung per Foto',
+        'Zuverlässige Terminplanung',
+        'Fachgerechte Entsorgung',
+        'Dokumentation auf Wunsch',
       ],
     },
     extraModule: {
-      title: 'Was passiert mit den Sachen?',
-      subtitle: 'Transparenz ist uns wichtig.',
+      title: 'Typische Stolpersteine',
+      subtitle: 'Und wie wir sie für Sie lösen',
       points: [
-        'Recyclingfähiges wird fachgerecht getrennt',
-        'Brauchbares kann nach Absprache gespendet werden',
-        'Rest wird über zertifizierte Partner entsorgt',
+        { problem: 'Menge schwer einzuschätzen', solution: '3-6 Fotos reichen für eine gute Einschätzung.' },
+        { problem: 'Sondermüll vorhanden', solution: 'Elektro, Farben, Chemie – wir entsorgen fachgerecht.' },
+        { problem: 'Enger Zugang / Treppen', solution: 'Kein Problem für unser erfahrenes Team.' },
       ],
     },
     faq: [
@@ -222,7 +229,7 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       h1: 'Haushaltsauflösung – respektvoll und zuverlässig.',
       subline: 'Wir nehmen dir die Organisation ab – transparent, diskret, besenrein.',
       trustPills: ['Keine versteckten Kosten', 'Planbar', 'Diskret'],
-      imageSrc: '/images/service-haushaltsaufloesung.webp',
+      imageSrc: '/images/service-haushaltsaufloesung.jpg',
       imageAlt: 'Räumzwerge-Team beim Verladen von Spende- und Müll-Kartons vor einem Wohnhaus',
     },
     scenarios: [
@@ -251,27 +258,27 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
         badges: ['Diskret']
       },
     ],
-    scope: {
-      included: [
-        'Terminplanung nach deinen Wünschen',
-        'Sorgfältiges, respektvolles Vorgehen',
-        'Abtransport und Entsorgung',
-        'Besenreine Übergabe',
+    comparison: {
+      others: [
+        'Respektloser Umgang',
+        'Zeitdruck und Hektik',
+        'Wertgegenstände werden übersehen',
+        'Aufsehen bei Nachbarn',
       ],
-      optional: [
-        'Wertanrechnung / Weitergabe',
-        'Schlüsselübergabe ohne Anwesenheit',
-        'Enge Zeitfenster / Express',
-        'Dokumentation',
+      raeumzwerge: [
+        'Einfühlsame Vorgehensweise',
+        'Flexible Terminplanung',
+        'Wertanrechnung möglich',
+        'Diskret und respektvoll',
       ],
     },
     extraModule: {
-      title: 'So läuft die Übergabe',
-      subtitle: 'Klar strukturiert, ohne Überraschungen.',
+      title: 'Typische Stolpersteine',
+      subtitle: 'Und wie wir sie für Sie lösen',
       points: [
-        'Abnahme gemeinsam oder per Schlüssel (nach Absprache)',
-        'Besenrein-Standard garantiert',
-        'Transparente Auflistung aller Leistungen',
+        { problem: 'Emotionale Belastung', solution: 'Wir arbeiten einfühlsam und geben Ihnen Zeit.' },
+        { problem: 'Wertgegenstände sortieren', solution: 'Wir helfen beim Identifizieren – Wertanrechnung möglich.' },
+        { problem: 'Nachbarn sollen nichts merken', solution: 'Diskrete Kleidung, neutrale Fahrzeuge.' },
       ],
     },
     faq: [
@@ -298,7 +305,7 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       h1: 'Keller, Dachboden oder Garage entrümpeln – schnell wieder Platz.',
       subline: 'Foto senden, Preiseinschätzung < 24h, Termin – fertig.',
       trustPills: ['Auch enge Zugänge', 'Entsorgung inklusive', 'Besenrein'],
-      imageSrc: '/images/service-keller.webp',
+      imageSrc: '/images/service-keller.jpg',
       imageAlt: 'Räumzwerge-Team beim Sortieren und Verladen von Kartons in einer Garage',
     },
     scenarios: [
@@ -327,27 +334,27 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
         badges: ['Baumaterial inklusive']
       },
     ],
-    scope: {
-      included: [
-        'Tragen und Abtransport',
-        'Fachgerechte Entsorgung',
-        'Besenreine Übergabe',
-        'Terminabstimmung',
+    comparison: {
+      others: [
+        'Enge Zugänge werden abgelehnt',
+        'Schwere Gegenstände kosten extra',
+        'Sondermüll wird nicht mitgenommen',
+        'Grober, schneller Umgang',
       ],
-      optional: [
-        'Demontage von Regalen/Einbauten',
-        'Sortierhilfe (Behalten/Kann weg)',
-        'Sondermüll / Elektro',
-        'Express-Termin',
+      raeumzwerge: [
+        'Auch enge Treppen kein Problem',
+        'Schwerlast inklusive',
+        'Elektro und Sondermüll dabei',
+        'Sorgfältige Arbeit',
       ],
     },
     extraModule: {
-      title: 'Typische Stolpersteine – und wie wir sie lösen',
-      subtitle: 'Wir haben für alles eine Lösung.',
+      title: 'Typische Stolpersteine',
+      subtitle: 'Und wie wir sie für Sie lösen',
       points: [
-        'Enge Treppen, kein Aufzug – kein Problem für unser Team',
-        'Parken/Zugang schwierig – wir finden eine Lösung',
-        'Schwere Gegenstände – wir haben die Ausrüstung',
+        { problem: 'Enge Treppen, kein Aufzug', solution: 'Unser Team ist darauf spezialisiert – wir schaffen das!' },
+        { problem: 'Parken/Zugang schwierig', solution: 'Wir finden immer eine Lösung – Halteverbot, Seitenstraße, etc.' },
+        { problem: 'Schwere Gegenstände', solution: 'Wir haben die Ausrüstung und Erfahrung dafür.' },
       ],
     },
     faq: [
@@ -374,7 +381,7 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       h1: 'Gewerbe, Büro oder Lager räumen – planbar und effizient.',
       subline: 'Klare Abstimmung, transparente Preise, termintreu – auch außerhalb der Geschäftszeiten.',
       trustPills: ['Minimale Betriebsstörung', 'Termintreu', 'Transparent'],
-      imageSrc: '/images/service-gewerbe.webp',
+      imageSrc: '/images/service-gewerbe.jpg',
       imageAlt: 'Räumzwerge-Team bei der Büroauflösung mit Aktenkartons',
     },
     scenarios: [
@@ -403,28 +410,27 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
         badges: ['Termingerecht']
       },
     ],
-    scope: {
-      included: [
-        'Terminfensterplanung nach Bedarf',
-        'Zügige, professionelle Abwicklung',
-        'Abtransport und Entsorgung',
-        'Besenreine Übergabe',
+    comparison: {
+      others: [
+        'Nur während Geschäftszeiten',
+        'Störung des laufenden Betriebs',
+        'Keine Termingarantie',
+        'Unflexibel bei Änderungen',
       ],
-      optional: [
-        'Arbeiten außerhalb der Geschäftszeiten',
-        'Datenträger-Hinweise (organisatorisch)',
-        'Dokumentation / Protokoll',
-        'Teilräumung in Etappen',
+      raeumzwerge: [
+        'Auch abends und am Wochenende',
+        'Minimale Betriebsstörung',
+        'Termintreue Abwicklung',
+        'Flexible Anpassung',
       ],
     },
     extraModule: {
-      title: 'Ablauf für Unternehmen',
-      subtitle: 'Professionell und planbar.',
+      title: 'Typische Stolpersteine',
+      subtitle: 'Und wie wir sie für Sie lösen',
       points: [
-        'Fotos/Begehung zur Einschätzung',
-        'Angebot / Festpreis nach Einschätzung',
-        'Durchführung in abgestimmten Slots',
-        'Übergabe mit Protokoll (optional)',
+        { problem: 'Betrieb darf nicht gestört werden', solution: 'Wir arbeiten außerhalb Ihrer Geschäftszeiten.' },
+        { problem: 'Enge Zeitfenster', solution: 'Wir stimmen exakte Slots ab und halten sie ein.' },
+        { problem: 'IT-Geräte und Datenträger', solution: 'Fachgerechte Entsorgung – Datenvernichtung obliegt Ihnen.' },
       ],
     },
     faq: [
@@ -456,7 +462,7 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       h1: 'Diskrete Reinigung & Entrümpelung – respektvoll und geschützt.',
       subline: 'Wir arbeiten diskret, strukturiert und ohne Aufsehen. Preiseinschätzung per Foto möglich – innerhalb von 24 Stunden.',
       trustPills: ['Absolute Diskretion', 'Respektvoll', 'Geschütztes Vorgehen'],
-      imageSrc: '/images/service-messie.webp',
+      imageSrc: '/images/service-messie.jpg',
       imageAlt: 'Diskretes Team bei der sorgfältigen Arbeit',
     },
     scenarios: [
@@ -485,28 +491,27 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
         badges: ['Neutrale Fahrzeuge']
       },
     ],
-    scope: {
-      included: [
-        'Absolute Diskretion',
-        'Strukturierte Vorgehensweise',
-        'Abtransport und Entsorgung',
-        'Besenreine Übergabe',
+    comparison: {
+      others: [
+        'Wertender, unsensibeler Umgang',
+        'Keine Diskretion',
+        'Aufsehen erregen',
+        'Druck und Hektik',
       ],
-      optional: [
-        'Intensivreinigung',
-        'Geruchsneutralisierung / Desinfektion',
-        'Etappenplan (mehrere Termine)',
-        'Begleitung durch Fachpersonal',
+      raeumzwerge: [
+        'Ohne Wertung und mit Respekt',
+        'Absolute Diskretion',
+        'Neutrale Fahrzeuge und Kleidung',
+        'Ihr Tempo zählt',
       ],
     },
     extraModule: {
-      title: 'Diskret heißt bei uns',
-      subtitle: 'Deine Privatsphäre hat höchste Priorität.',
+      title: 'Typische Stolpersteine',
+      subtitle: 'Und wie wir sie für Sie lösen',
       points: [
-        'Neutrale Kleidung und Fahrzeuge – kein Aufsehen',
-        'Leise, respektvolle Kommunikation',
-        'Klare Absprachen, keine Überraschungen',
-        'Schutz der Privatsphäre hat höchste Priorität',
+        { problem: 'Scham und Angst vor Verurteilung', solution: 'Wir arbeiten wertfrei und respektvoll – garantiert.' },
+        { problem: 'Nachbarn könnten etwas merken', solution: 'Neutrale Kleidung, keine Logos, leises Arbeiten.' },
+        { problem: 'Überforderung mit dem Ausmaß', solution: 'Wir begleiten Schritt für Schritt, in Ihrem Tempo.' },
       ],
     },
     faq: [

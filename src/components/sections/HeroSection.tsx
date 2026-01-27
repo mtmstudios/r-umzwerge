@@ -4,7 +4,7 @@ import { getWhatsAppLink, PHONE_LINK } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
-import heroTeamImage from '@/assets/hero-team.webp';
+import heroTeamImage from '@/assets/hero-team.jpg';
 
 const trustPills = [
   "Antwort < 24h",
