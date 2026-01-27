@@ -9,17 +9,17 @@ export function RegionsSection() {
   const [activeCity, setActiveCity] = useState<string | null>(null);
 
   return (
-    <section className="py-6 md:py-8 lg:py-10 bg-secondary/30">
+    <section className="py-5 md:py-7 lg:py-9 bg-secondary/30">
       <div className="container-custom">
         <div
           ref={ref}
           className={cn(
-            "text-center mb-3 md:mb-4 lg:mb-5",
+            "text-center mb-2 md:mb-3 lg:mb-4",
             "scroll-reveal",
             isVisible && "visible"
           )}
         >
-          <h2 className="text-section-mobile lg:text-section text-foreground mb-2 md:mb-3">
+          <h2 className="text-section-mobile lg:text-section text-foreground mb-2">
             Unsere Regionen in Süddeutschland
           </h2>
           <p className="text-muted-foreground">
@@ -28,9 +28,9 @@ export function RegionsSection() {
         </div>
 
         {/* Two-Column Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5 lg:gap-6 items-start">
           {/* Left: Map */}
-          <div className="lg:sticky lg:top-24">
+          <div className="lg:sticky lg:top-16">
             <InteractiveMap 
               activeCity={activeCity}
               onCityHover={setActiveCity}

@@ -9,9 +9,9 @@ export function FAQSection() {
   const half = Math.ceil(FAQ_ITEMS.length / 2);
 
   return (
-    <section id="faq" className="py-16 lg:py-24 bg-background">
+    <section id="faq" className="py-12 md:py-14 lg:py-16 bg-background">
       <div className="container-custom">
-        <div ref={ref} className={cn("text-center mb-12", "scroll-reveal", isVisible && "visible")}>
+        <div ref={ref} className={cn("text-center mb-8 md:mb-10", "scroll-reveal", isVisible && "visible")}>
           <h2 className="text-section-mobile lg:text-section text-foreground mb-4">FAQ</h2>
         </div>
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-12">

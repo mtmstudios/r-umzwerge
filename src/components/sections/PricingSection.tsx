@@ -9,12 +9,12 @@ export function PricingSection() {
   const { ref, isVisible } = useScrollReveal(0.1);
 
   return (
-    <section id="preise" className="py-16 lg:py-24 bg-background overflow-hidden">
+    <section id="preise" className="py-12 md:py-14 lg:py-16 bg-background overflow-hidden">
       <div className="container-custom">
         <div
           ref={ref}
           className={cn(
-            "grid lg:grid-cols-2 gap-10 lg:gap-16 items-start",
+            "grid lg:grid-cols-2 gap-8 lg:gap-12 items-start",
             "scroll-reveal",
             isVisible && "visible"
           )}

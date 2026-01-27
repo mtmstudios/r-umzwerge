@@ -31,12 +31,12 @@ export function ProcessSection() {
   const { ref, isVisible } = useScrollReveal(0.1);
 
   return (
-    <section id="ablauf" className="py-20 lg:py-32 bg-background">
+    <section id="ablauf" className="py-12 md:py-14 lg:py-16 bg-background">
       <div className="container-custom">
         <div
           ref={ref}
           className={cn(
-            "text-center mb-16",
+            "text-center mb-8 md:mb-10",
             "scroll-reveal",
             isVisible && "visible"
           )}
@@ -49,7 +49,7 @@ export function ProcessSection() {
           </h2>
         </div>
 
-        <HorizontalTimeline steps={steps} className="mb-16" />
+        <HorizontalTimeline steps={steps} className="mb-10 md:mb-12" />
 
         <div className={cn(
           "text-center scroll-reveal",
