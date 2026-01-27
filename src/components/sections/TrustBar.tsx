@@ -1,8 +1,9 @@
-import { ShieldCheck, Clock, BadgeCheck, HeartHandshake, Sparkles } from 'lucide-react';
+import { ShieldCheck, Clock, BadgeCheck, HeartHandshake, Sparkles, MapPin } from 'lucide-react';
 import { Marquee } from '@/components/ui/Marquee';
 import { cn } from '@/lib/utils';
 
 const trustItems = [
+  { icon: MapPin, text: "Hauptsitz Ulm · Teams vor Ort" },
   { icon: ShieldCheck, text: "Keine versteckten Kosten" },
   { icon: Clock, text: "Preiseinschätzung < 24h" },
   { icon: BadgeCheck, text: "Festpreis nach Einschätzung" },

@@ -37,11 +37,11 @@ export function HeroSection() {
           )}
         >
           <h1 className="text-3xl md:text-4xl xl:text-5xl 2xl:text-6xl font-bold text-white mb-4 md:mb-6 text-balance leading-tight max-w-4xl">
-            Entrümpelung ohne Stress – sauber, diskret, transparent.
+            Entrümpelung ohne Stress – mit unseren Teams in ganz Süddeutschland.
           </h1>
           
           <p className="text-base md:text-lg xl:text-xl text-white/90 mb-6 md:mb-8 max-w-2xl">
-            Wohnung, Haus, Keller, Garage oder Gewerbe: Wir räumen fachgerecht und besenrein. Preiseinschätzung per WhatsApp-Foto – innerhalb von 24 Stunden.
+            Von Ulm aus koordinieren wir Entrümpelungen in ganz Baden-Württemberg und Bayern. Preiseinschätzung per WhatsApp-Foto – innerhalb von 24 Stunden.
           </p>
 
           {/* CTAs */}
