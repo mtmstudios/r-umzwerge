@@ -52,13 +52,14 @@ const Index = () => {
         />
         <ReviewsSection />
         
-        <SectionDivider variant="wave" fillClassName="fill-secondary/30" />
+        <SectionDivider variant="wave" fillClassName="fill-secondary/30" svgHeightClassName="h-8 md:h-10 lg:h-12" />
         <RegionsSection />
         
         <SectionDivider 
           variant="gradient" 
           fromColor="hsl(var(--secondary) / 0.3)" 
-          toColor="hsl(var(--background))" 
+          toColor="hsl(var(--background))"
+          height={32}
         />
         <FAQSection />
         

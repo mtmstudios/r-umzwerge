@@ -7,6 +7,8 @@ interface SectionDividerProps {
   fillClassName?: string;
   fromColor?: string;
   toColor?: string;
+  height?: number;
+  svgHeightClassName?: string;
 }
 
 export function SectionDivider({
@@ -16,6 +18,8 @@ export function SectionDivider({
   fillClassName = 'fill-background',
   fromColor = 'hsl(var(--background))',
   toColor = 'hsl(var(--secondary) / 0.3)',
+  height,
+  svgHeightClassName,
 }: SectionDividerProps) {
   const isFlipped = direction === 'up';
 
@@ -29,7 +33,7 @@ export function SectionDivider({
           className
         )}
         style={{
-          height: '60px',
+          height: `${height ?? 60}px`,
           background: `linear-gradient(to bottom, ${fromColor}, ${toColor})`,
         }}
       />
@@ -44,7 +48,7 @@ export function SectionDivider({
           isFlipped && 'rotate-180',
           className
         )}
-        style={{ height: '80px' }}
+        style={{ height: `${height ?? 80}px` }}
       >
         {/* Base gradient */}
         <div
@@ -81,7 +85,7 @@ export function SectionDivider({
       <svg
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
-        className={cn('w-full h-16 md:h-20 lg:h-24', fillClassName)}
+        className={cn('w-full', svgHeightClassName ?? 'h-16 md:h-20 lg:h-24', fillClassName)}
       >
         {variant === 'angle' && (
           <polygon points="0,100 100,0 100,100" />

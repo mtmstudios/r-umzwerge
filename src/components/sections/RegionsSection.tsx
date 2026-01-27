@@ -9,17 +9,17 @@ export function RegionsSection() {
   const [activeCity, setActiveCity] = useState<string | null>(null);
 
   return (
-    <section className="py-8 lg:py-12 bg-secondary/30">
+    <section className="py-6 md:py-8 lg:py-10 bg-secondary/30">
       <div className="container-custom">
         <div
           ref={ref}
           className={cn(
-            "text-center mb-4 lg:mb-6",
+            "text-center mb-3 md:mb-4 lg:mb-5",
             "scroll-reveal",
             isVisible && "visible"
           )}
         >
-          <h2 className="text-section-mobile lg:text-section text-foreground mb-4">
+          <h2 className="text-section-mobile lg:text-section text-foreground mb-2 md:mb-3">
             Unsere Regionen in Süddeutschland
           </h2>
           <p className="text-muted-foreground">
@@ -44,7 +44,7 @@ export function RegionsSection() {
           />
         </div>
 
-        <p className="text-center text-sm text-muted-foreground mt-8">
+        <p className="text-center text-sm text-muted-foreground mt-5 md:mt-6">
           Weitere Orte auf Anfrage – wir sind regional flexibel.
         </p>
       </div>
