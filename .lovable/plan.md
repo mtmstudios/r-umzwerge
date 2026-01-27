@@ -1,76 +1,70 @@
 
-# Plan: Regionale Seiten-Links Korrektur
+# Plan: Logo auf Tablet und Mobil zentrieren
 
-## Problem-Analyse
+## Aktuelle Situation
 
-Es wurden zwei Probleme identifiziert, die dazu führen, dass regionale Seiten auf der Mittwald-Domain als "Not Found" angezeigt werden:
+Der Header verwendet ein einfaches Flexbox-Layout mit `justify-between`:
+- Logo links (`-ml-8`)
+- Navigation in der Mitte (nur Desktop sichtbar)
+- CTA-Button rechts (nur Desktop sichtbar)
+- Menü-Button rechts (nur Mobil/Tablet sichtbar)
 
-### Problem 1: Inkonsistenter Link-Pfad
-Die Komponente `ServiceRegions.tsx` verwendet einen falschen Pfad:
-- **Aktuell:** `/region/${region.slug}` (z.B. `/region/augsburg`)
-- **Korrekt:** `/${region.slug}` (z.B. `/augsburg`)
+## Lösungsansatz
 
-Die Route in `App.tsx` ist als `/:citySlug` definiert, daher führen Links zu `/region/augsburg` zu einer 404-Seite.
-
-### Problem 2: SPA-Routing Bestätigung
-Die `.htaccess`-Datei ist korrekt konfiguriert und befindet sich im `public/`-Ordner. Vite kopiert diese automatisch in den `dist/`-Ordner beim Build. Das SPA-Routing sollte also serverseitig funktionieren.
-
----
-
-## Lösung
-
-### Schritt 1: Link-Pfad in ServiceRegions.tsx korrigieren
-
-Die Datei `src/components/services/ServiceRegions.tsx` wird angepasst:
+Das Layout wird auf Mobil/Tablet in ein 3-Spalten-Grid umgewandelt, bei dem das Logo in der Mitte zentriert wird:
 
 ```text
-Zeile 35 ändern von:
-  href={`/region/${region.slug}`}
-
-zu:
-  href={`/${region.slug}`}
+Desktop (ab lg):     [Logo] [Navigation] [CTA-Button]
+Tablet/Mobil:        [Menü-Button] [Logo zentriert] [Platzhalter]
 ```
 
-### Betroffene Komponenten
+## Technische Änderungen
 
-| Komponente | Aktueller Pfad | Status |
-|------------|----------------|--------|
-| `Footer.tsx` | `/${region.slug}` | Korrekt |
-| `CityList.tsx` | `/${region.slug}` | Korrekt |
-| `ServiceRegions.tsx` | `/region/${region.slug}` | Muss korrigiert werden |
+### Datei: `src/components/layout/Header.tsx`
 
----
+1. **Container-Layout ändern** (Zeile 38):
+   - Von: `flex items-center justify-between`
+   - Zu: Grid-basiertes Layout für Mobil/Tablet, Flex für Desktop
 
-## Technische Details
+2. **Menü-Button nach links verschieben** (Zeile 109-120):
+   - Position: erste Spalte (links)
+   - Nur auf Mobil/Tablet sichtbar (`lg:hidden`)
 
-### Routing-Struktur
-Die regionale Seiten-Route in `App.tsx`:
+3. **Logo zentrieren** (Zeile 39-48):
+   - Entfernen des negativen Margins auf Mobil (`-ml-8`)
+   - Zentrierte Ausrichtung in der mittleren Spalte
+
+4. **Platzhalter für rechte Spalte** (nur Mobil/Tablet):
+   - Leerer Bereich für symmetrisches Layout
+
+### Code-Struktur (vereinfacht):
+
 ```tsx
-<Route path="/:citySlug" element={<CityPage />} />
+<div className="grid grid-cols-3 lg:flex lg:justify-between items-center">
+  {/* Links: Menü-Button (nur mobil) */}
+  <div className="lg:hidden flex justify-start">
+    <button>...</button>
+  </div>
+  
+  {/* Mitte: Logo (zentriert auf mobil, links auf desktop) */}
+  <a className="flex justify-center lg:justify-start">
+    <img src={logo} />
+  </a>
+  
+  {/* Rechts: Navigation + CTA (desktop) oder Platzhalter (mobil) */}
+  <div className="hidden lg:flex">...</div>
+  <div className="lg:hidden" /> {/* Platzhalter für Symmetrie */}
+</div>
 ```
 
-Dies erwartet direkte Slugs wie `/ulm`, `/augsburg`, `/muenchen` usw.
+## Visuelles Ergebnis
 
-### Verfügbare City-Slugs
-Definiert in `cityData.ts`:
-- ulm (HQ)
-- augsburg
-- heidenheim
-- muenchen
-- nuernberg
-- ravensburg
-- reutlingen
-- stuttgart
-
-### Nach der Korrektur
-Nach dem nächsten Deployment werden alle regionalen Links auf der Mittwald-Domain korrekt funktionieren:
-- `https://deine-domain.de/ulm`
-- `https://deine-domain.de/augsburg`
-- `https://deine-domain.de/muenchen`
-- usw.
-
----
+| Gerät | Layout |
+|-------|--------|
+| Desktop (1024px+) | Logo links, Navigation Mitte, CTA rechts |
+| Tablet (768px-1023px) | Menü links, Logo zentriert, - |
+| Mobil (unter 768px) | Menü links, Logo zentriert, - |
 
 ## Zusammenfassung
 
-Eine einzeilige Änderung in `ServiceRegions.tsx` (Zeile 35) behebt das Problem. Nach dem automatischen GitHub-Sync und Deployment via GitHub Actions werden die Links funktionieren.
+Eine Umstrukturierung des Header-Layouts von reinem Flexbox zu einem responsiven Grid/Flex-Hybrid ermöglicht die Zentrierung des Logos auf kleineren Bildschirmen, während das Desktop-Layout unverändert bleibt.
