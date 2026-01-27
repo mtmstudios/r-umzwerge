@@ -204,6 +204,10 @@ export const seaData: Record<SEAVariant, SEAData> = {
     tone: 'gentle',
     heroImage: '/images/service-messie.jpg',
     heroImageAlt: 'Diskrete Hilfe bei Messie-Situationen',
+    beforeImage: '/images/messie-vorher.png',
+    beforeImageAlt: 'Zimmer vor der Messie-Räumung - voll mit Gegenständen',
+    afterImage: '/images/messie-nachher.png',
+    afterImageAlt: 'Zimmer nach der Messie-Räumung - sauber und besenrein',
   },
 };
 
