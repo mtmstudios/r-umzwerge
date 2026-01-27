@@ -1,122 +1,166 @@
 
-# Plan: Mobile Animationen reparieren
+# Plan: Mobiler Hero-Bereich - Vollbild-Design mit Overlay
 
-## Identifizierte Probleme
+## Ziel
 
-Nach ausführlicher Analyse der mobilen Ansicht wurden folgende Animationsprobleme identifiziert:
+Den mobilen Hero-Bereich von einem gestapelten Grid-Layout in ein modernes Vollbild-Hintergrundbild mit dunklem Overlay und zentriertem Content transformieren. Das Desktop-Layout bleibt unverändert (Side-by-Side).
 
-### Problem 1: `animate-fade-in` fehlt in Tailwind
-Die Klasse `animate-fade-in` wird in zwei Komponenten verwendet, ist aber nicht in der Tailwind-Konfiguration registriert:
+## Aktuelles Problem
 
-| Datei | Zeile | Verwendung |
-|-------|-------|------------|
-| `ReviewsSection.tsx` | 21 | Review-Karten Einblend-Animation |
-| `Header.tsx` | 126 | Mobile Menü Einblend-Animation |
+| Aspekt | Aktuell | Problem |
+|--------|---------|---------|
+| Layout | Bild oben, Text darunter | Wirkt langweilig, typisches "Template"-Design |
+| Bild | Kleine Karte (aspect-4/3) | Verschenktes visuelles Potenzial |
+| Höhe | ~100vh+ mit Scrollen | CTAs nicht sofort sichtbar |
+| Stil | Standardmäßig, keine Tiefe | Nicht emotional genug |
 
-**Lösung:** Die Animation in `tailwind.config.ts` registrieren.
+## Neue Designvision
 
----
-
-### Problem 2: `scale-115` ist keine gültige Tailwind-Klasse
-In `BentoCard.tsx` (Zeile 97) wird `group-hover:scale-115` verwendet. Tailwind bietet standardmäßig nur:
-- `scale-100`, `scale-105`, `scale-110`, `scale-125`, `scale-150`, etc.
-
-Die Klasse `scale-115` existiert nicht und hat daher keine Wirkung.
-
-**Lösung:** Entweder zu `scale-110` ändern oder einen Custom-Scale in Tailwind registrieren.
-
----
-
-### Problem 3: Marquee Hover-Pause funktioniert nicht
-In `index.css` (Zeile 344-346) verwendet die Klasse `.pause` anstelle von `.paused`:
-```css
-.hover\:\[&_.marquee-track\]\:pause:hover .marquee-track {
-  animation-play-state: paused;
-}
+```text
+┌─────────────────────────┐
+│  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ │  ← Header (transparent/glassmorphism)
+│  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ │
+│░░░░░░░░░░░░░░░░░░░░░░░░│
+│░░░ VOLLBILD-FOTO ░░░░░░│  ← Hero-Team.jpg als Hintergrund
+│░░░ MIT DUNKLEM ░░░░░░░░│
+│░░░ GRADIENT-OVERLAY ░░░│
+│░░░░░░░░░░░░░░░░░░░░░░░░│
+│                         │
+│   ╔═══════════════╗     │
+│   ║  HEADLINE     ║     │  ← Weißer Text, zentriert
+│   ║  (weiß)       ║     │
+│   ╠═══════════════╣     │
+│   ║  Subline      ║     │
+│   ╠═══════════════╣     │
+│   ║ [WhatsApp CTA]║     │  ← Grüner Button
+│   ║ [Anrufen CTA] ║     │  ← Oranger Button
+│   ╠═══════════════╣     │
+│   ║ ✓ ✓ ✓ Pills   ║     │  ← Trust-Badges (halbtransparent)
+│   ╚═══════════════╝     │
+│                         │
+│▓▓▓▓▓ Gradient fade ▓▓▓▓│  ← Sanfter Übergang zur nächsten Section
+└─────────────────────────┘
 ```
-Der CSS-Selektor erwartet eine Klasse `.pause`, die jedoch nicht existiert.
-
-**Lösung:** Den korrekten CSS-Selektor verwenden.
-
----
 
 ## Technische Umsetzung
 
-### Datei 1: `tailwind.config.ts`
+### Datei: `src/components/sections/HeroSection.tsx`
 
-**Änderung 1: `fade-in` Keyframes hinzufügen (nach Zeile 128)**
-```typescript
-"fade-in": {
-  from: { opacity: "0" },
-  to: { opacity: "1" },
-},
-```
+Die Komponente wird so umgebaut, dass sie **responsiv** zwischen zwei Layouts wechselt:
+- **Mobile (< lg)**: Vollbild-Hintergrund mit Overlay
+- **Desktop (lg+)**: Bestehendes Side-by-Side Layout (unverändert)
 
-**Änderung 2: `fade-in` Animation hinzufügen (nach Zeile 139)**
-```typescript
-"fade-in": "fade-in 0.3s ease-out forwards",
-```
+**Struktur-Änderung:**
 
-**Änderung 3: Custom Scale hinzufügen (neue extend-Sektion)**
-```typescript
-scale: {
-  '115': '1.15',
-},
-```
-
----
-
-### Datei 2: `src/index.css`
-
-**Änderung: Marquee Hover-Pause korrigieren (Zeilen 343-346)**
-
-Aktuelle CSS-Klasse funktioniert bereits korrekt. Das Problem liegt nicht im CSS-Wert (`paused` ist korrekt), sondern in der Tailwind-Klasse, die in `Marquee.tsx` verwendet wird.
-
-Ich muss die `Marquee.tsx` Komponente überprüfen - dort wird `pauseOnHover` verwendet, aber die Klasse `hover:[&_.marquee-track]:pause` wird nie angewendet.
-
----
-
-### Datei 3: `src/components/ui/Marquee.tsx`
-
-Das Problem: Die Klasse `hover:[&_.marquee-track]:pause` verwendet `pause`, aber der CSS-Selektor in `index.css` erwartet genau diese Klasse. Die CSS-Eigenschaft ist korrekt (`animation-play-state: paused`), aber Tailwind kann diese spezielle Syntax nicht verarbeiten.
-
-**Lösung:** Eine direkte Tailwind-Klasse verwenden, die `animation-play-state` setzt.
-
----
-
-### Datei 4: `src/components/ui/BentoCard.tsx`
-
-**Änderung: `scale-115` zu `scale-[1.15]` ändern (Zeile 97)**
-
-Von:
 ```tsx
-'group-hover:scale-115 group-hover:rotate-3',
+// Vorher: Grid mit Bild und Content nebeneinander
+<section className="relative bg-background overflow-hidden">
+  <div className="container-custom relative">
+    <div className="grid lg:grid-cols-2 gap-8 items-center py-12 lg:py-20">
+      <div className="order-2 lg:order-1">{/* Content */}</div>
+      <div className="order-1 lg:order-2">{/* Image */}</div>
+    </div>
+  </div>
+</section>
+
+// Nachher: Mobile = Fullscreen, Desktop = Grid
+<section className="relative overflow-hidden">
+  {/* Mobile: Fullscreen background */}
+  <div className="lg:hidden absolute inset-0">
+    <img src={heroTeamImage} className="w-full h-full object-cover" />
+    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30" />
+  </div>
+  
+  {/* Desktop: Standard background */}
+  <div className="hidden lg:block absolute inset-0 bg-gradient-to-br from-secondary/50 via-background to-background" />
+  
+  <div className="container-custom relative">
+    {/* Mobile: Centered content */}
+    <div className="lg:hidden min-h-[85vh] flex flex-col justify-end pb-8 pt-20">
+      {/* Mobile-optimierter Content */}
+    </div>
+    
+    {/* Desktop: Original grid layout */}
+    <div className="hidden lg:grid lg:grid-cols-2 gap-16 items-center py-20">
+      {/* Original content + image */}
+    </div>
+  </div>
+</section>
 ```
 
-Zu:
+### Wichtige Mobile-Anpassungen
+
+**1. Hero-Höhe:**
 ```tsx
-'group-hover:scale-[1.15] group-hover:rotate-3',
+min-h-[85vh]  // Füllt fast den gesamten Viewport
 ```
+
+**2. Gradient-Overlay (von unten nach oben, dunkler unten):**
+```tsx
+bg-gradient-to-t from-black/80 via-black/50 to-black/30
+```
+
+**3. Text-Farben für Overlay:**
+```tsx
+// Headline
+text-white
+
+// Subline
+text-white/90
+
+// Trust Pills
+bg-white/20 text-white backdrop-blur-sm border border-white/10
+```
+
+**4. CTA-Buttons auf dunklem Hintergrund:**
+```tsx
+// WhatsApp - bleibt grün
+bg-whatsapp hover:bg-whatsapp-hover
+
+// Anrufen - solid orange (bereits so für Mobile)
+bg-cta hover:bg-cta-hover text-white
+```
+
+**5. Dezente Hinweis-Zeile:**
+```tsx
+text-white/70 text-sm
+```
+
+### Vollständige Änderungen
+
+| Element | Aktuell (Mobile) | Neu (Mobile) |
+|---------|------------------|--------------|
+| Layout | Grid, Bild oben | Vollbild-Hintergrund |
+| Höhe | Auto (~100vh+) | 85vh (ohne viel Scrollen) |
+| Hintergrund | Keine | Hero-Team.jpg + Gradient |
+| Text-Farben | Dunkel (foreground) | Weiß (white) |
+| Trust Pills | bg-secondary | bg-white/20 + backdrop-blur |
+| Bild | Separate Karte | Hintergrund |
+| Content-Position | Oben links | Unten zentriert |
+
+### Desktop bleibt unverändert
+
+Das bestehende Desktop-Layout (lg:) bleibt vollständig erhalten:
+- Side-by-Side Grid mit 2 Spalten
+- Bild rechts als separate Karte
+- Dunkle Textfarben
+- Standard-Background
 
 ---
 
-## Zusammenfassung der Änderungen
+## Zusammenfassung
 
 | Datei | Änderung |
 |-------|----------|
-| `tailwind.config.ts` | `fade-in` Keyframes und Animation hinzufügen |
-| `tailwind.config.ts` | Custom `scale.115` hinzufügen (optional) |
-| `src/components/ui/BentoCard.tsx` | `scale-115` → `scale-[1.15]` (arbitrary value) |
-| `src/components/ui/Marquee.tsx` | Hover-Pause-Mechanismus überarbeiten |
-
----
+| `src/components/sections/HeroSection.tsx` | Kompletter Mobile-Redesign mit Vollbild-Overlay |
 
 ## Ergebnis
 
-Nach diesen Änderungen:
+Nach dieser Änderung:
 
-- Review-Karten werden mit sanfter Fade-Animation eingeblendet
-- Mobile Menü hat eine saubere Einblend-Animation
-- BentoCard Icons skalieren korrekt beim Hover auf 115%
-- Marquee pausiert beim Hover (falls gewünscht)
-- Alle Animationen funktionieren konsistent auf Desktop und Mobile
+- **Mobile**: Modernes, emotionales Vollbild-Design mit Hero-Team-Foto als Hintergrund
+- **Text sofort sichtbar**: Keine Notwendigkeit nach unten zu scrollen
+- **Professioneller Look**: Dunkles Overlay sorgt für Tiefe und Lesbarkeit
+- **Starke CTAs**: WhatsApp (grün) und Anrufen (orange) stechen hervor
+- **Desktop unverändert**: Bewährtes Side-by-Side Layout bleibt
+- **Konsistent mit Brand**: Verwendet existierendes Hero-Team-Bild
