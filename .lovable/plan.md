@@ -1,65 +1,85 @@
 
 
-# Plan: Timeline vollständig scroll-basiert – ohne Wischen
+# Plan: Mobile/Tablet Menü zentrieren
 
-## Ziel
+## Aktuelle Situation
 
-Die Timeline soll auf **allen Geräten** automatisch per Scroll funktionieren. Wenn die Section in der **Mitte des Viewports** ist, muss die Timeline **100% erreicht** haben. Kein manuelles Wischen oder Tippen.
+Das Mobile-Menü ist derzeit **linksbündig** ausgerichtet:
+- Menüpunkte haben `px-4` Padding aber keinen `text-center`
+- Der CTA-Button ist zwar `w-full`, aber der Container ist nicht zentriert
+
+## Lösung
+
+Das gesamte Mobile-Menü zentrieren – sowohl die Navigationslinks als auch den CTA-Button.
 
 ---
 
 ## Technische Umsetzung
 
-### Datei 1: `src/hooks/useTimelineProgress.ts`
+### Datei: `src/components/layout/Header.tsx`
 
-**Änderungen:**
+**Änderung 1: Navigation Container zentrieren (Zeile 127)**
 
-| Was | Aktion |
-|-----|--------|
-| `isMobile` State | Entfernen |
-| `goToStep` Callback | Entfernen |
-| Mobile-Initialisierung (`useEffect` mit `goToStep(0)`) | Entfernen |
-| `if (isMobile) return;` Check | Entfernen |
-| Scroll-Berechnung | Anpassen für 100% bei Section-Mitte |
+```tsx
+// ALT
+<nav className="container-custom py-4 flex flex-col gap-1">
 
-**Neue Scroll-Berechnung:**
-```typescript
-// ALT: Progress über gesamte Section
-const scrollStart = windowHeight * 0.8;
-const scrollEnd = sectionHeight * 0.6;
-
-// NEU: 100% wenn Section-Mitte im Viewport
-const scrollStart = windowHeight * 0.7;
-const scrollEnd = windowHeight * 0.5;
+// NEU - items-center für zentrierte Ausrichtung
+<nav className="container-custom py-4 flex flex-col items-center gap-1">
 ```
 
-**Vereinfachter Return:**
-```typescript
-return { 
-  containerRef, 
-  activeStep, 
-  progress, 
-  justActivated
-  // isMobile und goToStep werden nicht mehr exportiert
-};
+**Änderung 2: Collapsible Trigger zentrieren (Zeile 135)**
+
+```tsx
+// ALT
+<CollapsibleTrigger className="flex items-center justify-between w-full py-3 px-4 text-base font-medium ...">
+
+// NEU - justify-center für zentrierten Text, ChevronDown daneben
+<CollapsibleTrigger className="flex items-center justify-center gap-2 w-full py-3 px-4 text-base font-medium ...">
+```
+
+**Änderung 3: Submenu-Einträge zentrieren (Zeile 143-154)**
+
+```tsx
+// ALT
+<div className="pl-4 flex flex-col gap-1 mt-1">
+  <a ... className="py-2.5 px-4 text-sm font-medium ...">
+
+// NEU - pl-4 entfernen, text-center hinzufügen
+<div className="flex flex-col items-center gap-1 mt-1">
+  <a ... className="py-2.5 px-4 text-sm font-medium text-center ...">
+```
+
+**Änderung 4: Normale Menüpunkte zentrieren (Zeile 158-165)**
+
+```tsx
+// ALT
+<a ... className="py-3 px-4 text-base font-medium ...">
+
+// NEU - text-center hinzufügen
+<a ... className="py-3 px-4 text-base font-medium text-center ...">
+```
+
+**Änderung 5: CTA-Container zentrieren (Zeile 170)**
+
+```tsx
+// ALT
+<div className="mt-4 pt-4 border-t border-border/50">
+
+// NEU - w-full für volle Breite des zentrierten Containers
+<div className="mt-4 pt-4 border-t border-border/50 w-full max-w-xs">
 ```
 
 ---
 
-### Datei 2: `src/components/ui/HorizontalTimeline.tsx`
+## Vorher/Nachher
 
-**Entfernen:**
-
-| Element | Grund |
-|---------|-------|
-| `touchStartX` Ref | Kein Wischen mehr |
-| `handleTouchStart` Funktion | Kein Wischen mehr |
-| `handleTouchEnd` Funktion | Kein Wischen mehr |
-| `onTouchStart` / `onTouchEnd` Props | Kein Wischen mehr |
-| `onClick={() => isMobile && goToStep(index)}` | Kein Tippen mehr |
-| `cursor-pointer select-none` Klassen | Kein Tippen mehr |
-| "Tippen oder wischen" Hint-Text | Obsolet |
-| `isMobile` / `goToStep` aus Hook-Import | Nicht mehr benötigt |
+| Element | Vorher | Nachher |
+|---------|--------|---------|
+| Menüpunkte | Linksbündig | Zentriert |
+| Submenu-Einträge | Links eingerückt | Zentriert |
+| Leistungen + Chevron | justify-between | justify-center mit gap |
+| CTA-Button | Volle Breite | Zentriert, max-w-xs |
 
 ---
 
@@ -67,16 +87,14 @@ return {
 
 | Datei | Änderung |
 |-------|----------|
-| `src/hooks/useTimelineProgress.ts` | Scroll für alle Geräte, schnellerer Progress, vereinfacht |
-| `src/components/ui/HorizontalTimeline.tsx` | Touch-Interaktion komplett entfernen |
+| `src/components/layout/Header.tsx` | Mobile Menü zentrieren (5 Stellen) |
 
 ---
 
 ## Ergebnis
 
-Nach dieser Änderung:
-- Timeline füllt sich **automatisch beim Scrollen** auf allen Geräten
-- **100% Progress bei Section-Mitte** im Viewport
-- **Kein Wischen, kein Tippen** erforderlich
-- Gleiche User Experience auf Mobile, Tablet und Desktop
+- Alle Menüpunkte **zentriert** auf Mobile/Tablet
+- Submenu-Einträge ebenfalls zentriert
+- CTA-Button kompakter und zentriert
+- Professionelleres, ausgewogenes Erscheinungsbild
 
