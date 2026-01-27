@@ -9,12 +9,12 @@ export function RegionsSection() {
   const [activeCity, setActiveCity] = useState<string | null>(null);
 
   return (
-    <section className="py-12 lg:py-16 bg-secondary/30">
+    <section className="py-8 lg:py-12 bg-secondary/30">
       <div className="container-custom">
         <div
           ref={ref}
           className={cn(
-            "text-center mb-8 lg:mb-12",
+            "text-center mb-4 lg:mb-6",
             "scroll-reveal",
             isVisible && "visible"
           )}
@@ -28,7 +28,7 @@ export function RegionsSection() {
         </div>
 
         {/* Two-Column Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start">
           {/* Left: Map */}
           <div className="lg:sticky lg:top-24">
             <InteractiveMap 
