@@ -1,119 +1,146 @@
 
-
-# Plan: Alle Website-Bilder auf WebP optimieren
+# Plan: Alle 3 offenen Aufgaben umsetzen
 
 ## Übersicht
 
-Konvertierung aller Bilder von JPG/PNG zu WebP für deutlich schnellere Ladezeiten (30-50% kleinere Dateigrößen bei gleicher Qualität).
+Dieses Update behebt das Logo-Problem und fügt zwei neue Features hinzu:
 
-## Betroffene Bilder
-
-### public/images/ (9 Bilder)
-| Aktuell | Neu |
-|---------|-----|
-| `service-wohnungsentruempelung.jpg` | `service-wohnungsentruempelung.webp` |
-| `service-entruempelung.jpg` | `service-entruempelung.webp` |
-| `service-haushaltsaufloesung.jpg` | `service-haushaltsaufloesung.webp` |
-| `service-keller.jpg` | `service-keller.webp` |
-| `service-gewerbe.jpg` | `service-gewerbe.webp` |
-| `service-messie.jpg` | `service-messie.webp` |
-| `messiewohnung-bg.jpg` | `messiewohnung-bg.webp` |
-| `before-after-vorher.png` | `before-after-vorher.webp` |
-| `before-after-nachher.png` | `before-after-nachher.webp` |
-
-### src/assets/ (3 Bilder)
-| Aktuell | Neu |
-|---------|-----|
-| `hero-team.jpg` | `hero-team.webp` |
-| `logo-raeumzwerge.png` | `logo-raeumzwerge.webp` |
-| `logo-white.png` | `logo-white.webp` |
-
-**Gesamt: 12 Bilder**
+1. Logo-Transparenz wiederherstellen (PNG statt WebP)
+2. Logo auf SEA-Landingpages zur Hauptseite verlinken
+3. Interaktiver Vorher/Nachher-Slider für Messie SEA-Landingpage
 
 ---
 
-## Technische Umsetzung
+## Aufgabe 1: Logo-Transparenz wiederherstellen
 
-### Schritt 1: Bilder konvertieren
+### Problem
+Die WebP-Konvertierung hat die Alpha-Transparenz der Logos nicht korrekt übertragen, wodurch ein schwarzer Hintergrund erscheint.
 
-Alle 12 Bilder werden als WebP-Versionen mit optimierter Komprimierung erstellt.
+### Lösung
+Logo-Importe zurück auf PNG ändern (originale Dateien existieren noch).
 
-### Schritt 2: Pfad-Referenzen aktualisieren
+### Änderungen
 
-#### Datei: `src/lib/serviceData.ts`
-6 Änderungen:
-```text
-Zeile 55:  imageSrc: '/images/service-wohnungsentruempelung.webp'
-Zeile 137: imageSrc: '/images/service-entruempelung.webp'
-Zeile 219: imageSrc: '/images/service-haushaltsaufloesung.webp'
-Zeile 295: imageSrc: '/images/service-keller.webp'
-Zeile 371: imageSrc: '/images/service-gewerbe.webp'
-Zeile 448: imageSrc: '/images/service-messie.webp'
+| Datei | Zeile | Änderung |
+|-------|-------|----------|
+| `src/components/layout/Header.tsx` | 3 | `logo-raeumzwerge.webp` → `logo-raeumzwerge.png` |
+| `src/components/layout/Footer.tsx` | 4 | `logo-white.webp` → `logo-white.png` |
+| `src/components/sea/SEAMinimalHeader.tsx` | 4 | `logo-raeumzwerge.webp` → `logo-raeumzwerge.png` |
+
+---
+
+## Aufgabe 2: Logo-Link auf SEA-Landingpages
+
+### Aktueller Zustand
+Das Logo ist ein `<div>` ohne Link (Zeile 12-18 in SEAMinimalHeader.tsx).
+
+### Neue Struktur
+Das `<div>` wird durch einen `<a>`-Tag ersetzt:
+
+```tsx
+<a 
+  href="https://www.raeumzwerge.de" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  className="h-20 lg:h-24 overflow-hidden flex items-center -ml-8 lg:-ml-12 group"
+>
+  <img
+    src={logoImage}
+    alt="Räumzwerge"
+    className="h-64 lg:h-80 w-auto object-contain object-left transition-all duration-300 group-hover:scale-[1.03] group-hover:opacity-90"
+  />
+</a>
 ```
 
-#### Datei: `src/lib/seaData.ts`
-3 Änderungen:
-```text
-Zeile 88:  heroImage: '/images/service-haushaltsaufloesung.webp'
-Zeile 140: heroImage: '/images/service-entruempelung.webp'
-Zeile 192: heroImage: '/images/service-messie.webp'
-```
+| Attribut | Zweck |
+|----------|-------|
+| `target="_blank"` | Öffnet in neuem Tab, Landingpage bleibt offen |
+| `rel="noopener noreferrer"` | Sicherheit bei externen Links |
+| `group-hover` Effekte | Visuelles Feedback wie im Haupt-Header |
 
-#### Datei: `src/components/sections/BeforeAfterSection.tsx`
-2 Änderungen:
-```text
-Zeile 82: src="/images/before-after-vorher.webp"
-Zeile 94: src="/images/before-after-nachher.webp"
-```
+---
 
-#### Datei: `src/components/sections/PricingSection.tsx`
-1 Änderung:
-```text
-Zeile 49: src="/images/messiewohnung-bg.webp"
-```
+## Aufgabe 3: Vorher/Nachher-Slider für Messie-Seite
 
-#### Datei: `src/components/sections/HeroSection.tsx`
-1 Änderung:
-```text
-Zeile 7: import heroTeamImage from '@/assets/hero-team.webp'
-```
+### Hochgeladene Bilder
 
-#### Datei: `src/components/layout/Header.tsx`
-1 Änderung:
-```text
-Logo-Import auf .webp ändern
-```
+| Datei | Beschreibung | Verwendung |
+|-------|--------------|------------|
+| `Gemini_Generated_Image_4r6zkr4r6zkr4r6z-2.png` | Überladenes Zimmer mit Kartons, Kleidung | **Vorher** |
+| `Gemini_Generated_Image_12l94a12l94a12l9-2.png` | Dasselbe Zimmer - leer, besenrein | **Nachher** |
 
-#### Datei: `src/components/layout/Footer.tsx`
-1 Änderung:
-```text
-Logo-Import auf .webp ändern
-```
+### Neue Bilder erstellen
 
-#### Datei: `src/components/sea/SEAMinimalHeader.tsx`
-1 Änderung:
-```text
-Logo-Import auf .webp ändern
+| Quelle | Ziel |
+|--------|------|
+| `user-uploads://Gemini_Generated_Image_4r6zkr4r6zkr4r6z-2.png` | `public/images/messie-vorher.webp` |
+| `user-uploads://Gemini_Generated_Image_12l94a12l94a12l9-2.png` | `public/images/messie-nachher.webp` |
+
+### Komponenten-Änderung
+
+**Datei:** `src/components/sea/SEABeforeAfter.tsx`
+
+Der "Gentle Mode" Block (Zeile 73-85) zeigt aktuell nur einen statischen Platzhalter. Dieser wird durch einen echten interaktiven Slider mit den Messie-Bildern ersetzt:
+
+```tsx
+{isGentleMode ? (
+  // Gentle Mode: Real Before/After Slider for Messie
+  <div
+    ref={containerRef}
+    className="relative max-w-2xl mx-auto aspect-[4/3] md:aspect-video bg-muted rounded-xl overflow-hidden cursor-ew-resize select-none mb-6"
+    onMouseDown={handleMouseDown}
+    onMouseUp={handleMouseUp}
+    onMouseMove={handleMouseMove}
+    onTouchMove={handleTouchMove}
+    onMouseLeave={handleMouseUp}
+  >
+    {/* Before Image */}
+    <div className="absolute inset-0">
+      <img 
+        src="/images/messie-vorher.webp" 
+        alt="Zimmer vor der Räumung"
+        className="w-full h-full object-cover"
+      />
+    </div>
+
+    {/* After Image (Clipped) */}
+    <div
+      className="absolute inset-0"
+      style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+    >
+      <img 
+        src="/images/messie-nachher.webp" 
+        alt="Zimmer nach der Räumung"
+        className="w-full h-full object-cover"
+      />
+    </div>
+
+    {/* Slider Handle + Labels (identisch zum Standard-Modus) */}
+    ...
+  </div>
+) : (
+  // Standard Mode: Placeholder slider
+  ...
+)}
 ```
 
 ---
 
-## Zusammenfassung der Änderungen
+## Zusammenfassung aller Änderungen
 
-| Kategorie | Dateien | Änderungen |
-|-----------|---------|------------|
-| Neue WebP-Bilder | 12 Dateien | Konvertiert aus JPG/PNG |
-| Daten-Dateien | 2 Dateien | serviceData.ts, seaData.ts |
-| Komponenten | 6 Dateien | HeroSection, BeforeAfter, Pricing, Header, Footer, SEAMinimalHeader |
+| Kategorie | Dateien | Aktion |
+|-----------|---------|--------|
+| **Logo-Import** | Header.tsx, Footer.tsx, SEAMinimalHeader.tsx | `.webp` → `.png` |
+| **Logo-Link** | SEAMinimalHeader.tsx | `<div>` → `<a href="...">` |
+| **Neue Bilder** | public/images/messie-vorher.webp, messie-nachher.webp | Erstellen |
+| **Slider-Logik** | SEABeforeAfter.tsx | Gentle-Mode mit echten Bildern |
 
-**Gesamt: 20 Dateioperationen**
+**Gesamt: 4 Dateien ändern + 2 neue Bilder erstellen**
 
 ---
 
 ## Erwartetes Ergebnis
 
-- **Dateigröße**: 30-50% kleiner bei gleicher visueller Qualität
-- **Ladezeit**: Deutlich schnellere Seitenladezeiten
-- **SEO**: Bessere Core Web Vitals (LCP, FCP)
-- **Kompatibilität**: WebP wird von allen modernen Browsern unterstützt (Chrome, Firefox, Safari 14+, Edge)
-
+- Logos zeigen wieder transparenten Hintergrund auf allen Seiten
+- Das Logo auf SEA-Landingpages verlinkt zur Hauptwebsite (neuer Tab)
+- Die Messie SEA-Landingpage zeigt einen interaktiven Vorher/Nachher-Slider mit emotionalem Beweis der Transformation
