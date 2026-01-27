@@ -32,6 +32,10 @@ jobs:
       - name: Build project
         run: npm run build
 
+      - name: Ensure .htaccess is in dist
+        run: |
+          cp public/.htaccess dist/.htaccess 2>/dev/null || echo ".htaccess already in dist"
+
       - name: Deploy via SFTP
         uses: sand4rt/ftp-deployer@v1.8
         with:
@@ -43,5 +47,5 @@ jobs:
           remote_folder: ${{ secrets.SFTP_PATH }}
           local_folder: './dist'
           cleanup: true
-          include: '[ "*", "**/*" ]'
+          include: '[ "*", "**/*", ".*" ]'
           exclude: '[]'
