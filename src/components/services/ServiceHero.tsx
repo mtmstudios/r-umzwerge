@@ -12,11 +12,19 @@ interface ServiceHeroProps {
   trustPills: string[];
   imageSrc?: string;
   imageAlt?: string;
+  isDiscrete?: boolean;
+  ctaText?: {
+    whatsapp: string;
+    whatsappShort: string;
+  };
 }
 
-export function ServiceHero({ h1, subline, trustPills, imageSrc, imageAlt }: ServiceHeroProps) {
+export function ServiceHero({ h1, subline, trustPills, imageSrc, imageAlt, isDiscrete, ctaText }: ServiceHeroProps) {
   const { ref, isVisible } = useScrollReveal(0.1);
 
+  // Dynamic CTA text for discrete services
+  const whatsappLong = ctaText?.whatsapp || 'Foto senden · Preiseinschätzung erhalten';
+  const whatsappShort = ctaText?.whatsappShort || 'Foto senden · Preis erhalten';
   return (
     <section className="relative overflow-hidden">
       {/* Mobile & Tablet: Fullscreen background with overlay */}
@@ -63,8 +71,8 @@ export function ServiceHero({ h1, subline, trustPills, imageSrc, imageAlt }: Ser
             >
               <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
                 <WhatsAppIcon className="h-5 w-5 flex-shrink-0" />
-                <span className="hidden sm:inline">Foto senden · Preiseinschätzung erhalten</span>
-                <span className="sm:hidden">Foto senden · Preis erhalten</span>
+                <span className="hidden sm:inline">{whatsappLong}</span>
+                <span className="sm:hidden">{whatsappShort}</span>
               </a>
             </Button>
             <Button
@@ -79,11 +87,12 @@ export function ServiceHero({ h1, subline, trustPills, imageSrc, imageAlt }: Ser
             </Button>
           </div>
 
-          {/* Photo Guide */}
-          <p className="text-sm text-white/70 mb-6">
-            💡 {PHOTO_GUIDE}
-          </p>
-
+          {/* Photo Guide - hidden for discrete services */}
+          {!isDiscrete && (
+            <p className="text-sm text-white/70 mb-6">
+              💡 {PHOTO_GUIDE}
+            </p>
+          )}
           {/* Trust Pills */}
           <div className="flex flex-wrap justify-center gap-2">
             {trustPills.map((pill) => (
@@ -133,10 +142,10 @@ export function ServiceHero({ h1, subline, trustPills, imageSrc, imageAlt }: Ser
                 size="lg"
                 className="gap-2.5 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-12 sm:h-14 px-6 sm:px-8 text-sm sm:text-base"
               >
-                <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
+              <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
                   <WhatsAppIcon className="h-5 w-5" />
-                  <span className="hidden sm:inline">Foto senden · Preis erhalten</span>
-                  <span className="sm:hidden">Foto senden</span>
+                  <span className="hidden sm:inline">{whatsappLong}</span>
+                  <span className="sm:hidden">{whatsappShort}</span>
                 </a>
               </Button>
               
@@ -153,10 +162,12 @@ export function ServiceHero({ h1, subline, trustPills, imageSrc, imageAlt }: Ser
               </Button>
             </div>
 
-            {/* Photo Guide */}
-            <p className="text-xs sm:text-sm text-muted-foreground text-center lg:text-left">
-              💡 {PHOTO_GUIDE}
-            </p>
+            {/* Photo Guide - hidden for discrete services */}
+            {!isDiscrete && (
+              <p className="text-xs sm:text-sm text-muted-foreground text-center lg:text-left">
+                💡 {PHOTO_GUIDE}
+              </p>
+            )}
           </div>
 
           {/* Image / Visual */}

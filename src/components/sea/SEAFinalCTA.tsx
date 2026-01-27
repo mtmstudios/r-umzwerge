@@ -14,6 +14,11 @@ const trustBadges = ['Unverbindlich', 'Keine versteckten Kosten', 'Besenrein'];
 export function SEAFinalCTA({ data }: SEAFinalCTAProps) {
   const isGentle = data.tone === 'gentle';
 
+  // Dynamic CTA text
+  const ctaText = isGentle
+    ? { long: 'Unverbindlich schreiben', short: 'Schreiben' }
+    : { long: 'Foto senden · Preis erhalten', short: 'Foto senden' };
+
   return (
     <section className={cn(
       "py-16 lg:py-20",
@@ -39,8 +44,8 @@ export function SEAFinalCTA({ data }: SEAFinalCTAProps) {
             >
               <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
                 <WhatsAppIcon className="h-5 w-5 sm:h-6 sm:w-6" />
-                <span className="hidden sm:inline">Foto senden · Preis erhalten</span>
-                <span className="sm:hidden">Foto senden</span>
+                <span className="hidden sm:inline">{ctaText.long}</span>
+                <span className="sm:hidden">{ctaText.short}</span>
               </a>
             </Button>
 

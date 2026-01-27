@@ -9,14 +9,26 @@ interface SEAMidCTAProps {
   data: SEAData;
 }
 
-const processSteps = [
-  { num: '1', label: 'Foto senden', icon: Camera },
-  { num: '2', label: 'Einschätzung erhalten', icon: MessageCircle },
-  { num: '3', label: 'Termin machen', icon: Calendar },
-];
-
 export function SEAMidCTA({ data }: SEAMidCTAProps) {
   const isGentle = data.tone === 'gentle';
+
+  // Dynamic process steps based on tone
+  const processSteps = isGentle
+    ? [
+        { num: '1', label: 'Kontakt aufnehmen', icon: MessageCircle },
+        { num: '2', label: 'Gemeinsam besprechen', icon: MessageCircle },
+        { num: '3', label: 'Termin nach Wunsch', icon: Calendar },
+      ]
+    : [
+        { num: '1', label: 'Foto senden', icon: Camera },
+        { num: '2', label: 'Einschätzung erhalten', icon: MessageCircle },
+        { num: '3', label: 'Termin machen', icon: Calendar },
+      ];
+
+  // Dynamic CTA text
+  const ctaText = isGentle
+    ? { long: 'Unverbindlich schreiben', short: 'Schreiben' }
+    : { long: 'Foto senden · Preis erhalten', short: 'Foto senden' };
 
   return (
     <section className={cn(
@@ -58,8 +70,8 @@ export function SEAMidCTA({ data }: SEAMidCTAProps) {
             >
               <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
                 <WhatsAppIcon className="h-5 w-5" />
-                <span className="hidden sm:inline">Foto senden · Preis erhalten</span>
-                <span className="sm:hidden">Foto senden</span>
+                <span className="hidden sm:inline">{ctaText.long}</span>
+                <span className="sm:hidden">{ctaText.short}</span>
               </a>
             </Button>
 
