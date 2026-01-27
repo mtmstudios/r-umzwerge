@@ -53,11 +53,11 @@ isScrolled
 
           {/* Logo - zentriert auf Mobil/Tablet, links auf Desktop */}
           <a href="/" className="flex items-center justify-center lg:justify-start group shrink-0 lg:-ml-12">
-            <div className="h-20 lg:h-24 overflow-hidden flex items-center">
+            <div className="h-28 lg:h-24 overflow-hidden flex items-center">
               <img 
                 src={logoRaeumzwerge} 
                 alt="Räumzwerge - Entrümpelungen, Auflösungen, Service" 
-                className="h-64 lg:h-80 w-auto object-contain object-center lg:object-left transition-all duration-300 group-hover:scale-[1.03] group-hover:opacity-90"
+                className="h-96 lg:h-80 w-auto object-contain object-center lg:object-left transition-all duration-300 group-hover:scale-[1.03] group-hover:opacity-90"
               />
             </div>
           </a>
