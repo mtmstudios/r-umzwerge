@@ -1,59 +1,42 @@
 
 
-## Timeline Carousel Optimierung
+## Problem: Weißer Rand auf Mobile
 
-Die Mobile-Carousel-Ansicht wird angepasst, damit der erste Schritt zentriert ist und der naechste Schritt teilweise sichtbar eingeblendet wird.
+### Ursache
 
----
+In `src/App.css` befindet sich alter Vite-Template-Code:
 
-## Aktuelle Probleme
+```css
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;     /* <- Das erzeugt den weißen Rand */
+  text-align: center;
+}
+```
 
-1. **Nicht zentriert**: Der negative Margin `-ml-2` auf CarouselContent verschiebt alles nach links
-2. **Kein Peek-Effekt**: Der naechste Step ist nicht sichtbar, obwohl `basis-[85%]` gesetzt ist
+Diese Styles begrenzen die App-Breite und fuegen 2rem Padding hinzu - dadurch entsteht der sichtbare Rand auf Mobile.
 
 ---
 
 ## Loesung
 
-### 1. Carousel-Optionen anpassen
+Die gesamte `App.css` Datei wird bereinigt. Die darin enthaltenen Styles sind Ueberreste vom Vite-Starter-Template und werden nicht mehr benoetigt, da das Projekt Tailwind CSS verwendet.
 
-```tsx
-<Carousel 
-  setApi={setApi}
-  opts={{ 
-    align: 'center',  // Zentriert den aktiven Slide
-    loop: false,
-    containScroll: false  // Erlaubt Overflow links/rechts
-  }}
-  className="w-full"
->
-```
+### Aenderungen
 
-### 2. CarouselContent ohne negativen Margin
+| Datei | Aktion |
+|-------|--------|
+| `src/App.css` | Alle Styles entfernen (Datei leeren oder loeschen) |
 
-```tsx
-<CarouselContent className="ml-0">  {/* Statt -ml-2 */}
-```
+### Neue App.css (minimal)
 
-### 3. CarouselItem mit Peek-Effekt
-
-```tsx
-<CarouselItem 
-  key={step.number} 
-  className="pl-4 basis-[75%]"  {/* 75% statt 85% = 12.5% Peek auf jeder Seite */}
->
-```
-
-### 4. Visueller Hinweis fuer Swipe
-
-Nicht-aktive Slides werden leicht ausgegraut:
-
-```tsx
-<StepCard 
-  step={step} 
-  isActive={true} 
-  isCurrent={step.number - 1 === current}  {/* Nur der aktive Slide ist "current" */}
-/>
+```css
+/* App.css - Reset for full-width layout */
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
 ```
 
 ---
@@ -61,33 +44,16 @@ Nicht-aktive Slides werden leicht ausgegraut:
 ## Visuelles Ergebnis
 
 ```text
-Vorher:   |  [Step 1]  | ● ○ ○
-                        ↑ Nicht zentriert, kein Peek
+Vorher:   [  |  Hero-Bild  |  ]   <- Weißer Rand links/rechts
+                              ↑
+                         2rem padding
 
-Nachher:  [ ] [Step 1] [ ]  ● ○ ○
-            ↑           ↑
-       Step 3 Peek   Step 2 Peek (ausgegraut)
+Nachher:  [     Hero-Bild     ]   <- Volle Breite
 ```
 
-Der Nutzer sieht sofort:
-- Links: Leerer Bereich (kein vorheriger Step bei Step 1)
-- Mitte: Aktiver Step (voll sichtbar, hervorgehoben)
-- Rechts: Naechster Step (teilweise sichtbar, leicht ausgegraut)
-
 ---
 
-## Aenderungen
+## Weitere Optimierung (optional)
 
-| Zeile | Aenderung |
-|-------|-----------|
-| 128 | `containScroll: false` hinzufuegen |
-| 131 | `-ml-2` entfernen, durch `ml-0` ersetzen |
-| 133 | `basis-[85%]` aendern zu `basis-[75%]` |
-| 134-135 | `isCurrent` basierend auf `current` State berechnen |
-
----
-
-## Datei
-
-`src/components/ui/HorizontalTimeline.tsx` - MobileCarousel-Komponente (Zeilen 105-160)
+Da kein Code aus `App.css` tatsaechlich verwendet wird, kann die Datei komplett geleert werden. Die relevanten Styles sind bereits in `src/index.css` definiert.
 
