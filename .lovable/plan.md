@@ -1,120 +1,93 @@
 
 
-## N8N-Integration für ContactFunnel
+## Timeline Carousel Optimierung
 
-Die simulierte API-Funktion wird durch einen echten API-Call an den N8N-Webhook ersetzt.
+Die Mobile-Carousel-Ansicht wird angepasst, damit der erste Schritt zentriert ist und der naechste Schritt teilweise sichtbar eingeblendet wird.
 
 ---
 
-## Änderung
+## Aktuelle Probleme
 
-Die `handleSubmit`-Funktion (Zeilen 99-114) wird ersetzt, um Formulardaten an den N8N-Webhook zu senden.
+1. **Nicht zentriert**: Der negative Margin `-ml-2` auf CarouselContent verschiebt alles nach links
+2. **Kein Peek-Effekt**: Der naechste Step ist nicht sichtbar, obwohl `basis-[85%]` gesetzt ist
 
-**Aktuell (Simulation):**
+---
+
+## Loesung
+
+### 1. Carousel-Optionen anpassen
+
 ```tsx
-const handleSubmit = async () => {
-  if (!validateStep()) return;
-  setIsSubmitting(true);
-  
-  // Simulate API call
-  await new Promise((resolve) => setTimeout(resolve, 1500));
-  
-  setIsSubmitting(false);
-  setIsSubmitted(true);
-  
-  toast({
-    title: "Anfrage gesendet! ✓",
-    description: "Wir melden uns innerhalb von 24 Stunden bei Ihnen.",
-  });
-};
+<Carousel 
+  setApi={setApi}
+  opts={{ 
+    align: 'center',  // Zentriert den aktiven Slide
+    loop: false,
+    containScroll: false  // Erlaubt Overflow links/rechts
+  }}
+  className="w-full"
+>
 ```
 
-**Neu (Echte N8N-Integration):**
-```tsx
-const handleSubmit = async () => {
-  if (!validateStep()) return;
+### 2. CarouselContent ohne negativen Margin
 
-  setIsSubmitting(true);
-  
-  try {
-    const payload = {
-      objektart: formData.serviceType,
-      umfang: formData.scope,
-      plz: formData.postalCode,
-      ort: formData.location,
-      zeitrahmen: formData.timeline,
-      name: formData.name,
-      telefon: formData.phone,
-      email: formData.email || '',
-      nachricht: formData.message || '',
-      timestamp: new Date().toISOString()
-    };
-    
-    const response = await fetch('https://mtmstudios.app.n8n.cloud/webhook/entruempelung', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload)
-    });
-    
-    const data = await response.json();
-    
-    if (response.ok && data.success) {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-      
-      toast({
-        title: "Anfrage gesendet! ✓",
-        description: "Wir melden uns innerhalb von 24 Stunden bei Ihnen.",
-      });
-    } else {
-      throw new Error(data.error || 'Fehler beim Senden');
-    }
-  } catch (error) {
-    console.error('Submit error:', error);
-    setIsSubmitting(false);
-    toast({
-      title: "Fehler beim Senden",
-      description: "Bitte versuchen Sie es erneut oder rufen Sie uns an.",
-      variant: "destructive"
-    });
-  }
-};
+```tsx
+<CarouselContent className="ml-0">  {/* Statt -ml-2 */}
+```
+
+### 3. CarouselItem mit Peek-Effekt
+
+```tsx
+<CarouselItem 
+  key={step.number} 
+  className="pl-4 basis-[75%]"  {/* 75% statt 85% = 12.5% Peek auf jeder Seite */}
+>
+```
+
+### 4. Visueller Hinweis fuer Swipe
+
+Nicht-aktive Slides werden leicht ausgegraut:
+
+```tsx
+<StepCard 
+  step={step} 
+  isActive={true} 
+  isCurrent={step.number - 1 === current}  {/* Nur der aktive Slide ist "current" */}
+/>
 ```
 
 ---
 
-## Was ändert sich
+## Visuelles Ergebnis
 
-| Aspekt | Vorher | Nachher |
-|--------|--------|---------|
-| API-Call | Simuliert (setTimeout) | Echter POST an N8N |
-| Payload | Keiner | Alle Formulardaten mit deutschem Mapping |
-| Fehlerbehandlung | Keine | Try-Catch mit Toast-Fehlermeldung |
-| Timestamp | Keiner | Wird mitgesendet |
+```text
+Vorher:   |  [Step 1]  | ● ○ ○
+                        ↑ Nicht zentriert, kein Peek
 
----
+Nachher:  [ ] [Step 1] [ ]  ● ○ ○
+            ↑           ↑
+       Step 3 Peek   Step 2 Peek (ausgegraut)
+```
 
-## Feld-Mapping
-
-| Formular-Feld | N8N-Payload |
-|---------------|-------------|
-| serviceType | objektart |
-| scope | umfang |
-| postalCode | plz |
-| location | ort |
-| timeline | zeitrahmen |
-| name | name |
-| phone | telefon |
-| email | email |
-| message | nachricht |
+Der Nutzer sieht sofort:
+- Links: Leerer Bereich (kein vorheriger Step bei Step 1)
+- Mitte: Aktiver Step (voll sichtbar, hervorgehoben)
+- Rechts: Naechster Step (teilweise sichtbar, leicht ausgegraut)
 
 ---
 
-## Dateiänderung
+## Aenderungen
 
-| Datei | Änderung |
-|-------|----------|
-| `src/components/contact/ContactFunnel.tsx` | handleSubmit-Funktion (Zeilen 99-114) ersetzen |
+| Zeile | Aenderung |
+|-------|-----------|
+| 128 | `containScroll: false` hinzufuegen |
+| 131 | `-ml-2` entfernen, durch `ml-0` ersetzen |
+| 133 | `basis-[85%]` aendern zu `basis-[75%]` |
+| 134-135 | `isCurrent` basierend auf `current` State berechnen |
+
+---
+
+## Datei
+
+`src/components/ui/HorizontalTimeline.tsx` - MobileCarousel-Komponente (Zeilen 105-160)
 
