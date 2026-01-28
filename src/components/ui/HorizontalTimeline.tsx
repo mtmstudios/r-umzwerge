@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon, ChevronRight } from 'lucide-react';
 import { useTimelineProgress } from '@/hooks/useTimelineProgress';
 import { Carousel, CarouselContent, CarouselItem, CarouselApi } from '@/components/ui/carousel';
 import { useState, useEffect, useCallback } from 'react';
@@ -122,7 +122,7 @@ function MobileCarousel({ steps }: { steps: TimelineStep[] }) {
   }, [api, onSelect]);
 
   return (
-    <div className="md:hidden">
+    <div className="md:hidden relative">
       <Carousel 
         setApi={setApi}
         opts={{ align: 'center', loop: false, containScroll: false }}
@@ -131,7 +131,12 @@ function MobileCarousel({ steps }: { steps: TimelineStep[] }) {
         <CarouselContent className="ml-0">
           {steps.map((step, index) => (
             <CarouselItem key={step.number} className="pl-4 basis-[75%]">
-              <div className="py-4">
+              <div className={cn(
+                "py-4 carousel-gpu transition-all duration-300 ease-out",
+                index === current 
+                  ? "scale-100 opacity-100" 
+                  : "scale-90 opacity-60"
+              )}>
                 <StepCard 
                   step={step} 
                   isActive={true} 
@@ -142,6 +147,13 @@ function MobileCarousel({ steps }: { steps: TimelineStep[] }) {
           ))}
         </CarouselContent>
       </Carousel>
+
+      {/* Swipe Hint - nur beim ersten Slide sichtbar */}
+      {current === 0 && (
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground animate-pulse pointer-events-none">
+          <ChevronRight className="h-6 w-6" />
+        </div>
+      )}
       
       {/* Dot Indicators */}
       <div className="flex justify-center gap-2 mt-4">
