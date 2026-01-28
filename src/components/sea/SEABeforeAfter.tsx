@@ -112,7 +112,7 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
             <img 
               src={images.after} 
               alt={data.afterImageAlt || 'Nachher'}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover scale-[1.15]"
             />
           </div>
 
@@ -124,7 +124,7 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
             <img 
               src={images.before} 
               alt={data.beforeImageAlt || 'Vorher'}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover scale-[1.15]"
             />
           </div>
 
