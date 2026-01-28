@@ -85,7 +85,7 @@ export function BeforeAfterSection() {
             <img 
               src={afterImage} 
               alt="Wohnung nach der Entrümpelung - besenrein"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover scale-[1.15]"
             />
           </div>
 
@@ -97,7 +97,7 @@ export function BeforeAfterSection() {
             <img 
               src={beforeImage} 
               alt="Wohnung vor der Entrümpelung - voll mit Kartons und Müll"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover scale-[1.15]"
             />
           </div>
 
