@@ -1,121 +1,101 @@
 
 
-## Carousel Performance-Optimierung & Peek-Effekt
+## Logo-Austausch mit optimierter Groessenanpassung
 
-Die Mobile-Carousel-Ansicht wird mit GPU-beschleunigten Animationen optimiert und der Peek-Effekt wird visuell verstaerkt.
+Das neue Logo wird eingebunden und fuer alle Geraeteklassen (Desktop, Tablet, Mobile) perfekt dimensioniert.
 
 ---
 
 ## Aktuelle Situation
 
-Der Code hat bereits `basis-[75%]` und `containScroll: false` - theoretisch sollte der naechste Slide sichtbar sein. Das Problem: Die Karten sind nicht visuell abgegrenzt und die Browser-GPU wird nicht optimal genutzt.
+- **Header.tsx**: Verwendet `logo-raeumzwerge-cropped.png` mit `.logo-trim` CSS (clip-path + scale)
+- **SEAMinimalHeader.tsx**: Verwendet `logo-raeumzwerge.png` mit Overflow-Clipping
+- Das neue Logo hat ein horizontales Layout (Icon + Text nebeneinander)
 
 ---
 
-## Loesung: 3 Optimierungen
+## Loesung
 
-### 1. GPU-Beschleunigung mit will-change
+### 1. Neues Logo als Asset speichern
 
-Neue CSS-Klasse in `index.css`:
+Das hochgeladene Bild wird in `src/assets/` kopiert:
 
-```css
-/* GPU-optimierte Carousel-Animationen */
-.carousel-gpu {
-  will-change: transform;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
+```
+user-uploads://Entrümpelungszauberer-03.jpg  →  src/assets/logo-new.jpg
 ```
 
-### 2. Visueller Peek-Effekt verstaerken
+### 2. CSS-Klasse .logo-trim entfernen
 
-Nicht-aktive Slides werden kleiner und ausgegraut, damit der Swipe-Hinweis offensichtlich ist:
+Die aktuelle `.logo-trim` Klasse in `src/index.css` verwendet `clip-path` und `scale`, was fuer das alte Logo optimiert war. Fuer das neue Logo wird diese Klasse nicht mehr benoetigt.
+
+### 3. Header.tsx anpassen
+
+Neue responsive Groessen ohne Container-Tricks:
+
+```text
+Mobile (< 640px):   h-10 (40px) - kompakt aber lesbar
+Tablet (640-1024px): h-12 (48px) - ausgewogen
+Desktop (> 1024px):  h-14 (56px) - prominent
+```
 
 ```tsx
-// In StepCard: Skalierung basierend auf isCurrent
-<div className={cn(
-  'transition-all duration-300',
-  isCurrent 
-    ? 'scale-100 opacity-100' 
-    : 'scale-90 opacity-60'  // Peek-Slides sind kleiner + ausgegraut
-)}>
+<img
+  src={logoNew}
+  alt="Räumzwerge - Entrümpelungen, Auflösungen, Service"
+  className="h-10 sm:h-12 lg:h-14 w-auto object-contain transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-90"
+/>
 ```
 
-### 3. Swipe-Hinweis mit Pfeil-Icon
+### 4. SEAMinimalHeader.tsx anpassen
 
-Ein dezenter visueller Hinweis rechts neben der ersten Karte:
+Gleiche Logik, leicht groessere Variante:
 
 ```tsx
-{current === 0 && (
-  <div className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground animate-pulse">
-    <ChevronRight className="h-6 w-6" />
-  </div>
-)}
+<img
+  src={logoNew}
+  alt="Räumzwerge"
+  className="h-10 sm:h-12 lg:h-16 w-auto object-contain transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-90"
+/>
 ```
-
----
-
-## Technische Aenderungen
-
-| Datei | Aenderung |
-|-------|-----------|
-| `src/index.css` | Neue `.carousel-gpu` Klasse hinzufuegen |
-| `src/components/ui/HorizontalTimeline.tsx` | GPU-Klasse anwenden, Peek-Skalierung, optionaler Swipe-Hinweis |
 
 ---
 
 ## Visuelles Ergebnis
 
 ```text
-Vorher:   [   Step 1   ] [Step 2 halb]
-                         ↑ Gleiche Groesse, kaum erkennbar
+Mobile:
+┌─────────────────────────────────┐
+│ ☰   [🏠🧙 RÄUMZWERGE]          │  h-10 (40px)
+└─────────────────────────────────┘
 
-Nachher:  [   Step 1   ] [S2]  →
-             100%        90% + ausgegraut + Pfeil
+Tablet:
+┌─────────────────────────────────────────┐
+│ ☰   [🏠🧙 RÄUMZWERGE Text]             │  h-12 (48px)
+└─────────────────────────────────────────┘
+
+Desktop:
+┌─────────────────────────────────────────────────────────┐
+│ [🏠🧙 RÄUMZWERGE - ENTRUEMPELUNGEN - SERVICE]   [CTA]  │  h-14 (56px)
+└─────────────────────────────────────────────────────────┘
 ```
-
-Der Nutzer sieht sofort:
-- Aktiver Step: Volle Groesse, volle Deckkraft
-- Naechster Step: Kleiner + ausgegraut = "Da ist noch mehr"
-- Optional: Animierter Pfeil bei Step 1
 
 ---
 
-## Code-Aenderungen (HorizontalTimeline.tsx)
+## Technische Aenderungen
 
-### MobileCarousel anpassen:
+| Datei | Aktion |
+|-------|--------|
+| `src/assets/logo-new.jpg` | Neues Logo kopieren |
+| `src/index.css` | `.logo-trim` Klasse entfernen (Zeilen 65-69) |
+| `src/components/layout/Header.tsx` | Logo-Import aendern, Klassen vereinfachen |
+| `src/components/sea/SEAMinimalHeader.tsx` | Logo-Import aendern, Klassen vereinfachen |
 
-```tsx
-<CarouselContent className="ml-0">
-  {steps.map((step, index) => (
-    <CarouselItem key={step.number} className="pl-4 basis-[75%]">
-      <div className={cn(
-        "py-4 carousel-gpu transition-all duration-300 ease-out",
-        index === current 
-          ? "scale-100 opacity-100" 
-          : "scale-90 opacity-60"
-      )}>
-        <StepCard 
-          step={step} 
-          isActive={true} 
-          isCurrent={index === current} 
-        />
-      </div>
-    </CarouselItem>
-  ))}
-</CarouselContent>
-```
+---
 
-### CSS hinzufuegen (index.css):
+## Vorteile der neuen Loesung
 
-```css
-/* Carousel GPU Optimization for Mobile */
-.carousel-gpu {
-  will-change: transform, opacity;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-```
+1. **Kein Clipping/Scaling**: Das Logo wird direkt in der richtigen Groesse angezeigt
+2. **Responsive**: Skaliert fliessend ueber alle Breakpoints
+3. **Konsistent**: Beide Header verwenden die gleiche Strategie
+4. **Performant**: Keine zusaetzlichen CSS-Transformationen noetig
 
