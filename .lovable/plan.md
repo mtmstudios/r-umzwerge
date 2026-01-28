@@ -1,70 +1,120 @@
 
 
-## EntruempelungForm auf der Kontaktseite einbinden
+## N8N-Integration für ContactFunnel
 
-Das neue N8N-verbundene Formular ersetzt den aktuellen Multi-Step ContactFunnel auf der Kontaktseite.
+Die simulierte API-Funktion wird durch einen echten API-Call an den N8N-Webhook ersetzt.
 
 ---
 
-## Notwendige Anpassungen
+## Änderung
 
-### 1. Contact.tsx anpassen
+Die `handleSubmit`-Funktion (Zeilen 99-114) wird ersetzt, um Formulardaten an den N8N-Webhook zu senden.
 
-Die Kontaktseite wird aktualisiert, um das neue `EntruempelungForm` zu verwenden:
-
-**Vorher:**
+**Aktuell (Simulation):**
 ```tsx
-import { ContactFunnel, ContactFunnelRef } from "@/components/contact/ContactFunnel";
-// ...
-<ContactFunnel ref={funnelRef} />
-```
-
-**Nachher:**
-```tsx
-import EntruempelungForm from "@/components/contact/EntruempelungForm";
-// ...
-<section id="funnel" className="py-16 md:py-24 bg-muted/30">
-  <div className="container mx-auto px-4 md:px-6">
-    <EntruempelungForm />
-  </div>
-</section>
-```
-
-### 2. Scroll-Funktion beibehalten
-
-Da das `EntruempelungForm` keine `ref`-Unterstützung hat, wird die Scroll-Logik vereinfacht:
-
-```tsx
-const handleFormClick = () => {
-  document.getElementById('funnel')?.scrollIntoView({ behavior: 'smooth' });
+const handleSubmit = async () => {
+  if (!validateStep()) return;
+  setIsSubmitting(true);
+  
+  // Simulate API call
+  await new Promise((resolve) => setTimeout(resolve, 1500));
+  
+  setIsSubmitting(false);
+  setIsSubmitted(true);
+  
+  toast({
+    title: "Anfrage gesendet! ✓",
+    description: "Wir melden uns innerhalb von 24 Stunden bei Ihnen.",
+  });
 };
 ```
 
-### 3. Sicherheitsverbesserung (optional aber empfohlen)
+**Neu (Echte N8N-Integration):**
+```tsx
+const handleSubmit = async () => {
+  if (!validateStep()) return;
 
-Das `console.log` im `EntruempelungForm.jsx` sollte entfernt werden, da es sensible Formulardaten loggt:
-
-```jsx
-// Diese Zeilen entfernen:
-console.log('Sending data:', payload);
-console.log('Response:', data);
+  setIsSubmitting(true);
+  
+  try {
+    const payload = {
+      objektart: formData.serviceType,
+      umfang: formData.scope,
+      plz: formData.postalCode,
+      ort: formData.location,
+      zeitrahmen: formData.timeline,
+      name: formData.name,
+      telefon: formData.phone,
+      email: formData.email || '',
+      nachricht: formData.message || '',
+      timestamp: new Date().toISOString()
+    };
+    
+    const response = await fetch('https://mtmstudios.app.n8n.cloud/webhook/entruempelung', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload)
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok && data.success) {
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      
+      toast({
+        title: "Anfrage gesendet! ✓",
+        description: "Wir melden uns innerhalb von 24 Stunden bei Ihnen.",
+      });
+    } else {
+      throw new Error(data.error || 'Fehler beim Senden');
+    }
+  } catch (error) {
+    console.error('Submit error:', error);
+    setIsSubmitting(false);
+    toast({
+      title: "Fehler beim Senden",
+      description: "Bitte versuchen Sie es erneut oder rufen Sie uns an.",
+      variant: "destructive"
+    });
+  }
+};
 ```
 
 ---
 
-## Zusammenfassung der Dateiänderungen
+## Was ändert sich
 
-| Datei | Änderung |
-|-------|----------|
-| `src/pages/Contact.tsx` | Import und Verwendung von EntruempelungForm statt ContactFunnel |
-| `src/components/contact/EntruempelungForm.jsx` | Console.log-Statements entfernen (Sicherheit) |
+| Aspekt | Vorher | Nachher |
+|--------|--------|---------|
+| API-Call | Simuliert (setTimeout) | Echter POST an N8N |
+| Payload | Keiner | Alle Formulardaten mit deutschem Mapping |
+| Fehlerbehandlung | Keine | Try-Catch mit Toast-Fehlermeldung |
+| Timestamp | Keiner | Wird mitgesendet |
 
 ---
 
-## Erwartetes Ergebnis
+## Feld-Mapping
 
-- Das Kontaktformular auf `/kontakt` verwendet das neue N8N-verbundene Formular
-- Anfragen werden direkt an den N8N-Webhook gesendet
-- Die "Zum Formular"-Funktion scrollt weiterhin zum Formular
-- Keine sensiblen Daten werden in der Browser-Konsole geloggt
+| Formular-Feld | N8N-Payload |
+|---------------|-------------|
+| serviceType | objektart |
+| scope | umfang |
+| postalCode | plz |
+| location | ort |
+| timeline | zeitrahmen |
+| name | name |
+| phone | telefon |
+| email | email |
+| message | nachricht |
+
+---
+
+## Dateiänderung
+
+| Datei | Änderung |
+|-------|----------|
+| `src/components/contact/ContactFunnel.tsx` | handleSubmit-Funktion (Zeilen 99-114) ersetzen |
 
