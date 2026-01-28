@@ -46,11 +46,12 @@ export function Header() {
           {/* Logo - zentriert auf Mobil/Tablet, links auf Desktop */}
           <a href="/" className="flex items-center justify-center lg:justify-start group shrink-0">
             <img
-              src={logoNeu}
-              alt="Räumzwerge - Entrümpelungen, Auflösungen, Service"
-              className="!h-20 sm:!h-24 lg:!h-28 !w-auto !max-h-none object-contain logo-trim"
-            />
-          </a>
+  src={logoNeu}
+  alt="Räumzwerge – Entrümpelungen, Auflösungen, Service"
+  style={{ height: 120, width: "auto", maxHeight: "none" }}
+  className="object-contain logo-trim"
+/>
+
 
           {/* Platzhalter rechts für Symmetrie auf Mobil/Tablet */}
           <div className="lg:hidden" />
