@@ -1,7 +1,7 @@
 import { Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PHONE_LINK } from '@/lib/constants';
-import logoImage from '@/assets/logo-raeumzwerge.png';
+import logoNew from '@/assets/logo-new.jpg';
 
 export function SEAMinimalHeader() {
   return (
@@ -13,12 +13,12 @@ export function SEAMinimalHeader() {
             href="https://www.raeumzwerge.de" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="h-20 lg:h-24 overflow-hidden flex items-center -ml-8 lg:-ml-12 group"
+            className="flex items-center group"
           >
             <img
-              src={logoImage}
+              src={logoNew}
               alt="Räumzwerge"
-              className="h-64 lg:h-80 w-auto object-contain object-left transition-all duration-300 group-hover:scale-[1.03] group-hover:opacity-90"
+              className="h-10 sm:h-12 lg:h-16 w-auto object-contain transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-90"
             />
           </a>
 
