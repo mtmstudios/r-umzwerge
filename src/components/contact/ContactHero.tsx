@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { serviceImages } from '@/lib/serviceImages';
 
 export function ContactHero() {
   return (
@@ -6,9 +7,11 @@ export function ContactHero() {
       {/* Background Image */}
       <div className="absolute inset-0">
         <img 
-          src="/images/contact-hero.png"
+          src={serviceImages.contactHero}
           alt="Aufgeräumtes Wohnzimmer nach Entrümpelung"
           className="w-full h-full object-cover"
+          fetchPriority="high"
+          loading="eager"
         />
         <div className="absolute inset-0 bg-black/50" />
       </div>

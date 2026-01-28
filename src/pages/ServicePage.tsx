@@ -50,6 +50,7 @@ export default function ServicePage() {
           h1={pageData.hero.h1}
           subline={pageData.hero.subline}
           trustPills={pageData.hero.trustPills}
+          slug={slug}
           imageSrc={pageData.hero.imageSrc}
           imageAlt={pageData.hero.imageAlt}
           isDiscrete={pageData.isDiscrete}

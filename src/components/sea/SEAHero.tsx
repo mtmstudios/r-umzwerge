@@ -28,6 +28,8 @@ export function SEAHero({ data }: SEAHeroProps) {
           src={seaImages.heroTeam}
           alt={data.heroImageAlt}
           className="w-full h-full object-cover"
+          fetchPriority="high"
+          loading="eager"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30" />
       </div>

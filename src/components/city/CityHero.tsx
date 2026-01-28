@@ -4,6 +4,7 @@ import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 import { getWhatsAppLink, PHONE_LINK } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
+import { serviceImages } from '@/lib/serviceImages';
 
 interface CityHeroProps {
   h1: string;
@@ -20,9 +21,11 @@ export function CityHero({ h1, subline, trustPills, imageAlt }: CityHeroProps) {
       {/* Fullscreen background */}
       <div className="absolute inset-0">
         <img 
-          src="/images/hero-team-raeumzwerge.png"
+          src={serviceImages.heroTeamRaeumzwerge}
           alt={imageAlt}
           className="w-full h-full object-cover"
+          fetchPriority="high"
+          loading="eager"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30" />
       </div>

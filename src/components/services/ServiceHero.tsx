@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 import { getWhatsAppLink, PHONE_LINK } from '@/lib/constants';
 import { PHOTO_GUIDE } from '@/lib/serviceData';
+import { serviceImages, ServiceImageSlug } from '@/lib/serviceImages';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
 
@@ -10,6 +11,7 @@ interface ServiceHeroProps {
   h1: string;
   subline: string;
   trustPills: string[];
+  slug?: string;
   imageSrc?: string;
   imageAlt?: string;
   isDiscrete?: boolean;
@@ -19,22 +21,29 @@ interface ServiceHeroProps {
   };
 }
 
-export function ServiceHero({ h1, subline, trustPills, imageSrc, imageAlt, isDiscrete, ctaText }: ServiceHeroProps) {
+export function ServiceHero({ h1, subline, trustPills, slug, imageSrc, imageAlt, isDiscrete, ctaText }: ServiceHeroProps) {
   const { ref, isVisible } = useScrollReveal(0.1);
 
   // Dynamic CTA text for discrete services
   const whatsappLong = ctaText?.whatsapp || 'Foto senden · Preiseinschätzung erhalten';
   const whatsappShort = ctaText?.whatsappShort || 'Foto senden · Preis erhalten';
 
+  // Resolve image source: prefer bundled assets from serviceImages, fallback to imageSrc
+  const resolvedImageSrc = slug && slug in serviceImages 
+    ? serviceImages[slug as ServiceImageSlug] 
+    : imageSrc;
+
   return (
     <section ref={ref} className="relative overflow-hidden">
       {/* Fullscreen background for ALL breakpoints */}
       <div className="absolute inset-0">
-        {imageSrc ? (
+        {resolvedImageSrc ? (
           <img 
-            src={imageSrc}
+            src={resolvedImageSrc}
             alt={imageAlt || h1}
             className="w-full h-full object-cover"
+            fetchPriority="high"
+            loading="eager"
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-primary/30 via-accent/20 to-primary/10" />
