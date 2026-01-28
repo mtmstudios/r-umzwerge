@@ -2,7 +2,7 @@ import { Check, X } from 'lucide-react';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
 import { COMMON_BADGES, ComparisonData } from '@/lib/serviceData';
-import logoRaeumzwerge from '@/assets/logo-raeumzwerge.png';
+import logoNeu from '@/assets/logo-neu.png';
 
 interface ServiceComparisonProps {
   comparison: ComparisonData;
@@ -56,7 +56,7 @@ export function ServiceComparison({ comparison }: ServiceComparisonProps) {
                 {/* Logo Header */}
                 <div className="flex items-center justify-center mb-4 sm:mb-6">
                   <img 
-                    src={logoRaeumzwerge} 
+                    src={logoNeu} 
                     alt="Räumzwerge" 
                     className="h-12 sm:h-14 lg:h-16 w-auto logo-trim"
                   />

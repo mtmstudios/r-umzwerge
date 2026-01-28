@@ -1,7 +1,7 @@
 import { Check, X } from 'lucide-react';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
-import logoRaeumzwerge from '@/assets/logo-raeumzwerge.png';
+import logoNeu from '@/assets/logo-neu.png';
 
 const COMPARISON_DATA = {
   others: [
@@ -73,7 +73,7 @@ export function CityComparison() {
                 {/* Logo Header */}
                 <div className="flex items-center justify-center mb-4 sm:mb-6">
                   <img 
-                    src={logoRaeumzwerge} 
+                    src={logoNeu} 
                     alt="Räumzwerge" 
                     className="h-12 sm:h-14 lg:h-16 w-auto logo-trim"
                   />
