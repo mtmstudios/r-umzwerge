@@ -44,13 +44,13 @@ export function Header() {
           </div>
 
           {/* Logo - zentriert auf Mobil/Tablet, links auf Desktop */}
-          <a href="/" className="flex items-center justify-center lg:justify-start group shrink-0">
+          <a href="/" className="flex items-center justify-center lg:justify-start group shrink-0 h-full">
             <img
-  src={logoNeu}
-  alt="Räumzwerge – Entrümpelungen, Auflösungen, Service"
-  style={{ height: 120, width: "auto", maxHeight: "none" }}
-  className="object-contain logo-trim -my-6"
-/>
+              src={logoNeu}
+              alt="Räumzwerge – Entrümpelungen, Auflösungen, Service"
+              style={{ height: 120, width: "auto", maxHeight: "none" }}
+              className="object-contain logo-trim -my-6 block"
+            />
           </a>
 
           {/* Platzhalter rechts für Symmetrie auf Mobil/Tablet */}
