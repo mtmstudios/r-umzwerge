@@ -1,7 +1,6 @@
 import { Check, X } from 'lucide-react';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
-import logoNeu from '@/assets/logo-neu.png';
 
 const COMPARISON_DATA = {
   others: [
@@ -70,14 +69,9 @@ export function CityComparison() {
               <div className="hidden lg:block absolute left-0 top-6 bottom-6 w-1 bg-gradient-to-b from-accent via-primary to-accent rounded-full" />
               
               <div className="relative z-10">
-                {/* Logo Header */}
-                <div className="flex items-center justify-center mb-4 sm:mb-6">
-                  <img 
-                    src={logoNeu} 
-                    alt="Räumzwerge" 
-                    className="h-12 sm:h-14 lg:h-16 w-auto logo-trim"
-                  />
-                </div>
+                <h3 className="font-semibold text-foreground mb-4 sm:mb-6 text-center text-sm sm:text-base">
+                  Räumzwerge
+                </h3>
                 
                 <ul className="space-y-3 sm:space-y-4">
                   {COMPARISON_DATA.raeumzwerge.map((item) => (
