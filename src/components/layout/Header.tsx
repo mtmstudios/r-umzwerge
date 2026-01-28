@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown, Phone } from 'lucide-react';
-import logoRaeumzwerge from '@/assets/logo-raeumzwerge-cropped.png';
+import logoNew from '@/assets/logo-new.jpg';
 import { Button } from '@/components/ui/button';
 import { NAV_ITEMS, PHONE_LINK } from '@/lib/constants';
 import { cn } from '@/lib/utils';
@@ -53,14 +53,11 @@ isScrolled
 
           {/* Logo - zentriert auf Mobil/Tablet, links auf Desktop */}
           <a href="/" className="flex items-center justify-center lg:justify-start group shrink-0">
-            {/* Keep header compact while making the logo look larger by cropping internal whitespace */}
-            <div className="flex items-center justify-center">
-              <img
-                src={logoRaeumzwerge}
-                alt="Räumzwerge - Entrümpelungen, Auflösungen, Service"
-                className="logo-trim h-20 sm:h-22 lg:h-24 w-auto max-w-none object-contain transition-all duration-300 group-hover:scale-[1.04] group-hover:opacity-90"
-              />
-            </div>
+            <img
+              src={logoNew}
+              alt="Räumzwerge - Entrümpelungen, Auflösungen, Service"
+              className="h-10 sm:h-12 lg:h-14 w-auto object-contain transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-90"
+            />
           </a>
 
           {/* Platzhalter rechts für Symmetrie auf Mobil/Tablet */}
