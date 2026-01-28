@@ -51,7 +51,7 @@ export function Header() {
   style={{ height: 120, width: "auto", maxHeight: "none" }}
   className="object-contain logo-trim"
 />
-
+          </a>
 
           {/* Platzhalter rechts für Symmetrie auf Mobil/Tablet */}
           <div className="lg:hidden" />
