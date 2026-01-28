@@ -113,6 +113,7 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
               src={images.after} 
               alt={data.afterImageAlt || 'Nachher'}
               className="w-full h-full object-cover scale-[1.15]"
+              loading="lazy"
             />
           </div>
 
@@ -122,7 +123,8 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
             style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
           >
             <img 
-              src={images.before} 
+              src={images.before}
+              loading="lazy"
               alt={data.beforeImageAlt || 'Vorher'}
               className="w-full h-full object-cover scale-[1.15]"
             />
