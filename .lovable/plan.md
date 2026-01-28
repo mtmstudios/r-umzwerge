@@ -1,18 +1,21 @@
 
 
-## Header deutlich verkleinern - Logo bleibt 120px
+## Logo zentrieren im Header
 
 ---
 
 ### Problem
 
-Der Header ist bereits auf minimalem Padding (py-0). Das Logo mit 120px Höhe bestimmt aktuell die Header-Höhe. Um den Header kleiner zu machen aber das Logo bei 120px zu belassen, muss das Logo über den Header hinausragen.
+Das Logo erscheint nicht perfekt zentriert, weil:
+1. Die `.logo-trim` Klasse eine `scale(1.6)` Transformation anwendet
+2. Die negativen Margins `-my-6` die vertikale Position beeinflussen
+3. Das Zusammenspiel dieser Effekte kann zu einer leichten Verschiebung führen
 
 ---
 
-### Lösung: Negative Margins
+### Lösung
 
-Das Logo bekommt negative vertikale Margins, sodass es über den Header-Container hinausragt. Der Header wird visuell kleiner, das Logo bleibt aber 120px groß.
+Das `<img>`-Element bekommt `block` hinzugefügt, um sicherzustellen dass es als Block-Element behandelt wird und sich korrekt innerhalb des Flex-Containers zentriert.
 
 ---
 
@@ -20,33 +23,25 @@ Das Logo bekommt negative vertikale Margins, sodass es über den Header-Containe
 
 **Datei:** `src/components/layout/Header.tsx`
 
-**Logo-Element (Zeile 52-56) anpassen:**
+**Zeile 52 ändern:**
 
 ```tsx
-<img
-  src={logoNeu}
-  alt="Räumzwerge – Entrümpelungen, Auflösungen, Service"
-  style={{ height: 120, width: "auto", maxHeight: "none" }}
-  className="object-contain logo-trim -my-6"
-/>
+className="object-contain logo-trim -my-6 block"
 ```
 
-Die Klasse `-my-6` (negative margin top/bottom von 24px) lässt das Logo 48px über den Header hinausragen, wodurch der Header visuell deutlich kompakter wird.
+Falls das nicht ausreicht, alternativ die Flex-Ausrichtung des übergeordneten `<a>`-Tags verstärken:
 
----
+**Zeile 47 ändern:**
 
-### Alternativen
-
-Falls `-my-6` zu viel/wenig ist:
-- `-my-4` = 32px weniger Header-Höhe
-- `-my-8` = 64px weniger Header-Höhe  
-- `-my-10` = 80px weniger Header-Höhe
+```tsx
+<a href="/" className="flex items-center justify-center lg:justify-start group shrink-0 h-full">
+```
 
 ---
 
 ### Ergebnis
 
-- Header wird ~48px kleiner
-- Logo bleibt exakt bei 120px
-- Logo überlappt leicht mit dem Content darunter (wird durch z-50 überdeckt)
+- Logo wird perfekt vertikal und horizontal zentriert
+- Negative Margins und Skalierung bleiben erhalten
+- Header-Höhe bleibt kompakt
 
