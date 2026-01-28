@@ -61,7 +61,12 @@
 
 /* Räumzwerge Design System */
 
-/* Logo sizing is now handled directly via Tailwind classes */
+/* Logo Trimming - entfernt transparente Raender */
+.logo-trim {
+  clip-path: inset(8% 5% 8% 5%);
+  transform: scale(1.2);
+  transform-origin: center;
+}
 
 /* Accessibility: Font Scale */
 :root {

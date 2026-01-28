@@ -58,7 +58,7 @@ export function ServiceComparison({ comparison }: ServiceComparisonProps) {
                   <img 
                     src={logoRaeumzwerge} 
                     alt="Räumzwerge" 
-                    className="h-10 sm:h-12 lg:h-14 w-auto"
+                    className="h-12 sm:h-14 lg:h-16 w-auto logo-trim"
                   />
                 </div>
                 
