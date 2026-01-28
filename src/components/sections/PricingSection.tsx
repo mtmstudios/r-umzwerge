@@ -4,6 +4,7 @@ import { getWhatsAppLink, PRICE_FACTORS } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
+import pricingTeamImage from '@/assets/pricing-team.jpg';
 
 export function PricingSection() {
   const { ref, isVisible } = useScrollReveal(0.1);
@@ -46,8 +47,8 @@ export function PricingSection() {
             {/* Visible Image */}
             <div className="relative rounded-2xl overflow-hidden shadow-lg">
               <img 
-                src="/images/messiewohnung-bg.jpg"
-                alt="Entrümpelung einer vollen Wohnung"
+                src={pricingTeamImage}
+                alt="Räumzwerge-Mitarbeiter beim Verladen von Umzugskartons"
                 className="w-full h-64 lg:h-72 object-cover"
               />
               {/* Subtle overlay for depth */}
