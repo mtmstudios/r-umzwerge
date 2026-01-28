@@ -26,8 +26,8 @@ export function Header() {
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
         isScrolled
-          ? "glass-strong shadow-[0_4px_20px_-4px_hsl(var(--foreground)/0.12)] py-0.5 lg:py-1 border-b border-border/30"
-          : "bg-card py-1 lg:py-1.5 shadow-none border-b border-transparent",
+          ? "glass-strong shadow-[0_4px_20px_-4px_hsl(var(--foreground)/0.12)] py-0 lg:py-0 border-b border-border/30"
+          : "bg-card py-0 lg:py-0.5 shadow-none border-b border-transparent",
       )}
     >
       <div className="container-custom">
