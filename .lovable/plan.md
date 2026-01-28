@@ -1,107 +1,74 @@
 
 
-## Favicon und Bildproblem beheben
+## Bild-Änderungen auf der Startseite
 
-Es gibt zwei separate Aufgaben:
-1. **Favicon aktualisieren** mit dem hochgeladenen Logo
-2. **Bilder auf Mittwald funktionieren nicht** - Root-Cause-Analyse und Lösung
+Es werden zwei Anpassungen vorgenommen: Ein neues Bild für die Pricing-Section und eine Positionsanpassung des Hero-Bildes auf Mobilgeräten.
 
 ---
 
-## Problem-Analyse: Warum Bilder auf Mittwald nicht laden
+## Änderung 1: Neues Bild für "So entsteht der Preis"
 
-### Aktuelle Situation
+Das hochgeladene Bild (zwei Mitarbeiter beim Kartons-Verladen) ersetzt das aktuelle Bild in der Pricing-Section.
 
-Die Website verwendet zwei verschiedene Methoden, Bilder einzubinden:
+**Schritte:**
+1. Bild in `src/assets/` speichern als `pricing-team.jpg`
+2. In `PricingSection.tsx` das Bild als ES6-Import einbinden
+3. Bildpfad und Alt-Text aktualisieren
 
-| Methode | Ordner | Beispiel | Vite-Verhalten |
-|---------|--------|----------|----------------|
-| ES6-Import | `src/assets/` | `import heroTeam from '@/assets/hero-team.jpg'` | Wird gehasht und in `dist/assets/` gebündelt |
-| Direkte URL | `public/images/` | `src="/images/sea-hero-team.png"` | Wird 1:1 nach `dist/images/` kopiert |
+**Vorher:**
+```tsx
+<img 
+  src="/images/messiewohnung-bg.jpg"
+  alt="Entrümpelung einer vollen Wohnung"
+/>
+```
 
-### Vermutete Ursachen
-
-1. **SFTP-Sync-Problem**: Das FTP-Deployer-Tool könnte Probleme haben mit:
-   - Großen PNG-Dateien (die neuen Team-Bilder sind mehrere MB)
-   - Sonderzeichen in Dateinamen
-   - Timeout bei großen Dateien
-
-2. **Cleanup-Flag**: Im Deploy-Workflow ist `cleanup: true` gesetzt - das löscht den Remote-Ordner vor dem Upload. Wenn der Upload abbricht, fehlen die Bilder.
-
-3. **Dateiformat**: PNG-Dateien sind deutlich größer als WebP und können zu Upload-Problemen führen.
-
----
-
-## Lösungsplan
-
-### Schritt 1: Favicon hinzufügen
-
-Das hochgeladene Logo wird als Favicon gespeichert:
-
-- Kopieren nach `public/favicon.png`
-- Aktualisierung der `index.html`:
-  ```html
-  <link rel="icon" type="image/png" href="/favicon.png" />
-  ```
-
-### Schritt 2: Bilder in src/assets verschieben (EMPFOHLEN)
-
-Für eine robustere Lösung werden alle Bilder konsistent über ES6-Imports eingebunden:
-
-**Betroffene Bilder verschieben:**
-- `public/images/sea-hero-team.png` -> `src/assets/sea-hero-team.png`
-- `public/images/before-after-*.png` -> `src/assets/before-after-*.png`
-- Alle neuen `.png` Bilder die nicht laden
-
-**Komponenten anpassen:**
-- `SEAHero.tsx` - Import statt URL-String
-- `SEABeforeAfter.tsx` - Import statt URL-String
-- `BeforeAfterSection.tsx` - Import statt URL-String
-- `seaData.ts` und `serviceData.ts` - Imports verwenden
-
-**Vorteile:**
-- Vite bündelt und optimiert die Bilder
-- Keine Abhängigkeit vom korrekten SFTP-Upload
-- Build-Fehler wenn Bild fehlt (statt 404 auf Produktion)
-
-### Schritt 3: Alternative - WebP-Konvertierung
-
-Falls Schritt 2 zu aufwändig erscheint, können die großen PNG-Dateien zu WebP konvertiert werden:
-
-- Geringere Dateigröße (80% kleiner)
-- Schnellerer Upload via SFTP
-- Bessere Performance auf der Website
+**Nachher:**
+```tsx
+import pricingTeamImage from '@/assets/pricing-team.jpg';
+// ...
+<img 
+  src={pricingTeamImage}
+  alt="Räumzwerge-Mitarbeiter beim Verladen von Umzugskartons"
+/>
+```
 
 ---
 
-## Technische Umsetzung
+## Änderung 2: Hero-Bild nach rechts verschieben (Mobile)
 
-### Dateien die geändert werden
+Das Problem: Auf Mobilgeräten wird das Räumzwerge-Logo auf dem LKW (links im Bild) abgeschnitten, weil `object-cover` das Bild zentriert.
+
+**Lösung:** Mit `object-position` das Bild auf Mobilgeräten nach links verschieben, sodass der rechte Teil (mit dem LKW-Logo) sichtbar wird.
+
+**Anpassung in `HeroSection.tsx`:**
+
+```tsx
+<img 
+  src={heroTeamImage} 
+  alt="..."
+  className="w-full h-full object-cover object-[25%_center] md:object-center"
+/>
+```
+
+- `object-[25%_center]`: Auf Mobile wird das Bild so positioniert, dass 25% von links (also mehr vom linken Bereich mit dem LKW) sichtbar ist
+- `md:object-center`: Ab Tablet wieder zentriert
+
+---
+
+## Zusammenfassung der Dateiänderungen
 
 | Datei | Änderung |
 |-------|----------|
-| `public/favicon.png` | Neues Favicon-Bild (Logo) |
-| `index.html` | Favicon-Referenz aktualisieren |
-| `src/components/sections/HeroSection.tsx` | Bereits korrekt mit Import |
-| `src/components/sections/BeforeAfterSection.tsx` | Import statt URL |
-| `src/components/sea/SEAHero.tsx` | Import statt URL |
-| `src/components/sea/SEABeforeAfter.tsx` | Import statt URL |
-| `src/lib/seaData.ts` | Bilder als Imports |
-
-### Empfohlene Reihenfolge
-
-1. Favicon hinzufügen
-2. Bilder nach `src/assets/` verschieben
-3. Imports in Komponenten und Data-Dateien anpassen
-4. Testen im Preview
-5. Deployment erneut durchführen
+| `src/assets/pricing-team.jpg` | Neues Bild hinzufügen |
+| `src/components/sections/PricingSection.tsx` | Bild-Import und -Referenz ändern |
+| `src/components/sections/HeroSection.tsx` | `object-position` für Mobile anpassen |
 
 ---
 
 ## Erwartetes Ergebnis
 
-- Favicon wird korrekt im Browser-Tab angezeigt
-- Alle Bilder laden zuverlässig auf raeumzwerge.de
-- Konsistente Bildeinbindung im gesamten Projekt
-- Kein Risiko mehr durch SFTP-Upload-Probleme
+- Die Pricing-Section zeigt das neue Team-Bild mit den Kartons
+- Das Hero-Bild zeigt auf Mobilgeräten den LKW mit dem Räumzwerge-Logo
+- Beide Bilder werden über ES6-Imports eingebunden für zuverlässiges Deployment
 
