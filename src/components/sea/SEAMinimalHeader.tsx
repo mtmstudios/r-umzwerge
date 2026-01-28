@@ -7,7 +7,7 @@ export function SEAMinimalHeader() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border/50">
       <div className="container-custom">
-        <div className="flex items-center justify-between h-16 lg:h-[420px]">
+        <div className="flex items-center justify-between h-12 lg:h-14">
           {/* Logo - links to main website in new tab */}
           <a 
             href="https://www.raeumzwerge.de" 
@@ -18,7 +18,7 @@ export function SEAMinimalHeader() {
             <img
               src={logoTransparent}
               alt="Räumzwerge"
-              className="h-12 sm:h-14 lg:h-96 w-auto object-contain transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-90"
+              className="h-8 sm:h-9 lg:h-10 w-auto object-contain transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-90"
             />
           </a>
 
