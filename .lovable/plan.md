@@ -1,59 +1,121 @@
 
 
-## Problem: Weißer Rand auf Mobile
+## Carousel Performance-Optimierung & Peek-Effekt
 
-### Ursache
-
-In `src/App.css` befindet sich alter Vite-Template-Code:
-
-```css
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;     /* <- Das erzeugt den weißen Rand */
-  text-align: center;
-}
-```
-
-Diese Styles begrenzen die App-Breite und fuegen 2rem Padding hinzu - dadurch entsteht der sichtbare Rand auf Mobile.
+Die Mobile-Carousel-Ansicht wird mit GPU-beschleunigten Animationen optimiert und der Peek-Effekt wird visuell verstaerkt.
 
 ---
 
-## Loesung
+## Aktuelle Situation
 
-Die gesamte `App.css` Datei wird bereinigt. Die darin enthaltenen Styles sind Ueberreste vom Vite-Starter-Template und werden nicht mehr benoetigt, da das Projekt Tailwind CSS verwendet.
+Der Code hat bereits `basis-[75%]` und `containScroll: false` - theoretisch sollte der naechste Slide sichtbar sein. Das Problem: Die Karten sind nicht visuell abgegrenzt und die Browser-GPU wird nicht optimal genutzt.
 
-### Aenderungen
+---
 
-| Datei | Aktion |
-|-------|--------|
-| `src/App.css` | Alle Styles entfernen (Datei leeren oder loeschen) |
+## Loesung: 3 Optimierungen
 
-### Neue App.css (minimal)
+### 1. GPU-Beschleunigung mit will-change
+
+Neue CSS-Klasse in `index.css`:
 
 ```css
-/* App.css - Reset for full-width layout */
-#root {
-  width: 100%;
-  min-height: 100vh;
+/* GPU-optimierte Carousel-Animationen */
+.carousel-gpu {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 ```
+
+### 2. Visueller Peek-Effekt verstaerken
+
+Nicht-aktive Slides werden kleiner und ausgegraut, damit der Swipe-Hinweis offensichtlich ist:
+
+```tsx
+// In StepCard: Skalierung basierend auf isCurrent
+<div className={cn(
+  'transition-all duration-300',
+  isCurrent 
+    ? 'scale-100 opacity-100' 
+    : 'scale-90 opacity-60'  // Peek-Slides sind kleiner + ausgegraut
+)}>
+```
+
+### 3. Swipe-Hinweis mit Pfeil-Icon
+
+Ein dezenter visueller Hinweis rechts neben der ersten Karte:
+
+```tsx
+{current === 0 && (
+  <div className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground animate-pulse">
+    <ChevronRight className="h-6 w-6" />
+  </div>
+)}
+```
+
+---
+
+## Technische Aenderungen
+
+| Datei | Aenderung |
+|-------|-----------|
+| `src/index.css` | Neue `.carousel-gpu` Klasse hinzufuegen |
+| `src/components/ui/HorizontalTimeline.tsx` | GPU-Klasse anwenden, Peek-Skalierung, optionaler Swipe-Hinweis |
 
 ---
 
 ## Visuelles Ergebnis
 
 ```text
-Vorher:   [  |  Hero-Bild  |  ]   <- Weißer Rand links/rechts
-                              ↑
-                         2rem padding
+Vorher:   [   Step 1   ] [Step 2 halb]
+                         ↑ Gleiche Groesse, kaum erkennbar
 
-Nachher:  [     Hero-Bild     ]   <- Volle Breite
+Nachher:  [   Step 1   ] [S2]  →
+             100%        90% + ausgegraut + Pfeil
 ```
+
+Der Nutzer sieht sofort:
+- Aktiver Step: Volle Groesse, volle Deckkraft
+- Naechster Step: Kleiner + ausgegraut = "Da ist noch mehr"
+- Optional: Animierter Pfeil bei Step 1
 
 ---
 
-## Weitere Optimierung (optional)
+## Code-Aenderungen (HorizontalTimeline.tsx)
 
-Da kein Code aus `App.css` tatsaechlich verwendet wird, kann die Datei komplett geleert werden. Die relevanten Styles sind bereits in `src/index.css` definiert.
+### MobileCarousel anpassen:
+
+```tsx
+<CarouselContent className="ml-0">
+  {steps.map((step, index) => (
+    <CarouselItem key={step.number} className="pl-4 basis-[75%]">
+      <div className={cn(
+        "py-4 carousel-gpu transition-all duration-300 ease-out",
+        index === current 
+          ? "scale-100 opacity-100" 
+          : "scale-90 opacity-60"
+      )}>
+        <StepCard 
+          step={step} 
+          isActive={true} 
+          isCurrent={index === current} 
+        />
+      </div>
+    </CarouselItem>
+  ))}
+</CarouselContent>
+```
+
+### CSS hinzufuegen (index.css):
+
+```css
+/* Carousel GPU Optimization for Mobile */
+.carousel-gpu {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+```
 
