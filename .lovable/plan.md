@@ -1,58 +1,54 @@
 
 
-## Bild-Änderungen auf der Startseite
+## EntruempelungForm auf der Kontaktseite einbinden
 
-Es werden zwei Anpassungen vorgenommen: Ein neues Bild für die Pricing-Section und eine Positionsanpassung des Hero-Bildes auf Mobilgeräten.
+Das neue N8N-verbundene Formular ersetzt den aktuellen Multi-Step ContactFunnel auf der Kontaktseite.
 
 ---
 
-## Änderung 1: Neues Bild für "So entsteht der Preis"
+## Notwendige Anpassungen
 
-Das hochgeladene Bild (zwei Mitarbeiter beim Kartons-Verladen) ersetzt das aktuelle Bild in der Pricing-Section.
+### 1. Contact.tsx anpassen
 
-**Schritte:**
-1. Bild in `src/assets/` speichern als `pricing-team.jpg`
-2. In `PricingSection.tsx` das Bild als ES6-Import einbinden
-3. Bildpfad und Alt-Text aktualisieren
+Die Kontaktseite wird aktualisiert, um das neue `EntruempelungForm` zu verwenden:
 
 **Vorher:**
 ```tsx
-<img 
-  src="/images/messiewohnung-bg.jpg"
-  alt="Entrümpelung einer vollen Wohnung"
-/>
+import { ContactFunnel, ContactFunnelRef } from "@/components/contact/ContactFunnel";
+// ...
+<ContactFunnel ref={funnelRef} />
 ```
 
 **Nachher:**
 ```tsx
-import pricingTeamImage from '@/assets/pricing-team.jpg';
+import EntruempelungForm from "@/components/contact/EntruempelungForm";
 // ...
-<img 
-  src={pricingTeamImage}
-  alt="Räumzwerge-Mitarbeiter beim Verladen von Umzugskartons"
-/>
+<section id="funnel" className="py-16 md:py-24 bg-muted/30">
+  <div className="container mx-auto px-4 md:px-6">
+    <EntruempelungForm />
+  </div>
+</section>
 ```
 
----
+### 2. Scroll-Funktion beibehalten
 
-## Änderung 2: Hero-Bild nach rechts verschieben (Mobile)
-
-Das Problem: Auf Mobilgeräten wird das Räumzwerge-Logo auf dem LKW (links im Bild) abgeschnitten, weil `object-cover` das Bild zentriert.
-
-**Lösung:** Mit `object-position` das Bild auf Mobilgeräten nach links verschieben, sodass der rechte Teil (mit dem LKW-Logo) sichtbar wird.
-
-**Anpassung in `HeroSection.tsx`:**
+Da das `EntruempelungForm` keine `ref`-Unterstützung hat, wird die Scroll-Logik vereinfacht:
 
 ```tsx
-<img 
-  src={heroTeamImage} 
-  alt="..."
-  className="w-full h-full object-cover object-[25%_center] md:object-center"
-/>
+const handleFormClick = () => {
+  document.getElementById('funnel')?.scrollIntoView({ behavior: 'smooth' });
+};
 ```
 
-- `object-[25%_center]`: Auf Mobile wird das Bild so positioniert, dass 25% von links (also mehr vom linken Bereich mit dem LKW) sichtbar ist
-- `md:object-center`: Ab Tablet wieder zentriert
+### 3. Sicherheitsverbesserung (optional aber empfohlen)
+
+Das `console.log` im `EntruempelungForm.jsx` sollte entfernt werden, da es sensible Formulardaten loggt:
+
+```jsx
+// Diese Zeilen entfernen:
+console.log('Sending data:', payload);
+console.log('Response:', data);
+```
 
 ---
 
@@ -60,15 +56,15 @@ Das Problem: Auf Mobilgeräten wird das Räumzwerge-Logo auf dem LKW (links im B
 
 | Datei | Änderung |
 |-------|----------|
-| `src/assets/pricing-team.jpg` | Neues Bild hinzufügen |
-| `src/components/sections/PricingSection.tsx` | Bild-Import und -Referenz ändern |
-| `src/components/sections/HeroSection.tsx` | `object-position` für Mobile anpassen |
+| `src/pages/Contact.tsx` | Import und Verwendung von EntruempelungForm statt ContactFunnel |
+| `src/components/contact/EntruempelungForm.jsx` | Console.log-Statements entfernen (Sicherheit) |
 
 ---
 
 ## Erwartetes Ergebnis
 
-- Die Pricing-Section zeigt das neue Team-Bild mit den Kartons
-- Das Hero-Bild zeigt auf Mobilgeräten den LKW mit dem Räumzwerge-Logo
-- Beide Bilder werden über ES6-Imports eingebunden für zuverlässiges Deployment
+- Das Kontaktformular auf `/kontakt` verwendet das neue N8N-verbundene Formular
+- Anfragen werden direkt an den N8N-Webhook gesendet
+- Die "Zum Formular"-Funktion scrollt weiterhin zum Formular
+- Keine sensiblen Daten werden in der Browser-Konsole geloggt
 
