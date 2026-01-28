@@ -1,18 +1,16 @@
-import { useRef, useEffect } from "react";
+import { useEffect } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingCTAs } from "@/components/layout/FloatingCTAs";
 import { ContactHero } from "@/components/contact/ContactHero";
 import { ContactOptions } from "@/components/contact/ContactOptions";
-import { ContactFunnel, ContactFunnelRef } from "@/components/contact/ContactFunnel";
+import EntruempelungForm from "@/components/contact/EntruempelungForm";
 import { ContactInfo } from "@/components/contact/ContactInfo";
 
 const META_TITLE = "Kontakt – Räumzwerge | Jetzt unverbindlich anfragen";
 const META_DESCRIPTION = "Kontaktieren Sie die Räumzwerge: Anruf, WhatsApp oder Kontaktformular. Preiseinschätzung innerhalb von 24 Stunden. Besenrein und transparent.";
 
 export default function Contact() {
-  const funnelRef = useRef<ContactFunnelRef>(null);
-
   // SEO: Dynamic title and meta description
   useEffect(() => {
     document.title = META_TITLE;
@@ -24,7 +22,7 @@ export default function Contact() {
   }, []);
 
   const handleFormClick = () => {
-    funnelRef.current?.scrollToFunnel();
+    document.getElementById('funnel')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -33,7 +31,11 @@ export default function Contact() {
       <main>
         <ContactHero />
         <ContactOptions onFormClick={handleFormClick} />
-        <ContactFunnel ref={funnelRef} />
+        <section id="funnel" className="py-16 md:py-24 bg-muted/30">
+          <div className="container mx-auto px-4 md:px-6">
+            <EntruempelungForm />
+          </div>
+        </section>
         <ContactInfo />
       </main>
       <Footer />
