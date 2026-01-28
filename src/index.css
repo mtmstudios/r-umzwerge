@@ -63,8 +63,8 @@
 
 /* Logo Trimming - entfernt transparente Raender */
 .logo-trim {
-  clip-path: inset(12% 8% 12% 8%);
-  transform: scale(1.35);
+  clip-path: inset(3% 2% 3% 2%);
+  transform: scale(1.08);
   transform-origin: center;
 }
 

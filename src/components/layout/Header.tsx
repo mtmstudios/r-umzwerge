@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Menu, X, ChevronDown, Phone } from "lucide-react";
-import logoTransparent from "@/assets/logo-transparent.png";
+import logoNeu from "@/assets/logo-neu.png";
 import { Button } from "@/components/ui/button";
 import { NAV_ITEMS, PHONE_LINK } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -46,7 +46,7 @@ export function Header() {
           {/* Logo - zentriert auf Mobil/Tablet, links auf Desktop */}
           <a href="/" className="flex items-center justify-center lg:justify-start group shrink-0">
             <img
-              src={logoTransparent}
+              src={logoNeu}
               alt="Räumzwerge - Entrümpelungen, Auflösungen, Service"
               className="h-14 sm:h-16 lg:h-20 w-auto max-h-none object-contain logo-trim"
             />
