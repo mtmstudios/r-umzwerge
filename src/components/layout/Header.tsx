@@ -48,7 +48,7 @@ export function Header() {
             <img
               src={logoNeu}
               alt="Räumzwerge - Entrümpelungen, Auflösungen, Service"
-              className=""h-14 sm:h-16 lg:h-20 w-auto max-h-none object-contain""
+              className="h-14 sm:h-16 lg:h-20 w-auto max-h-none object-contain"
             />
           </a>
 
