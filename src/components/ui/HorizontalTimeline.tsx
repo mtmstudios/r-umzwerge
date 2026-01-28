@@ -125,14 +125,18 @@ function MobileCarousel({ steps }: { steps: TimelineStep[] }) {
     <div className="md:hidden">
       <Carousel 
         setApi={setApi}
-        opts={{ align: 'center', loop: false }}
-        className="w-full"
+        opts={{ align: 'center', loop: false, containScroll: false }}
+        className="w-full overflow-visible"
       >
-        <CarouselContent className="-ml-2">
-          {steps.map((step) => (
-            <CarouselItem key={step.number} className="pl-2 basis-[85%]">
+        <CarouselContent className="ml-0">
+          {steps.map((step, index) => (
+            <CarouselItem key={step.number} className="pl-4 basis-[75%]">
               <div className="py-4">
-                <StepCard step={step} isActive={true} isCurrent={true} />
+                <StepCard 
+                  step={step} 
+                  isActive={true} 
+                  isCurrent={index === current} 
+                />
               </div>
             </CarouselItem>
           ))}
