@@ -49,7 +49,7 @@ export function Header() {
   src={logoNeu}
   alt="Räumzwerge – Entrümpelungen, Auflösungen, Service"
   style={{ height: 120, width: "auto", maxHeight: "none" }}
-  className="object-contain logo-trim"
+  className="object-contain logo-trim -my-6"
 />
           </a>
 
