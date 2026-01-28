@@ -1,7 +1,7 @@
 import { Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PHONE_LINK } from '@/lib/constants';
-import logoNew from '@/assets/logo-new.jpg';
+import logoTransparent from '@/assets/logo-transparent.png';
 
 export function SEAMinimalHeader() {
   return (
@@ -16,9 +16,9 @@ export function SEAMinimalHeader() {
             className="flex items-center group"
           >
             <img
-              src={logoNew}
+              src={logoTransparent}
               alt="Räumzwerge"
-              className="h-10 sm:h-12 lg:h-16 w-auto object-contain transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-90"
+              className="h-9 sm:h-11 lg:h-14 w-auto object-contain transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-90"
             />
           </a>
 
