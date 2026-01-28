@@ -1,47 +1,59 @@
 
 
-## Logo zentrieren im Header
+## Logo vertikal zentrieren - Korrektur der Verschiebung nach oben
 
 ---
 
 ### Problem
 
-Das Logo erscheint nicht perfekt zentriert, weil:
-1. Die `.logo-trim` Klasse eine `scale(1.6)` Transformation anwendet
-2. Die negativen Margins `-my-6` die vertikale Position beeinflussen
-3. Das Zusammenspiel dieser Effekte kann zu einer leichten Verschiebung führen
+Das Logo erscheint nach oben versetzt. Die Ursache ist die `.logo-trim` CSS-Klasse:
+
+```css
+.logo-trim {
+  clip-path: inset(5% 3% 5% 3%);
+  transform: scale(1.6);
+  transform-origin: center;
+}
+```
+
+Obwohl `clip-path` symmetrisch ist (5% oben/unten), kann das Ursprungsbild selbst asymmetrisch sein - der Inhalt sitzt nicht exakt mittig im PNG.
 
 ---
 
 ### Lösung
 
-Das `<img>`-Element bekommt `block` hinzugefügt, um sicherzustellen dass es als Block-Element behandelt wird und sich korrekt innerhalb des Flex-Containers zentriert.
-
----
-
-### Technische Umsetzung
+Den negativen Margin oben/unten asymmetrisch machen, um das Logo nach unten zu korrigieren:
 
 **Datei:** `src/components/layout/Header.tsx`
 
-**Zeile 52 ändern:**
-
+**Zeile 52 ändern von:**
 ```tsx
 className="object-contain logo-trim -my-6 block"
 ```
 
-Falls das nicht ausreicht, alternativ die Flex-Ausrichtung des übergeordneten `<a>`-Tags verstärken:
-
-**Zeile 47 ändern:**
-
+**zu:**
 ```tsx
-<a href="/" className="flex items-center justify-center lg:justify-start group shrink-0 h-full">
+className="object-contain logo-trim -mt-4 -mb-8 block"
 ```
+
+Alternativ mit feinerer Kontrolle über inline style:
+```tsx
+style={{ height: 120, width: "auto", maxHeight: "none", marginTop: "-20px", marginBottom: "-28px" }}
+```
+
+---
+
+### Erklärung
+
+- `-mt-4` = -16px oben (weniger negativ = Logo rutscht nach unten)
+- `-mb-8` = -32px unten (mehr negativ = kompensiert)
+- Gesamte Header-Höhenersparnis bleibt bei ~48px
 
 ---
 
 ### Ergebnis
 
-- Logo wird perfekt vertikal und horizontal zentriert
-- Negative Margins und Skalierung bleiben erhalten
+- Logo wird visuell perfekt zentriert
 - Header-Höhe bleibt kompakt
+- Falls nötig, können die Werte feinjustiert werden (-mt-3/-mb-9, etc.)
 
