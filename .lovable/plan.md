@@ -1,104 +1,73 @@
 
+# SFTP Deployment-Fehler beheben
 
-# BentoCard Mobile-Optimierung
+## Problem-Analyse
 
-## Probleme
+Der Fehler `no such file ***/images/entruempelung-nachher.png` tritt beim SFTP-Upload auf. Das Problem ist wahrscheinlich:
 
-1. **Hover-Animationen auf Touch-Geräten**: Karten reagieren auf Maus-Hover mit Skalierung, Schatten und Glow-Effekten - diese sind auf Mobile/Tablet störend und unlogisch
-2. **Abgeschnittene Texte**: Highlights werden mit `...` abgeschnitten (`truncate max-w-[100px]`)
-3. **Arrow-Indikator nur bei Hover**: Der "Details" Pfeil ist auf Mobile unsichtbar
+1. **`cleanup: true`** löscht erst alle Remote-Dateien, dann lädt neue hoch
+2. Bei großen Bilddateien kann es zu Timing-/Netzwerk-Problemen kommen
+3. Die `sand4rt/ftp-deployer` Action ist veraltet (DeprecationWarning zeigt das auch)
 
----
+## Lösung
 
-## Technische Umsetzung
+### Option A: Robusterer Deployer (Empfohlen)
 
-### Datei: `src/components/ui/BentoCard.tsx`
+Wechsel zu einem moderneren SFTP-Deployer wie `SamKirkland/FTP-Deploy-Action@v4.3.5`:
 
-#### 1. Hover-Animationen nur auf Desktop (Zeile 60-73)
-
-```tsx
-// Vorher:
-'hover:scale-[1.03] hover:-translate-y-2 active:scale-[0.98]',
-'bg-card border border-border hover:border-accent/60 hover:shadow-[...]',
-
-// Nachher - nur auf lg: (Desktop) aktivieren:
-'lg:hover:scale-[1.03] lg:hover:-translate-y-2 active:scale-[0.98]',
-'bg-card border border-border lg:hover:border-accent/60 lg:hover:shadow-[...]',
+```yaml
+- name: Deploy via SFTP
+  uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+  with:
+    server: ${{ secrets.SFTP_HOST }}
+    username: ${{ secrets.SFTP_USER }}
+    password: ${{ secrets.SFTP_PASSWORD }}
+    port: 22
+    protocol: sftp
+    local-dir: ./dist/
+    server-dir: ${{ secrets.SFTP_PATH }}/
+    dangerous-clean-slate: true
 ```
 
-#### 2. Glow-Effekt nur auf Desktop (Zeile 86-90)
+### Option B: Cleanup deaktivieren (Schnelle Lösung)
 
-```tsx
-// Vorher:
-className="absolute inset-0 opacity-0 group-hover:opacity-100 ..."
+Ändere in `.github/workflows/deploy.yml`:
 
-// Nachher:
-className="absolute inset-0 opacity-0 lg:group-hover:opacity-100 ..."
+```yaml
+cleanup: false  # statt true
 ```
 
-#### 3. Icon-Animation nur auf Desktop (Zeile 93-112)
+Das verhindert das Löschen von Dateien vor dem Upload, kann aber "verwaiste" Dateien auf dem Server hinterlassen.
 
-```tsx
-// Vorher:
-'group-hover:scale-115 group-hover:rotate-3',
-'group-hover:bg-accent/25 group-hover:shadow-[...]',
-'group-hover:scale-110',
-'text-primary group-hover:text-accent'
+### Option C: Retry-Logik hinzufügen
 
-// Nachher:
-'lg:group-hover:scale-115 lg:group-hover:rotate-3',
-'lg:group-hover:bg-accent/25 lg:group-hover:shadow-[...]',
-'lg:group-hover:scale-110',
-'text-primary lg:group-hover:text-accent'
-```
+```yaml
+- name: Deploy via SFTP
+  uses: sand4rt/ftp-deployer@v1.8
+  with:
+    # ... existing config ...
+    cleanup: false
+  continue-on-error: true
+  id: deploy1
 
-#### 4. Truncation entfernen + max-width erhöhen (Zeile 157-167)
-
-```tsx
-// Vorher:
-<span className="truncate max-w-[100px]">{highlight}</span>
-
-// Nachher - Text vollständig anzeigen:
-<span className="whitespace-nowrap">{highlight}</span>
-```
-
-Außerdem die Highlight-Container anpassen für besseres Wrapping auf Mobile:
-
-```tsx
-// Vorher:
-<div className={cn("flex flex-wrap justify-center mt-3", isLarge ? "gap-3" : "gap-2")}>
-
-// Nachher - kleinere Gaps auf Mobile:
-<div className={cn("flex flex-wrap justify-center mt-2 sm:mt-3", isLarge ? "gap-2 sm:gap-3" : "gap-1.5 sm:gap-2")}>
-```
-
-#### 5. Arrow-Indikator auf Mobile immer sichtbar (Zeile 174-189)
-
-```tsx
-// Vorher:
-'opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0',
-
-// Nachher - auf Mobile sichtbar, auf Desktop nur bei Hover:
-'opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-3 lg:group-hover:opacity-100 lg:group-hover:translate-y-0',
+- name: Retry Deploy if failed
+  if: steps.deploy1.outcome == 'failure'
+  uses: sand4rt/ftp-deployer@v1.8
+  with:
+    # ... same config ...
 ```
 
 ---
 
-## Zusammenfassung der Änderungen
+## Zusätzlich: Aufräumen der Bild-Referenzen
 
-| Element | Mobile/Tablet | Desktop |
-|---------|---------------|---------|
-| Karten-Scale/Translate | Keine Animation | Hover-Animation aktiv |
-| Glow-Effekt | Deaktiviert | Hover-Animation aktiv |
-| Icon-Animation | Keine Animation | Hover-Animation aktiv |
-| Highlight-Texte | Vollständig angezeigt | Vollständig angezeigt |
-| "Details" Pfeil | Immer sichtbar | Erscheint bei Hover |
+Die Bildpfade in `seaData.ts` (Zeilen 93-98, 149-154, 205-210) werden nicht mehr benötigt, da `SEABeforeAfter.tsx` die Bilder aus `seaImages.ts` lädt. Diese können entfernt werden, um Verwirrung zu vermeiden.
 
 ---
 
-## Design-Verbesserungen
+## Empfohlene Vorgehensweise
 
-- **Cleaner Look auf Mobile**: Keine unbeabsichtigten Hover-States beim Scrollen
-- **Bessere Lesbarkeit**: Alle Highlights vollständig lesbar
-- **Klare Navigation**: "Details" Pfeil zeigt auf Mobile sofort, dass Karten klickbar sind
+1. **Sofort**: `cleanup: false` setzen und erneut deployen
+2. **Langfristig**: Auf `SamKirkland/FTP-Deploy-Action` wechseln (moderner, stabiler)
+3. **Optional**: Ungenutzte Bildpfade in `seaData.ts` entfernen
 
