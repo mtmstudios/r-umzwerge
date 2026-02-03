@@ -105,14 +105,15 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
 
         {/* Split Content: Problem | Lösung */}
         <div className={cn(
-          "grid h-auto",
+          "grid h-auto relative",
           isMobile ? "grid-cols-1" : "grid-cols-2"
         )}>
           {/* Problem-Seite */}
           <div className={cn(
-            "p-5 relative",
-            isMobile ? "pb-4" : "border-r border-border/30",
-            "bg-muted/40"
+            "p-5",
+            isMobile ? "pb-4" : "",
+            "bg-muted/60",
+            "border-l-[3px] border-destructive/40"
           )}>
             {/* Icon Badge */}
             <div className="flex items-center gap-2 mb-3">
@@ -128,17 +129,14 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
             </div>
 
             {/* Problem-Zitat */}
-            <blockquote className={cn(
-              "text-base lg:text-lg text-foreground/85 italic leading-relaxed",
-              "border-l-3 border-destructive/50 pl-3"
-            )}>
+            <blockquote className="text-base lg:text-lg text-foreground/85 italic leading-relaxed">
               „{point.problem}"
             </blockquote>
           </div>
 
           {/* Transformation-Pfeil (nur Desktop in der Mitte) */}
           {!isMobile && (
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 hidden lg:flex">
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
               <div className={cn(
                 "w-10 h-10 rounded-full flex items-center justify-center",
                 "bg-card border-2 border-accent shadow-lg",
@@ -151,7 +149,7 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
 
           {/* Mobile Pfeil */}
           {isMobile && (
-            <div className="flex justify-center py-2">
+            <div className="flex justify-center py-2 bg-gradient-to-b from-muted/60 to-card">
               <div className={cn(
                 "w-8 h-8 rounded-full flex items-center justify-center",
                 "bg-accent/20 text-accent"
@@ -163,9 +161,10 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
 
           {/* Lösungs-Seite */}
           <div className={cn(
-            "p-5 relative",
+            "p-5",
             isMobile ? "pt-2" : "",
-            "bg-gradient-to-br from-accent/5 to-primary/5"
+            "bg-card",
+            "border-l-[3px] border-accent/40"
           )}>
             {/* Lösung Label */}
             <div className="flex items-center gap-2 mb-3">
