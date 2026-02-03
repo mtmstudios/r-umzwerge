@@ -12,6 +12,13 @@ export interface SEAFaqItem {
   answer: string;
 }
 
+export interface SEAComparisonData {
+  headline: string;
+  subline: string;
+  pairs: Array<{ problem: string; solution: string }>;
+  badges: string[];
+}
+
 export interface SEAData {
   slug: SEAVariant;
   title: string;
@@ -29,6 +36,7 @@ export interface SEAData {
   ctaHeadline: string;
   ctaSubline: string;
   outcomeBadges: string[];
+  comparison?: SEAComparisonData;
   // Variant-specific styling
   tone: 'warm' | 'direct' | 'gentle';
 }
@@ -81,6 +89,17 @@ export const seaData: Record<SEAVariant, SEAData> = {
     ctaHeadline: 'Jetzt unverbindlich anfragen',
     ctaSubline: 'Foto senden – Preiseinschätzung innerhalb von 24h.',
     outcomeBadges: ['Besenrein', 'Übergabefertig', 'Respektvoll geräumt'],
+    comparison: {
+      headline: 'Warum Räumzwerge für Ihre Haushaltsauflösung?',
+      subline: 'Klicken Sie auf eine Karte, um unseren Unterschied zu sehen',
+      pairs: [
+        { problem: 'Schnelles Abarbeiten ohne Rücksicht', solution: 'Einfühlsame Begleitung in schweren Zeiten' },
+        { problem: 'Alles wird einfach entsorgt', solution: 'Wertanrechnung und Spenden möglich' },
+        { problem: 'Wechselndes Personal', solution: 'Ein fester Ansprechpartner für alles' },
+        { problem: 'Nur grobe Räumung', solution: 'Besenrein und dokumentiert' },
+      ],
+      badges: ['Respektvoll', 'Wertanrechnung möglich', 'Ein Ansprechpartner'],
+    },
     tone: 'warm',
   },
 
@@ -131,6 +150,17 @@ export const seaData: Record<SEAVariant, SEAData> = {
     ctaHeadline: 'Jetzt Festpreis anfragen',
     ctaSubline: 'Foto senden – in 24h wissen Sie, was es kostet.',
     outcomeBadges: ['Besenrein', 'Schnell erledigt', 'Fachgerecht entsorgt'],
+    comparison: {
+      headline: 'Warum Räumzwerge für Ihre Entrümpelung?',
+      subline: 'Klicken Sie auf eine Karte, um unseren Unterschied zu sehen',
+      pairs: [
+        { problem: 'Preisschätzung nur vor Ort', solution: 'Einschätzung per WhatsApp < 24h' },
+        { problem: 'Versteckte Zusatzkosten', solution: 'Transparenter Festpreis möglich' },
+        { problem: 'Grob geräumt', solution: 'Besenrein garantiert' },
+        { problem: 'Lange Wartezeiten', solution: 'Schnelle Terminvergabe' },
+      ],
+      badges: ['Festpreis möglich', 'Besenrein', 'Schnelle Termine'],
+    },
     tone: 'direct',
   },
 
@@ -181,6 +211,17 @@ export const seaData: Record<SEAVariant, SEAData> = {
     ctaHeadline: 'Unverbindlich Kontakt aufnehmen',
     ctaSubline: 'Wir hören zu. Kein Druck, keine Wertung.',
     outcomeBadges: ['Diskret', 'Respektvoll', 'Ein neuer Anfang'],
+    comparison: {
+      headline: 'Warum Räumzwerge?',
+      subline: 'Klicken Sie auf eine Karte, um unseren Unterschied zu sehen',
+      pairs: [
+        { problem: 'Auffällige Firmenfahrzeuge', solution: 'Neutrale Fahrzeuge auf Wunsch' },
+        { problem: 'Schnelle Urteile, Druck', solution: 'Keine Wertung, kein Zeitdruck' },
+        { problem: 'Wechselndes Team', solution: 'Ein vertrauter Ansprechpartner' },
+        { problem: 'Unpersönliche Abwicklung', solution: 'Respektvolle Begleitung Schritt für Schritt' },
+      ],
+      badges: ['100% Diskret', 'Ohne Wertung', 'Neutrale Fahrzeuge'],
+    },
     tone: 'gentle',
   },
 };
