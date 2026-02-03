@@ -162,11 +162,12 @@ export function PricingSection() {
                 <Button
                   asChild
                   size="lg"
-                  className="w-full gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-14 text-base btn-lift shadow-whatsapp"
+                  className="w-full gap-2 sm:gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-12 sm:h-14 text-sm sm:text-base btn-lift shadow-whatsapp"
                 >
                   <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                    <WhatsAppIcon className="h-5 w-5" />
-                    <span className="hidden sm:inline">Foto senden · Preiseinschätzung erhalten</span>
+                    <WhatsAppIcon className="h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0" />
+                    <span className="hidden md:inline">Foto senden · Preiseinschätzung erhalten</span>
+                    <span className="hidden sm:inline md:hidden">Foto senden</span>
                     <span className="sm:hidden">Preis erhalten</span>
                   </a>
                 </Button>
