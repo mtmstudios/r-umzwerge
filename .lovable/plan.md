@@ -1,130 +1,125 @@
 
 
-# Einzigartige Comparison-Section: "Flip-Vergleich" Design
+# "Warum Räumzwerge" Section für SEA-Landingpages
 
-## Analyse der aktuellen Situation
+## Übersicht
 
-### Pricing-Karten Größenkonsistenz
-Die aktuellen `PriceFactorCard`-Komponenten haben bereits konsistente Größen durch:
-- `max-w-[140px] sm:max-w-[160px]` für einheitliche Breite
-- Feste Icon-Container (`w-12 h-12 sm:w-14 sm:h-14`)
-- Gleiche Padding-Werte (`p-4 sm:p-5`)
+Die interaktive "Warum Räumzwerge?" Flip-Card-Section soll auf alle SEA-Landingpages übertragen und themenspezifisch angepasst werden.
 
-**Keine Änderung notwendig** - die Karten sind bereits uniform.
+### Wichtiger Unterschied zu SEAPainPoints:
+- **SEAPainPoints**: Zeigt emotionale Probleme des Kunden → Räumzwerge-Lösung
+- **SEAComparison (neu)**: Zeigt Probleme bei anderen Anbietern → Räumzwerge-Vorteil
 
-### Problem mit der aktuellen Comparison-Section
-Die bestehende "Der Unterschied"-Section ist:
-- Generisch und langweilig (zwei nebeneinander liegende Listen)
-- Kein interaktives Element
-- Keine visuelle Hierarchie oder Storytelling
-- Ähnelt zu sehr Standard-UI-Pattern
+Die Sections ergänzen sich – eine spricht emotionale Situationen an, die andere differenziert vom Wettbewerb.
 
-## Neues Design-Konzept: "VS Flip-Battle"
+## Neue Section: SEAComparison
 
-Ein einzigartiges, interaktives Design, das die bewährte FlipCard-Mechanik adaptiert:
+### Platzierung
+Nach `SEAMidCTA` und vor `SEAMiniFAQ` – als zusätzlicher Vertrauensbildner kurz vor dem FAQ.
 
-### Konzept
-Statt zweier Spalten wird ein **horizontaler "Battle"-Flow** mit **Flip-Karten** verwendet:
-1. Jeder Vergleichspunkt ist eine eigene interaktive Karte
-2. Vorderseite zeigt das **Problem bei anderen Anbietern** (rot getönt)
-3. Rückseite zeigt die **Räumzwerge-Lösung** (grün getönt)
-4. Zentrales "VS"-Element als visueller Anker
-5. Animierte Badges und Trust-Elemente
+### Themenspezifische Inhalte
 
-### Visuelles Layout
+| Variante | Headline | Vergleichspunkte |
+|----------|----------|------------------|
+| **Haushaltsauflösung** | "Warum Räumzwerge für Ihre Haushaltsauflösung?" | Einfühlsam vs. unpersönlich, Wertanrechnung vs. alles entsorgt, fester Ansprechpartner vs. wechselndes Personal |
+| **Entrümpelung** | "Warum Räumzwerge für Ihre Entrümpelung?" | Schnelle WhatsApp-Einschätzung vs. nur Vorort-Termin, Festpreis vs. versteckte Kosten, Besenrein vs. grob geräumt |
+| **Messie-Hilfe** | "Warum Räumzwerge?" | 100% Diskretion vs. auffällige Fahrzeuge, ohne Wertung vs. vorschnelle Urteile, fester Ansprechpartner vs. wechselndes Team |
+
+### Badges pro Variante
+
+| Variante | Badges |
+|----------|--------|
+| **Haushaltsauflösung** | "Respektvoll", "Wertanrechnung möglich", "Ein Ansprechpartner" |
+| **Entrümpelung** | "Festpreis möglich", "Besenrein", "Schnelle Termine" |
+| **Messie-Hilfe** | "100% Diskret", "Ohne Wertung", "Neutrale Fahrzeuge" |
+
+## Änderungen
+
+### 1. Neue Komponente: `src/components/sea/SEAComparison.tsx`
+
+Nutzt die bestehende `UnifiedComparison`-Komponente mit themenspezifischen Daten:
 
 ```text
-┌─────────────────────────────────────────────────────────────────┐
-│                                                                 │
-│        Der Unterschied macht's                                  │
-│        Klicken Sie auf eine Karte für unsere Lösung             │
-│                                                                 │
-│   ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐           │
-│   │ Flip    │  │ Flip    │  │ Flip    │  │ Flip    │           │
-│   │ Card 1  │  │ Card 2  │  │ Card 3  │  │ Card 4  │           │
-│   │         │  │         │  │         │  │         │           │
-│   │ Problem │  │ Problem │  │ Problem │  │ Problem │           │
-│   │ vs      │  │ vs      │  │ vs      │  │ vs      │           │
-│   │ Lösung  │  │ Lösung  │  │ Lösung  │  │ Lösung  │           │
-│   └─────────┘  └─────────┘  └─────────┘  └─────────┘           │
-│                                                                 │
-│         [Badge 1]  [Badge 2]  [Badge 3]                        │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+SEAComparison
+├── Props: { data: SEAData }
+├── Wählt Vergleichsdaten basierend auf data.slug
+├── Passt Headline/Subline an data.tone an
+└── Verwendet UnifiedComparison mit angepassten Badges
 ```
 
-### Karten-Design Details
+### 2. Daten in `src/lib/seaData.ts` erweitern
 
-**Vorderseite (Problem - "Andere Anbieter"):**
-- Roter Akzent-Rand links
-- X-Icon mit destructive-Farbe
-- Problem-Statement als Zitat
-- "Tippen für Lösung" Hinweis
-- Dezenter roter Glow-Effekt
+Neue optionale `comparison`-Property im `SEAData` Interface:
 
-**Rückseite (Lösung - "Räumzwerge"):**
-- Grüner Akzent-Rand links
-- Animierter Checkmark
-- Lösungs-Statement
-- Optional: Mini-WhatsApp-CTA
-- Grüner Glow-Effekt beim Hover
-
-### Mobile Darstellung
-- 1-2 Spalten Grid
-- Swipe-freundliche Touch-Interaktion
-- Kompaktere Karten-Höhe
-
-## Technische Umsetzung
-
-### Neue Komponente: `ComparisonFlipCard.tsx`
-Wiederverwendbare Flip-Karte speziell für Vergleiche mit:
-- `problem` und `solution` Props
-- Einheitliche Größe für alle Karten
-- Gleiche CSS-Klassen wie `FlipCard.tsx`
-
-### Konsolidierte Comparison-Komponente
-Eine einzige `UnifiedComparison.tsx` ersetzt:
-- `ServiceComparison.tsx`
-- `CityComparison.tsx`
-
-Mit Props:
 ```typescript
-interface UnifiedComparisonProps {
-  headline?: string;
-  subline?: string;
-  comparison: ComparisonData;
-  badges?: string[];
-}
+comparison?: {
+  headline: string;
+  subline: string;
+  pairs: Array<{ problem: string; solution: string }>;
+  badges: string[];
+};
 ```
 
-### Dateien die geändert werden
+Daten für alle drei Varianten hinzufügen.
+
+### 3. SEA-Landingpage einbinden
+
+In `SEALandingPage.tsx` die neue Section nach `SEAMidCTA` einfügen:
+
+```text
+<SEAHero />
+<SEAPainPoints />
+<SEASocialProof />
+<SEABeforeAfter />
+<SEAMidCTA />
+<SEAComparison />  ← NEU
+<SEAMiniFAQ />
+<SEAFinalCTA />
+```
+
+## Themenspezifische Vergleichspunkte (Details)
+
+### Haushaltsauflösung (tone: "warm")
+
+| Andere Anbieter | Räumzwerge |
+|-----------------|------------|
+| Schnelles Abarbeiten ohne Rücksicht | Einfühlsame Begleitung in schweren Zeiten |
+| Alles wird entsorgt | Wertanrechnung und Spenden möglich |
+| Wechselndes Personal | Ein fester Ansprechpartner für alles |
+| Nur grobe Räumung | Besenrein und dokumentiert |
+
+### Entrümpelung (tone: "direct")
+
+| Andere Anbieter | Räumzwerge |
+|-----------------|------------|
+| Preisschätzung nur vor Ort | Einschätzung per WhatsApp < 24h |
+| Versteckte Zusatzkosten | Transparenter Festpreis möglich |
+| Grob geräumt | Besenrein garantiert |
+| Lange Wartezeiten | Schnelle Terminvergabe |
+
+### Messie-Hilfe (tone: "gentle")
+
+| Andere Anbieter | Räumzwerge |
+|-----------------|------------|
+| Auffällige Firmenfahrzeuge | Neutrale Fahrzeuge auf Wunsch |
+| Schnelle Urteile, Druck | Keine Wertung, kein Zeitdruck |
+| Wechselndes Team | Ein vertrauter Ansprechpartner |
+| Unpersönliche Abwicklung | Respektvolle Begleitung Schritt für Schritt |
+
+## Dateien die geändert werden
 
 | Datei | Änderung |
 |-------|----------|
-| `src/components/services/ComparisonFlipCard.tsx` | **NEU** - Wiederverwendbare Flip-Karte für Vergleiche |
-| `src/components/services/ServiceComparison.tsx` | Komplettes Redesign mit Flip-Card-Layout |
-| `src/components/city/CityComparison.tsx` | Nutzt neues `ServiceComparison` mit eigenen Daten |
-| `src/pages/ServicePage.tsx` | Keine Änderung (bereits korrekt) |
-| `src/pages/CityPage.tsx` | Anpassung für Props-Übergabe |
-| `src/lib/serviceData.ts` | Eventuell Erweiterung der Comparison-Daten um Paarungen |
+| `src/lib/seaData.ts` | Interface erweitern, Comparison-Daten für alle 3 Varianten hinzufügen |
+| `src/components/sea/SEAComparison.tsx` | **NEU** – Wrapper für UnifiedComparison mit SEA-Daten |
+| `src/pages/SEALandingPage.tsx` | SEAComparison importieren und einbinden |
 
-### CSS-Anpassungen
-Die bestehenden FlipCard-CSS-Regeln werden wiederverwendet:
-- `.flip-card`, `.flip-card-inner`
-- `.flip-card-front`, `.flip-card-back`
-- Glow-Effekte und Hover-States
+## Visueller Stil
 
-### Zusätzliche visuelle Elemente
+Die Section übernimmt das Design der `UnifiedComparison`:
+- Flip-Cards mit Problem/Lösung
+- Fortschrittsanzeige "Entdeckt X von Y"
+- Staggered Scroll-Animations
+- Badges am Ende
+- Konsistent mit dem "premium" Look der SEA-Landingpages
 
-1. **VS-Badge** zwischen den Karten (Desktop)
-2. **Fortschrittsanzeige** zeigt wie viele Karten geflippt wurden
-3. **Auto-Flip-Hint** animiert eine Karte dezent beim Laden
-4. **Staggered Animation** bei Scroll-Reveal
-
-## Vorteil des neuen Designs
-
-- **Interaktiv**: Nutzer entdecken aktiv die Vorteile
-- **Storytelling**: Problem -> Lösung Narrativ
-- **Einheitlich**: Gleiche Mechanik wie SEA FlipCards
-- **Einprägsam**: Visuell unique, nicht generisch
-- **Mobile-optimiert**: Touch-freundliche Interaktion
