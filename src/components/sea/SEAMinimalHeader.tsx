@@ -5,21 +5,20 @@ import logoNeu from '@/assets/logo-neu.png';
 
 export function SEAMinimalHeader() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border/50">
-      <div className="container-custom">
-        <div className="flex items-center justify-between py-1">
-          {/* Logo - links auf Mobile (nicht abgeschnitten), links auf Desktop */}
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border/50 overflow-visible">
+      <div className="container-custom overflow-visible">
+        <div className="flex items-center justify-between py-1 overflow-visible">
+          {/* Logo - links auf Mobile, links auf Desktop */}
           <a 
             href="https://www.raeumzwerge.de" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="flex items-center justify-start shrink-0 overflow-visible"
+            className="flex items-center justify-start shrink-0"
           >
             <img
               src={logoNeu}
               alt="Räumzwerge – Entrümpelungen, Auflösungen, Service"
-              style={{ height: 140, width: "auto", maxHeight: "none" }}
-              className="object-contain logo-trim -mt-5 -mb-10 block max-w-none"
+              className="object-contain logo-trim block h-[100px] sm:h-[120px] lg:h-[140px] w-auto -mt-3 -mb-6 sm:-mt-4 sm:-mb-8 lg:-mt-5 lg:-mb-10"
             />
           </a>
 
