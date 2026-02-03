@@ -128,4 +128,3 @@ Die bestehenden FlipCard-CSS-Regeln werden wiederverwendet:
 - **Einheitlich**: Gleiche Mechanik wie SEA FlipCards
 - **Einprägsam**: Visuell unique, nicht generisch
 - **Mobile-optimiert**: Touch-freundliche Interaktion
-

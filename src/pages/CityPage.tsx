@@ -96,7 +96,7 @@ export default function CityPage() {
           fromColor="hsl(var(--background))" 
           toColor="hsl(var(--secondary) / 0.3)" 
         />
-        <CityComparison />
+        <CityComparison cityName={cityData.name} />
         
         {/* Pricing */}
         <SectionDivider 
