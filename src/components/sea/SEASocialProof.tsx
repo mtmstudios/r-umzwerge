@@ -31,12 +31,46 @@ function GoogleIcon({ className }: { className?: string }) {
   );
 }
 
-// Review Card Component
+// Shimmer stars animation
+function ShimmerStars({ count = 5 }: { count?: number }) {
+  return (
+    <div className="flex items-center gap-0.5 relative">
+      {[...Array(count)].map((_, i) => (
+        <Star
+          key={i}
+          className="h-4 w-4 fill-amber-400 text-amber-400"
+          style={{ 
+            animationDelay: `${i * 100}ms`,
+          }}
+        />
+      ))}
+      {/* Shimmer overlay */}
+      <div 
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"
+        style={{ backgroundSize: '200% 100%' }}
+      />
+    </div>
+  );
+}
+
+// Review Card Component with floating effect
 function ReviewCard({ review, index }: { review: typeof FEATURED_REVIEWS[0]; index: number }) {
   return (
     <div 
-      className="bg-card border border-border/50 rounded-xl p-5 lg:p-6 opacity-0 animate-fade-in"
-      style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'forwards' }}
+      className={cn(
+        // Glassmorphism
+        "glass rounded-xl p-5 lg:p-6",
+        "border border-border/30",
+        // Floating effect on hover
+        "hover:shadow-2xl hover:-translate-y-2 hover:shadow-primary/10",
+        "transition-all duration-500",
+        // Staggered entrance
+        "opacity-0 animate-fade-in"
+      )}
+      style={{ 
+        animationDelay: `${index * 150}ms`, 
+        animationFillMode: 'forwards' 
+      }}
     >
       {/* Stars */}
       <div className="flex items-center gap-0.5 mb-3">
@@ -55,13 +89,13 @@ function ReviewCard({ review, index }: { review: typeof FEATURED_REVIEWS[0]; ind
       
       {/* Author */}
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-          <span className="text-xs font-semibold text-primary">
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-accent/10 flex items-center justify-center shadow-sm">
+          <span className="text-sm font-bold text-primary">
             {review.author.charAt(0)}
           </span>
         </div>
         <div>
-          <p className="text-sm font-medium text-foreground">{review.author}</p>
+          <p className="text-sm font-semibold text-foreground">{review.author}</p>
           <p className="text-xs text-muted-foreground">{review.date}</p>
         </div>
       </div>
@@ -73,26 +107,23 @@ export function SEASocialProof({ data }: SEASocialProofProps) {
   const isGentle = data.tone === 'gentle';
 
   return (
-    <section className="py-12 lg:py-16 bg-background">
-      <div className="container-custom">
+    <section className="py-12 lg:py-16 bg-background relative overflow-hidden">
+      {/* Decorative blurs */}
+      <div className="absolute top-0 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-48 h-48 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
+      
+      <div className="container-custom relative z-10">
         {/* Section Header */}
         <div className="text-center mb-8 lg:mb-10">
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground mb-4">
             Was unsere Kunden sagen
           </h2>
           
-          {/* Google Rating Badge */}
-          <div className="inline-flex items-center gap-3 bg-muted/50 px-5 py-3 rounded-full">
-            <GoogleIcon className="h-5 w-5" />
-            <div className="flex items-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className="h-4 w-4 fill-amber-400 text-amber-400"
-                />
-              ))}
-            </div>
-            <span className="font-semibold text-foreground">
+          {/* Enhanced Google Rating Badge with Glassmorphism */}
+          <div className="inline-flex items-center gap-3 glass px-6 py-4 rounded-full shadow-lg shadow-primary/5">
+            <GoogleIcon className="h-6 w-6" />
+            <ShimmerStars count={5} />
+            <span className="font-bold text-foreground text-lg">
               {GOOGLE_RATING.score.toFixed(1)}
             </span>
             <span className="text-muted-foreground text-sm">
@@ -101,7 +132,7 @@ export function SEASocialProof({ data }: SEASocialProofProps) {
           </div>
         </div>
 
-        {/* Review Cards Grid */}
+        {/* Review Cards Grid with floating effect */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mb-8">
           {FEATURED_REVIEWS.map((review, index) => (
             <ReviewCard key={review.id} review={review} index={index} />
@@ -115,7 +146,8 @@ export function SEASocialProof({ data }: SEASocialProofProps) {
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              "inline-flex items-center gap-2 text-sm font-medium transition-colors",
+              "inline-flex items-center gap-2 text-sm font-semibold transition-all duration-300",
+              "hover:gap-3",
               isGentle 
                 ? "text-primary/80 hover:text-primary" 
                 : "text-primary hover:text-primary/80"

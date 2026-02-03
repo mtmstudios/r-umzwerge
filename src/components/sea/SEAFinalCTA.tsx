@@ -20,26 +20,37 @@ export function SEAFinalCTA({ data }: SEAFinalCTAProps) {
     : { long: 'Foto senden · Preis erhalten', short: 'Foto senden' };
 
   return (
-    <section className={cn(
-      "py-16 lg:py-20",
-      isGentle ? "bg-primary/90" : "bg-primary"
-    )}>
-      <div className="container-custom">
+    <section className="py-16 lg:py-24 relative overflow-hidden">
+      {/* Animated gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/95 to-primary animate-gradient-slow" />
+      
+      {/* Floating decorative shapes */}
+      <div className="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full blur-2xl animate-float-slow pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-48 h-48 bg-accent/10 rounded-full blur-3xl animate-float-slow pointer-events-none" style={{ animationDelay: '1s' }} />
+      <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-cta/10 rounded-full blur-2xl animate-float-slow pointer-events-none" style={{ animationDelay: '2s' }} />
+      
+      <div className="container-custom relative z-10">
         <div className="max-w-2xl mx-auto text-center">
           {/* Dynamic Headline */}
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-primary-foreground mb-4">
+          <h2 className="text-xl sm:text-2xl lg:text-4xl font-bold text-primary-foreground mb-4">
             {data.ctaHeadline}
           </h2>
-          <p className="text-primary-foreground/80 mb-8 text-base lg:text-lg">
+          <p className="text-primary-foreground/80 mb-10 text-base lg:text-lg">
             {data.ctaSubline}
           </p>
 
-          {/* CTAs - Both equally sized */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8">
+          {/* CTAs with enhanced styling */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
             <Button
               asChild
               size="lg"
-              className="gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-14 sm:h-16 px-8 text-base sm:text-lg btn-lift shadow-whatsapp"
+              className={cn(
+                "gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground",
+                "h-14 sm:h-16 px-8 text-base sm:text-lg",
+                "btn-lift shadow-xl shadow-black/20",
+                "hover:shadow-2xl hover:shadow-whatsapp/30",
+                "transition-all duration-300"
+              )}
               data-track="cta-whatsapp-final"
             >
               <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
@@ -52,7 +63,13 @@ export function SEAFinalCTA({ data }: SEAFinalCTAProps) {
             <Button
               asChild
               size="lg"
-              className="gap-3 h-14 sm:h-16 px-8 text-base sm:text-lg bg-cta hover:bg-cta-hover text-cta-foreground transition-all"
+              className={cn(
+                "gap-3 h-14 sm:h-16 px-8 text-base sm:text-lg",
+                "bg-cta hover:bg-cta-hover text-cta-foreground",
+                "btn-lift shadow-xl shadow-black/20",
+                "hover:shadow-2xl hover:shadow-cta/30",
+                "transition-all duration-300"
+              )}
               data-track="cta-phone-final"
             >
               <a href={PHONE_LINK}>
@@ -62,15 +79,21 @@ export function SEAFinalCTA({ data }: SEAFinalCTAProps) {
             </Button>
           </div>
 
-          {/* Trust Badges */}
-          <div className="flex flex-wrap justify-center gap-4 mb-6">
+          {/* Trust Badges with Glassmorphism */}
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-8">
             {trustBadges.map((badge) => (
               <div
                 key={badge}
-                className="flex items-center gap-2 text-primary-foreground/80"
+                className={cn(
+                  "flex items-center gap-2",
+                  "px-4 py-2 rounded-full",
+                  "bg-white/10 backdrop-blur-sm",
+                  "border border-white/10",
+                  "text-primary-foreground/90"
+                )}
               >
                 <CheckCircle className="h-4 w-4 text-accent" />
-                <span className="text-sm">{badge}</span>
+                <span className="text-sm font-medium">{badge}</span>
               </div>
             ))}
           </div>
