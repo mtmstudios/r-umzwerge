@@ -569,9 +569,28 @@
   }
 }
 
-/* Subtle lift on hover before flip */
+/* Subtle lift on hover before flip with orange glow */
 .flip-card:not(.flipped):hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
+}
+
+.flip-card:not(.flipped):hover .flip-card-front {
+  box-shadow: 
+    0 16px 36px -12px hsl(var(--foreground) / 0.15),
+    0 0 30px -5px hsl(var(--cta) / 0.25),
+    0 0 60px -10px hsl(var(--cta) / 0.15);
+}
+
+/* Green glow for flipped cards on hover */
+.flip-card.flipped:hover {
+  transform: translateY(-6px);
+}
+
+.flip-card.flipped:hover .flip-card-back {
+  box-shadow: 
+    0 24px 48px -12px hsl(var(--accent) / 0.4),
+    0 0 40px -5px hsl(var(--accent) / 0.35),
+    0 0 80px -10px hsl(var(--accent) / 0.25);
 }
 
 /* SEA Landing Page Premium Animations */
