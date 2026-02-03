@@ -7,6 +7,7 @@ import { SEAPainPoints } from '@/components/sea/SEAPainPoints';
 import { SEASocialProof } from '@/components/sea/SEASocialProof';
 import { SEABeforeAfter } from '@/components/sea/SEABeforeAfter';
 import { SEAMidCTA } from '@/components/sea/SEAMidCTA';
+import { SEAComparison } from '@/components/sea/SEAComparison';
 import { SEAMiniFAQ } from '@/components/sea/SEAMiniFAQ';
 import { SEAFinalCTA } from '@/components/sea/SEAFinalCTA';
 import { SEAMinimalFooter } from '@/components/sea/SEAMinimalFooter';
@@ -48,6 +49,7 @@ export default function SEALandingPage() {
         <SEASocialProof data={data} />
         <SEABeforeAfter data={data} />
         <SEAMidCTA data={data} />
+        <SEAComparison data={data} />
         <SEAMiniFAQ data={data} />
         <SEAFinalCTA data={data} />
       </main>
