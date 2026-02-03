@@ -635,3 +635,48 @@
   background-size: 200% 200%;
   animation: gradient-slow 8s ease infinite;
 }
+
+/* ============================================
+   COMPARISON FLIP CARDS
+   ============================================ */
+
+.comparison-flip-card {
+  perspective: 1000px;
+}
+
+.comparison-flip-card-inner {
+  position: relative;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.comparison-flip-card.flipped .comparison-flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.comparison-flip-card-front,
+.comparison-flip-card-back {
+  position: absolute;
+  inset: 0;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.comparison-flip-card-back {
+  transform: rotateY(180deg);
+}
+
+/* Hover effects - desktop only */
+@media (min-width: 1024px) {
+  .comparison-flip-card:not(.flipped):hover .comparison-flip-card-front {
+    box-shadow: 0 0 20px hsl(var(--destructive) / 0.15);
+  }
+  
+  .comparison-flip-card.flipped:hover .comparison-flip-card-back {
+    box-shadow: 0 0 20px hsl(var(--accent) / 0.25);
+  }
+  
+  .comparison-flip-card:hover {
+    transform: translateY(-4px);
+  }
+}
