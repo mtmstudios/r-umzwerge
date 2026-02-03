@@ -4,7 +4,7 @@ import { getWhatsAppLink } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
-import pricingConsultantImage from '@/assets/pricing-consultant.png';
+import pricingTabletImage from '@/assets/pricing-tablet.png';
 
 const PRICE_FACTORS = [
   { icon: Package, label: 'Umfang', description: 'Menge & Raumgröße' },
@@ -123,12 +123,12 @@ export function PricingSection() {
             "grid md:grid-cols-2 gap-4 md:gap-6 lg:gap-8 items-stretch mb-12 lg:mb-16 transition-all duration-700 delay-300",
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           )}>
-            {/* Consultant Image */}
-            <div className="relative rounded-2xl overflow-hidden shadow-xl h-48 sm:h-56 md:h-64 lg:h-80">
+            {/* Tablet Image */}
+            <div className="relative rounded-2xl overflow-hidden shadow-xl h-56 sm:h-64 md:h-72 lg:h-80">
               <img 
-                src={pricingConsultantImage}
-                alt="Räumzwerge-Berater zeigt transparente Preisberechnung auf Tablet"
-                className="w-full h-full object-cover object-top"
+                src={pricingTabletImage}
+                alt="Tablet mit transparenter Preiskalkulation auf Tisch mit Umzugskartons"
+                className="w-full h-full object-cover object-center"
               />
               {/* Gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-foreground/20 via-transparent to-transparent" />
