@@ -26,7 +26,7 @@ export function SEAHero({ data }: SEAHeroProps) {
       <div className="absolute inset-0">
         <img 
           src={seaImages.heroTeam}
-          alt={data.heroImageAlt}
+          alt="Räumzwerge-Team beim professionellen Beladen des Transporters"
           className="w-full h-full object-cover"
           fetchPriority="high"
           loading="eager"

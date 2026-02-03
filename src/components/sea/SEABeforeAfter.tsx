@@ -116,7 +116,7 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
               <div className="absolute inset-0">
                 <img 
                   src={images.after} 
-                  alt={data.afterImageAlt || 'Nachher'}
+                  alt="Nachher"
                   className="w-full h-full object-cover scale-[1.15]"
                   loading="lazy"
                 />
@@ -130,7 +130,7 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
                 <img 
                   src={images.before}
                   loading="lazy"
-                  alt={data.beforeImageAlt || 'Vorher'}
+                  alt="Vorher"
                   className="w-full h-full object-cover scale-[1.15]"
                 />
               </div>

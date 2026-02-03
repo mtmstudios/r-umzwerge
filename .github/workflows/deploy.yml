@@ -46,15 +46,13 @@ jobs:
           ls -la dist/assets/ || echo "No assets folder!"
 
       - name: Deploy via SFTP
-        uses: sand4rt/ftp-deployer@v1.8
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          sftp: true
-          host: ${{ secrets.SFTP_HOST }}
-          port: 22
+          server: ${{ secrets.SFTP_HOST }}
           username: ${{ secrets.SFTP_USER }}
           password: ${{ secrets.SFTP_PASSWORD }}
-          remote_folder: ${{ secrets.SFTP_PATH }}
-          local_folder: './dist'
-          cleanup: true
-          include: '[ "**/*", "**/**/*", ".*", "**/.*" ]'
-          exclude: '[]'
+          port: 22
+          protocol: sftp
+          local-dir: ./dist/
+          server-dir: ${{ secrets.SFTP_PATH }}/
+          dangerous-clean-slate: true
