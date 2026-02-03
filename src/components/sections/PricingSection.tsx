@@ -40,10 +40,10 @@ function PriceFactorCard({ icon: Icon, label, description, index, isVisible }: P
       style={{ transitionDelay: `${index * 100}ms` }}
     >
       {/* Card */}
-      <div className="relative bg-card border border-border rounded-2xl p-4 sm:p-5 transition-all duration-300 hover:border-accent/60 hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1 hover:scale-[1.02] w-full max-w-[140px] sm:max-w-[160px]">
+      <div className="relative bg-card border border-border rounded-2xl p-4 sm:p-5 lg:transition-all lg:duration-300 lg:hover:border-accent/60 lg:hover:shadow-lg lg:hover:shadow-accent/10 lg:hover:-translate-y-1 lg:hover:scale-[1.02] w-full max-w-[140px] sm:max-w-[160px]">
         {/* Icon Container */}
-        <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 bg-primary/10 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:bg-accent/20 group-hover:scale-110 group-hover:rotate-3">
-          <Icon className="h-6 w-6 sm:h-7 sm:w-7 text-primary transition-colors duration-300 group-hover:text-accent" />
+        <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 bg-primary/10 rounded-xl flex items-center justify-center lg:transition-all lg:duration-300 lg:group-hover:bg-accent/20 lg:group-hover:scale-110 lg:group-hover:rotate-3">
+          <Icon className="h-6 w-6 sm:h-7 sm:w-7 text-primary lg:transition-colors lg:duration-300 lg:group-hover:text-accent" />
         </div>
         
         {/* Label */}
