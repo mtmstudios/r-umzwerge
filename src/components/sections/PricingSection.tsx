@@ -133,9 +133,9 @@ export function PricingSection() {
               {/* Gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-foreground/20 via-transparent to-transparent" />
               
-              {/* Floating badge */}
-              <div className="absolute bottom-4 left-4 bg-card/90 backdrop-blur-sm rounded-xl px-4 py-2 border border-border/50">
-                <p className="text-sm font-medium text-foreground">Transparente Preisberechnung</p>
+              {/* Floating badge - centered at top */}
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-card/90 backdrop-blur-sm rounded-xl px-4 py-2 border border-border/50">
+                <p className="text-sm font-medium text-foreground whitespace-nowrap">Transparente Preisberechnung</p>
               </div>
             </div>
 
