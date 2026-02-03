@@ -42,13 +42,11 @@ function StepCard({
         className={cn(
           'relative z-10 w-24 h-24 sm:w-28 sm:h-28 md:w-[120px] md:h-[120px] rounded-2xl sm:rounded-3xl flex flex-col items-center justify-center',
           'border-2 transition-all duration-500',
-          // Hintergrund-Abdeckung die die Timeline-Linie verdeckt
-          'before:absolute before:inset-[-8px] before:-z-10 before:rounded-3xl',
           isCurrent
-            ? 'bg-primary border-primary shadow-lg shadow-primary/30 before:bg-background'
+            ? 'bg-primary border-primary shadow-lg shadow-primary/30'
             : isActive
-            ? 'bg-primary/90 border-primary before:bg-background'
-            : 'bg-card border-border before:bg-background',
+            ? 'bg-primary/90 border-primary'
+            : 'bg-card border-border',
           isJustActivated && 'animate-bounce-in',
           isCurrent && !isJustActivated && 'scale-110'
         )}
