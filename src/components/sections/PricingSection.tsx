@@ -34,7 +34,8 @@ function PriceFactorCard({ icon: Icon, label, description, index, isVisible }: P
       className={cn(
         'group relative flex flex-col items-center text-center',
         'transition-all duration-500 ease-out',
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
+        index === 4 && 'col-span-2 md:col-span-1 justify-self-center'
       )}
       style={{ transitionDelay: `${index * 100}ms` }}
     >
@@ -53,7 +54,7 @@ function PriceFactorCard({ icon: Icon, label, description, index, isVisible }: P
       </div>
       
       {/* Arrow pointing down (mobile only) */}
-      <div className="mt-3 lg:hidden">
+      <div className="mt-3 md:hidden">
         <ArrowDown className="h-4 w-4 text-accent/60" />
       </div>
     </div>
@@ -86,7 +87,7 @@ export function PricingSection() {
             <div className="hidden lg:block absolute top-[52px] left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
             
             {/* Factor Cards Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-4 justify-items-center">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-3 lg:gap-4 justify-items-center">
               {PRICE_FACTORS.map((factor, index) => (
                 <PriceFactorCard
                   key={factor.label}
@@ -119,11 +120,11 @@ export function PricingSection() {
 
           {/* Split Card: Image + CTA */}
           <div className={cn(
-            "grid lg:grid-cols-2 gap-6 lg:gap-8 items-stretch mb-12 lg:mb-16 transition-all duration-700 delay-300",
+            "grid md:grid-cols-2 gap-4 md:gap-6 lg:gap-8 items-stretch mb-12 lg:mb-16 transition-all duration-700 delay-300",
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           )}>
             {/* Consultant Image */}
-            <div className="relative rounded-2xl overflow-hidden shadow-xl h-64 lg:h-80">
+            <div className="relative rounded-2xl overflow-hidden shadow-xl h-48 sm:h-56 md:h-64 lg:h-80">
               <img 
                 src={pricingConsultantImage}
                 alt="Räumzwerge-Berater zeigt transparente Preisberechnung auf Tablet"
@@ -144,15 +145,15 @@ export function PricingSection() {
               <div className="absolute inset-0 bg-gradient-to-br from-whatsapp/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               
               <div className="relative z-10">
-                <div className="flex items-start gap-4 mb-6">
-                  <div className="flex-shrink-0 w-14 h-14 bg-whatsapp/20 rounded-xl flex items-center justify-center">
-                    <WhatsAppIcon className="h-7 w-7 text-whatsapp" />
+                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-4 mb-4 sm:mb-6 text-center sm:text-left">
+                  <div className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 bg-whatsapp/20 rounded-xl flex items-center justify-center">
+                    <WhatsAppIcon className="h-6 w-6 sm:h-7 sm:w-7 text-whatsapp" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground text-xl mb-1">
+                    <h3 className="font-semibold text-foreground text-lg sm:text-xl mb-1">
                       Schnelle Preiseinschätzung
                     </h3>
-                    <p className="text-muted-foreground">
+                    <p className="text-sm sm:text-base text-muted-foreground">
                       WhatsApp-Foto reicht – Antwort innerhalb von 24 Stunden.
                     </p>
                   </div>
@@ -182,7 +183,7 @@ export function PricingSection() {
             "pt-8 border-t border-border/50 transition-all duration-700 delay-500",
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           )}>
-            <div className="flex flex-wrap justify-center gap-8 sm:gap-12 lg:gap-20">
+            <div className="flex flex-wrap justify-center gap-6 sm:gap-8 md:gap-12 lg:gap-20">
               {TRUST_STATS.map(({ icon: Icon, value, label }, index) => (
                 <div
                   key={label}
