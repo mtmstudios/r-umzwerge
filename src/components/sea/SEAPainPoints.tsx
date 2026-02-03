@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowRight, ArrowDown, Heart, Clock, Shield, Home, AlertCircle, Feather } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 import { cn } from '@/lib/utils';
@@ -12,32 +12,12 @@ import {
   CarouselItem,
   type CarouselApi 
 } from '@/components/ui/carousel';
+import { FlipCard } from './FlipCard';
 import type { SEAData } from '@/lib/seaData';
 
 interface SEAPainPointsProps {
   data: SEAData;
 }
-
-// Icon-Mapping basierend auf Problemtext-Keywords
-const getIconForProblem = (problem: string) => {
-  const text = problem.toLowerCase();
-  if (text.includes('verstorben') || text.includes('tod') || text.includes('trauer')) {
-    return { icon: Feather, label: 'Trauerfall' };
-  }
-  if (text.includes('pflege') || text.includes('heim') || text.includes('umzug')) {
-    return { icon: Home, label: 'Pflegeheim' };
-  }
-  if (text.includes('zeit') || text.includes('schnell') || text.includes('dringend')) {
-    return { icon: Clock, label: 'Zeitdruck' };
-  }
-  if (text.includes('diskret') || text.includes('messie') || text.includes('scham')) {
-    return { icon: Shield, label: 'Diskret' };
-  }
-  if (text.includes('überfordert') || text.includes('allein') || text.includes('weiß nicht')) {
-    return { icon: AlertCircle, label: 'Überforderung' };
-  }
-  return { icon: Heart, label: 'Persönlich' };
-};
 
 export function SEAPainPoints({ data }: SEAPainPointsProps) {
   const isGentle = data.tone === 'gentle';
@@ -72,128 +52,6 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
       : 'Hallo Räumzwerge, ich hätte gerne eine Preiseinschätzung. Ort: ____. Ich sende gleich Fotos.';
   };
 
-  // Split-Card Komponente
-  const PainPointCard = ({ point, index }: { point: { problem: string; solution: string }, index: number }) => {
-    const { icon: IconComponent, label } = getIconForProblem(point.problem);
-    
-    return (
-      <div
-        className={cn(
-          "pain-point-card rounded-2xl overflow-hidden h-full",
-          "border border-border/40",
-          "bg-card/50 backdrop-blur-sm",
-          "transition-all duration-500",
-          !isMobile && "opacity-0 translate-y-6",
-          !isMobile && isVisible && "opacity-100 translate-y-0"
-        )}
-        style={!isMobile ? {
-          transitionDelay: isVisible ? `${index * 150}ms` : '0ms',
-        } : undefined}
-      >
-        {/* Nummerierte Badge mit Gradient-Linie */}
-        <div className="flex items-center gap-3 px-5 pt-5 pb-3">
-          <div className={cn(
-            "flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center",
-            "text-sm font-bold",
-            "bg-gradient-to-br from-cta to-cta-hover text-cta-foreground",
-            "shadow-lg shadow-cta/30"
-          )}>
-            {index + 1}
-          </div>
-          <div className="flex-1 h-[2px] bg-gradient-to-r from-cta/60 via-cta/30 to-transparent rounded-full" />
-        </div>
-
-        {/* Split Content: Problem | Lösung */}
-        <div className={cn(
-          "grid h-auto relative",
-          isMobile ? "grid-cols-1" : "grid-cols-2"
-        )}>
-          {/* Problem-Seite */}
-          <div className={cn(
-            "p-5",
-            isMobile ? "pb-4" : "",
-            "bg-muted/60",
-            "border-l-[3px] border-destructive/40"
-          )}>
-            {/* Icon Badge */}
-            <div className="flex items-center gap-2 mb-3">
-              <div className={cn(
-                "w-9 h-9 rounded-lg flex items-center justify-center",
-                "bg-destructive/10 text-destructive"
-              )}>
-                <IconComponent className="h-5 w-5" />
-              </div>
-              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                {label}
-              </span>
-            </div>
-
-            {/* Problem-Zitat */}
-            <blockquote className="text-base lg:text-lg text-foreground/85 italic leading-relaxed">
-              „{point.problem}"
-            </blockquote>
-          </div>
-
-          {/* Transformation-Pfeil (nur Desktop in der Mitte) */}
-          {!isMobile && (
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-              <div className={cn(
-                "w-10 h-10 rounded-full flex items-center justify-center",
-                "bg-card border-2 border-accent shadow-lg",
-                "text-accent"
-              )}>
-                <ArrowRight className="h-5 w-5" />
-              </div>
-            </div>
-          )}
-
-          {/* Mobile Pfeil */}
-          {isMobile && (
-            <div className="flex justify-center py-2 bg-gradient-to-b from-muted/60 to-card">
-              <div className={cn(
-                "w-8 h-8 rounded-full flex items-center justify-center",
-                "bg-accent/20 text-accent"
-              )}>
-                <ArrowDown className="h-4 w-4" />
-              </div>
-            </div>
-          )}
-
-          {/* Lösungs-Seite */}
-          <div className={cn(
-            "p-5",
-            isMobile ? "pt-2" : "",
-            "bg-card",
-            "border-l-[3px] border-accent/40"
-          )}>
-            {/* Lösung Label */}
-            <div className="flex items-center gap-2 mb-3">
-              <div className={cn(
-                "w-6 h-6 rounded-full flex items-center justify-center",
-                "bg-accent/20 text-accent"
-              )}>
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <span className={cn(
-                "text-sm font-semibold",
-                isGentle ? "text-primary" : "text-accent"
-              )}>
-                Unsere Lösung
-              </span>
-            </div>
-
-            {/* Lösungs-Text */}
-            <p className="text-foreground font-medium leading-relaxed">
-              {point.solution}
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <section className={cn(
       "py-12 lg:py-20 relative overflow-hidden",
@@ -214,9 +72,12 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
               ? 'Sie sind nicht allein. Wir helfen – ohne Druck, ohne Wertung.'
               : 'Diese Situationen kennen wir. Und wir haben die Lösung.'}
           </p>
+          <p className="text-sm text-muted-foreground/70 mt-3">
+            {isMobile ? 'Tippen Sie auf eine Karte' : 'Klicken Sie auf eine Karte'} um die Lösung zu sehen
+          </p>
         </div>
 
-        {/* Mobile: Carousel | Desktop: Stacked Cards */}
+        {/* Mobile: Carousel | Desktop: Grid */}
         {isMobile ? (
           <div className="space-y-6">
             <Carousel
@@ -230,7 +91,14 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
               <CarouselContent className="-ml-4">
                 {data.painPoints.map((point, index) => (
                   <CarouselItem key={index} className="pl-4 basis-[90%]">
-                    <PainPointCard point={point} index={index} />
+                    <FlipCard
+                      problem={point.problem}
+                      solution={point.solution}
+                      index={index}
+                      isGentle={isGentle}
+                      isMobile={isMobile}
+                      isVisible={true}
+                    />
                   </CarouselItem>
                 ))}
               </CarouselContent>
@@ -256,10 +124,18 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
         ) : (
           <div 
             ref={sectionRef}
-            className="flex flex-col gap-6 max-w-4xl mx-auto"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto"
           >
             {data.painPoints.map((point, index) => (
-              <PainPointCard key={index} point={point} index={index} />
+              <FlipCard
+                key={index}
+                problem={point.problem}
+                solution={point.solution}
+                index={index}
+                isGentle={isGentle}
+                isMobile={isMobile}
+                isVisible={isVisible}
+              />
             ))}
           </div>
         )}

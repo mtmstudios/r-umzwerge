@@ -521,11 +521,11 @@
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.7s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
 }
 
-.flip-card:hover .flip-card-inner,
+/* Only flip on .flipped class (click/tap), not hover */
 .flip-card.flipped .flip-card-inner {
   transform: rotateY(180deg);
 }
@@ -538,26 +538,40 @@
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   border-radius: 1rem;
-  transition: box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: box-shadow 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .flip-card-front {
-  box-shadow: 0 4px 12px -4px hsl(var(--foreground) / 0.08);
+  box-shadow: 0 8px 24px -8px hsl(var(--foreground) / 0.1);
 }
 
-.flip-card:hover .flip-card-front,
+.flip-card:hover .flip-card-front {
+  box-shadow: 0 16px 36px -12px hsl(var(--foreground) / 0.15);
+}
+
 .flip-card.flipped .flip-card-front {
-  box-shadow: 0 20px 40px -12px hsl(var(--foreground) / 0.2);
+  box-shadow: 0 4px 12px -4px hsl(var(--foreground) / 0.05);
 }
 
 .flip-card-back {
   transform: rotateY(180deg);
-  box-shadow: 0 20px 40px -12px hsl(var(--primary) / 0.4);
+  box-shadow: 0 8px 24px -8px hsl(var(--accent) / 0.2);
 }
 
-.flip-card:hover .flip-card-back,
 .flip-card.flipped .flip-card-back {
-  box-shadow: 0 24px 48px -12px hsl(var(--primary) / 0.5);
+  box-shadow: 0 24px 48px -12px hsl(var(--accent) / 0.35);
+}
+
+/* Checkmark draw animation */
+@keyframes draw-check {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Subtle lift on hover before flip */
+.flip-card:not(.flipped):hover {
+  transform: translateY(-4px);
 }
 
 /* SEA Landing Page Premium Animations */
