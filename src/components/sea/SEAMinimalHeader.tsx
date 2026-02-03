@@ -18,8 +18,8 @@ export function SEAMinimalHeader() {
             <img
               src={logoNeu}
               alt="Räumzwerge – Entrümpelungen, Auflösungen, Service"
-              style={{ height: 100, width: "auto", maxHeight: "none" }}
-              className="object-contain logo-trim -mt-3 -mb-6 block"
+              style={{ height: 120, width: "auto", maxHeight: "none" }}
+              className="object-contain logo-trim -mt-4 -mb-8 block"
             />
           </a>
 
