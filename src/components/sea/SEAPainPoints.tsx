@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MessageCircle, ArrowRight } from 'lucide-react';
+import { ArrowRight, ArrowDown, Heart, Clock, Shield, Home, AlertCircle, Feather } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 import { cn } from '@/lib/utils';
@@ -17,6 +17,27 @@ import type { SEAData } from '@/lib/seaData';
 interface SEAPainPointsProps {
   data: SEAData;
 }
+
+// Icon-Mapping basierend auf Problemtext-Keywords
+const getIconForProblem = (problem: string) => {
+  const text = problem.toLowerCase();
+  if (text.includes('verstorben') || text.includes('tod') || text.includes('trauer')) {
+    return { icon: Feather, label: 'Trauerfall' };
+  }
+  if (text.includes('pflege') || text.includes('heim') || text.includes('umzug')) {
+    return { icon: Home, label: 'Pflegeheim' };
+  }
+  if (text.includes('zeit') || text.includes('schnell') || text.includes('dringend')) {
+    return { icon: Clock, label: 'Zeitdruck' };
+  }
+  if (text.includes('diskret') || text.includes('messie') || text.includes('scham')) {
+    return { icon: Shield, label: 'Diskret' };
+  }
+  if (text.includes('überfordert') || text.includes('allein') || text.includes('weiß nicht')) {
+    return { icon: AlertCircle, label: 'Überforderung' };
+  }
+  return { icon: Heart, label: 'Persönlich' };
+};
 
 export function SEAPainPoints({ data }: SEAPainPointsProps) {
   const isGentle = data.tone === 'gentle';
@@ -40,116 +61,139 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
   // CTA-Text je nach Ton
   const getCtaText = () => {
     if (isGentle) return 'Unverbindlich schreiben';
-    if (isDirect) return 'Preis anfragen';
+    if (isDirect) return 'Jetzt Preis anfragen';
     return 'Jetzt Hilfe anfragen';
   };
 
-  // WhatsApp-Nachricht mit Kontext
-  const getWhatsAppMessage = (problem: string) => {
-    return `Hallo Räumzwerge, ${isGentle ? 'ich brauche diskret Hilfe' : 'ich hätte gerne eine Preiseinschätzung'}. Meine Situation: ${problem.substring(0, 50)}... Ort: ____.`;
+  // WhatsApp-Nachricht
+  const getWhatsAppMessage = () => {
+    return isGentle 
+      ? 'Hallo Räumzwerge, ich brauche diskret Hilfe. Ort: ____. Ich sende gleich Fotos.'
+      : 'Hallo Räumzwerge, ich hätte gerne eine Preiseinschätzung. Ort: ____. Ich sende gleich Fotos.';
   };
 
-  // Card-Komponente für Wiederverwendung
-  const PainPointCard = ({ point, index }: { point: { problem: string; solution: string }, index: number }) => (
-    <div
-      className={cn(
-        // Glassmorphism base
-        "glass card-glow rounded-2xl overflow-hidden h-full",
-        "border border-border/30",
-        // Transitions
-        "transition-all duration-500",
-        !isMobile && "opacity-0 translate-y-6",
-        !isMobile && isVisible && "opacity-100 translate-y-0"
-      )}
-      style={!isMobile ? {
-        transitionDelay: isVisible ? `${index * 150}ms` : '0ms',
-      } : undefined}
-    >
-      <div className="p-6 lg:p-8 flex flex-col h-full relative z-10">
-        {/* Problem: Emotionales Zitat */}
-        <div className="flex-grow mb-6">
-          <div className="flex items-start gap-3 mb-4">
-            <div className={cn(
-              "flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center",
-              "icon-bounce transition-all duration-300",
-              "bg-gradient-to-br",
-              isGentle 
-                ? "from-primary/20 to-primary/5 shadow-lg shadow-primary/10" 
-                : "from-accent/20 to-accent/5 shadow-lg shadow-accent/10"
-            )}>
-              <MessageCircle className={cn(
-                "h-6 w-6",
-                isGentle ? "text-primary" : "text-accent"
-              )} />
-            </div>
-            <span className="text-sm text-muted-foreground pt-3 font-medium">
-              Was wir oft hören:
-            </span>
-          </div>
-          <blockquote className={cn(
-            "text-lg lg:text-xl text-foreground/90 italic leading-relaxed pl-4",
-            "border-l-2",
-            isGentle ? "border-primary/40" : "border-accent/40"
+  // Split-Card Komponente
+  const PainPointCard = ({ point, index }: { point: { problem: string; solution: string }, index: number }) => {
+    const { icon: IconComponent, label } = getIconForProblem(point.problem);
+    
+    return (
+      <div
+        className={cn(
+          "pain-point-card rounded-2xl overflow-hidden h-full",
+          "border border-border/40",
+          "bg-card/50 backdrop-blur-sm",
+          "transition-all duration-500",
+          !isMobile && "opacity-0 translate-y-6",
+          !isMobile && isVisible && "opacity-100 translate-y-0"
+        )}
+        style={!isMobile ? {
+          transitionDelay: isVisible ? `${index * 150}ms` : '0ms',
+        } : undefined}
+      >
+        {/* Nummerierte Badge mit Gradient-Linie */}
+        <div className="flex items-center gap-3 px-5 pt-5 pb-3">
+          <div className={cn(
+            "flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center",
+            "text-sm font-bold",
+            "bg-gradient-to-br from-cta to-cta-hover text-cta-foreground",
+            "shadow-lg shadow-cta/30"
           )}>
-            „{point.problem}"
-          </blockquote>
+            {index + 1}
+          </div>
+          <div className="flex-1 h-[2px] bg-gradient-to-r from-cta/60 via-cta/30 to-transparent rounded-full" />
         </div>
 
-        {/* Lösung mit animiertem Gradient-Hintergrund */}
+        {/* Split Content: Problem | Lösung */}
         <div className={cn(
-          "rounded-xl p-4 mb-4 relative overflow-hidden",
-          "border-l-4",
-          isGentle ? "border-primary" : "border-accent"
+          "grid h-auto",
+          isMobile ? "grid-cols-1" : "grid-cols-2"
         )}>
-          {/* Animated gradient background */}
+          {/* Problem-Seite */}
           <div className={cn(
-            "absolute inset-0 opacity-60",
-            isGentle 
-              ? "bg-gradient-to-r from-primary/15 via-primary/8 to-primary/15"
-              : "bg-gradient-to-r from-accent/15 via-accent/8 to-accent/15"
-          )} />
-          
-          <div className="relative z-10">
-            <p className={cn(
-              "text-sm font-semibold mb-1",
-              isGentle ? "text-primary" : "text-accent"
+            "p-5 relative",
+            isMobile ? "pb-4" : "border-r border-border/30",
+            "bg-muted/40"
+          )}>
+            {/* Icon Badge */}
+            <div className="flex items-center gap-2 mb-3">
+              <div className={cn(
+                "w-9 h-9 rounded-lg flex items-center justify-center",
+                "bg-destructive/10 text-destructive"
+              )}>
+                <IconComponent className="h-5 w-5" />
+              </div>
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                {label}
+              </span>
+            </div>
+
+            {/* Problem-Zitat */}
+            <blockquote className={cn(
+              "text-base lg:text-lg text-foreground/85 italic leading-relaxed",
+              "border-l-3 border-destructive/50 pl-3"
             )}>
-              Unsere Lösung:
-            </p>
+              „{point.problem}"
+            </blockquote>
+          </div>
+
+          {/* Transformation-Pfeil (nur Desktop in der Mitte) */}
+          {!isMobile && (
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 hidden lg:flex">
+              <div className={cn(
+                "w-10 h-10 rounded-full flex items-center justify-center",
+                "bg-card border-2 border-accent shadow-lg",
+                "text-accent"
+              )}>
+                <ArrowRight className="h-5 w-5" />
+              </div>
+            </div>
+          )}
+
+          {/* Mobile Pfeil */}
+          {isMobile && (
+            <div className="flex justify-center py-2">
+              <div className={cn(
+                "w-8 h-8 rounded-full flex items-center justify-center",
+                "bg-accent/20 text-accent"
+              )}>
+                <ArrowDown className="h-4 w-4" />
+              </div>
+            </div>
+          )}
+
+          {/* Lösungs-Seite */}
+          <div className={cn(
+            "p-5 relative",
+            isMobile ? "pt-2" : "",
+            "bg-gradient-to-br from-accent/5 to-primary/5"
+          )}>
+            {/* Lösung Label */}
+            <div className="flex items-center gap-2 mb-3">
+              <div className={cn(
+                "w-6 h-6 rounded-full flex items-center justify-center",
+                "bg-accent/20 text-accent"
+              )}>
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <span className={cn(
+                "text-sm font-semibold",
+                isGentle ? "text-primary" : "text-accent"
+              )}>
+                Unsere Lösung
+              </span>
+            </div>
+
+            {/* Lösungs-Text */}
             <p className="text-foreground font-medium leading-relaxed">
               {point.solution}
             </p>
           </div>
         </div>
-
-        {/* WhatsApp Mini-CTA */}
-        <a
-          href={getWhatsAppLink(getWhatsAppMessage(point.problem))}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group mt-auto"
-        >
-          <Button
-            variant="outline"
-            size="sm"
-            className={cn(
-              "w-full justify-between",
-              "border-whatsapp/40 text-whatsapp",
-              "hover:bg-whatsapp hover:text-whatsapp-foreground hover:border-whatsapp",
-              "transition-all duration-300",
-              "shadow-sm hover:shadow-lg hover:shadow-whatsapp/20"
-            )}
-          >
-            <span className="flex items-center gap-2">
-              <WhatsAppIcon className="h-4 w-4" />
-              {getCtaText()}
-            </span>
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Button>
-        </a>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <section className={cn(
@@ -161,7 +205,7 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
       <div className="absolute bottom-20 right-10 w-40 h-40 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
       
       <div className="container-custom relative z-10">
-        {/* Header mit angepasstem Text */}
+        {/* Header */}
         <div className="text-center mb-10 lg:mb-14">
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground mb-3">
             {isGentle ? 'Wir verstehen, wie Sie sich fühlen' : 'Kennen Sie das?'}
@@ -173,7 +217,7 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
           </p>
         </div>
 
-        {/* Mobile: Carousel | Desktop: Grid */}
+        {/* Mobile: Carousel | Desktop: Stacked Cards */}
         {isMobile ? (
           <div className="space-y-6">
             <Carousel
@@ -186,7 +230,7 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
             >
               <CarouselContent className="-ml-4">
                 {data.painPoints.map((point, index) => (
-                  <CarouselItem key={index} className="pl-4 basis-[85%]">
+                  <CarouselItem key={index} className="pl-4 basis-[90%]">
                     <PainPointCard point={point} index={index} />
                   </CarouselItem>
                 ))}
@@ -202,7 +246,7 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
                   className={cn(
                     "h-2 rounded-full transition-all duration-300",
                     currentSlide === index 
-                      ? "w-6 bg-primary" 
+                      ? "w-6 bg-cta" 
                       : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50"
                   )}
                   aria-label={`Gehe zu Karte ${index + 1}`}
@@ -213,13 +257,42 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
         ) : (
           <div 
             ref={sectionRef}
-            className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto"
+            className="flex flex-col gap-6 max-w-4xl mx-auto"
           >
             {data.painPoints.map((point, index) => (
               <PainPointCard key={index} point={point} index={index} />
             ))}
           </div>
         )}
+
+        {/* Zentraler WhatsApp CTA */}
+        <div className="mt-10 lg:mt-14 flex justify-center">
+          <a
+            href={getWhatsAppLink(getWhatsAppMessage())}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group"
+          >
+            <Button
+              size="lg"
+              className={cn(
+                "gap-3 px-8 py-6 text-base font-semibold rounded-xl",
+                "bg-whatsapp text-whatsapp-foreground",
+                "hover:bg-whatsapp-hover",
+                "shadow-lg shadow-whatsapp/30 hover:shadow-xl hover:shadow-whatsapp/40",
+                "transition-all duration-300",
+                "btn-lift"
+              )}
+            >
+              <WhatsAppIcon className="h-6 w-6" />
+              <span>{getCtaText()}</span>
+              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+            </Button>
+            <p className="text-center text-sm text-muted-foreground mt-3">
+              Antwort innerhalb von 24 Stunden
+            </p>
+          </a>
+        </div>
       </div>
     </section>
   );

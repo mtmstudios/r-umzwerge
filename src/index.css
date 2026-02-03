@@ -500,6 +500,17 @@
   pointer-events: none;
 }
 
+/* Pain Point Split Card */
+.pain-point-card {
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              box-shadow 0.3s ease-out;
+}
+
+.pain-point-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px -12px hsl(var(--foreground) / 0.12);
+}
 
 /* 3D Flip Card Styles */
 .flip-card {
