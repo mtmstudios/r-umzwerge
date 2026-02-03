@@ -118,9 +118,9 @@ function MobileCarousel({ steps }: { steps: TimelineStep[] }) {
         opts={{ align: 'center', loop: false, containScroll: false }}
         className="w-full overflow-visible"
       >
-        <CarouselContent className="ml-0">
+        <CarouselContent className="-ml-0">
           {steps.map((step, index) => (
-            <CarouselItem key={step.number} className="pl-4 basis-[75%]">
+            <CarouselItem key={step.number} className="pl-0 basis-[85%] flex justify-center">
               <div className={cn(
                 "py-4 carousel-gpu transition-all duration-300 ease-out",
                 index === current 

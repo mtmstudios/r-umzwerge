@@ -171,22 +171,6 @@ export function BentoCard({
         )}
       </div>
 
-      {/* Arrow indicator - visible on mobile, hover-only on desktop */}
-      <div
-        className={cn(
-          'absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 font-medium',
-          'transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]',
-          'opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-3 lg:group-hover:opacity-100 lg:group-hover:translate-y-0',
-          isLarge ? 'text-sm' : 'text-xs sm:text-sm',
-          variant === 'accent' ? 'text-accent' : 'text-primary'
-        )}
-      >
-        <span className="transition-transform duration-200 lg:group-hover:translate-x-[-2px]">Details</span>
-        <ArrowRight className={cn(
-          'transition-transform duration-300 lg:group-hover:translate-x-1',
-          isLarge ? 'h-4 w-4' : 'h-3.5 w-3.5'
-        )} />
-      </div>
     </a>
   );
 }
