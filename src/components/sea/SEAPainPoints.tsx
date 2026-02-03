@@ -79,18 +79,18 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
 
         {/* Mobile: Carousel | Desktop: Grid */}
         {isMobile ? (
-          <div className="space-y-6">
+          <div className="flex flex-col items-center space-y-6">
             <Carousel
               setApi={setCarouselApi}
               opts={{
-                align: 'start',
+                align: 'center',
                 loop: false,
               }}
-              className="w-full"
+              className="w-full max-w-sm mx-auto"
             >
-              <CarouselContent className="-ml-4">
+              <CarouselContent className="-ml-2">
                 {data.painPoints.map((point, index) => (
-                  <CarouselItem key={index} className="pl-4 basis-[90%]">
+                  <CarouselItem key={index} className="pl-2 basis-[85%]">
                     <FlipCard
                       problem={point.problem}
                       solution={point.solution}
