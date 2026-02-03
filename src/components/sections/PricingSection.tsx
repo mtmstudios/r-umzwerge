@@ -128,7 +128,7 @@ export function PricingSection() {
               <img 
                 src={pricingTabletImage}
                 alt="Tablet mit transparenter Preiskalkulation auf Tisch mit Umzugskartons"
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-cover object-[center_35%] sm:object-center"
               />
               {/* Gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-foreground/20 via-transparent to-transparent" />
