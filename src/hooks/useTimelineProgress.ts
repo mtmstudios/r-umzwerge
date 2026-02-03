@@ -18,17 +18,22 @@ export function useTimelineProgress(stepsCount: number) {
       // Calculate progress so timeline reaches 100% when section center is in viewport center
       const sectionTop = rect.top;
       
-      // Start when section enters viewport (70% from top)
-      // Complete when section center reaches viewport center (50%)
-      const scrollStart = windowHeight * 0.7;
-      const scrollEnd = windowHeight * 0.5;
+      // Längerer, sanfterer Scroll-Bereich (40% statt 20%)
+      const scrollStart = windowHeight * 0.85;  // Früher starten
+      const scrollEnd = windowHeight * 0.45;    // Später enden
       
       const scrollRange = scrollStart - scrollEnd;
       const currentScroll = scrollStart - sectionTop;
       
-      // Calculate progress (0 to 1)
+      // Calculate raw progress (0 to 1)
       const rawProgress = Math.min(Math.max(currentScroll / scrollRange, 0), 1);
-      setProgress(rawProgress);
+      
+      // Smooth ease-in-out-quad für natürlichere Bewegung
+      const easedProgress = rawProgress < 0.5
+        ? 2 * rawProgress * rawProgress
+        : 1 - Math.pow(-2 * rawProgress + 2, 2) / 2;
+      
+      setProgress(easedProgress);
       
       // Calculate which step is active
       const stepProgress = rawProgress * stepsCount;

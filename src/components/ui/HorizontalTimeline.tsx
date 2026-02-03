@@ -41,12 +41,14 @@ function StepCard({
       <div
         className={cn(
           'relative z-10 w-24 h-24 sm:w-28 sm:h-28 md:w-[120px] md:h-[120px] rounded-2xl sm:rounded-3xl flex flex-col items-center justify-center',
-          'border-2 transition-colors duration-500',
+          'border-2 transition-all duration-500',
+          // Hintergrund-Abdeckung die die Timeline-Linie verdeckt
+          'before:absolute before:inset-[-8px] before:-z-10 before:rounded-3xl',
           isCurrent
-            ? 'bg-primary border-primary shadow-lg shadow-primary/30'
+            ? 'bg-primary border-primary shadow-lg shadow-primary/30 before:bg-background'
             : isActive
-            ? 'bg-primary/90 border-primary'
-            : 'bg-card border-border',
+            ? 'bg-primary/90 border-primary before:bg-background'
+            : 'bg-card border-border before:bg-background',
           isJustActivated && 'animate-bounce-in',
           isCurrent && !isJustActivated && 'scale-110'
         )}
@@ -182,16 +184,16 @@ function DesktopTimeline({ steps }: { steps: TimelineStep[] }) {
 
   return (
     <div ref={containerRef} className="hidden md:block relative">
-      {/* Progress Bar */}
-      <div className="absolute top-[60px] left-0 right-0 z-0 h-1 bg-border rounded-full mx-auto max-w-3xl">
+      {/* Progress Bar - hinter den Karten mit -z-10 */}
+      <div className="absolute top-[60px] left-0 right-0 -z-10 h-1 bg-border rounded-full mx-auto max-w-3xl">
         <div
-          className="absolute top-0 left-0 h-full bg-gradient-to-r from-cta via-accent to-cta rounded-full transition-all duration-300 ease-out"
+          className="absolute top-0 left-0 h-full bg-gradient-to-r from-cta via-accent to-cta rounded-full transition-all duration-700 ease-out"
           style={{ width: `${progress * 100}%` }}
         />
       </div>
 
-      {/* Steps Grid */}
-      <div className="grid md:grid-cols-3 gap-4 lg:gap-8">
+      {/* Steps Grid - über der Progress-Bar mit z-10 */}
+      <div className="relative z-10 grid md:grid-cols-3 gap-4 lg:gap-8">
         {steps.map((step, index) => (
           <StepCard
             key={step.number}
