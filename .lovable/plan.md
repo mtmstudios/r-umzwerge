@@ -1,143 +1,103 @@
 
-# Smoother Timeline Animation + Linie hinter Karten
+# Fix: Timeline-Hintergrund nicht mehr sichtbar
 
-## Betroffene Seiten
+## Erkanntes Problem
 
-Die Änderungen wirken auf **alle Seiten**, da sie die gemeinsame Komponente nutzen:
+Auf dem Screenshot sehe ich:
+- Die Karten haben **weiße rechteckige Hintergründe** (`before:bg-background`) die stark auffallen
+- Diese Hintergründe sollten NICHT sichtbar sein - sie waren nur gedacht um die Linie zu verdecken
+- Die Service-Seiten (`/entruempelung` etc.) haben `bg-secondary/30` aber die Pseudo-Elemente zeigen trotzdem weiß
 
-| Seite | Komponente |
-|-------|------------|
-| Homepage `/` | `ProcessSection.tsx` |
-| Service-Seiten `/entruempelung`, `/haushaltsaufloesung`, etc. | `ServiceProcess.tsx` |
-| City-Seiten `/ulm`, `/muenchen`, `/augsburg`, etc. | `ServiceProcess.tsx` |
+## Lösung
 
----
-
-## Probleme & Lösungen
-
-| Problem | Lösung |
-|---------|--------|
-| Fortschrittslinie scheint durch die Karten | Linie auf `z-0`, Karten-Container auf `z-10`, Karten bekommen Hintergrund-Abdeckung |
-| Animation zu abrupt/schnell | Längerer Scroll-Bereich (40% statt 20%) + Easing-Kurve |
-| Nicht komplett bei Section-Ankunft | Timeline erreicht 100% wenn Section im Viewport-Zentrum |
+Die Linie ist bereits mit `-z-10` unter den Karten - wir brauchen das Pseudo-Element gar nicht mehr. Stattdessen bekommt nur der **Icon-Container selbst** einen passenden Hintergrund.
 
 ---
 
-## Technische Änderungen
+## Technische Änderung
 
-### 1. `src/hooks/useTimelineProgress.ts`
+### `src/components/ui/HorizontalTimeline.tsx`
 
-**Smootherer Scroll-Bereich:**
-
-```typescript
-// Vorher: Zu kurzer Bereich (20%)
-const scrollStart = windowHeight * 0.7;
-const scrollEnd = windowHeight * 0.5;
-
-// Nachher: Längerer, sanfterer Bereich (40%)
-const scrollStart = windowHeight * 0.85;  // Früher starten
-const scrollEnd = windowHeight * 0.45;    // Später enden
+**Vorher (Zeile 43-51):**
+```tsx
+'border-2 transition-all duration-500',
+// Hintergrund-Abdeckung die die Timeline-Linie verdeckt
+'before:absolute before:inset-[-8px] before:-z-10 before:rounded-3xl',
+isCurrent
+  ? 'bg-primary border-primary shadow-lg shadow-primary/30 before:bg-background'
+  : isActive
+  ? 'bg-primary/90 border-primary before:bg-background'
+  : 'bg-card border-border before:bg-background',
 ```
 
-**Easing-Funktion für natürliche Bewegung:**
-
-```typescript
-// Smooth ease-in-out-quad
-const easedProgress = rawProgress < 0.5
-  ? 2 * rawProgress * rawProgress
-  : 1 - Math.pow(-2 * rawProgress + 2, 2) / 2;
+**Nachher - Pseudo-Element entfernt:**
+```tsx
+'border-2 transition-all duration-500',
+isCurrent
+  ? 'bg-primary border-primary shadow-lg shadow-primary/30'
+  : isActive
+  ? 'bg-primary/90 border-primary'
+  : 'bg-card border-border',
 ```
 
 ---
 
-### 2. `src/components/ui/HorizontalTimeline.tsx`
+## Warum funktioniert das?
 
-**Progress-Bar hinter die Karten (z-index Fix):**
-
+Die Timeline-Linie hat bereits `-z-10`:
 ```tsx
-// Vorher:
-<div className="absolute top-[60px] ... z-0 h-1 ...">
-
-// Nachher:
-<div className="absolute top-[60px] ... -z-10 h-1 ...">
+<div className="absolute top-[60px] left-0 right-0 -z-10 h-1 ..." />
 ```
 
-**Karten-Container mit höherem z-index:**
-
+Und der Karten-Container hat `relative z-10`:
 ```tsx
-// Vorher:
-<div className="grid md:grid-cols-3 ...">
-
-// Nachher:
-<div className="relative z-10 grid md:grid-cols-3 ...">
+<div className="relative z-10 grid md:grid-cols-3 ..." />
 ```
 
-**Hintergrund-Abdeckung für Karten-Icons:**
-
-```tsx
-// In StepCard - Circle bekommt Pseudo-Element das die Linie verdeckt
-<div className={cn(
-  'relative z-10 w-24 h-24 ... rounded-2xl',
-  // NEU: Hintergrund der die Linie verdeckt
-  'before:absolute before:inset-[-4px] before:-z-10 before:bg-secondary/30 before:rounded-3xl'
-)}>
-```
-
-**Smoothere CSS-Transitions:**
-
-```tsx
-// Progress-Bar mit längerer Animation
-className="... transition-all duration-500 ease-out"
-
-// Karten mit gestaffelter Einblendung (optional)
-style={{ transitionDelay: `${index * 100}ms` }}
-```
+Dadurch ist die Linie automatisch UNTER den Karten - ohne extra Hintergrund-Abdeckung.
 
 ---
 
 ## Visuelles Ergebnis
 
+**Vorher:**
 ```text
-Scroll-Fortschritt:    0%      25%      50%      75%     100%
-                       ▼        ▼        ▼        ▼        ▼
-Progress-Bar:         [      ][====   ][======= ][========][=========]
-                              ↑ sanfter Start    ↑ smooth Ende
-                                (eased)
-
-Layering (Seitenansicht):
 ┌─────────────────────────────────────────┐
-│  Karten (z-10)        ┌─┐  ┌─┐  ┌─┐    │
-│                       │1│  │2│  │3│    │
-│                       └─┘  └─┘  └─┘    │
-│  ─────────────────────────────────────  │ ← Linie (z-0) HINTER Karten
-│  Hintergrund-Abdeckung (before pseudo)  │
+│    ┌──────────┐  ┌──────────┐           │
+│    │ ░░░░░░░░ │  │ ░░░░░░░░ │  ← Weißer │
+│    │ ░ KARTE ░│  │ ░ KARTE ░│    Block  │
+│    │ ░░░░░░░░ │  │ ░░░░░░░░ │           │
+│    └──────────┘  └──────────┘           │
+│  ─────────────────────────────          │
+└─────────────────────────────────────────┘
+```
+
+**Nachher:**
+```text
+┌─────────────────────────────────────────┐
+│       ┌────────┐    ┌────────┐          │
+│       │  KARTE │    │  KARTE │          │
+│       └────────┘    └────────┘          │
+│                                         │ ← Kein Block
+│  ─────────────────────────────          │    mehr sichtbar
 └─────────────────────────────────────────┘
 ```
 
 ---
 
-## Betroffene Dateien
+## Betroffene Seiten
 
-| Datei | Änderungen |
-|-------|------------|
-| `src/hooks/useTimelineProgress.ts` | Längerer Scroll-Range (85% → 45%), Easing-Funktion |
-| `src/components/ui/HorizontalTimeline.tsx` | z-index Layering, Hintergrund-Abdeckung, smoothere Transitions |
+Diese Änderung wirkt automatisch auf:
+- Homepage `/` (ProcessSection)
+- Alle Service-Seiten (ServiceProcess)
+- Alle City-Seiten (ServiceProcess)
 
 ---
 
-## Ergebnis auf allen Seiten
+## Zusammenfassung
 
-Nach der Änderung wirkt die Timeline auf:
+| Änderung | Datei |
+|----------|-------|
+| Pseudo-Element (`before:...`) entfernen | `HorizontalTimeline.tsx` |
 
-- **Homepage** (`/`) - "In 3 Schritten zum freien Raum"
-- **Entrümpelung** (`/entruempelung`) - "So läuft's ab"
-- **Haushaltsauflösung** (`/haushaltsaufloesung`) - "So läuft's ab"
-- **Messiewohnung** (`/messiewohnung-entruempeln`) - "So läuft's ab"
-- **Ulm** (`/ulm`) - "So läuft's ab"
-- **München** (`/muenchen`) - "So läuft's ab"
-- **Alle anderen City-Seiten** - "So läuft's ab"
-
-Die Animation wird überall:
-- Sanfter und länger aufgebaut
-- Die Linie bleibt hinter den Karten unsichtbar
-- Bei Erreichen der Section ist alles vollständig sichtbar
+Die Linie bleibt durch das korrekte z-index Layering weiterhin hinter den Karten verborgen, aber ohne sichtbaren weißen Hintergrund.
