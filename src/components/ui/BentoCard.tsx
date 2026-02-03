@@ -62,10 +62,10 @@ export function BentoCard({
         'flex flex-col items-center text-center',
         'transition-all duration-300 ease-out',
         'lg:hover:scale-[1.03] lg:hover:-translate-y-2 active:scale-[0.98]',
-        // Size variants
+        // Size variants - increased min-height for tablet text
         isLarge 
-          ? 'p-6 sm:p-8 min-h-[180px] sm:min-h-[200px]' 
-          : 'p-4 sm:p-5 min-h-[140px] sm:min-h-[160px]',
+          ? 'p-5 sm:p-6 md:p-8 min-h-[220px] sm:min-h-[240px] md:min-h-[260px]' 
+          : 'p-4 sm:p-5 min-h-[180px] sm:min-h-[200px] md:min-h-[220px]',
         // Style variants with enhanced shadows (hover only on desktop)
         variant === 'default' && 'bg-card border border-border lg:hover:border-accent/60 lg:hover:shadow-[0_20px_50px_-15px_hsl(var(--accent)/0.2)]',
         variant === 'glass' && 'glass lg:hover:shadow-[0_20px_50px_-15px_hsl(var(--accent)/0.25)]',
@@ -95,7 +95,7 @@ export function BentoCard({
           'relative rounded-xl sm:rounded-2xl flex items-center justify-center mb-3 sm:mb-4 mx-auto',
           'transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]',
           'lg:group-hover:scale-115 lg:group-hover:rotate-3',
-          isLarge ? 'w-14 h-14 sm:w-16 sm:h-16' : 'w-10 h-10 sm:w-12 sm:h-12',
+          isLarge ? 'w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16' : 'w-10 h-10 sm:w-12 sm:h-12',
           variant === 'accent'
             ? 'bg-accent/20 lg:group-hover:bg-accent/30'
             : 'bg-accent/10 lg:group-hover:bg-accent/25 lg:group-hover:shadow-[0_0_20px_hsl(var(--accent)/0.3)]'
@@ -105,18 +105,18 @@ export function BentoCard({
           className={cn(
             'transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]',
             'lg:group-hover:scale-110',
-            isLarge ? 'h-7 w-7 sm:h-8 sm:w-8' : 'h-5 w-5 sm:h-6 sm:w-6',
+            isLarge ? 'h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8' : 'h-5 w-5 sm:h-6 sm:w-6',
             variant === 'accent' ? 'text-accent' : 'text-primary lg:group-hover:text-accent'
           )}
         />
       </div>
 
       {/* Content */}
-      <div className="relative space-y-1 sm:space-y-1.5 text-center">
+      <div className="relative space-y-1 sm:space-y-1.5 text-center flex-1">
         <h3
           className={cn(
             'font-semibold',
-            isLarge ? 'text-base sm:text-lg' : 'text-sm sm:text-base',
+            isLarge ? 'text-sm sm:text-base md:text-lg' : 'text-sm sm:text-base',
             variant === 'accent' ? 'text-primary-foreground' : 'text-foreground'
           )}
         >
@@ -138,7 +138,7 @@ export function BentoCard({
           <p
             className={cn(
               'leading-relaxed',
-              isLarge ? 'text-sm' : 'text-xs sm:text-sm',
+              isLarge ? 'text-xs sm:text-sm' : 'text-xs sm:text-sm',
               variant === 'accent' ? 'text-primary-foreground/80' : 'text-muted-foreground'
             )}
           >
@@ -171,6 +171,18 @@ export function BentoCard({
         )}
       </div>
 
+      {/* "Zur Lösung" Link - visible on mobile/tablet, hover on desktop */}
+      <div
+        className={cn(
+          'mt-4 flex items-center gap-1.5 font-medium text-sm',
+          'transition-all duration-300 ease-out',
+          'opacity-100 lg:opacity-0 lg:group-hover:opacity-100',
+          variant === 'accent' ? 'text-accent' : 'text-primary'
+        )}
+      >
+        <span>Zur Lösung</span>
+        <ArrowRight className="h-4 w-4 transition-transform duration-300 lg:group-hover:translate-x-1" />
+      </div>
     </a>
   );
 }
