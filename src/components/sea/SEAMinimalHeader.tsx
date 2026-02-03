@@ -8,18 +8,18 @@ export function SEAMinimalHeader() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border/50">
       <div className="container-custom">
         <div className="flex items-center justify-between py-1">
-          {/* Logo - links to main website in new tab */}
+          {/* Logo - links auf Mobile (nicht abgeschnitten), links auf Desktop */}
           <a 
             href="https://www.raeumzwerge.de" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="flex items-center group"
+            className="flex items-center justify-start shrink-0 overflow-visible"
           >
             <img
               src={logoNeu}
               alt="Räumzwerge – Entrümpelungen, Auflösungen, Service"
               style={{ height: 140, width: "auto", maxHeight: "none" }}
-              className="object-contain logo-trim -mt-5 -mb-10 block"
+              className="object-contain logo-trim -mt-5 -mb-10 block max-w-none"
             />
           </a>
 
