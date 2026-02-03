@@ -31,14 +31,6 @@ export interface SEAData {
   outcomeBadges: string[];
   // Variant-specific styling
   tone: 'warm' | 'direct' | 'gentle';
-  // Hero image
-  heroImage: string;
-  heroImageAlt: string;
-  // Before/After images (optional)
-  beforeImage?: string;
-  beforeImageAlt?: string;
-  afterImage?: string;
-  afterImageAlt?: string;
 }
 
 export const seaData: Record<SEAVariant, SEAData> = {
@@ -90,12 +82,6 @@ export const seaData: Record<SEAVariant, SEAData> = {
     ctaSubline: 'Foto senden – Preiseinschätzung innerhalb von 24h.',
     outcomeBadges: ['Besenrein', 'Übergabefertig', 'Respektvoll geräumt'],
     tone: 'warm',
-    heroImage: '/images/sea-hero-team.png',
-    heroImageAlt: 'Räumzwerge-Team beim professionellen Beladen des Transporters',
-    beforeImage: '/images/haushaltsaufloesung-vorher.png',
-    beforeImageAlt: 'Wohnung vor der Haushaltsauflösung - voller Kartons und Gegenstände',
-    afterImage: '/images/haushaltsaufloesung-nachher.png',
-    afterImageAlt: 'Wohnung nach der Haushaltsauflösung - besenrein und übergabefertig',
   },
 
   'entruempelung': {
@@ -146,12 +132,6 @@ export const seaData: Record<SEAVariant, SEAData> = {
     ctaSubline: 'Foto senden – in 24h wissen Sie, was es kostet.',
     outcomeBadges: ['Besenrein', 'Schnell erledigt', 'Fachgerecht entsorgt'],
     tone: 'direct',
-    heroImage: '/images/sea-hero-team.png',
-    heroImageAlt: 'Räumzwerge-Team beim professionellen Beladen des Transporters',
-    beforeImage: '/images/entruempelung-vorher.png',
-    beforeImageAlt: 'Wohnung vor der Entrümpelung - voll mit Kartons und Müllsäcken',
-    afterImage: '/images/entruempelung-nachher.png',
-    afterImageAlt: 'Wohnung nach der Entrümpelung - besenrein und leer',
   },
 
   'messie-hilfe': {
@@ -202,12 +182,6 @@ export const seaData: Record<SEAVariant, SEAData> = {
     ctaSubline: 'Wir hören zu. Kein Druck, keine Wertung.',
     outcomeBadges: ['Diskret', 'Respektvoll', 'Ein neuer Anfang'],
     tone: 'gentle',
-    heroImage: '/images/sea-hero-team.png',
-    heroImageAlt: 'Räumzwerge-Team beim professionellen Beladen des Transporters',
-    beforeImage: '/images/messie-vorher.png',
-    beforeImageAlt: 'Zimmer vor der Messie-Räumung - voll mit Gegenständen',
-    afterImage: '/images/messie-nachher.png',
-    afterImageAlt: 'Zimmer nach der Messie-Räumung - sauber und besenrein',
   },
 };
 
