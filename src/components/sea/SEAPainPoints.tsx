@@ -5,7 +5,7 @@ import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 import { cn } from '@/lib/utils';
 import { getWhatsAppLink } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useIsMobile, useIsTabletOrMobile } from '@/hooks/use-mobile';
 import { 
   Carousel, 
   CarouselContent, 
@@ -24,8 +24,16 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
   const isDirect = data.tone === 'direct';
   const { ref: sectionRef, isVisible } = useScrollReveal(0.15);
   const isMobile = useIsMobile();
+  const isTabletOrMobile = useIsTabletOrMobile();
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [hasLoaded, setHasLoaded] = useState(false);
+
+  // Einblende-Animation für Carousel
+  useEffect(() => {
+    const timer = setTimeout(() => setHasLoaded(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (!carouselApi) return;
@@ -77,20 +85,24 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
           </p>
         </div>
 
-        {/* Mobile: Carousel | Desktop: Grid */}
-        {isMobile ? (
-          <div className="flex flex-col items-center space-y-6">
+        {/* Mobile/Tablet: Carousel | Desktop: Grid */}
+        {isTabletOrMobile ? (
+          <div className={cn(
+            "flex flex-col items-center space-y-6",
+            "transition-all duration-700 ease-out",
+            hasLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          )}>
             <Carousel
               setApi={setCarouselApi}
               opts={{
                 align: 'center',
                 loop: false,
               }}
-              className="w-full max-w-sm mx-auto"
+              className="w-full max-w-sm md:max-w-md mx-auto"
             >
               <CarouselContent className="-ml-2">
                 {data.painPoints.map((point, index) => (
-                  <CarouselItem key={index} className="pl-2 basis-[85%]">
+                  <CarouselItem key={index} className="pl-2 basis-[85%] md:basis-[65%]">
                     <FlipCard
                       problem={point.problem}
                       solution={point.solution}

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowRight, Heart, Clock, Shield, Home, AlertCircle, Feather, MousePointerClick } from 'lucide-react';
+import { ArrowRight, Heart, Clock, Shield, Home, AlertCircle, Feather, MousePointerClick, Package, Euro } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 import { cn } from '@/lib/utils';
@@ -8,21 +8,35 @@ import { getWhatsAppLink } from '@/lib/constants';
 // Icon-Mapping basierend auf Problemtext-Keywords
 const getIconForProblem = (problem: string) => {
   const text = problem.toLowerCase();
+  // Trauerfall
   if (text.includes('verstorben') || text.includes('tod') || text.includes('trauer')) {
     return { icon: Feather, label: 'Trauerfall' };
   }
-  if (text.includes('pflege') || text.includes('heim') || text.includes('umzug')) {
-    return { icon: Home, label: 'Pflegeheim' };
+  // Wohnung/Pflegeheim/Umzug
+  if (text.includes('pflege') || text.includes('heim') || text.includes('umzug') || text.includes('immobilie') || text.includes('verkauft')) {
+    return { icon: Home, label: 'Wohnung' };
   }
+  // Zeitdruck
   if (text.includes('zeit') || text.includes('schnell') || text.includes('dringend')) {
     return { icon: Clock, label: 'Zeitdruck' };
   }
-  if (text.includes('diskret') || text.includes('messie') || text.includes('scham')) {
+  // Platzmangel (NEU)
+  if (text.includes('platz') || text.includes('voll') || text.includes('keller') || text.includes('dachboden')) {
+    return { icon: Package, label: 'Platzmangel' };
+  }
+  // Kosten (NEU)
+  if (text.includes('kostet') || text.includes('preis') || text.includes('geld') || text.includes('überraschung')) {
+    return { icon: Euro, label: 'Kosten' };
+  }
+  // Diskret/Scham
+  if (text.includes('diskret') || text.includes('messie') || text.includes('scham') || text.includes('schäm')) {
     return { icon: Shield, label: 'Diskret' };
   }
-  if (text.includes('überfordert') || text.includes('allein') || text.includes('weiß nicht')) {
+  // Überforderung
+  if (text.includes('überfordert') || text.includes('allein') || text.includes('weiß nicht') || text.includes('anfangen')) {
     return { icon: AlertCircle, label: 'Überforderung' };
   }
+  // Fallback
   return { icon: Heart, label: 'Persönlich' };
 };
 
