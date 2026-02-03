@@ -4,7 +4,7 @@ import { getWhatsAppLink } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
-import pricingTeamImage from '@/assets/pricing-team.jpg';
+import pricingConsultantImage from '@/assets/pricing-consultant.png';
 
 const PRICE_FACTORS = [
   { icon: Package, label: 'Umfang', description: 'Menge & Raumgröße' },
@@ -122,19 +122,19 @@ export function PricingSection() {
             "grid lg:grid-cols-2 gap-6 lg:gap-8 items-stretch mb-12 lg:mb-16 transition-all duration-700 delay-300",
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           )}>
-            {/* Team Image */}
+            {/* Consultant Image */}
             <div className="relative rounded-2xl overflow-hidden shadow-xl h-64 lg:h-80">
               <img 
-                src={pricingTeamImage}
-                alt="Räumzwerge-Mitarbeiter beim Verladen von Umzugskartons"
-                className="w-full h-full object-cover"
+                src={pricingConsultantImage}
+                alt="Räumzwerge-Berater zeigt transparente Preisberechnung auf Tablet"
+                className="w-full h-full object-cover object-top"
               />
               {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-foreground/30 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-foreground/20 via-transparent to-transparent" />
               
               {/* Floating badge */}
               <div className="absolute bottom-4 left-4 bg-card/90 backdrop-blur-sm rounded-xl px-4 py-2 border border-border/50">
-                <p className="text-sm font-medium text-foreground">Unser Team vor Ort</p>
+                <p className="text-sm font-medium text-foreground">Transparente Preisberechnung</p>
               </div>
             </div>
 
