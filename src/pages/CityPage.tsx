@@ -104,7 +104,10 @@ export default function CityPage() {
           fromColor="hsl(var(--secondary) / 0.3)" 
           toColor="hsl(var(--background))" 
         />
-        <ServicePricing />
+        <ServicePricing 
+          headline={`Entrümpelung in ${cityData.name} – Transparente Preise`}
+          subline="Keine versteckten Kosten. Festpreis nach Einschätzung möglich."
+        />
         
         {/* City-specific FAQ */}
         <CityFAQ cityName={cityData.name} items={cityData.faq} />

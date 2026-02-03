@@ -23,6 +23,11 @@ export interface ExtraModulePoint {
   solution: string;
 }
 
+export interface ServicePricingData {
+  headline: string;
+  subline: string;
+}
+
 export interface ServicePageData {
   slug: string;
   title: string;
@@ -47,6 +52,7 @@ export interface ServicePageData {
     title: string;
     description: string;
   }[];
+  pricing?: ServicePricingData;
   // For discrete services like Messie
   isDiscrete?: boolean;
   ctaText?: {
@@ -136,6 +142,10 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       { title: 'Einschätzung < 24h', description: 'Wir melden uns mit einer Preiseinschätzung.' },
       { title: 'Termin & besenrein', description: 'Durchführung zum Wunschtermin, besenreine Übergabe.' },
     ],
+    pricing: {
+      headline: 'Kosten Ihrer Wohnungsentrümpelung',
+      subline: 'Transparent berechnet – nach Einschätzung oft Festpreis möglich.',
+    },
   },
 
   'entruempelung': {
@@ -218,6 +228,10 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       { title: 'Einschätzung < 24h', description: 'Wir melden uns mit einer Preiseinschätzung.' },
       { title: 'Termin & besenrein', description: 'Durchführung zum Wunschtermin, besenreine Übergabe.' },
     ],
+    pricing: {
+      headline: 'So entsteht Ihr Entrümpelungspreis',
+      subline: '5 Faktoren bestimmen den Preis – transparent und nachvollziehbar.',
+    },
   },
 
   'haushaltsaufloesung': {
@@ -294,6 +308,10 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       { title: 'Einschätzung & Planung', description: 'Preiseinschätzung und Terminabstimmung.' },
       { title: 'Durchführung & Übergabe', description: 'Räumung, besenrein, Schlüsselübergabe.' },
     ],
+    pricing: {
+      headline: 'Kosten Ihrer Haushaltsauflösung',
+      subline: 'Respektvoll kalkuliert – Wertanrechnung möglich.',
+    },
   },
 
   'keller-dachboden-garage': {
@@ -370,6 +388,10 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       { title: 'Einschätzung < 24h', description: 'Schnelle Rückmeldung mit Preiseinschätzung.' },
       { title: 'Räumung & fertig', description: 'Termin, Räumung, besenrein – fertig.' },
     ],
+    pricing: {
+      headline: 'Preis für Ihre Kellerentrümpelung',
+      subline: 'Schnell berechnet – auch bei schwierigem Zugang.',
+    },
   },
 
   'gewerbe-buero-lager': {
@@ -446,6 +468,10 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       { title: 'Angebot erhalten', description: 'Klare Preiseinschätzung, oft Festpreis.' },
       { title: 'Umsetzung & Übergabe', description: 'Termingerechte Räumung, besenrein.' },
     ],
+    pricing: {
+      headline: 'Kosten Ihrer Gewerberäumung',
+      subline: 'Planbar und transparent – Festpreis nach Einschätzung.',
+    },
   },
 
   'messie-wohnungen': {
@@ -527,6 +553,10 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
       { title: 'Einschätzung', description: 'Fotos oder Begehung – vertraulich und respektvoll.' },
       { title: 'Umsetzung', description: 'Strukturierte Räumung, diskret, besenrein.' },
     ],
+    pricing: {
+      headline: 'Diskrete Preisgestaltung',
+      subline: 'Vertraulich, ohne Druck – Einschätzung per Foto möglich.',
+    },
   },
 };
 
