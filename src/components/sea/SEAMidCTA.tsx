@@ -52,59 +52,94 @@ export function SEAMidCTA({ data }: SEAMidCTAProps) {
   }, []);
 
   return (
-    <section className="py-12 lg:py-16 bg-secondary/30">
-      <div className="container-custom">
+    <section className="py-12 lg:py-20 bg-secondary/30 relative overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute top-1/2 left-0 w-48 h-48 bg-primary/5 rounded-full blur-3xl pointer-events-none -translate-y-1/2" />
+      <div className="absolute top-1/2 right-0 w-48 h-48 bg-cta/5 rounded-full blur-3xl pointer-events-none -translate-y-1/2" />
+      
+      <div className="container-custom relative z-10">
         <div className="max-w-4xl mx-auto">
           {/* Headline */}
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground text-center mb-8 lg:mb-10">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground text-center mb-10 lg:mb-14">
             So einfach geht's
           </h2>
 
-          {/* Process Cards */}
+          {/* Process Cards with Timeline */}
           <div 
             ref={sectionRef}
-            className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6 mb-10"
+            className="relative"
           >
-            {processSteps.map((step, index) => {
-              const Icon = step.icon;
-              return (
-                <div
-                  key={step.num}
-                  className={cn(
-                    "relative bg-card rounded-2xl p-6 text-center",
-                    "border border-border shadow-sm",
-                    "hover:shadow-lg hover:-translate-y-1 transition-all duration-300",
-                    "opacity-0 translate-y-4",
-                    isVisible && "opacity-100 translate-y-0"
-                  )}
-                  style={{
-                    transitionDelay: isVisible ? `${index * 100}ms` : '0ms',
-                    transitionDuration: '500ms',
-                  }}
-                >
-                  {/* Number Badge */}
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm shadow-md">
-                    {step.num}
+            {/* Connecting gradient line (desktop only) */}
+            <div className="hidden sm:block absolute top-16 left-[15%] right-[15%] h-1 bg-gradient-to-r from-primary/20 via-cta/40 to-primary/20 rounded-full" />
+            
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8">
+              {processSteps.map((step, index) => {
+                const Icon = step.icon;
+                return (
+                  <div
+                    key={step.num}
+                    className={cn(
+                      "relative",
+                      "opacity-0 translate-y-6",
+                      isVisible && "opacity-100 translate-y-0"
+                    )}
+                    style={{
+                      transitionDelay: isVisible ? `${index * 150}ms` : '0ms',
+                      transitionProperty: 'opacity, transform',
+                      transitionDuration: '600ms',
+                      transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'
+                    }}
+                  >
+                    {/* Card */}
+                    <div className={cn(
+                      "glass card-glow rounded-2xl p-6 lg:p-8 text-center",
+                      "border border-border/30",
+                      "transition-all duration-300"
+                    )}>
+                      {/* Number Badge with CTA glow */}
+                      <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                        <div className="relative">
+                          {/* Glow ring */}
+                          <div className="absolute inset-0 w-10 h-10 rounded-full bg-cta/30 blur-md" />
+                          
+                          {/* Badge */}
+                          <div className="relative w-10 h-10 rounded-full bg-gradient-to-br from-cta to-cta-hover text-cta-foreground flex items-center justify-center font-bold text-lg shadow-lg shadow-cta/30">
+                            {step.num}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Icon with premium styling */}
+                      <div className={cn(
+                        "w-16 h-16 mx-auto mb-4 mt-4 rounded-2xl",
+                        "bg-gradient-to-br from-secondary to-secondary/50",
+                        "flex items-center justify-center",
+                        "shadow-inner",
+                        "icon-bounce"
+                      )}>
+                        <Icon className="h-8 w-8 text-primary" />
+                      </div>
+                      
+                      {/* Label */}
+                      <p className="font-semibold text-foreground text-lg">{step.label}</p>
+                    </div>
                   </div>
-                  
-                  {/* Icon */}
-                  <div className="w-14 h-14 mx-auto mb-4 mt-2 rounded-xl bg-secondary/50 flex items-center justify-center">
-                    <Icon className="h-7 w-7 text-primary" />
-                  </div>
-                  
-                  {/* Label */}
-                  <p className="font-semibold text-foreground">{step.label}</p>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
 
           {/* CTA Centered */}
-          <div className="text-center space-y-4">
+          <div className="text-center space-y-4 mt-12">
             <Button
               asChild
               size="lg"
-              className="gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-14 px-8 text-base btn-lift shadow-whatsapp"
+              className={cn(
+                "gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground",
+                "h-14 px-8 text-base",
+                "btn-lift shadow-lg shadow-whatsapp/25",
+                "hover:shadow-xl hover:shadow-whatsapp/30"
+              )}
               data-track="cta-whatsapp-mid"
             >
               <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">

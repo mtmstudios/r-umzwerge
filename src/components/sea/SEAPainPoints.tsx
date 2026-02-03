@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { MessageCircle, ArrowRight } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 import { cn } from '@/lib/utils';
@@ -52,56 +51,75 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
 
   // Card-Komponente für Wiederverwendung
   const PainPointCard = ({ point, index }: { point: { problem: string; solution: string }, index: number }) => (
-    <Card
+    <div
       className={cn(
-        "border-none shadow-lg h-full",
-        "hover:shadow-xl hover:-translate-y-1",
-        "hover:shadow-primary/10",
-        isGentle ? "bg-background" : "bg-card",
+        // Glassmorphism base
+        "glass card-glow rounded-2xl overflow-hidden h-full",
+        "border border-border/30",
+        // Transitions
+        "transition-all duration-500",
         !isMobile && "opacity-0 translate-y-6",
         !isMobile && isVisible && "opacity-100 translate-y-0"
       )}
       style={!isMobile ? {
         transitionDelay: isVisible ? `${index * 150}ms` : '0ms',
-        transitionProperty: 'opacity, transform',
-        transitionDuration: '500ms',
-        transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'
       } : undefined}
     >
-      <CardContent className="p-6 lg:p-8 flex flex-col h-full">
+      <div className="p-6 lg:p-8 flex flex-col h-full relative z-10">
         {/* Problem: Emotionales Zitat */}
         <div className="flex-grow mb-6">
           <div className="flex items-start gap-3 mb-4">
             <div className={cn(
-              "flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center",
-              isGentle ? "bg-primary/10" : "bg-accent/10"
+              "flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center",
+              "icon-bounce transition-all duration-300",
+              "bg-gradient-to-br",
+              isGentle 
+                ? "from-primary/20 to-primary/5 shadow-lg shadow-primary/10" 
+                : "from-accent/20 to-accent/5 shadow-lg shadow-accent/10"
             )}>
               <MessageCircle className={cn(
-                "h-5 w-5",
-                isGentle ? "text-primary/70" : "text-accent"
+                "h-6 w-6",
+                isGentle ? "text-primary" : "text-accent"
               )} />
             </div>
-            <span className="text-sm text-muted-foreground pt-2.5">
+            <span className="text-sm text-muted-foreground pt-3 font-medium">
               Was wir oft hören:
             </span>
           </div>
-          <blockquote className="text-lg lg:text-xl text-foreground/90 italic leading-relaxed pl-4 border-l-2 border-muted">
+          <blockquote className={cn(
+            "text-lg lg:text-xl text-foreground/90 italic leading-relaxed pl-4",
+            "border-l-2",
+            isGentle ? "border-primary/40" : "border-accent/40"
+          )}>
             „{point.problem}"
           </blockquote>
         </div>
 
-        {/* Lösung mit grünem Akzent */}
+        {/* Lösung mit animiertem Gradient-Hintergrund */}
         <div className={cn(
-          "rounded-xl p-4 mb-4",
-          "bg-gradient-to-r from-primary/10 to-primary/5",
-          "border-l-4 border-primary"
+          "rounded-xl p-4 mb-4 relative overflow-hidden",
+          "border-l-4",
+          isGentle ? "border-primary" : "border-accent"
         )}>
-          <p className="text-sm font-medium text-primary/70 mb-1">
-            Unsere Lösung:
-          </p>
-          <p className="text-foreground font-medium leading-relaxed">
-            {point.solution}
-          </p>
+          {/* Animated gradient background */}
+          <div className={cn(
+            "absolute inset-0 opacity-60",
+            isGentle 
+              ? "bg-gradient-to-r from-primary/15 via-primary/8 to-primary/15"
+              : "bg-gradient-to-r from-accent/15 via-accent/8 to-accent/15"
+          )} />
+          
+          <div className="relative z-10">
+            <p className={cn(
+              "text-sm font-semibold mb-1",
+              isGentle ? "text-primary" : "text-accent"
+            )}>
+              Unsere Lösung:
+            </p>
+            <p className="text-foreground font-medium leading-relaxed">
+              {point.solution}
+            </p>
+          </div>
         </div>
 
         {/* WhatsApp Mini-CTA */}
@@ -116,10 +134,10 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
             size="sm"
             className={cn(
               "w-full justify-between",
-              "border-[#25D366]/30 text-[#25D366]",
-              "hover:bg-[#25D366] hover:text-white",
+              "border-whatsapp/40 text-whatsapp",
+              "hover:bg-whatsapp hover:text-whatsapp-foreground hover:border-whatsapp",
               "transition-all duration-300",
-              "group-hover:border-[#25D366]"
+              "shadow-sm hover:shadow-lg hover:shadow-whatsapp/20"
             )}
           >
             <span className="flex items-center gap-2">
@@ -129,16 +147,20 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Button>
         </a>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 
   return (
     <section className={cn(
-      "py-12 lg:py-20",
+      "py-12 lg:py-20 relative overflow-hidden",
       isGentle ? "bg-muted/30" : "bg-muted/50"
     )}>
-      <div className="container-custom">
+      {/* Floating decorative elements */}
+      <div className="absolute top-20 left-10 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-20 right-10 w-40 h-40 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
+      
+      <div className="container-custom relative z-10">
         {/* Header mit angepasstem Text */}
         <div className="text-center mb-10 lg:mb-14">
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground mb-3">
