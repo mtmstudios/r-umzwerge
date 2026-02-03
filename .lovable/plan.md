@@ -1,73 +1,117 @@
 
-# SFTP Deployment-Fehler beheben
 
-## Problem-Analyse
+# Themenspezifische Preis-Section für Service- und City-Seiten
 
-Der Fehler `no such file ***/images/entruempelung-nachher.png` tritt beim SFTP-Upload auf. Das Problem ist wahrscheinlich:
+## Übersicht
 
-1. **`cleanup: true`** löscht erst alle Remote-Dateien, dann lädt neue hoch
-2. Bei großen Bilddateien kann es zu Timing-/Netzwerk-Problemen kommen
-3. Die `sand4rt/ftp-deployer` Action ist veraltet (DeprecationWarning zeigt das auch)
+Aktuell verwendet `ServicePricing` auf allen Leistungs- und City-Seiten eine generische Version ohne themenspezifische Inhalte. Die Hauptseite (`Index.tsx`) hat hingegen die vollständige `PricingSection` mit der interaktiven "Pricing Pipeline" (5 Faktor-Karten, Festpreis-Badge, Split-Layout mit Bild und WhatsApp-CTA).
 
-## Lösung
+## Ziel
 
-### Option A: Robusterer Deployer (Empfohlen)
+Die Preis-Section auf allen Unterseiten soll:
+1. Das gleiche Design wie die Hauptseite nutzen (Pricing Pipeline mit 5 Faktoren)
+2. Themenspezifische Überschriften und Beschreibungen erhalten
+3. Für City-Seiten den Stadtnamen einbinden
 
-Wechsel zu einem moderneren SFTP-Deployer wie `SamKirkland/FTP-Deploy-Action@v4.3.5`:
+## Änderungen
 
-```yaml
-- name: Deploy via SFTP
-  uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-  with:
-    server: ${{ secrets.SFTP_HOST }}
-    username: ${{ secrets.SFTP_USER }}
-    password: ${{ secrets.SFTP_PASSWORD }}
-    port: 22
-    protocol: sftp
-    local-dir: ./dist/
-    server-dir: ${{ secrets.SFTP_PATH }}/
-    dangerous-clean-slate: true
+### 1. ServicePricing erweitern mit Props
+
+Die Komponente `src/components/services/ServicePricing.tsx` wird erweitert, um optionale Props für themenspezifische Inhalte zu akzeptieren:
+
+```text
+interface ServicePricingProps {
+  headline?: string;      // z.B. "Preise für Ihre Wohnungsentrümpelung"
+  subline?: string;       // z.B. "Transparent kalkuliert – oft Festpreis möglich"
+  cityName?: string;      // z.B. "München" für City-Seiten
+}
 ```
 
-### Option B: Cleanup deaktivieren (Schnelle Lösung)
+Die Komponente übernimmt dann das vollständige Layout der Hauptseiten-PricingSection:
+- 5 Preisfaktor-Karten (Umfang, Etage, Demontage, Sondermüll, Termin)
+- Verbindungslinien auf Desktop
+- Zentrales "Festpreis"-Badge
+- Split-Layout mit Tablet-Bild und WhatsApp-CTA
+- Trust-Stats am Ende
 
-Ändere in `.github/workflows/deploy.yml`:
+### 2. Daten in serviceData.ts ergänzen
 
-```yaml
-cleanup: false  # statt true
+Für jede Leistungsseite werden themenspezifische Pricing-Texte hinzugefügt:
+
+| Service | Headline | Subline |
+|---------|----------|---------|
+| Wohnungsentrümpelung | "Kosten Ihrer Wohnungsentrümpelung" | "Transparent berechnet – nach Einschätzung oft Festpreis möglich." |
+| Entrümpelung | "So entsteht Ihr Entrümpelungspreis" | "5 Faktoren bestimmen den Preis – transparent und nachvollziehbar." |
+| Haushaltsauflösung | "Kosten Ihrer Haushaltsauflösung" | "Respektvoll kalkuliert – Wertanrechnung möglich." |
+| Keller/Dachboden/Garage | "Preis für Ihre Kellerentrümpelung" | "Schnell berechnet – auch bei schwierigem Zugang." |
+| Gewerbe/Büro/Lager | "Kosten Ihrer Gewerberäumung" | "Planbar und transparent – Festpreis nach Einschätzung." |
+| Messie-Wohnungen | "Diskrete Preisgestaltung" | "Vertraulich, ohne Druck – Einschätzung per Foto möglich." |
+
+### 3. City-Seiten: Dynamischer Stadtname
+
+Für City-Seiten wird der Stadtname in die Headline eingebunden:
+- "Entrümpelung in {Stadt} – Transparente Preise"
+- "Keine versteckten Kosten. Festpreis nach Einschätzung möglich."
+
+### 4. ServicePage.tsx und CityPage.tsx anpassen
+
+Die Props werden beim Aufruf von `ServicePricing` übergeben.
+
+## Technische Details
+
+### Datei: `src/lib/serviceData.ts`
+
+Erweiterung des `ServicePageData` Interface um ein optionales `pricing`-Objekt:
+
+```typescript
+pricing?: {
+  headline: string;
+  subline: string;
+};
 ```
 
-Das verhindert das Löschen von Dateien vor dem Upload, kann aber "verwaiste" Dateien auf dem Server hinterlassen.
+Für jede der 6 Leistungsseiten werden die passenden Texte ergänzt.
 
-### Option C: Retry-Logik hinzufügen
+### Datei: `src/components/services/ServicePricing.tsx`
 
-```yaml
-- name: Deploy via SFTP
-  uses: sand4rt/ftp-deployer@v1.8
-  with:
-    # ... existing config ...
-    cleanup: false
-  continue-on-error: true
-  id: deploy1
+Komplette Überarbeitung: Das Layout wird vom aktuellen Icon-Cluster-Design auf das Pricing-Pipeline-Design der Hauptseite umgestellt. Die Komponente erhält Props für themenspezifische Texte und verwendet das bereits importierte Tablet-Bild.
 
-- name: Retry Deploy if failed
-  if: steps.deploy1.outcome == 'failure'
-  uses: sand4rt/ftp-deployer@v1.8
-  with:
-    # ... same config ...
+Neue Struktur:
+1. Header mit dynamischer Headline/Subline
+2. 5 Preisfaktor-Karten in Grid (2x2 + 1 auf Mobile, 5 Spalten auf Desktop)
+3. Festpreis-Badge darunter
+4. Split-Layout: Tablet-Bild links, WhatsApp-CTA rechts
+5. Trust-Stats Footer
+
+### Datei: `src/pages/ServicePage.tsx`
+
+Übergabe der Pricing-Daten an die Komponente:
+
+```tsx
+<ServicePricing 
+  headline={pageData.pricing?.headline}
+  subline={pageData.pricing?.subline}
+/>
 ```
 
----
+### Datei: `src/pages/CityPage.tsx`
 
-## Zusätzlich: Aufräumen der Bild-Referenzen
+Übergabe mit dynamischem Stadtnamen:
 
-Die Bildpfade in `seaData.ts` (Zeilen 93-98, 149-154, 205-210) werden nicht mehr benötigt, da `SEABeforeAfter.tsx` die Bilder aus `seaImages.ts` lädt. Diese können entfernt werden, um Verwirrung zu vermeiden.
+```tsx
+<ServicePricing 
+  headline={`Entrümpelung in ${cityData.name} – Transparente Preise`}
+  subline="Keine versteckten Kosten. Festpreis nach Einschätzung möglich."
+  cityName={cityData.name}
+/>
+```
 
----
+## Dateien die geändert werden
 
-## Empfohlene Vorgehensweise
-
-1. **Sofort**: `cleanup: false` setzen und erneut deployen
-2. **Langfristig**: Auf `SamKirkland/FTP-Deploy-Action` wechseln (moderner, stabiler)
-3. **Optional**: Ungenutzte Bildpfade in `seaData.ts` entfernen
+| Datei | Änderung |
+|-------|----------|
+| `src/lib/serviceData.ts` | Interface erweitern, Pricing-Daten für alle 6 Services hinzufügen |
+| `src/components/services/ServicePricing.tsx` | Komplett überarbeiten mit Pricing-Pipeline-Layout und Props |
+| `src/pages/ServicePage.tsx` | Pricing-Props übergeben |
+| `src/pages/CityPage.tsx` | Pricing-Props mit Stadtname übergeben |
 
