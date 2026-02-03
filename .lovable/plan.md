@@ -1,136 +1,168 @@
 
+# Implementierung: Tablet-Carousel + Einblende-Animation + Verschiedene Icons
 
-# Alle 3 Aufgaben implementieren
+## Übersicht der 3 Aufgaben
 
-## Übersicht
-
-Ich werde jetzt alle drei ausstehenden Aufgaben gleichzeitig umsetzen:
-
-1. **Header-Anpassungen** (Mobile/Tablet)
-2. **Carousel-Zentrierung** (Flip-Cards auf Mobile)
-3. **Glow-Animationen** (Premium-Effekt beim Hover)
+| # | Aufgabe | Betroffene Datei |
+|---|---------|------------------|
+| 1 | Carousel auch auf Tablet anzeigen (< 1024px) | `use-mobile.tsx`, `SEAPainPoints.tsx` |
+| 2 | Sanfte Einblende-Animation beim Laden | `SEAPainPoints.tsx` |
+| 3 | 3 verschiedene Icons statt 2x "Persönlich" | `FlipCard.tsx` |
 
 ---
 
-## 1. SEAMinimalHeader.tsx
+## Aufgabe 1: Tablet-Carousel
 
-### Änderungen
+### Änderungen in `src/hooks/use-mobile.tsx`
+
+Neuen Hook `useIsTabletOrMobile` hinzufügen:
+
+```typescript
+const TABLET_BREAKPOINT = 1024;
+
+export function useIsTabletOrMobile() {
+  const [isTabletOrMobile, setIsTabletOrMobile] = useState<boolean | undefined>(undefined);
+
+  useEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${TABLET_BREAKPOINT - 1}px)`);
+    const onChange = () => {
+      setIsTabletOrMobile(window.innerWidth < TABLET_BREAKPOINT);
+    };
+    mql.addEventListener("change", onChange);
+    setIsTabletOrMobile(window.innerWidth < TABLET_BREAKPOINT);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
+
+  return !!isTabletOrMobile;
+}
+```
+
+### Änderungen in `SEAPainPoints.tsx`
 
 | Element | Vorher | Nachher |
 |---------|--------|---------|
-| Header-Position | `fixed top-0` | `relative lg:fixed lg:top-0` |
-| Backdrop-Blur | `backdrop-blur-sm` | `lg:backdrop-blur-sm` |
-| Layout | `justify-between` | `justify-center lg:justify-between` |
-| Logo-Container | `justify-start` | `justify-center lg:justify-start` |
-| CTA-Button | Immer sichtbar | `hidden lg:flex` |
+| Hook | `useIsMobile()` | `useIsTabletOrMobile()` |
+| Carousel max-width | `max-w-sm` | `max-w-sm md:max-w-md` |
+| Card Basis | `basis-[85%]` | `basis-[85%] md:basis-[65%]` |
+| Hinweistext | Nur Mobile-Check | Auch Tablet berücksichtigen |
 
-### Visuelles Ergebnis
+---
 
-**Mobile/Tablet:**
-```text
-+------------------------------------------+
-|              [LOGO zentriert]            |  ← nicht sticky, kein Button
-+------------------------------------------+
+## Aufgabe 2: Einblende-Animation
+
+### Änderungen in `SEAPainPoints.tsx`
+
+Neuer State für sanftes Einblenden:
+
+```typescript
+const [hasLoaded, setHasLoaded] = useState(false);
+
+useEffect(() => {
+  const timer = setTimeout(() => setHasLoaded(true), 100);
+  return () => clearTimeout(timer);
+}, []);
 ```
 
-**Desktop:**
-```text
-+------------------------------------------+
-| [LOGO links]            [Jetzt anrufen]  |  ← sticky, Button sichtbar
-+------------------------------------------+
+Animation-Wrapper um das Carousel:
+
+```jsx
+<div className={cn(
+  "flex flex-col items-center space-y-6",
+  "transition-all duration-700 ease-out",
+  hasLoaded 
+    ? "opacity-100 translate-y-0" 
+    : "opacity-0 translate-y-8"
+)}>
+  <Carousel ... />
+</div>
 ```
 
 ---
 
-## 2. SEAPainPoints.tsx
+## Aufgabe 3: Verschiedene Icons für alle LPs
 
-### Änderungen am Carousel
+### Änderungen in `src/components/sea/FlipCard.tsx`
 
-| Element | Vorher | Nachher |
-|---------|--------|---------|
-| Container | `space-y-6` | `flex flex-col items-center space-y-6` |
-| Carousel align | `start` | `center` |
-| Carousel Breite | `w-full` | `w-full max-w-sm mx-auto` |
-| Content Margin | `-ml-4` | `-ml-2` |
-| Item Padding | `pl-4` | `pl-2` |
-| Card Basis | `90%` | `85%` |
-
-### Visuelles Ergebnis
-
-```text
-+------------------------------------------+
-|                                          |
-|           ┌──────────────┐               |
-|           │  FLIP-CARD   │               |  ← zentriert
-|           │   (aktiv)    │               |
-|           └──────────────┘               |
-|                                          |
-|               ● ○ ○ ○ ○ ○                |  ← Dots zentriert
-+------------------------------------------+
+**Neue Icons importieren:**
+```typescript
+import { ..., Package, Euro } from 'lucide-react';
 ```
+
+**Erweiterte Keyword-Zuordnung:**
+
+| Kategorie | Keywords | Icon | Label |
+|-----------|----------|------|-------|
+| Trauerfall | verstorben, tod, trauer | `Feather` | Trauerfall |
+| Wohnung | pflege, heim, umzug, immobilie, verkauft | `Home` | Wohnung |
+| Zeitdruck | zeit, schnell, dringend | `Clock` | Zeitdruck |
+| **NEU: Platzmangel** | platz, voll, keller, dachboden | `Package` | Platzmangel |
+| **NEU: Kosten** | kostet, preis, geld, überraschung | `Euro` | Kosten |
+| Diskret | diskret, messie, scham, schäm | `Shield` | Diskret |
+| Überforderung | überfordert, allein, weiß nicht, anfangen | `AlertCircle` | Überforderung |
+| Fallback | - | `Heart` | Persönlich |
 
 ---
 
-## 3. index.css - Premium Glow-Animationen
+## Ergebnis pro Landing Page
 
-### Neue Hover-Effekte
+### `/lp/entruempelung` (direct)
 
-**Vorderseite (Problem) - Orange Glow:**
-```css
-.flip-card:not(.flipped):hover .flip-card-front {
-  box-shadow: 
-    0 16px 36px -12px hsl(var(--foreground) / 0.15),
-    0 0 30px -5px hsl(var(--cta) / 0.25),      /* Orange Glow */
-    0 0 60px -10px hsl(var(--cta) / 0.15);     /* Äußerer Schein */
-}
-```
+| Karte | Problem-Keywords | Icon | Label |
+|-------|------------------|------|-------|
+| 1 | "Kein **Platz** mehr – alles **voll**..." | Package | Platzmangel |
+| 2 | "Keine **Zeit**..." | Clock | Zeitdruck |
+| 3 | "Was **kostet** das... **Überraschung**..." | Euro | Kosten |
 
-**Rückseite (Lösung) - Grüner Glow:**
-```css
-.flip-card.flipped:hover .flip-card-back {
-  box-shadow: 
-    0 24px 48px -12px hsl(var(--accent) / 0.4),
-    0 0 40px -5px hsl(var(--accent) / 0.35),   /* Grüner Glow */
-    0 0 80px -10px hsl(var(--accent) / 0.25);  /* Äußerer Schein */
-}
-```
+### `/lp/haushaltsaufloesung` (warm)
 
-**Zusätzlich: Lift-Animation für geflippte Karten:**
-```css
-.flip-card.flipped:hover {
-  transform: translateY(-6px);  /* Stärkerer Lift als vorher */
-}
-```
+| Karte | Problem-Keywords | Icon | Label |
+|-------|------------------|------|-------|
+| 1 | "Angehöriger ist **verstorben**..." | Feather | Trauerfall |
+| 2 | "**Umzug** ins **Pflegeheim**..." | Home | Wohnung |
+| 3 | "**Immobilie** muss **verkauft** werden..." | Home | Wohnung |
 
-### Visueller Effekt
+### `/lp/messie-hilfe` (gentle)
 
-```text
-Normal:                      Hover (nicht geflippt):
-┌──────────────┐            ╔══════════════╗
-│   PROBLEM    │            ║░░ PROBLEM ░░ ║  ← Orange Glow
-└──────────────┘            ╚══════════════╝
-
-Normal (geflippt):           Hover (geflippt):
-┌──────────────┐            ╔══════════════╗
-│   LÖSUNG     │            ║░░ LÖSUNG ░░ ║   ← Grüner Glow
-└──────────────┘            ╚══════════════╝
-```
+| Karte | Problem-Keywords | Icon | Label |
+|-------|------------------|------|-------|
+| 1 | "Ich **schäme** mich..." | Shield | Diskret |
+| 2 | "...Nachbarn etwas **mitbekommen**..." | Shield | Diskret |
+| 3 | "...weiß nicht, wo ich **anfangen** soll" | AlertCircle | Überforderung |
 
 ---
 
-## Zusammenfassung aller Änderungen
+## Zusammenfassung der Dateien
 
 | Datei | Änderungen |
 |-------|------------|
-| `src/components/sea/SEAMinimalHeader.tsx` | Responsive Header: Position, Zentrierung, Button-Visibility |
-| `src/components/sea/SEAPainPoints.tsx` | Carousel-Zentrierung: align, max-width, margins |
-| `src/index.css` | Premium Glow: Orange für Vorderseite, Grün für Rückseite, verstärkter Hover-Lift |
+| `src/hooks/use-mobile.tsx` | Neuer Export `useIsTabletOrMobile()` mit 1024px Breakpoint |
+| `src/components/sea/SEAPainPoints.tsx` | Hook wechseln, Animation-State, größere Carousel-Cards auf Tablet |
+| `src/components/sea/FlipCard.tsx` | 2 neue Icons (Package, Euro), erweiterte Keyword-Zuordnung |
 
 ---
 
-## Erwartetes Ergebnis
+## Visuelles Ergebnis
 
-- **Header**: Sauberes, zentriertes Logo auf Mobile ohne störenden Button
-- **Flip-Cards**: Perfekt zentriert im Viewport auf Mobile
-- **Premium-Gefühl**: Subtiler farbiger Glow beim Hover verstärkt die Interaktivität
+### Tablet (768px - 1024px):
+```text
++------------------------------------------------+
+|                                                |
+|         ┌────────────────────┐                 |
+|         │   📦 Platzmangel   │                 |
+|         │                    │    ← swipebar   |
+|         │  "Kein Platz..."   │      & größer   |
+|         │                    │                 |
+|         └────────────────────┘                 |
+|              ↑ fade-in + slide-up              |
+|              ● ○ ○                             |
++------------------------------------------------+
+```
 
+### Desktop (>= 1024px):
+```text
++------------------------------------------------+
+| ┌──────────┐  ┌──────────┐  ┌──────────┐       |
+| │📦 Platz  │  │⏰ Zeit   │  │💶 Kosten │       |
+| └──────────┘  └──────────┘  └──────────┘       |
++------------------------------------------------+
+```
