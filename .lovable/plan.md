@@ -1,117 +1,131 @@
 
 
-# Themenspezifische Preis-Section für Service- und City-Seiten
+# Einzigartige Comparison-Section: "Flip-Vergleich" Design
 
-## Übersicht
+## Analyse der aktuellen Situation
 
-Aktuell verwendet `ServicePricing` auf allen Leistungs- und City-Seiten eine generische Version ohne themenspezifische Inhalte. Die Hauptseite (`Index.tsx`) hat hingegen die vollständige `PricingSection` mit der interaktiven "Pricing Pipeline" (5 Faktor-Karten, Festpreis-Badge, Split-Layout mit Bild und WhatsApp-CTA).
+### Pricing-Karten Größenkonsistenz
+Die aktuellen `PriceFactorCard`-Komponenten haben bereits konsistente Größen durch:
+- `max-w-[140px] sm:max-w-[160px]` für einheitliche Breite
+- Feste Icon-Container (`w-12 h-12 sm:w-14 sm:h-14`)
+- Gleiche Padding-Werte (`p-4 sm:p-5`)
 
-## Ziel
+**Keine Änderung notwendig** - die Karten sind bereits uniform.
 
-Die Preis-Section auf allen Unterseiten soll:
-1. Das gleiche Design wie die Hauptseite nutzen (Pricing Pipeline mit 5 Faktoren)
-2. Themenspezifische Überschriften und Beschreibungen erhalten
-3. Für City-Seiten den Stadtnamen einbinden
+### Problem mit der aktuellen Comparison-Section
+Die bestehende "Der Unterschied"-Section ist:
+- Generisch und langweilig (zwei nebeneinander liegende Listen)
+- Kein interaktives Element
+- Keine visuelle Hierarchie oder Storytelling
+- Ähnelt zu sehr Standard-UI-Pattern
 
-## Änderungen
+## Neues Design-Konzept: "VS Flip-Battle"
 
-### 1. ServicePricing erweitern mit Props
+Ein einzigartiges, interaktives Design, das die bewährte FlipCard-Mechanik adaptiert:
 
-Die Komponente `src/components/services/ServicePricing.tsx` wird erweitert, um optionale Props für themenspezifische Inhalte zu akzeptieren:
+### Konzept
+Statt zweier Spalten wird ein **horizontaler "Battle"-Flow** mit **Flip-Karten** verwendet:
+1. Jeder Vergleichspunkt ist eine eigene interaktive Karte
+2. Vorderseite zeigt das **Problem bei anderen Anbietern** (rot getönt)
+3. Rückseite zeigt die **Räumzwerge-Lösung** (grün getönt)
+4. Zentrales "VS"-Element als visueller Anker
+5. Animierte Badges und Trust-Elemente
+
+### Visuelles Layout
 
 ```text
-interface ServicePricingProps {
-  headline?: string;      // z.B. "Preise für Ihre Wohnungsentrümpelung"
-  subline?: string;       // z.B. "Transparent kalkuliert – oft Festpreis möglich"
-  cityName?: string;      // z.B. "München" für City-Seiten
+┌─────────────────────────────────────────────────────────────────┐
+│                                                                 │
+│        Der Unterschied macht's                                  │
+│        Klicken Sie auf eine Karte für unsere Lösung             │
+│                                                                 │
+│   ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐           │
+│   │ Flip    │  │ Flip    │  │ Flip    │  │ Flip    │           │
+│   │ Card 1  │  │ Card 2  │  │ Card 3  │  │ Card 4  │           │
+│   │         │  │         │  │         │  │         │           │
+│   │ Problem │  │ Problem │  │ Problem │  │ Problem │           │
+│   │ vs      │  │ vs      │  │ vs      │  │ vs      │           │
+│   │ Lösung  │  │ Lösung  │  │ Lösung  │  │ Lösung  │           │
+│   └─────────┘  └─────────┘  └─────────┘  └─────────┘           │
+│                                                                 │
+│         [Badge 1]  [Badge 2]  [Badge 3]                        │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Karten-Design Details
+
+**Vorderseite (Problem - "Andere Anbieter"):**
+- Roter Akzent-Rand links
+- X-Icon mit destructive-Farbe
+- Problem-Statement als Zitat
+- "Tippen für Lösung" Hinweis
+- Dezenter roter Glow-Effekt
+
+**Rückseite (Lösung - "Räumzwerge"):**
+- Grüner Akzent-Rand links
+- Animierter Checkmark
+- Lösungs-Statement
+- Optional: Mini-WhatsApp-CTA
+- Grüner Glow-Effekt beim Hover
+
+### Mobile Darstellung
+- 1-2 Spalten Grid
+- Swipe-freundliche Touch-Interaktion
+- Kompaktere Karten-Höhe
+
+## Technische Umsetzung
+
+### Neue Komponente: `ComparisonFlipCard.tsx`
+Wiederverwendbare Flip-Karte speziell für Vergleiche mit:
+- `problem` und `solution` Props
+- Einheitliche Größe für alle Karten
+- Gleiche CSS-Klassen wie `FlipCard.tsx`
+
+### Konsolidierte Comparison-Komponente
+Eine einzige `UnifiedComparison.tsx` ersetzt:
+- `ServiceComparison.tsx`
+- `CityComparison.tsx`
+
+Mit Props:
+```typescript
+interface UnifiedComparisonProps {
+  headline?: string;
+  subline?: string;
+  comparison: ComparisonData;
+  badges?: string[];
 }
 ```
 
-Die Komponente übernimmt dann das vollständige Layout der Hauptseiten-PricingSection:
-- 5 Preisfaktor-Karten (Umfang, Etage, Demontage, Sondermüll, Termin)
-- Verbindungslinien auf Desktop
-- Zentrales "Festpreis"-Badge
-- Split-Layout mit Tablet-Bild und WhatsApp-CTA
-- Trust-Stats am Ende
-
-### 2. Daten in serviceData.ts ergänzen
-
-Für jede Leistungsseite werden themenspezifische Pricing-Texte hinzugefügt:
-
-| Service | Headline | Subline |
-|---------|----------|---------|
-| Wohnungsentrümpelung | "Kosten Ihrer Wohnungsentrümpelung" | "Transparent berechnet – nach Einschätzung oft Festpreis möglich." |
-| Entrümpelung | "So entsteht Ihr Entrümpelungspreis" | "5 Faktoren bestimmen den Preis – transparent und nachvollziehbar." |
-| Haushaltsauflösung | "Kosten Ihrer Haushaltsauflösung" | "Respektvoll kalkuliert – Wertanrechnung möglich." |
-| Keller/Dachboden/Garage | "Preis für Ihre Kellerentrümpelung" | "Schnell berechnet – auch bei schwierigem Zugang." |
-| Gewerbe/Büro/Lager | "Kosten Ihrer Gewerberäumung" | "Planbar und transparent – Festpreis nach Einschätzung." |
-| Messie-Wohnungen | "Diskrete Preisgestaltung" | "Vertraulich, ohne Druck – Einschätzung per Foto möglich." |
-
-### 3. City-Seiten: Dynamischer Stadtname
-
-Für City-Seiten wird der Stadtname in die Headline eingebunden:
-- "Entrümpelung in {Stadt} – Transparente Preise"
-- "Keine versteckten Kosten. Festpreis nach Einschätzung möglich."
-
-### 4. ServicePage.tsx und CityPage.tsx anpassen
-
-Die Props werden beim Aufruf von `ServicePricing` übergeben.
-
-## Technische Details
-
-### Datei: `src/lib/serviceData.ts`
-
-Erweiterung des `ServicePageData` Interface um ein optionales `pricing`-Objekt:
-
-```typescript
-pricing?: {
-  headline: string;
-  subline: string;
-};
-```
-
-Für jede der 6 Leistungsseiten werden die passenden Texte ergänzt.
-
-### Datei: `src/components/services/ServicePricing.tsx`
-
-Komplette Überarbeitung: Das Layout wird vom aktuellen Icon-Cluster-Design auf das Pricing-Pipeline-Design der Hauptseite umgestellt. Die Komponente erhält Props für themenspezifische Texte und verwendet das bereits importierte Tablet-Bild.
-
-Neue Struktur:
-1. Header mit dynamischer Headline/Subline
-2. 5 Preisfaktor-Karten in Grid (2x2 + 1 auf Mobile, 5 Spalten auf Desktop)
-3. Festpreis-Badge darunter
-4. Split-Layout: Tablet-Bild links, WhatsApp-CTA rechts
-5. Trust-Stats Footer
-
-### Datei: `src/pages/ServicePage.tsx`
-
-Übergabe der Pricing-Daten an die Komponente:
-
-```tsx
-<ServicePricing 
-  headline={pageData.pricing?.headline}
-  subline={pageData.pricing?.subline}
-/>
-```
-
-### Datei: `src/pages/CityPage.tsx`
-
-Übergabe mit dynamischem Stadtnamen:
-
-```tsx
-<ServicePricing 
-  headline={`Entrümpelung in ${cityData.name} – Transparente Preise`}
-  subline="Keine versteckten Kosten. Festpreis nach Einschätzung möglich."
-  cityName={cityData.name}
-/>
-```
-
-## Dateien die geändert werden
+### Dateien die geändert werden
 
 | Datei | Änderung |
 |-------|----------|
-| `src/lib/serviceData.ts` | Interface erweitern, Pricing-Daten für alle 6 Services hinzufügen |
-| `src/components/services/ServicePricing.tsx` | Komplett überarbeiten mit Pricing-Pipeline-Layout und Props |
-| `src/pages/ServicePage.tsx` | Pricing-Props übergeben |
-| `src/pages/CityPage.tsx` | Pricing-Props mit Stadtname übergeben |
+| `src/components/services/ComparisonFlipCard.tsx` | **NEU** - Wiederverwendbare Flip-Karte für Vergleiche |
+| `src/components/services/ServiceComparison.tsx` | Komplettes Redesign mit Flip-Card-Layout |
+| `src/components/city/CityComparison.tsx` | Nutzt neues `ServiceComparison` mit eigenen Daten |
+| `src/pages/ServicePage.tsx` | Keine Änderung (bereits korrekt) |
+| `src/pages/CityPage.tsx` | Anpassung für Props-Übergabe |
+| `src/lib/serviceData.ts` | Eventuell Erweiterung der Comparison-Daten um Paarungen |
+
+### CSS-Anpassungen
+Die bestehenden FlipCard-CSS-Regeln werden wiederverwendet:
+- `.flip-card`, `.flip-card-inner`
+- `.flip-card-front`, `.flip-card-back`
+- Glow-Effekte und Hover-States
+
+### Zusätzliche visuelle Elemente
+
+1. **VS-Badge** zwischen den Karten (Desktop)
+2. **Fortschrittsanzeige** zeigt wie viele Karten geflippt wurden
+3. **Auto-Flip-Hint** animiert eine Karte dezent beim Laden
+4. **Staggered Animation** bei Scroll-Reveal
+
+## Vorteil des neuen Designs
+
+- **Interaktiv**: Nutzer entdecken aktiv die Vorteile
+- **Storytelling**: Problem -> Lösung Narrativ
+- **Einheitlich**: Gleiche Mechanik wie SEA FlipCards
+- **Einprägsam**: Visuell unique, nicht generisch
+- **Mobile-optimiert**: Touch-freundliche Interaktion
 
