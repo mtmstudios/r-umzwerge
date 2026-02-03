@@ -61,15 +61,15 @@ export function BentoCard({
         'group relative overflow-hidden rounded-xl sm:rounded-2xl',
         'flex flex-col items-center text-center',
         'transition-all duration-300 ease-out',
-        'hover:scale-[1.03] hover:-translate-y-2 active:scale-[0.98]',
+        'lg:hover:scale-[1.03] lg:hover:-translate-y-2 active:scale-[0.98]',
         // Size variants
         isLarge 
           ? 'p-6 sm:p-8 min-h-[180px] sm:min-h-[200px]' 
           : 'p-4 sm:p-5 min-h-[140px] sm:min-h-[160px]',
-        // Style variants with enhanced shadows
-        variant === 'default' && 'bg-card border border-border hover:border-accent/60 hover:shadow-[0_20px_50px_-15px_hsl(var(--accent)/0.2)]',
-        variant === 'glass' && 'glass hover:shadow-[0_20px_50px_-15px_hsl(var(--accent)/0.25)]',
-        variant === 'accent' && 'bg-gradient-to-br from-primary to-primary/80 text-primary-foreground hover:shadow-[0_20px_50px_-15px_hsl(var(--primary)/0.4)]',
+        // Style variants with enhanced shadows (hover only on desktop)
+        variant === 'default' && 'bg-card border border-border lg:hover:border-accent/60 lg:hover:shadow-[0_20px_50px_-15px_hsl(var(--accent)/0.2)]',
+        variant === 'glass' && 'glass lg:hover:shadow-[0_20px_50px_-15px_hsl(var(--accent)/0.25)]',
+        variant === 'accent' && 'bg-gradient-to-br from-primary to-primary/80 text-primary-foreground lg:hover:shadow-[0_20px_50px_-15px_hsl(var(--primary)/0.4)]',
         className
       )}
       style={{
@@ -83,30 +83,30 @@ export function BentoCard({
         </span>
       )}
 
-      {/* Glow effect on hover - animated gradient */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-400 pointer-events-none">
+      {/* Glow effect on hover - animated gradient (desktop only) */}
+      <div className="absolute inset-0 opacity-0 lg:group-hover:opacity-100 transition-opacity duration-400 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-br from-cta/10 via-accent/5 to-transparent animate-pulse-subtle" />
-        <div className="absolute inset-0 bg-gradient-radial from-accent/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <div className="absolute inset-0 bg-gradient-radial from-accent/10 via-transparent to-transparent opacity-0 lg:group-hover:opacity-100 transition-opacity duration-500" />
       </div>
 
-      {/* Icon with enhanced animation */}
+      {/* Icon with enhanced animation (desktop only) */}
       <div
         className={cn(
           'relative rounded-xl sm:rounded-2xl flex items-center justify-center mb-3 sm:mb-4 mx-auto',
           'transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]',
-          'group-hover:scale-115 group-hover:rotate-3',
+          'lg:group-hover:scale-115 lg:group-hover:rotate-3',
           isLarge ? 'w-14 h-14 sm:w-16 sm:h-16' : 'w-10 h-10 sm:w-12 sm:h-12',
           variant === 'accent'
-            ? 'bg-accent/20 group-hover:bg-accent/30'
-            : 'bg-accent/10 group-hover:bg-accent/25 group-hover:shadow-[0_0_20px_hsl(var(--accent)/0.3)]'
+            ? 'bg-accent/20 lg:group-hover:bg-accent/30'
+            : 'bg-accent/10 lg:group-hover:bg-accent/25 lg:group-hover:shadow-[0_0_20px_hsl(var(--accent)/0.3)]'
         )}
       >
         <Icon
           className={cn(
             'transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]',
-            'group-hover:scale-110',
+            'lg:group-hover:scale-110',
             isLarge ? 'h-7 w-7 sm:h-8 sm:w-8' : 'h-5 w-5 sm:h-6 sm:w-6',
-            variant === 'accent' ? 'text-accent' : 'text-primary group-hover:text-accent'
+            variant === 'accent' ? 'text-accent' : 'text-primary lg:group-hover:text-accent'
           )}
         />
       </div>
@@ -149,8 +149,8 @@ export function BentoCard({
         {/* Highlights with icons */}
         {highlights && highlights.length > 0 && (
           <div className={cn(
-            "flex flex-wrap justify-center mt-3",
-            isLarge ? "gap-3" : "gap-2"
+            "flex flex-wrap justify-center mt-2 sm:mt-3",
+            isLarge ? "gap-2 sm:gap-3" : "gap-1.5 sm:gap-2"
           )}>
             {highlights.slice(0, isLarge ? 3 : 2).map((highlight, i) => {
               const HighlightIcon = getHighlightIcon(highlight);
@@ -163,7 +163,7 @@ export function BentoCard({
                   )}
                 >
                   <HighlightIcon className="h-3 w-3 text-accent flex-shrink-0" />
-                  <span className="truncate max-w-[100px]">{highlight}</span>
+                  <span className="whitespace-nowrap">{highlight}</span>
                 </span>
               );
             })}
@@ -171,19 +171,19 @@ export function BentoCard({
         )}
       </div>
 
-      {/* Arrow indicator with enhanced animation */}
+      {/* Arrow indicator - visible on mobile, hover-only on desktop */}
       <div
         className={cn(
           'absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 font-medium',
           'transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]',
-          'opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0',
+          'opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-3 lg:group-hover:opacity-100 lg:group-hover:translate-y-0',
           isLarge ? 'text-sm' : 'text-xs sm:text-sm',
           variant === 'accent' ? 'text-accent' : 'text-primary'
         )}
       >
-        <span className="transition-transform duration-200 group-hover:translate-x-[-2px]">Details</span>
+        <span className="transition-transform duration-200 lg:group-hover:translate-x-[-2px]">Details</span>
         <ArrowRight className={cn(
-          'transition-transform duration-300 group-hover:translate-x-1',
+          'transition-transform duration-300 lg:group-hover:translate-x-1',
           isLarge ? 'h-4 w-4' : 'h-3.5 w-3.5'
         )} />
       </div>
