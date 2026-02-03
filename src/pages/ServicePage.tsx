@@ -80,7 +80,10 @@ export default function ServicePage() {
           fromColor="hsl(var(--background))" 
           toColor="hsl(var(--secondary) / 0.3)" 
         />
-        <ServicePricing />
+        <ServicePricing 
+          headline={pageData.pricing?.headline}
+          subline={pageData.pricing?.subline}
+        />
         
         {/* Extra Module - transparency/sustainability info */}
         <SectionDivider 
