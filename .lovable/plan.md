@@ -1,162 +1,267 @@
 
-# Mobile & Tablet Optimierung: Contact Funnel ohne Scrollen
+# 3 Maßgeschneiderte Funnels für SEA-Landingpages
 
-## Analyse der Probleme
+## Übersicht
 
-### 1. Mobile Drawer-Probleme (< 768px)
-- **Kein sichtbares X zum Schließen** - Der Drawer hat nur einen Drag-Handle, kein Close-Icon
-- **max-h-[90vh]** ist zu groß für viele Inhalte
-- **min-h-[280px]** für Step-Content erzwingt unnötige Höhe
-- **mb-8** und **py-8** in Steps verschwenden wertvollen Platz
+Statt eines generischen Funnels mit Varianten erstelle ich **3 komplett separate Funnel-Komponenten**, die thematisch auf die jeweilige Landingpage zugeschnitten sind.
 
-### 2. Tablet zeigt Desktop-Dialog (768px - 1023px)
-- `useIsMobile()` prüft nur < 768px, Tablets bekommen den zentrierten Dialog
-- Dialog ist für diese Bildschirmgröße nicht optimal
+## Aktuelle Struktur
 
-### 3. Step-Inhalte sind zu groß
-| Step | Problem |
-|------|---------|
-| Step 1 | 6 Buttons im 2x3 Grid mit `p-6` = viel Höhe |
-| Step 2 | 3 Karten mit `p-6` = zu viel Padding |
-| Step 3 | `mb-8` Margins verschwenden Platz |
-| Step 4 | OK, aber `mb-8` Header-Margin |
-| Step 5 | 4 Inputs + Textarea `min-h-[100px]` |
-
-## Lösung
-
-### Schritt 1: Drawer auch für Tablets verwenden
-
-```tsx
-// Vorher:
-const isMobile = useIsMobile();
-
-// Nachher:
-import { useIsTabletOrMobile } from "@/hooks/use-mobile";
-const isTabletOrMobile = useIsTabletOrMobile();
+```text
+ContactFunnelModal.tsx (universal)
+└── FunnelSteps.tsx
+    ├── Step 1: Was möchten Sie räumen? (6 generische Optionen)
+    ├── Step 2: Umfang (Klein/Mittel/Groß)
+    ├── Step 3: Standort (PLZ/Ort)
+    ├── Step 4: Zeitrahmen
+    └── Step 5: Kontaktdaten
 ```
 
-### Schritt 2: Sichtbares X-Icon im Drawer hinzufügen
+## Neue Struktur
 
-```tsx
-<DrawerContent className="...">
-  {/* Header mit X-Button */}
-  <div className="flex items-center justify-between px-4 pt-3 pb-2">
-    <div className="w-12 h-1.5 rounded-full bg-muted mx-auto" />
-    <button 
-      onClick={() => onOpenChange(false)}
-      className="absolute right-3 top-3 p-2 rounded-full bg-muted/50 hover:bg-muted"
-    >
-      <X className="w-5 h-5" />
-    </button>
-  </div>
+```text
+src/components/contact/
+├── ContactFunnelModal.tsx      ← Bleibt: Hauptseite, Services, Regionale
+├── FunnelSteps.tsx             ← Bleibt: Generische Steps
+│
+├── sea/                        ← NEU: SEA-spezifische Funnels
+│   ├── HaushaltsaufloesungFunnel.tsx
+│   ├── EntruempelungFunnel.tsx
+│   └── MessieFunnel.tsx
 ```
 
-### Schritt 3: Kompaktere Mobile-Layouts in FunnelSteps.tsx
+---
 
-Reduzierte Paddings und Margins für Mobile:
+## Funnel 1: Haushaltsauflösung
 
-```tsx
-// Vorher (Step 1):
-<div className="text-center mb-8">
-<button className="p-6 rounded-xl">
-  <div className="w-12 h-12 rounded-full">
+**Kontext:** Trauerfall, Pflegeheim-Umzug, Nachlass
 
-// Nachher:
-<div className="text-center mb-4 md:mb-8">
-<button className="p-3 md:p-6 rounded-xl">
-  <div className="w-8 h-8 md:w-12 md:h-12 rounded-full">
+| Step | Frage | Optionen |
+|------|-------|----------|
+| 1 | Was wird aufgelöst? | Wohnung, Haus, Wohngemeinschaft |
+| 2 | Grund der Auflösung | Trauerfall, Pflegeheim, Verkauf, Sonstiges |
+| 3 | Umfang | Komplett, Teilweise, Nur Entrümpelung |
+| 4 | Standort + Zeitrahmen | PLZ/Ort + Wann soll es stattfinden? |
+| 5 | Kontaktdaten | Name, Telefon, Email, Nachricht |
+
+**Besondere Anpassungen:**
+- Einfühlsamer Ton ("Wir begleiten Sie")
+- "Grund der Auflösung" für bessere Vorbereitung des Teams
+- Option "Komplett" vs "Teilweise" statt Raumanzahl
+
+---
+
+## Funnel 2: Entrümpelung
+
+**Kontext:** Schnell, direkt, Festpreis
+
+| Step | Frage | Optionen |
+|------|-------|----------|
+| 1 | Was wird entrümpelt? | Wohnung, Haus, Keller/Dachboden, Garage, Gewerbe/Büro |
+| 2 | Wie voll ist es? | Wenig (1-2 Räume), Normal (3-4 Räume), Viel (5+ Räume / Komplett) |
+| 3 | Standort | PLZ/Ort |
+| 4 | Wann soll es losgehen? | Schnellstmöglich, In 1-2 Wochen, In 1 Monat+, Flexibel |
+| 5 | Kontaktdaten | Name, Telefon, Email, Nachricht |
+
+**Besondere Anpassungen:**
+- Direkter Ton
+- "Wie voll ist es?" statt "Umfang"
+- Garage als eigene Option (häufiger Anwendungsfall)
+
+---
+
+## Funnel 3: Messie-Hilfe
+
+**Kontext:** Sensibel, diskret, einfühlsam
+
+| Step | Frage | Optionen |
+|------|-------|----------|
+| 1 | Wer braucht Hilfe? | Ich selbst, Ein Angehöriger, Ich bin Betreuer/Verwalter |
+| 2 | Wie ist die Situation? | Einzelne Räume betroffen, Mehrere Räume, Gesamte Wohnung/Haus |
+| 3 | Was ist Ihnen wichtig? | Diskrete Anfahrt, Schrittweises Vorgehen, Begleitung vor Ort, Reinigung nach Räumung |
+| 4 | Standort + Kontakt | PLZ/Ort (kombiniert mit Zeitrahmen) |
+| 5 | Ihre Nachricht | Name, Telefon, Freitextfeld für persönliche Situation |
+
+**Besondere Anpassungen:**
+- Sehr einfühlsamer, nicht wertender Ton
+- "Wer braucht Hilfe?" - wichtig für Kommunikation
+- "Was ist Ihnen wichtig?" - Multiselect für Wünsche
+- Größeres Nachrichtenfeld für persönliche Situation
+- Keine Zeitdruck-Optionen
+
+---
+
+## Technische Umsetzung
+
+### Neue Dateien
+
+| Datei | Beschreibung |
+|-------|--------------|
+| `src/components/contact/sea/HaushaltsaufloesungFunnel.tsx` | 5-Step Funnel für Haushaltsauflösung |
+| `src/components/contact/sea/EntruempelungFunnel.tsx` | 5-Step Funnel für Entrümpelung |
+| `src/components/contact/sea/MessieFunnel.tsx` | 5-Step Funnel für Messie-Hilfe |
+
+### Gemeinsame Elemente (werden wiederverwendet)
+
+- **Modal/Drawer-Logik:** Wird aus `ContactFunnelModal.tsx` kopiert
+- **Styling:** Gleiche Kompakt-Optimierungen für Mobile/Tablet
+- **Webhook:** Gleicher Endpunkt, aber angepasste Feldnamen
+- **Progress Bar:** Gleiche Komponente
+- **Animation:** Framer Motion Transitions
+
+### Angepasste Payloads
+
+**Haushaltsauflösung:**
+```javascript
+{
+  funnel_typ: 'haushaltsaufloesung',
+  objektart: 'wohnung' | 'haus' | 'wg',
+  grund: 'trauerfall' | 'pflegeheim' | 'verkauf' | 'sonstiges',
+  umfang: 'komplett' | 'teilweise' | 'nur_entruempelung',
+  plz: '...',
+  ort: '...',
+  zeitrahmen: '...',
+  name: '...',
+  telefon: '...',
+  email: '...',
+  nachricht: '...'
+}
 ```
 
-Alle Steps werden kompakter:
-- Überschriften: `text-lg md:text-2xl`
-- Margins: `mb-4 md:mb-8`
-- Paddings: `p-3 md:p-6`
-- Icons: `w-8 h-8 md:w-12 md:h-12`
-
-### Schritt 4: Step-Content Höhe dynamisch anpassen
-
-```tsx
-// Vorher:
-<div className="min-h-[280px] md:min-h-[320px]">
-
-// Nachher - keine Mindesthöhe auf Mobile:
-<div className="md:min-h-[280px]">
+**Entrümpelung:**
+```javascript
+{
+  funnel_typ: 'entruempelung',
+  objektart: 'wohnung' | 'haus' | 'keller' | 'garage' | 'gewerbe',
+  fuellgrad: 'wenig' | 'normal' | 'viel',
+  plz: '...',
+  ort: '...',
+  zeitrahmen: 'schnell' | '2wochen' | 'monat' | 'flexibel',
+  name: '...',
+  telefon: '...',
+  email: '...',
+  nachricht: '...'
+}
 ```
 
-### Schritt 5: Kompakte Progress-Bar auf Mobile
+**Messie-Hilfe:**
+```javascript
+{
+  funnel_typ: 'messie',
+  betroffener: 'selbst' | 'angehoeriger' | 'betreuer',
+  situation: 'einzelne_raeume' | 'mehrere_raeume' | 'komplett',
+  wuensche: ['diskret', 'schrittweise', 'begleitung', 'reinigung'], // Array
+  plz: '...',
+  ort: '...',
+  name: '...',
+  telefon: '...',
+  nachricht: '...' // Größeres Feld
+}
+```
+
+---
+
+## SEAHero.tsx Anpassung
 
 ```tsx
-// Vorher:
-<div className="w-8 h-8 md:w-10 md:h-10">
+// Import der 3 spezifischen Funnels
+import { HaushaltsaufloesungFunnel } from '@/components/contact/sea/HaushaltsaufloesungFunnel';
+import { EntruempelungFunnel } from '@/components/contact/sea/EntruempelungFunnel';
+import { MessieFunnel } from '@/components/contact/sea/MessieFunnel';
 
-// Nachher:
-<div className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10">
+// Dynamische Auswahl basierend auf data.slug
+const renderFunnel = () => {
+  switch (data.slug) {
+    case 'haushaltsaufloesung':
+      return <HaushaltsaufloesungFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />;
+    case 'entruempelung':
+      return <EntruempelungFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />;
+    case 'messie-hilfe':
+      return <MessieFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />;
+  }
+};
 ```
+
+---
+
+## Visuelle Darstellung der 3 Funnels
+
+### Haushaltsauflösung (warm, einfühlsam)
+```text
+┌────────────────────────────────────┐
+│ Was wird aufgelöst?                │
+│ ┌──────┐ ┌──────┐ ┌──────┐        │
+│ │Wohnng│ │ Haus │ │  WG  │        │
+│ └──────┘ └──────┘ └──────┘        │
+├────────────────────────────────────┤
+│ Was ist der Grund?                 │
+│ ○ Trauerfall                       │
+│ ○ Umzug ins Pflegeheim            │
+│ ○ Verkauf der Immobilie           │
+│ ○ Sonstiges                        │
+└────────────────────────────────────┘
+```
+
+### Entrümpelung (direkt, effizient)
+```text
+┌────────────────────────────────────┐
+│ Was wird entrümpelt?               │
+│ ┌────┐┌────┐┌────┐┌────┐┌────┐   │
+│ │Wohn││Haus││Kell││Gara││Gewe│   │
+│ └────┘└────┘└────┘└────┘└────┘   │
+├────────────────────────────────────┤
+│ Wie voll ist es?                   │
+│ ┌──────────┐                       │
+│ │ Wenig    │ 1-2 Räume             │
+│ ├──────────┤                       │
+│ │ Normal   │ 3-4 Räume             │
+│ ├──────────┤                       │
+│ │ Viel     │ 5+ Räume              │
+│ └──────────┘                       │
+└────────────────────────────────────┘
+```
+
+### Messie-Hilfe (sanft, ohne Druck)
+```text
+┌────────────────────────────────────┐
+│ Wer braucht Hilfe?                 │
+│ ○ Ich selbst                       │
+│ ○ Ein Angehöriger                  │
+│ ○ Ich bin Betreuer/Verwalter       │
+├────────────────────────────────────┤
+│ Was ist Ihnen besonders wichtig?   │
+│ ☑ Diskrete Anfahrt (neutrale Fzg.) │
+│ ☑ Schrittweises Vorgehen           │
+│ ☐ Begleitung vor Ort               │
+│ ☐ Reinigung nach Räumung           │
+├────────────────────────────────────┤
+│ Erzählen Sie uns mehr (optional)   │
+│ ┌──────────────────────────────┐   │
+│ │                              │   │
+│ │ [Größeres Textfeld]          │   │
+│ │                              │   │
+│ └──────────────────────────────┘   │
+└────────────────────────────────────┘
+```
+
+---
+
+## Zusammenfassung
+
+| Seite | Funnel | Steps | Besonderheit |
+|-------|--------|-------|--------------|
+| Hauptseite, Services, Regional | Standard | 5 | Generisch, alle Optionen |
+| /lp/haushaltsaufloesung | Haushaltsauflösung | 5 | Grund-Frage, einfühlsam |
+| /lp/entruempelung | Entrümpelung | 5 | Füllgrad-Frage, direkt |
+| /lp/messie-hilfe | Messie | 5 | Betroffener-Frage, Multiselect, sanft |
 
 ## Änderungen nach Datei
 
-| Datei | Änderung |
-|-------|----------|
-| `ContactFunnelModal.tsx` | Tablet-Erkennung, X-Button im Drawer, reduzierte Mindesthöhen |
-| `FunnelSteps.tsx` | Kompaktere Mobile-Layouts für alle 5 Steps |
-
-## Visuelle Darstellung
-
-```text
-Vorher (Mobile):
-┌─────────────────────────┐
-│     ═══════════════     │ ← Nur Drag-Handle
-│  ① ─ ② ─ ③ ─ ④ ─ ⑤    │ ← Große Progress-Kreise
-│                         │
-│  Was möchten Sie räumen?│ ← Große Überschrift
-│                         │
-│ ┌───────┐ ┌───────┐    │
-│ │       │ │       │    │ ← Große Buttons
-│ │ p-6   │ │ p-6   │    │
-│ └───────┘ └───────┘    │
-│  ...mehr Buttons...     │ ← Scrollen nötig!
-└─────────────────────────┘
-
-Nachher (Mobile):
-┌─────────────────────────┐
-│  ═════════════  [✕]    │ ← Handle + sichtbares X
-│ ①─②─③─④─⑤              │ ← Kompakte Kreise
-│ Was möchten Sie räumen? │ ← Kompakte Überschrift
-│ ┌───┐┌───┐┌───┐        │
-│ │   ││   ││   │        │ ← Kompakte Buttons
-│ └───┘└───┘└───┘        │
-│ ┌───┐┌───┐┌───┐        │
-│ │   ││   ││   │        │
-│ └───┘└───┘└───┘        │
-│ [Zurück]    [Weiter]   │ ← Alles sichtbar!
-└─────────────────────────┘
-```
-
-## Technische Details
-
-### Responsive Breakpoints
-- **Mobile**: < 768px (Drawer mit X-Button)
-- **Tablet**: 768px - 1023px (Drawer mit X-Button)
-- **Desktop**: >= 1024px (Dialog modal)
-
-### Spezifische Kompaktierungen je Step
-
-**Step 1 (Service Type):**
-- Icons: `w-8 h-8` statt `w-12 h-12`
-- Padding: `p-3` statt `p-6`
-- Gap: `gap-2` statt `gap-4`
-
-**Step 2 (Scope):**
-- Padding: `p-3 md:p-6`
-- Icon: `w-8 h-8` statt `w-10 h-10`
-
-**Step 3 (Location):**
-- Weniger Margins
-
-**Step 4 (Timeline):**
-- Padding: `px-4 py-2` statt `px-6 py-3`
-- Kein Icon auf Mobile
-
-**Step 5 (Contact):**
-- Textarea: `min-h-[60px]` statt `min-h-[100px]`
-- Reduzierte Gaps
+| Datei | Aktion |
+|-------|--------|
+| `src/components/contact/sea/HaushaltsaufloesungFunnel.tsx` | NEU erstellen |
+| `src/components/contact/sea/EntruempelungFunnel.tsx` | NEU erstellen |
+| `src/components/contact/sea/MessieFunnel.tsx` | NEU erstellen |
+| `src/components/sea/SEAHero.tsx` | Anpassen: richtige Funnel-Komponente importieren |
+| `src/components/sea/SEAFinalCTA.tsx` | Anpassen: richtige Funnel-Komponente verwenden |
+| `src/components/sea/SEAMidCTA.tsx` | Anpassen: richtige Funnel-Komponente verwenden |
