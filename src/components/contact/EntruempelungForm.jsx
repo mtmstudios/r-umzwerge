@@ -102,7 +102,7 @@ const EntruempelungForm = () => {
     };
     
     try {
-      const response = await fetch('https://mtmstudios.app.n8n.cloud/webhook/entruempelung', {
+      const response = await fetch('https://mtmstudios.app.n8n.cloud/webhook/728d78c5-bfa5-4be3-b5f1-82e8875d9915', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
