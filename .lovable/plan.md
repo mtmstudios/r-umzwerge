@@ -1,141 +1,100 @@
 
-
-# CSS-Optimierung: Render-Blocking CSS reduzieren
+# Fix: Hero-Header Überlappung auf Landing Pages
 
 ## Problem-Analyse
 
-Die CSS-Datei `/assets/index-*.css` (18,6 KiB) blockiert das erste Rendering und verzögert den LCP (Largest Contentful Paint) um 330ms.
+Der Hero-Text überlappt mit dem Header auf bestimmten Laptops, weil:
 
-**Warum passiert das?**
-- Vite bündelt alle CSS-Imports in eine große Datei
-- Diese wird im `<head>` als render-blocking `<link>` eingefügt
-- Der Browser wartet mit dem Rendering, bis das gesamte CSS geladen ist
-- Aber nur ~20% davon sind "above-the-fold" (Header + Hero) notwendig
+1. **Header ist fixed auf Desktop** (`lg:fixed`) und überlagert den Content
+2. **Hero hat nur `pt-24` (96px)** Padding, aber der Header ist visuell ~120-140px hoch
+3. **Bei niedrigeren Bildschirmhöhen** (z.B. 1366x768 Laptops) ist `min-h-[75vh]` = 576px, was zusammen mit dem zu kleinen Padding zu Überlappungen führt
 
-## Lösungs-Strategie
+## Betroffene Komponenten
 
-### Ansatz 1: Critical CSS Inlining (Empfohlen)
+| Komponente | Datei | Problem |
+|------------|-------|---------|
+| SEA Hero | `src/components/sea/SEAHero.tsx` | `pt-24` reicht nicht |
+| Service Hero | `src/components/services/ServiceHero.tsx` | Gleiches Problem |
+| City Hero | `src/components/city/CityHero.tsx` | Gleiches Problem |
+| Haupt Hero | `src/components/sections/HeroSection.tsx` | Prüfen |
 
-Mit dem Vite-Plugin `vite-plugin-beasties` wird kritisches CSS automatisch:
-1. Extrahiert (nur above-the-fold Styles)
-2. Inline in den `<head>` geschrieben
-3. Der Rest wird asynchron nachgeladen
+## Lösung
 
-| Vorher | Nachher |
-|--------|---------|
-| 18,6 KiB blockierend | ~3-4 KiB inline (kritisch) |
-| 330ms Wartezeit | ~0ms (sofort verfügbar) |
-| LCP verzögert | LCP verbessert |
+### Schritt 1: Header-Höhe als CSS-Variable definieren
 
-### Ansatz 2: Font-Loading optimieren
-
-Die 4 Inter-Font-Varianten werden aktuell erst geladen, wenn das CSS geparst ist. Mit `<link rel="preload">` können sie parallel geladen werden.
-
-## Implementierung
-
-### Schritt 1: Plugin installieren
-
-```bash
-npm install vite-plugin-beasties --save-dev
+In `src/index.css`:
+```css
+:root {
+  --header-height-mobile: 80px;
+  --header-height-desktop: 100px;
+}
 ```
 
-### Schritt 2: vite.config.ts anpassen
+### Schritt 2: Hero-Komponenten mit korrektem Padding
 
-```typescript
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import path from "path";
-import { componentTagger } from "lovable-tagger";
-import { beasties } from "vite-plugin-beasties";
+Alle Hero-Komponenten erhalten:
+```tsx
+// Vorher:
+<div className="... pt-24">
 
-export default defineConfig(({ mode }) => ({
-  server: {
-    host: "::",
-    port: 8080,
-    hmr: {
-      overlay: false,
-    },
-  },
-  plugins: [
-    react(), 
-    mode === "development" && componentTagger(),
-    beasties({
-      options: {
-        preload: 'swap',  // Restliches CSS asynchron laden
-        pruneSource: false, // Original CSS behalten
-        fonts: true, // Font-Preloads hinzufügen
-      }
-    })
-  ].filter(Boolean),
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },
-}));
+// Nachher:
+<div className="... pt-28 lg:pt-32">
 ```
 
-### Schritt 3: Font-Preloads in index.html
+Das ergibt:
+- Mobile: `pt-28` = 112px (ausreichend für 80-100px Header)
+- Desktop: `pt-32` = 128px (ausreichend für den fixed 100-140px Header)
 
-```html
-<head>
-  <!-- Preload kritische Fonts -->
-  <link rel="preload" href="/fonts/inter-regular.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/inter-semibold.woff2" as="font" type="font/woff2" crossorigin>
-  
-  <!-- ... restliche meta-tags ... -->
-</head>
+### Schritt 3: Min-Height anpassen für kleine Viewports
+
+```tsx
+// Vorher:
+min-h-[85vh] md:min-h-[75vh] xl:min-h-[70vh]
+
+// Nachher:
+min-h-[90vh] md:min-h-[80vh] xl:min-h-[75vh]
 ```
 
-## Änderungsliste
+Etwas mehr Höhe gibt dem Content mehr Platz.
+
+## Änderungen
 
 | Datei | Änderung |
 |-------|----------|
-| `package.json` | `vite-plugin-beasties` hinzufügen |
-| `vite.config.ts` | Plugin importieren und konfigurieren |
-| `index.html` | Font-Preload-Links hinzufügen |
-
-## Erwartete Ergebnisse
-
-| Metrik | Vorher | Nachher |
-|--------|--------|---------|
-| Render-Blocking CSS | 18,6 KiB | ~3-4 KiB (inline) |
-| First Contentful Paint | +330ms | ~0ms |
-| LCP Verbesserung | Baseline | 200-400ms schneller |
-| Lighthouse Score | - | +5-15 Punkte |
+| `src/components/sea/SEAHero.tsx` | `pt-24` → `pt-28 lg:pt-32`, Min-Height anpassen |
+| `src/components/services/ServiceHero.tsx` | `pt-24` → `pt-28 lg:pt-32`, Min-Height anpassen |
+| `src/components/city/CityHero.tsx` | Padding prüfen und anpassen |
+| `src/components/sections/HeroSection.tsx` | Padding prüfen (falls nötig) |
 
 ## Technische Details
 
-### Wie funktioniert beasties?
+### Warum passiert das nur auf bestimmten Laptops?
+
+Typische Laptop-Auflösungen:
+- **1366 x 768**: `75vh` = 576px → Header-Konflikt wahrscheinlich
+- **1920 x 1080**: `75vh` = 810px → Genug Platz
+- **1440 x 900**: `75vh` = 675px → Grenzfall
+
+Die Lösung mit mehr Padding und etwas größerer min-height löst das Problem für alle Viewport-Größen.
+
+### Visuelle Darstellung
 
 ```text
-Build-Zeit:
-1. Vite baut die App normal (mit CSS-Bundle)
-2. beasties rendert die Seite in einem headless Browser
-3. Analysiert welches CSS "above-the-fold" sichtbar ist
-4. Schreibt kritisches CSS inline in <style> im <head>
-5. Lädt Rest-CSS mit <link rel="preload" as="style">
+Vorher (Problem):
+┌─────────────────────────────┐
+│  ████  HEADER  ████  [CTA] │ ← Fixed, z-50
+├─────────────────────────────┤
+│  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ │ ← Hero-Text beginnt zu früh
+│  HERO HEADLINE  ← Overlap! │   (pt-24 = 96px)
+│                             │
+└─────────────────────────────┘
 
-Ergebnis:
-<head>
-  <style>/* kritisches CSS inline */</style>
-  <link rel="preload" href="/assets/index-xxx.css" as="style" onload="this.rel='stylesheet'">
-</head>
+Nachher (Fix):
+┌─────────────────────────────┐
+│  ████  HEADER  ████  [CTA] │ ← Fixed, z-50
+├─────────────────────────────┤
+│                             │ ← Mehr Abstand (pt-32 = 128px)
+│  HERO HEADLINE              │   
+│  Subtext hier...            │
+└─────────────────────────────┘
 ```
-
-### Warum nur Inter Regular und Semibold preloaden?
-
-- Regular (400): Fließtext, am häufigsten
-- Semibold (600): Headlines, CTAs im Hero
-- Medium (500) und Bold (700): Werden später benötigt, können nachladen
-
-## Alternative: Manuelles Critical CSS
-
-Falls das Plugin Probleme macht, kann kritisches CSS auch manuell extrahiert werden:
-
-1. CSS für Header + Hero (~100 Zeilen) in `src/critical.css` extrahieren
-2. In `index.html` als `<style>` inline einfügen
-3. Rest-CSS per JavaScript nachladen
-
-Dies ist aufwändiger zu pflegen, aber gibt volle Kontrolle.
-
