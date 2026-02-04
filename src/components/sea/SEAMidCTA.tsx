@@ -4,7 +4,10 @@ import { Button } from '@/components/ui/button';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 import { getWhatsAppLink, PHONE_LINK } from '@/lib/constants';
 import { cn } from '@/lib/utils';
-import type { SEAData } from '@/lib/seaData';
+import { HaushaltsaufloesungFunnel } from '@/components/contact/sea/HaushaltsaufloesungFunnel';
+import { EntruempelungFunnel } from '@/components/contact/sea/EntruempelungFunnel';
+import { MessieFunnel } from '@/components/contact/sea/MessieFunnel';
+import type { SEAData, SEAVariant } from '@/lib/seaData';
 
 interface SEAMidCTAProps {
   data: SEAData;
@@ -14,6 +17,7 @@ export function SEAMidCTA({ data }: SEAMidCTAProps) {
   const isGentle = data.tone === 'gentle';
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Dynamic process steps based on tone
   const processSteps = isGentle
@@ -129,24 +133,22 @@ export function SEAMidCTA({ data }: SEAMidCTAProps) {
             </div>
           </div>
 
-          {/* CTA Centered */}
+          {/* CTAs Centered */}
           <div className="text-center space-y-4 mt-12">
             <Button
-              asChild
               size="lg"
+              onClick={() => setIsModalOpen(true)}
               className={cn(
                 "gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground",
                 "h-14 px-8 text-base",
                 "btn-lift shadow-lg shadow-whatsapp/25",
                 "hover:shadow-xl hover:shadow-whatsapp/30"
               )}
-              data-track="cta-whatsapp-mid"
+              data-track="cta-funnel-mid"
             >
-              <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                <WhatsAppIcon className="h-5 w-5" />
-                <span className="hidden sm:inline">{ctaText.long}</span>
-                <span className="sm:hidden">{ctaText.short}</span>
-              </a>
+              <WhatsAppIcon className="h-5 w-5" />
+              <span className="hidden sm:inline">{ctaText.long}</span>
+              <span className="sm:hidden">{ctaText.short}</span>
             </Button>
 
             {/* Secondary: Text link for calling */}
@@ -163,6 +165,17 @@ export function SEAMidCTA({ data }: SEAMidCTAProps) {
           </div>
         </div>
       </div>
+
+      {/* Dynamic Funnel based on page slug */}
+      {data.slug === 'haushaltsaufloesung' && (
+        <HaushaltsaufloesungFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
+      )}
+      {data.slug === 'entruempelung' && (
+        <EntruempelungFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
+      )}
+      {data.slug === 'messie-hilfe' && (
+        <MessieFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
+      )}
     </section>
   );
 }
