@@ -46,13 +46,13 @@ jobs:
           ls -la dist/assets/ || echo "No assets folder!"
 
       - name: Deploy via SFTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
           server: ${{ secrets.SFTP_HOST }}
           username: ${{ secrets.SFTP_USER }}
           password: ${{ secrets.SFTP_PASSWORD }}
           port: 22
-          protocol: sftp
-          local-dir: ./dist/
-          server-dir: ${{ secrets.SFTP_PATH }}/
-          dangerous-clean-slate: true
+          local_path: './dist/*'
+          remote_path: ${{ secrets.SFTP_PATH }}
+          sftp_only: true
+          delete_remote_files: true
