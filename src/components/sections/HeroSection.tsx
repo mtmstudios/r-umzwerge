@@ -36,7 +36,7 @@ export function HeroSection() {
         {/* Unified Layout: Fullscreen with centered content for ALL breakpoints */}
         <div
           className={cn(
-            "min-h-[85vh] md:min-h-[75vh] xl:min-h-[70vh] flex flex-col justify-center items-center text-center px-4 py-16 md:py-20 xl:py-24",
+            "min-h-[90vh] md:min-h-[80vh] xl:min-h-[75vh] flex flex-col justify-center items-center text-center px-4 py-16 md:py-20 xl:py-24 pt-28 lg:pt-32",
             "scroll-reveal",
             isVisible && "visible"
           )}

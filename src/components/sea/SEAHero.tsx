@@ -45,7 +45,7 @@ export function SEAHero({ data }: SEAHeroProps) {
 
       <div className="container-custom relative">
         {/* Unified Layout: Fullscreen with centered content for ALL breakpoints */}
-        <div className="min-h-[85vh] md:min-h-[75vh] xl:min-h-[70vh] flex flex-col justify-center items-center text-center px-4 py-16 md:py-20 xl:py-24 pt-24">
+        <div className="min-h-[90vh] md:min-h-[80vh] xl:min-h-[75vh] flex flex-col justify-center items-center text-center px-4 py-16 md:py-20 xl:py-24 pt-28 lg:pt-32">
           <h1 className="text-2xl sm:text-3xl md:text-4xl xl:text-5xl 2xl:text-6xl font-bold text-white mb-4 md:mb-6 text-balance leading-tight max-w-4xl">
             {data.headline}
           </h1>
