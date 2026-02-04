@@ -1,125 +1,138 @@
 
-
-# "Warum Räumzwerge" Section für SEA-Landingpages
+# CTA-Button als Modal-Funnel in allen Hero-Sections
 
 ## Übersicht
 
-Die interaktive "Warum Räumzwerge?" Flip-Card-Section soll auf alle SEA-Landingpages übertragen und themenspezifisch angepasst werden.
+Der "Foto senden · Preiseinschätzung erhalten" Button in den Hero-Sections soll nicht mehr zu WhatsApp führen, sondern stattdessen den 5-Schritt-Kontaktformular-Funnel in einem Modal-Fenster öffnen.
 
-### Wichtiger Unterschied zu SEAPainPoints:
-- **SEAPainPoints**: Zeigt emotionale Probleme des Kunden → Räumzwerge-Lösung
-- **SEAComparison (neu)**: Zeigt Probleme bei anderen Anbietern → Räumzwerge-Vorteil
+### Betroffene Seiten
+- **Startseite** (`HeroSection.tsx`)
+- **Service-Seiten** (`ServiceHero.tsx`) 
+- **Regionale Seiten** (`CityHero.tsx`)
 
-Die Sections ergänzen sich – eine spricht emotionale Situationen an, die andere differenziert vom Wettbewerb.
+## Lösung
 
-## Neue Section: SEAComparison
+### Ansatz: Responsive Modal-Komponente
 
-### Platzierung
-Nach `SEAMidCTA` und vor `SEAMiniFAQ` – als zusätzlicher Vertrauensbildner kurz vor dem FAQ.
+Da der Funnel komplex ist (5 Schritte mit Progress-Bar), wird ein responsiver Ansatz gewählt:
+- **Desktop**: Dialog-Modal (zentriert)
+- **Mobile**: Drawer von unten (touch-freundlicher)
 
-### Themenspezifische Inhalte
-
-| Variante | Headline | Vergleichspunkte |
-|----------|----------|------------------|
-| **Haushaltsauflösung** | "Warum Räumzwerge für Ihre Haushaltsauflösung?" | Einfühlsam vs. unpersönlich, Wertanrechnung vs. alles entsorgt, fester Ansprechpartner vs. wechselndes Personal |
-| **Entrümpelung** | "Warum Räumzwerge für Ihre Entrümpelung?" | Schnelle WhatsApp-Einschätzung vs. nur Vorort-Termin, Festpreis vs. versteckte Kosten, Besenrein vs. grob geräumt |
-| **Messie-Hilfe** | "Warum Räumzwerge?" | 100% Diskretion vs. auffällige Fahrzeuge, ohne Wertung vs. vorschnelle Urteile, fester Ansprechpartner vs. wechselndes Team |
-
-### Badges pro Variante
-
-| Variante | Badges |
-|----------|--------|
-| **Haushaltsauflösung** | "Respektvoll", "Wertanrechnung möglich", "Ein Ansprechpartner" |
-| **Entrümpelung** | "Festpreis möglich", "Besenrein", "Schnelle Termine" |
-| **Messie-Hilfe** | "100% Diskret", "Ohne Wertung", "Neutrale Fahrzeuge" |
+Hierfür wird eine neue **ContactFunnelModal**-Komponente erstellt, die den bestehenden Funnel-Code adaptiert und in Dialog/Drawer einbettet.
 
 ## Änderungen
 
-### 1. Neue Komponente: `src/components/sea/SEAComparison.tsx`
+### 1. Neue Komponente: `ContactFunnelModal.tsx`
 
-Nutzt die bestehende `UnifiedComparison`-Komponente mit themenspezifischen Daten:
-
-```text
-SEAComparison
-├── Props: { data: SEAData }
-├── Wählt Vergleichsdaten basierend auf data.slug
-├── Passt Headline/Subline an data.tone an
-└── Verwendet UnifiedComparison mit angepassten Badges
-```
-
-### 2. Daten in `src/lib/seaData.ts` erweitern
-
-Neue optionale `comparison`-Property im `SEAData` Interface:
-
-```typescript
-comparison?: {
-  headline: string;
-  subline: string;
-  pairs: Array<{ problem: string; solution: string }>;
-  badges: string[];
-};
-```
-
-Daten für alle drei Varianten hinzufügen.
-
-### 3. SEA-Landingpage einbinden
-
-In `SEALandingPage.tsx` die neue Section nach `SEAMidCTA` einfügen:
+Eine eigenständige Modal-Komponente, die:
+- Den kompletten 5-Schritt-Funnel enthält (kopiert aus `ContactFunnel.tsx`)
+- Auf Desktop als Dialog, auf Mobile als Drawer erscheint
+- Über `open` und `onOpenChange` Props gesteuert wird
+- Nach erfolgreichem Absenden automatisch schließt
 
 ```text
-<SEAHero />
-<SEAPainPoints />
-<SEASocialProof />
-<SEABeforeAfter />
-<SEAMidCTA />
-<SEAComparison />  ← NEU
-<SEAMiniFAQ />
-<SEAFinalCTA />
+ContactFunnelModal
+├── Props: { open, onOpenChange }
+├── Desktop (lg+): Dialog mit max-w-3xl
+├── Mobile (<lg): Drawer mit max-height 90vh
+├── Enthält alle 5 Funnel-Steps
+└── Success-State schließt Modal nach 2s
 ```
 
-## Themenspezifische Vergleichspunkte (Details)
+### 2. Anpassungen der Hero-Komponenten
 
-### Haushaltsauflösung (tone: "warm")
+Jede Hero-Komponente erhält:
+- `useState` für Modal-Steuerung (`isModalOpen`)
+- Import der neuen `ContactFunnelModal`
+- Button-Änderung: Statt `<a href={getWhatsAppLink()}>` wird `onClick={() => setIsModalOpen(true)}`
+- CTA-Text bleibt gleich oder wird angepasst auf "Jetzt Anfrage starten"
 
-| Andere Anbieter | Räumzwerge |
-|-----------------|------------|
-| Schnelles Abarbeiten ohne Rücksicht | Einfühlsame Begleitung in schweren Zeiten |
-| Alles wird entsorgt | Wertanrechnung und Spenden möglich |
-| Wechselndes Personal | Ein fester Ansprechpartner für alles |
-| Nur grobe Räumung | Besenrein und dokumentiert |
+### 3. Button-Text-Anpassung
 
-### Entrümpelung (tone: "direct")
+| Vorher | Nachher |
+|--------|---------|
+| "Foto senden · Preiseinschätzung erhalten" | "Jetzt Anfrage starten" (oder bestehend) |
+| "Foto senden · Preis erhalten" (mobil) | "Anfrage starten" (oder bestehend) |
 
-| Andere Anbieter | Räumzwerge |
-|-----------------|------------|
-| Preisschätzung nur vor Ort | Einschätzung per WhatsApp < 24h |
-| Versteckte Zusatzkosten | Transparenter Festpreis möglich |
-| Grob geräumt | Besenrein garantiert |
-| Lange Wartezeiten | Schnelle Terminvergabe |
-
-### Messie-Hilfe (tone: "gentle")
-
-| Andere Anbieter | Räumzwerge |
-|-----------------|------------|
-| Auffällige Firmenfahrzeuge | Neutrale Fahrzeuge auf Wunsch |
-| Schnelle Urteile, Druck | Keine Wertung, kein Zeitdruck |
-| Wechselndes Team | Ein vertrauter Ansprechpartner |
-| Unpersönliche Abwicklung | Respektvolle Begleitung Schritt für Schritt |
+Optional: Der Text kann bleiben, da er weiterhin zur Preiseinschätzung führt – nur der Weg ändert sich.
 
 ## Dateien die geändert werden
 
 | Datei | Änderung |
 |-------|----------|
-| `src/lib/seaData.ts` | Interface erweitern, Comparison-Daten für alle 3 Varianten hinzufügen |
-| `src/components/sea/SEAComparison.tsx` | **NEU** – Wrapper für UnifiedComparison mit SEA-Daten |
-| `src/pages/SEALandingPage.tsx` | SEAComparison importieren und einbinden |
+| `src/components/contact/ContactFunnelModal.tsx` | **NEU** – Modal-Version des Kontakt-Funnels |
+| `src/components/sections/HeroSection.tsx` | Modal-State hinzufügen, Button-Handler ändern |
+| `src/components/services/ServiceHero.tsx` | Modal-State hinzufügen, Button-Handler ändern |
+| `src/components/city/CityHero.tsx` | Modal-State hinzufügen, Button-Handler ändern |
 
-## Visueller Stil
+## Technische Details
 
-Die Section übernimmt das Design der `UnifiedComparison`:
-- Flip-Cards mit Problem/Lösung
-- Fortschrittsanzeige "Entdeckt X von Y"
-- Staggered Scroll-Animations
-- Badges am Ende
-- Konsistent mit dem "premium" Look der SEA-Landingpages
+### ContactFunnelModal-Struktur
 
+Die Komponente nutzt den `useIsMobile` Hook für responsive Darstellung:
+
+```typescript
+// Pseudocode
+function ContactFunnelModal({ open, onOpenChange }) {
+  const isMobile = useIsMobile();
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState(initialFormData);
+  
+  // Funnel-Logik (identisch zu ContactFunnel)
+  
+  if (isMobile) {
+    return (
+      <Drawer open={open} onOpenChange={onOpenChange}>
+        <DrawerContent className="max-h-[90vh]">
+          {/* Funnel-Inhalt mit Scroll */}
+        </DrawerContent>
+      </Drawer>
+    );
+  }
+  
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+        {/* Funnel-Inhalt */}
+      </DialogContent>
+    </Dialog>
+  );
+}
+```
+
+### Hero-Button-Änderung
+
+```typescript
+// Vorher
+<Button asChild>
+  <a href={getWhatsAppLink()}>...</a>
+</Button>
+
+// Nachher
+<Button onClick={() => setIsModalOpen(true)}>
+  ...
+</Button>
+
+<ContactFunnelModal open={isModalOpen} onOpenChange={setIsModalOpen} />
+```
+
+### Success-Handling
+
+Nach erfolgreichem Absenden:
+1. Toast-Nachricht erscheint
+2. Modal schließt nach 2 Sekunden automatisch
+3. Formular wird zurückgesetzt für nächste Nutzung
+
+## Visuelles Design im Modal
+
+Das Modal behält das bestehende Funnel-Design:
+- Gradient Progress-Bar
+- 5 Step-Indikatoren
+- Animierte Step-Übergänge
+- Card-Container mit Border und Shadow
+- Zurück/Weiter Buttons
+
+Zusätzliche Anpassungen für Modal-Kontext:
+- Kompakteres Padding auf Mobile
+- Scroll-Container für lange Steps
+- X-Button zum Schließen immer sichtbar
