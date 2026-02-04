@@ -1,11 +1,12 @@
-import { CheckCircle, Phone } from 'lucide-react';
+import { useState } from 'react';
+import { CheckCircle, Phone, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
-import { getWhatsAppLink, PHONE_LINK } from '@/lib/constants';
+import { PHONE_LINK } from '@/lib/constants';
 import { PHOTO_GUIDE } from '@/lib/serviceData';
 import { serviceImages, ServiceImageSlug } from '@/lib/serviceImages';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
+import { ContactFunnelModal } from '@/components/contact/ContactFunnelModal';
 
 interface ServiceHeroProps {
   h1: string;
@@ -23,10 +24,11 @@ interface ServiceHeroProps {
 
 export function ServiceHero({ h1, subline, trustPills, slug, imageSrc, imageAlt, isDiscrete, ctaText }: ServiceHeroProps) {
   const { ref, isVisible } = useScrollReveal(0.1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Dynamic CTA text for discrete services
-  const whatsappLong = ctaText?.whatsapp || 'Foto senden · Preiseinschätzung erhalten';
-  const whatsappShort = ctaText?.whatsappShort || 'Foto senden · Preis erhalten';
+  const ctaLong = ctaText?.whatsapp || 'Jetzt Anfrage starten';
+  const ctaShort = ctaText?.whatsappShort || 'Anfrage starten';
 
   // Resolve image source: prefer bundled assets from serviceImages, fallback to imageSrc
   const resolvedImageSrc = slug && slug in serviceImages 
@@ -71,15 +73,13 @@ export function ServiceHero({ h1, subline, trustPills, slug, imageSrc, imageAlt,
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-3 mb-4 w-full sm:w-auto sm:justify-center">
             <Button
-              asChild
               size="lg"
-              className="gap-2 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground text-sm md:text-base xl:text-lg h-12 md:h-14 xl:h-16 px-4 md:px-6 xl:px-8 btn-lift shadow-whatsapp"
+              onClick={() => setIsModalOpen(true)}
+              className="gap-2 bg-cta hover:bg-cta-hover text-cta-foreground text-sm md:text-base xl:text-lg h-12 md:h-14 xl:h-16 px-4 md:px-6 xl:px-8 btn-lift"
             >
-              <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                <WhatsAppIcon className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
-                <span className="hidden sm:inline">{whatsappLong}</span>
-                <span className="sm:hidden">{whatsappShort}</span>
-              </a>
+              <MessageSquare className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
+              <span className="hidden sm:inline">{ctaLong}</span>
+              <span className="sm:hidden">{ctaShort}</span>
             </Button>
             <Button
               asChild
@@ -114,6 +114,8 @@ export function ServiceHero({ h1, subline, trustPills, slug, imageSrc, imageAlt,
           </div>
         </div>
       </div>
+
+      <ContactFunnelModal open={isModalOpen} onOpenChange={setIsModalOpen} />
     </section>
   );
 }
