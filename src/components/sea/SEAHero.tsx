@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 import { getWhatsAppLink } from '@/lib/constants';
 import { seaImages } from '@/lib/seaImages';
-import { ContactFunnelModal } from '@/components/contact/ContactFunnelModal';
-import type { SEAData } from '@/lib/seaData';
+import { HaushaltsaufloesungFunnel } from '@/components/contact/sea/HaushaltsaufloesungFunnel';
+import { EntruempelungFunnel } from '@/components/contact/sea/EntruempelungFunnel';
+import { MessieFunnel } from '@/components/contact/sea/MessieFunnel';
+import type { SEAData, SEAVariant } from '@/lib/seaData';
 
 interface SEAHeroProps {
   data: SEAData;
@@ -95,7 +97,16 @@ export function SEAHero({ data }: SEAHeroProps) {
         </div>
       </div>
 
-      <ContactFunnelModal open={isModalOpen} onOpenChange={setIsModalOpen} />
+      {/* Dynamic Funnel based on page slug */}
+      {data.slug === 'haushaltsaufloesung' && (
+        <HaushaltsaufloesungFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
+      )}
+      {data.slug === 'entruempelung' && (
+        <EntruempelungFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
+      )}
+      {data.slug === 'messie-hilfe' && (
+        <MessieFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
+      )}
     </section>
   );
 }
