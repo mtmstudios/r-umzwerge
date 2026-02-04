@@ -53,8 +53,16 @@ export function Header() {
             />
           </a>
 
-          {/* Platzhalter rechts für Symmetrie auf Mobil/Tablet */}
-          <div className="lg:hidden" />
+          {/* Anruf-Button rechts auf Mobil/Tablet */}
+          <div className="lg:hidden flex justify-end">
+            <a
+              href={PHONE_LINK}
+              className="p-2 -mr-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors"
+              aria-label="Jetzt anrufen"
+            >
+              <Phone className="h-6 w-6 text-primary" />
+            </a>
+          </div>
 
           {/* Desktop Navigation - größer mit Underline-Animation */}
           <nav className="hidden lg:flex items-center gap-8">

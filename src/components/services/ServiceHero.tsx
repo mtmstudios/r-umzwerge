@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { CheckCircle, Phone, MessageSquare } from 'lucide-react';
+import { CheckCircle, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { PHONE_LINK } from '@/lib/constants';
+import { getWhatsAppLink } from '@/lib/constants';
 import { PHOTO_GUIDE } from '@/lib/serviceData';
 import { serviceImages, ServiceImageSlug } from '@/lib/serviceImages';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
 import { ContactFunnelModal } from '@/components/contact/ContactFunnelModal';
+import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 
 interface ServiceHeroProps {
   h1: string;
@@ -84,11 +85,12 @@ export function ServiceHero({ h1, subline, trustPills, slug, imageSrc, imageAlt,
             <Button
               asChild
               size="lg"
-              className="gap-2 h-12 md:h-14 xl:h-16 px-4 md:px-6 xl:px-8 text-sm md:text-base xl:text-lg bg-cta hover:bg-cta-hover text-cta-foreground border-0"
+              className="gap-2 h-12 md:h-14 xl:h-16 px-4 md:px-6 xl:px-8 text-sm md:text-base xl:text-lg bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground border-0"
             >
-              <a href={PHONE_LINK}>
-                <Phone className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
-                Jetzt anrufen
+              <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
+                <WhatsAppIcon className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
+                <span className="hidden sm:inline">Foto senden · Preis erhalten</span>
+                <span className="sm:hidden">WhatsApp</span>
               </a>
             </Button>
           </div>
