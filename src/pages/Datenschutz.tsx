@@ -36,7 +36,7 @@ export default function Datenschutz() {
     { id: 'verantwortlicher', label: '1. Verantwortlicher' },
     { id: 'allgemeine-hinweise', label: '2. Allgemeine Hinweise' },
     { id: 'hosting', label: '3. Hosting' },
-    { id: 'kontaktformular', label: '4. Kontaktformular' },
+    { id: 'formulare', label: '4. Formulare' },
     { id: 'whatsapp', label: '5. WhatsApp' },
     { id: 'google-analytics', label: '6. Google Analytics 4' },
     { id: 'google-ads', label: '7. Google Ads' },
@@ -244,16 +244,17 @@ export default function Datenschutz() {
             </div>
           </section>
 
-          {/* 4. Kontaktformular */}
-          <section id="kontaktformular" className="mb-10 scroll-mt-24">
+          {/* 4. Formulare */}
+          <section id="formulare" className="mb-10 scroll-mt-24">
             <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
               <MessageSquare className="h-5 w-5 text-primary" />
-              4. Kontaktformular (N8N Cloud)
+              4. Formulare (N8N Cloud)
             </h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
-                Wenn Sie uns per Kontaktformular Anfragen zukommen lassen, werden Ihre Angaben aus dem 
-                Anfrageformular zur Bearbeitung der Anfrage bei uns verarbeitet.
+                Wenn Sie uns über eines unserer Formulare (z.B. Kontaktformular, Anfrage-Funnel) 
+                eine Anfrage zukommen lassen, werden Ihre Angaben zur Bearbeitung der Anfrage 
+                bei uns verarbeitet.
               </p>
               <div className="bg-muted/50 p-4 rounded-lg text-foreground">
                 <p className="font-medium">Auftragsverarbeiter: n8n GmbH</p>
@@ -262,14 +263,15 @@ export default function Datenschutz() {
               </div>
               <p>
                 Die Formulardaten werden über den Automatisierungsdienst N8N Cloud als Auftragsverarbeiter 
-                gemäß Art. 28 DSGVO an uns weitergeleitet.
+                gemäß Art. 28 DSGVO an uns weitergeleitet. Dies gilt für alle Formulare auf unserer Website.
               </p>
               <p>
-                <strong className="text-foreground">Erfasste Daten:</strong> Name, E-Mail-Adresse, 
-                Telefonnummer (falls angegeben), Ihre Nachricht
+                <strong className="text-foreground">Erfasste Daten:</strong> Je nach Formular z.B. 
+                Art der Dienstleistung, Umfang, Postleitzahl, Ort, Zeitrahmen, Name, E-Mail-Adresse, 
+                Telefonnummer, Ihre Nachricht
               </p>
               <p>
-                <strong className="text-foreground">Zweck:</strong> Bearbeitung Ihrer Kontaktanfrage
+                <strong className="text-foreground">Zweck:</strong> Bearbeitung Ihrer Kontakt- und Serviceanfragen
               </p>
               <p>
                 <strong className="text-foreground">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO 
