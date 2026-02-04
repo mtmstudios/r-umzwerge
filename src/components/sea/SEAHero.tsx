@@ -1,8 +1,10 @@
-import { Phone, CheckCircle } from 'lucide-react';
+import { useState } from 'react';
+import { CheckCircle, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
-import { getWhatsAppLink, PHONE_LINK } from '@/lib/constants';
+import { getWhatsAppLink } from '@/lib/constants';
 import { seaImages } from '@/lib/seaImages';
+import { ContactFunnelModal } from '@/components/contact/ContactFunnelModal';
 import type { SEAData } from '@/lib/seaData';
 
 interface SEAHeroProps {
@@ -10,15 +12,22 @@ interface SEAHeroProps {
 }
 
 export function SEAHero({ data }: SEAHeroProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const isGentle = data.tone === 'gentle';
 
   // Dynamic CTA text based on tone
-  const getWhatsAppCTAText = () => {
-    if (isGentle) return { long: 'Unverbindlich schreiben', short: 'Schreiben' };
-    return { long: 'Foto senden · Preis erhalten', short: 'Foto senden' };
+  const getModalCTAText = () => {
+    if (isGentle) return { long: 'Unverbindlich anfragen', short: 'Anfragen' };
+    return { long: 'Jetzt Anfrage starten', short: 'Anfrage starten' };
   };
 
-  const ctaText = getWhatsAppCTAText();
+  const getWhatsAppCTAText = () => {
+    if (isGentle) return { long: 'Diskret schreiben', short: 'Schreiben' };
+    return { long: 'Foto senden · Preis erhalten', short: 'WhatsApp' };
+  };
+
+  const modalCta = getModalCTAText();
+  const whatsappCta = getWhatsAppCTAText();
 
   return (
     <section className="relative overflow-hidden">
@@ -48,26 +57,25 @@ export function SEAHero({ data }: SEAHeroProps) {
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-3 mb-6 w-full sm:w-auto sm:justify-center">
             <Button
-              asChild
               size="lg"
-              className="gap-2 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground text-sm md:text-base xl:text-lg h-12 md:h-14 xl:h-16 px-4 md:px-6 xl:px-8 btn-lift shadow-whatsapp"
-              data-track="cta-whatsapp-hero"
+              onClick={() => setIsModalOpen(true)}
+              className="gap-2 bg-cta hover:bg-cta-hover text-cta-foreground text-sm md:text-base xl:text-lg h-12 md:h-14 xl:h-16 px-4 md:px-6 xl:px-8 btn-lift"
+              data-track="cta-funnel-hero"
             >
-              <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                <WhatsAppIcon className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
-                <span className="hidden sm:inline">{ctaText.long}</span>
-                <span className="sm:hidden">{ctaText.short}</span>
-              </a>
+              <MessageSquare className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
+              <span className="hidden sm:inline">{modalCta.long}</span>
+              <span className="sm:hidden">{modalCta.short}</span>
             </Button>
             <Button
               asChild
               size="lg"
-              className="gap-2 h-12 md:h-14 xl:h-16 px-4 md:px-6 xl:px-8 text-sm md:text-base xl:text-lg bg-cta hover:bg-cta-hover text-cta-foreground border-0"
-              data-track="cta-phone-hero"
+              className="gap-2 h-12 md:h-14 xl:h-16 px-4 md:px-6 xl:px-8 text-sm md:text-base xl:text-lg bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground border-0 shadow-whatsapp"
+              data-track="cta-whatsapp-hero"
             >
-              <a href={PHONE_LINK}>
-                <Phone className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
-                Jetzt anrufen
+              <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
+                <WhatsAppIcon className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
+                <span className="hidden sm:inline">{whatsappCta.long}</span>
+                <span className="sm:hidden">{whatsappCta.short}</span>
               </a>
             </Button>
           </div>
@@ -86,6 +94,8 @@ export function SEAHero({ data }: SEAHeroProps) {
           </div>
         </div>
       </div>
+
+      <ContactFunnelModal open={isModalOpen} onOpenChange={setIsModalOpen} />
     </section>
   );
 }
