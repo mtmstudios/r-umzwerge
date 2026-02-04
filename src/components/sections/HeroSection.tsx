@@ -1,9 +1,10 @@
-import { Phone, CheckCircle } from 'lucide-react';
+import { useState } from 'react';
+import { Phone, CheckCircle, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { getWhatsAppLink, PHONE_LINK } from '@/lib/constants';
+import { PHONE_LINK } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
-import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
+import { ContactFunnelModal } from '@/components/contact/ContactFunnelModal';
 import heroTeamImage from '@/assets/hero-team.jpg';
 
 const trustPills = [
@@ -14,6 +15,7 @@ const trustPills = [
 
 export function HeroSection() {
   const { ref, isVisible } = useScrollReveal(0.1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <section ref={ref} className="relative overflow-hidden">
@@ -49,15 +51,13 @@ export function HeroSection() {
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-3 mb-4 w-full sm:w-auto sm:justify-center">
             <Button
-              asChild
               size="lg"
-              className="gap-2 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground text-sm md:text-base xl:text-lg h-12 md:h-14 xl:h-16 px-4 md:px-6 xl:px-8 btn-lift shadow-whatsapp"
+              onClick={() => setIsModalOpen(true)}
+              className="gap-2 bg-cta hover:bg-cta-hover text-cta-foreground text-sm md:text-base xl:text-lg h-12 md:h-14 xl:h-16 px-4 md:px-6 xl:px-8 btn-lift"
             >
-              <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                <WhatsAppIcon className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
-                <span className="hidden sm:inline">Foto senden · Preiseinschätzung erhalten</span>
-                <span className="sm:hidden">Foto senden · Preis erhalten</span>
-              </a>
+              <MessageSquare className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
+              <span className="hidden sm:inline">Jetzt Anfrage starten</span>
+              <span className="sm:hidden">Anfrage starten</span>
             </Button>
             <Button
               asChild
@@ -89,6 +89,8 @@ export function HeroSection() {
           </div>
         </div>
       </div>
+
+      <ContactFunnelModal open={isModalOpen} onOpenChange={setIsModalOpen} />
     </section>
   );
 }
