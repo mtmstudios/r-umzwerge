@@ -132,6 +132,8 @@ export function ContactFunnelModal({ open, onOpenChange }: ContactFunnelModalPro
     
     try {
       const payload = {
+        quelle: 'hauptseite',
+        funnel_typ: 'standard',
         objektart: formData.serviceType,
         umfang: formData.scope,
         plz: formData.postalCode,

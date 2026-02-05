@@ -162,6 +162,7 @@ export function EntruempelungFunnel({ open, onOpenChange }: EntruempelungFunnelP
     
     try {
       const payload = {
+        quelle: 'entruempelung',
         funnel_typ: 'entruempelung',
         objektart: formData.objektart,
         fuellgrad: formData.fuellgrad,
