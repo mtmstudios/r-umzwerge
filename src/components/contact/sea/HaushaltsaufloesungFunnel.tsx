@@ -170,6 +170,7 @@ export function HaushaltsaufloesungFunnel({ open, onOpenChange }: Haushaltsauflo
     
     try {
       const payload = {
+        quelle: 'haushaltsaufloesung',
         funnel_typ: 'haushaltsaufloesung',
         objektart: formData.objektart,
         grund: formData.grund,

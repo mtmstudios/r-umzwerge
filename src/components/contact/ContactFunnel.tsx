@@ -103,6 +103,8 @@ export const ContactFunnel = forwardRef<ContactFunnelRef>((_, ref) => {
     
     try {
       const payload = {
+        quelle: 'kontaktseite',
+        funnel_typ: 'standard',
         objektart: formData.serviceType,
         umfang: formData.scope,
         plz: formData.postalCode,

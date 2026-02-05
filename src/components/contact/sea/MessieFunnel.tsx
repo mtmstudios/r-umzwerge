@@ -168,6 +168,7 @@ export function MessieFunnel({ open, onOpenChange }: MessieFunnelProps) {
     
     try {
       const payload = {
+        quelle: 'messie-hilfe',
         funnel_typ: 'messie',
         betroffener: formData.betroffener,
         situation: formData.situation,
