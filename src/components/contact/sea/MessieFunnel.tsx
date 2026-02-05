@@ -190,9 +190,7 @@ export function MessieFunnel({ open, onOpenChange }: MessieFunnelProps) {
         body: JSON.stringify(payload)
       });
       
-      const data = await response.json();
-      
-      if (response.ok && data.success) {
+      if (response.ok) {
         setIsSubmitting(false);
         setIsSubmitted(true);
         
@@ -201,7 +199,7 @@ export function MessieFunnel({ open, onOpenChange }: MessieFunnelProps) {
           description: "Wir melden uns diskret und einfühlsam bei Ihnen.",
         });
       } else {
-        throw new Error(data.error || 'Fehler beim Senden');
+        throw new Error(`HTTP Fehler: ${response.status}`);
       }
     } catch (error) {
       console.error('Submit error:', error);

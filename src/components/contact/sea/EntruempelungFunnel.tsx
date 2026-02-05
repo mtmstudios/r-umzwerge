@@ -184,9 +184,7 @@ export function EntruempelungFunnel({ open, onOpenChange }: EntruempelungFunnelP
         body: JSON.stringify(payload)
       });
       
-      const data = await response.json();
-      
-      if (response.ok && data.success) {
+      if (response.ok) {
         setIsSubmitting(false);
         setIsSubmitted(true);
         
@@ -195,7 +193,7 @@ export function EntruempelungFunnel({ open, onOpenChange }: EntruempelungFunnelP
           description: "Wir melden uns innerhalb von 24 Stunden mit einer Preiseinschätzung.",
         });
       } else {
-        throw new Error(data.error || 'Fehler beim Senden');
+        throw new Error(`HTTP Fehler: ${response.status}`);
       }
     } catch (error) {
       console.error('Submit error:', error);

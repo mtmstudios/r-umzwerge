@@ -125,9 +125,7 @@ export const ContactFunnel = forwardRef<ContactFunnelRef>((_, ref) => {
         body: JSON.stringify(payload)
       });
       
-      const data = await response.json();
-      
-      if (response.ok && data.success) {
+      if (response.ok) {
         setIsSubmitting(false);
         setIsSubmitted(true);
         
@@ -136,7 +134,7 @@ export const ContactFunnel = forwardRef<ContactFunnelRef>((_, ref) => {
           description: "Wir melden uns innerhalb von 24 Stunden bei Ihnen.",
         });
       } else {
-        throw new Error(data.error || 'Fehler beim Senden');
+        throw new Error(`HTTP Fehler: ${response.status}`);
       }
     } catch (error) {
       console.error('Submit error:', error);
