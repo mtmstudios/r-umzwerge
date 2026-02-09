@@ -1,66 +1,90 @@
 
 
-# Webhook-Fehlerbehandlung korrigieren
+# Tracking-Codes einbinden: etracker + Google Ads Remarketing
 
-## Problem
+## Uebersicht
 
-Der aktuelle Code in allen 5 Funnel-Dateien erwartet eine spezifische JSON-Antwort:
+Zwei Tracking-Codes muessen DSGVO-konform in die Website integriert werden:
+
+1. **etracker** (Conversion Tracking) - Secure-Code: `Knsu83`
+2. **Google Ads Remarketing** - ID: `AW-17942249403`
+
+Zusaetzlich muss die Datenschutzerklaerung um den etracker-Abschnitt ergaenzt werden.
+
+## Aenderungen
+
+### 1. etracker einbinden (`consentUtils.ts`)
+
+etracker wird mit `data-block-cookies="true"` geladen -- das bedeutet, etracker blockiert selbst Cookies ohne Einwilligung und arbeitet unter "berechtigtem Interesse" (Art. 6 Abs. 1 lit. f DSGVO). Das Script kann daher **immer** geladen werden (wie vom Anbieter vorgesehen).
+
+- Neue Funktion `loadEtracker()` hinzufuegen
+- In `applyConsent()` wird etracker immer geladen (da `data-block-cookies="true"`)
+- Bei Statistik-Einwilligung wird etracker auf `data-block-cookies="false"` umgestellt (volle Funktionalitaet)
+
+### 2. Google Ads Remarketing aktivieren (`consentUtils.ts`)
+
+Der bestehende Platzhalter wird mit der echten ID `AW-17942249403` ersetzt:
+- `loadGoogleAds('AW-17942249403')` wird bei Marketing-Einwilligung aufgerufen
+- Die auskommentierte Zeile wird aktiviert
+
+### 3. Cookie-Banner aktualisieren (`CookieConsentBanner.tsx`)
+
+- Statistik-Beschreibung um "etracker" ergaenzen:
+  "etracker & Google Analytics -- Hilft uns zu verstehen, wie Besucher unsere Website nutzen."
+
+### 4. Datenschutzerklaerung erweitern (`Datenschutz.tsx`)
+
+- Neuen Abschnitt "etracker" zwischen "WhatsApp" und "Google Analytics" einfuegen (wird neue Nr. 6)
+- Den bereitgestellten Datenschutz-Text von etracker einfuegen
+- Nummerierung der folgenden Abschnitte anpassen (Google Analytics wird 7, Google Ads wird 8, usw.)
+- etracker-Cookies zur Cookie-Tabelle hinzufuegen
+- Inhaltsverzeichnis aktualisieren
+
+## Technische Details
+
+### etracker-Ladelogik
 
 ```typescript
-const data = await response.json();
-if (response.ok && data.success) { ... }
+// etracker immer laden (data-block-cookies="true" = TTDSG-konform)
+export const loadEtracker = (blockCookies: boolean = true): void => {
+  const existing = document.getElementById('_etLoader');
+  if (existing) {
+    // Update block-cookies attribute
+    existing.setAttribute('data-block-cookies', String(blockCookies));
+    return;
+  }
+
+  const script = document.createElement('script');
+  script.id = '_etLoader';
+  script.type = 'text/javascript';
+  script.charset = 'UTF-8';
+  script.setAttribute('data-block-cookies', String(blockCookies));
+  script.setAttribute('data-secure-code', 'Knsu83');
+  script.src = '//code.etracker.com/code/e.js';
+  script.async = true;
+  document.head.appendChild(script);
+};
 ```
 
-n8n Webhooks antworten aber oft nur mit HTTP 200 ohne spezifischen Body.
-
-## Lösung
-
-Alle 5 Dateien werden so geändert, dass nur `response.ok` geprüft wird:
+### applyConsent-Aenderung
 
 ```typescript
-const response = await fetch(WEBHOOK_URL, { ... });
+export const applyConsent = (consent: ConsentState): void => {
+  // etracker - immer laden, bei Statistik-Einwilligung volle Cookies
+  loadEtracker(!consent.statistics);
 
-if (response.ok) {
-  // HTTP 200-299 = Erfolg
-  setIsSubmitting(false);
-  setIsSubmitted(true);
-  toast({ title: "Anfrage gesendet! ✓", ... });
-} else {
-  throw new Error(`HTTP ${response.status}`);
-}
+  // Google Ads Remarketing - nur bei Marketing-Einwilligung
+  if (consent.marketing) {
+    loadGoogleAds('AW-17942249403');
+  }
+};
 ```
 
-## Änderungen pro Datei
+### Betroffene Dateien
 
-| Datei | Zeilen | Änderung |
-|-------|--------|----------|
-| `HaushaltsaufloesungFunnel.tsx` | ~188-210 | `response.json()` entfernen |
-| `EntruempelungFunnel.tsx` | ~180-202 | `response.json()` entfernen |
-| `MessieFunnel.tsx` | ~186-208 | `response.json()` entfernen |
-| `ContactFunnelModal.tsx` | ~153-175 | `response.json()` entfernen |
-| `ContactFunnel.tsx` | ~122-144 | `response.json()` entfernen |
-
-## Neuer Code (für alle 5 Dateien gleich)
-
-```typescript
-const response = await fetch('https://mtmstudios.app.n8n.cloud/webhook/...', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(payload)
-});
-
-if (response.ok) {
-  setIsSubmitting(false);
-  setIsSubmitted(true);
-  
-  toast({
-    title: "Anfrage gesendet! ✓",
-    description: "Wir melden uns innerhalb von 24 Stunden.",
-  });
-} else {
-  throw new Error(`HTTP Fehler: ${response.status}`);
-}
-```
+| Datei | Aenderung |
+|-------|-----------|
+| `src/components/consent/consentUtils.ts` | etracker-Funktion + Google Ads ID aktivieren |
+| `src/components/consent/CookieConsentBanner.tsx` | Statistik-Beschreibung aktualisieren |
+| `src/pages/Datenschutz.tsx` | etracker-Abschnitt + Cookie-Tabelle + Nummerierung |
 
