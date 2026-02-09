@@ -8,6 +8,7 @@ import { CookieConsentProvider } from "@/components/consent/CookieConsentContext
 import { CookieConsentBanner } from "@/components/consent/CookieConsentBanner";
 import { AccessibilityProvider } from "@/components/accessibility/AccessibilityContext";
 import { FloatingAccessibilityButton } from "@/components/accessibility/FloatingAccessibilityButton";
+import { usePageTracking } from "@/hooks/usePageTracking";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Impressum from "./pages/Impressum";
@@ -17,6 +18,11 @@ import ServicePage from "./pages/ServicePage";
 import SEALandingPage from "./pages/SEALandingPage";
 import Contact from "./pages/Contact";
 import CityPage from "./pages/CityPage";
+
+function PageTracker() {
+  usePageTracking();
+  return null;
+}
 
 const queryClient = new QueryClient();
 
@@ -29,6 +35,7 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <PageTracker />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/kontakt" element={<Contact />} />

@@ -136,6 +136,24 @@ export const loadEtracker = (blockCookies: boolean = true): void => {
   document.head.appendChild(script);
 };
 
+// Send SPA page_view to Google Ads on route change
+export const trackPageView = (path: string): void => {
+  if (window.gtag) {
+    window.gtag('event', 'page_view', {
+      page_path: path,
+      page_location: window.location.origin + path,
+    });
+  }
+
+  // etracker handles SPA tracking automatically via its own API
+  // but we can trigger a virtual pageview if the et_eC_Wrapper exists
+  if (typeof (window as any).et_eC_Wrapper === 'function') {
+    (window as any).et_eC_Wrapper({
+      et_pagename: path,
+    });
+  }
+};
+
 // Apply consent-based loading
 export const applyConsent = (consent: ConsentState): void => {
   // etracker - always load (data-block-cookies="true" = TTDSG-compliant)
