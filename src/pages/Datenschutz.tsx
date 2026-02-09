@@ -38,12 +38,13 @@ export default function Datenschutz() {
     { id: 'hosting', label: '3. Hosting' },
     { id: 'formulare', label: '4. Formulare' },
     { id: 'whatsapp', label: '5. WhatsApp' },
-    { id: 'google-analytics', label: '6. Google Analytics 4' },
-    { id: 'google-ads', label: '7. Google Ads' },
-    { id: 'schriftarten', label: '8. Schriftarten' },
-    { id: 'cookies', label: '9. Cookies' },
-    { id: 'betroffenenrechte', label: '10. Betroffenenrechte' },
-    { id: 'cookie-einstellungen', label: '11. Cookie-Einstellungen ändern' },
+    { id: 'etracker', label: '6. etracker' },
+    { id: 'google-analytics', label: '7. Google Analytics 4' },
+    { id: 'google-ads', label: '8. Google Ads' },
+    { id: 'schriftarten', label: '9. Schriftarten' },
+    { id: 'cookies', label: '10. Cookies' },
+    { id: 'betroffenenrechte', label: '11. Betroffenenrechte' },
+    { id: 'cookie-einstellungen', label: '12. Cookie-Einstellungen ändern' },
   ];
 
   return (
@@ -331,11 +332,79 @@ export default function Datenschutz() {
             </div>
           </section>
 
-          {/* 6. Google Analytics 4 */}
+          {/* 6. etracker */}
+          <section id="etracker" className="mb-10 scroll-mt-24">
+            <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <BarChart3 className="h-5 w-5 text-primary" />
+              6. etracker
+            </h2>
+            <div className="space-y-4 text-muted-foreground">
+              <p>
+                Der Anbieter dieser Website nutzt Dienste der etracker GmbH aus Hamburg, Deutschland (
+                <a
+                  href="https://www.etracker.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:text-primary/80 transition-colors inline-flex items-center gap-1"
+                >
+                  www.etracker.com
+                  <ExternalLink className="h-3 w-3" />
+                </a>
+                ) zur Analyse von Nutzungsdaten.
+              </p>
+              <div className="bg-muted/50 p-4 rounded-lg text-foreground">
+                <p className="font-medium">etracker GmbH</p>
+                <p>Erste Brunnenstraße 1</p>
+                <p>20459 Hamburg, Deutschland</p>
+              </div>
+              <p>
+                Auch bei Ablehnung von statistischen Cookies werden in Übereinstimmung mit den rechtlichen 
+                Anforderungen der EU-Datenschutzgrundverordnung (EU-DSGVO) und dem Telekommunikation-Digitale-Dienste-Datenschutzgesetz 
+                (TDDDG) Nutzungsdaten erfasst.
+              </p>
+              <p>
+                <strong className="text-foreground">Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO 
+                (berechtigtes Interesse). Unser Anliegen im Sinne der EU-DSGVO (berechtigtes Interesse) ist die 
+                Optimierung unseres Online-Angebotes sowie einer rechtskonformen Einbindung und Verwaltung weiterer 
+                Dienste auf unserer Website. Sofern eine entsprechende Einwilligung gegeben wurde, erfolgt die 
+                Ausspielung anderer Technologien auf Grundlage von Art. 6 Abs. 1 lit. a der EU-DSGVO. Die 
+                Einwilligung ist jederzeit widerrufbar.
+              </p>
+              <p>
+                Die mit etracker erzeugten Web-Analyse-Daten werden im Auftrag des Anbieters dieser Website 
+                von etracker ausschließlich in Deutschland verarbeitet und gespeichert und unterliegen damit den 
+                strengen deutschen und europäischen Datenschutzgesetzen und -standards. etracker wurde diesbezüglich 
+                unabhängig geprüft, zertifiziert und mit dem Datenschutz-Gütesiegel{' '}
+                <a
+                  href="https://etracker.com/eprivacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:text-primary/80 transition-colors inline-flex items-center gap-1"
+                >
+                  ePrivacyseal
+                  <ExternalLink className="h-3 w-3" />
+                </a>{' '}
+                ausgezeichnet.
+              </p>
+              <p>
+                Da uns die Privatsphäre unserer Besucher wichtig ist, werden die Daten, die möglicherweise einen 
+                Bezug zu einer einzelnen Person zulassen, wie die IP-Adresse, Anmelde- oder Gerätekennungen, 
+                frühestmöglich anonymisiert oder pseudonymisiert. Eine andere Verwendung, Zusammenführung mit 
+                anderen Daten oder eine Weitergabe an Dritte erfolgt nicht.
+              </p>
+              <p>
+                <strong className="text-foreground">Opt-Out:</strong> Sie können der vorbeschriebenen 
+                Datenverarbeitung jederzeit widersprechen. Der Widerspruch hat keine nachteiligen Folgen. 
+                Nutzen Sie dazu die Cookie-Einstellungen am Ende dieser Seite.
+              </p>
+            </div>
+          </section>
+
+          {/* 7. Google Analytics 4 */}
           <section id="google-analytics" className="mb-10 scroll-mt-24">
             <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
               <BarChart3 className="h-5 w-5 text-primary" />
-              6. Google Analytics 4
+              7. Google Analytics 4
             </h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
@@ -406,11 +475,11 @@ export default function Datenschutz() {
             </div>
           </section>
 
-          {/* 7. Google Ads */}
+          {/* 8. Google Ads */}
           <section id="google-ads" className="mb-10 scroll-mt-24">
             <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
               <Megaphone className="h-5 w-5 text-primary" />
-              7. Google Ads Conversion Tracking
+              8. Google Ads Conversion Tracking & Remarketing
             </h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
@@ -459,10 +528,10 @@ export default function Datenschutz() {
             </div>
           </section>
 
-          {/* 8. Schriftarten */}
+          {/* 9. Schriftarten */}
           <section id="schriftarten" className="mb-10 scroll-mt-24">
             <h2 className="text-xl font-semibold text-foreground mb-4">
-              8. Schriftarten (Lokal gehostet)
+              9. Schriftarten (Lokal gehostet)
             </h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
@@ -484,11 +553,11 @@ export default function Datenschutz() {
             </div>
           </section>
 
-          {/* 9. Cookies */}
+          {/* 10. Cookies */}
           <section id="cookies" className="mb-10 scroll-mt-24">
             <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
               <Cookie className="h-5 w-5 text-primary" />
-              9. Cookies
+              10. Cookies
             </h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
@@ -529,21 +598,37 @@ export default function Datenschutz() {
                       <td className="border border-border p-3">90 Tage</td>
                       <td className="border border-border p-3">Ja</td>
                     </tr>
+                    <tr className="bg-muted/30">
+                      <td className="border border-border p-3 font-mono text-foreground">et_scroll</td>
+                      <td className="border border-border p-3">etracker</td>
+                      <td className="border border-border p-3">Scroll-Tracking</td>
+                      <td className="border border-border p-3">Sitzung</td>
+                      <td className="border border-border p-3">Nein*</td>
+                    </tr>
+                    <tr>
+                      <td className="border border-border p-3 font-mono text-foreground">_et_coid</td>
+                      <td className="border border-border p-3">etracker</td>
+                      <td className="border border-border p-3">Conversion-Tracking</td>
+                      <td className="border border-border p-3">Sitzung</td>
+                      <td className="border border-border p-3">Nein*</td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
 
               <p>
                 Die mit „Ja" gekennzeichneten Cookies werden erst nach Ihrer ausdrücklichen Einwilligung gesetzt.
+                *etracker arbeitet im Grundmodus ohne Einwilligung (berechtigtes Interesse), setzt dabei aber 
+                nur technisch notwendige Cookies ohne Personenbezug.
               </p>
             </div>
           </section>
 
-          {/* 10. Betroffenenrechte */}
+          {/* 11. Betroffenenrechte */}
           <section id="betroffenenrechte" className="mb-10 scroll-mt-24">
             <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
               <Shield className="h-5 w-5 text-primary" />
-              10. Ihre Rechte als betroffene Person
+              11. Ihre Rechte als betroffene Person
             </h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
@@ -614,11 +699,11 @@ export default function Datenschutz() {
             </div>
           </section>
 
-          {/* 11. Cookie-Einstellungen ändern */}
+          {/* 12. Cookie-Einstellungen ändern */}
           <section id="cookie-einstellungen" className="mb-10 scroll-mt-24">
             <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
               <Settings className="h-5 w-5 text-primary" />
-              11. Cookie-Einstellungen ändern
+              12. Cookie-Einstellungen ändern
             </h2>
             <div className="space-y-4 text-muted-foreground">
               <p>

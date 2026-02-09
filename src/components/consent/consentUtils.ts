@@ -117,19 +117,33 @@ export const loadGoogleAds = (conversionId: string): void => {
   window.gtag('config', conversionId);
 };
 
-// Apply consent-based loading
-export const applyConsent = (consent: ConsentState): void => {
-  // Google Analytics - Replace with actual measurement ID when available
-  if (consent.statistics) {
-    // Placeholder - replace GA_MEASUREMENT_ID with actual ID
-    // loadGoogleAnalytics('G-XXXXXXXXXX');
-    console.log('Statistics consent granted - Google Analytics would load here');
+// Load etracker dynamically (TTDSG-compliant with data-block-cookies)
+export const loadEtracker = (blockCookies: boolean = true): void => {
+  const existing = document.getElementById('_etLoader');
+  if (existing) {
+    existing.setAttribute('data-block-cookies', String(blockCookies));
+    return;
   }
 
-  // Google Ads - Replace with actual conversion ID when available
+  const script = document.createElement('script');
+  script.id = '_etLoader';
+  script.type = 'text/javascript';
+  script.charset = 'UTF-8';
+  script.setAttribute('data-block-cookies', String(blockCookies));
+  script.setAttribute('data-secure-code', 'Knsu83');
+  script.src = '//code.etracker.com/code/e.js';
+  script.async = true;
+  document.head.appendChild(script);
+};
+
+// Apply consent-based loading
+export const applyConsent = (consent: ConsentState): void => {
+  // etracker - always load (data-block-cookies="true" = TTDSG-compliant)
+  // With statistics consent: full cookie functionality
+  loadEtracker(!consent.statistics);
+
+  // Google Ads Remarketing - only with marketing consent
   if (consent.marketing) {
-    // Placeholder - replace AW_CONVERSION_ID with actual ID
-    // loadGoogleAds('AW-XXXXXXXXX');
-    console.log('Marketing consent granted - Google Ads would load here');
+    loadGoogleAds('AW-17942249403');
   }
 };
