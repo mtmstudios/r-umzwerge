@@ -84,7 +84,7 @@ export function CookieConsentBanner() {
                 <div className="flex-1">
                   <p className="font-medium text-foreground text-sm">Statistik</p>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    Google Analytics – Hilft uns zu verstehen, wie Besucher unsere Website nutzen.
+                    etracker & Google Analytics – Hilft uns zu verstehen, wie Besucher unsere Website nutzen.
                   </p>
                 </div>
                 <Switch 
