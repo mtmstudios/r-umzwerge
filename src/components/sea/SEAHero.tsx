@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CheckCircle, MessageSquare } from 'lucide-react';
+import { CheckCircle, MessageSquare, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 import { getWhatsAppLink } from '@/lib/constants';
@@ -47,7 +47,16 @@ export function SEAHero({ data }: SEAHeroProps) {
 
       <div className="container-custom relative">
         {/* Unified Layout: Fullscreen with centered content for ALL breakpoints */}
-        <div className="min-h-[90vh] md:min-h-[80vh] xl:min-h-[75vh] flex flex-col justify-center items-center text-center px-4 py-16 md:py-20 xl:py-24 pt-28 lg:pt-32">
+        <div className="min-h-[90vh] md:min-h-[80vh] xl:min-h-[75vh] flex flex-col justify-center items-center text-center px-4 py-16 md:py-20 xl:py-24 pt-28 lg:pt-32 relative">
+          {/* Urgency Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/15 mb-5 animate-fade-in">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+            </span>
+            <span className="text-sm font-medium text-white/90">Noch diese Woche Termine frei</span>
+          </div>
+
           <h1 className="text-2xl sm:text-3xl md:text-4xl xl:text-5xl 2xl:text-6xl font-bold text-white mb-4 md:mb-6 text-balance leading-tight max-w-4xl">
             {data.headline}
           </h1>
@@ -93,6 +102,11 @@ export function SEAHero({ data }: SEAHeroProps) {
                 {pill}
               </div>
             ))}
+          </div>
+
+          {/* Scroll Indicator */}
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce">
+            <ChevronDown className="h-6 w-6 text-white/60" />
           </div>
         </div>
       </div>

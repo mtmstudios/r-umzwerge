@@ -132,6 +132,24 @@ export function SEASocialProof({ data }: SEASocialProofProps) {
           </div>
         </div>
 
+        {/* Featured Variant Testimonial */}
+        {data.testimonial && (
+          <div className="max-w-2xl mx-auto mb-10 glass rounded-2xl p-6 lg:p-8 border border-border/30 shadow-lg shadow-primary/5 opacity-0 animate-fade-in" style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}>
+            <div className="flex gap-4">
+              <span className="text-4xl lg:text-5xl font-serif text-primary/30 leading-none select-none">"</span>
+              <div>
+                <p className={cn(
+                  "text-base lg:text-lg text-foreground/90 leading-relaxed mb-3 italic",
+                  isGentle ? "text-foreground/80" : ""
+                )}>
+                  {data.testimonial.text}
+                </p>
+                <p className="text-sm font-semibold text-muted-foreground">– {data.testimonial.author}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Review Cards Grid with floating effect */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mb-8">
           {FEATURED_REVIEWS.map((review, index) => (

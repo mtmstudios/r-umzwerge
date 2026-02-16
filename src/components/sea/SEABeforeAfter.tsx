@@ -1,7 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
-import { Sparkles, CheckCircle, Truck, Heart, Shield, Users } from 'lucide-react';
+import { Sparkles, CheckCircle, Truck, Heart, Shield, Users, MessageSquare } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { seaImages } from '@/lib/seaImages';
+import { HaushaltsaufloesungFunnel } from '@/components/contact/sea/HaushaltsaufloesungFunnel';
+import { EntruempelungFunnel } from '@/components/contact/sea/EntruempelungFunnel';
+import { MessieFunnel } from '@/components/contact/sea/MessieFunnel';
 import type { SEAData, SEAVariant } from '@/lib/seaData';
 
 const iconMap: Record<string, React.ElementType> = {
@@ -48,6 +52,7 @@ interface SEABeforeAfterProps {
 
 export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
   const [sliderPosition, setSliderPosition] = useState(50);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
 
@@ -193,7 +198,32 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
             );
           })}
         </div>
+
+        {/* Inline CTA after Before/After */}
+        <div className="text-center mt-8">
+          <Button
+            size="lg"
+            onClick={() => setIsModalOpen(true)}
+            className="gap-2 bg-cta hover:bg-cta-hover text-cta-foreground h-12 md:h-14 px-6 md:px-8 text-sm md:text-base btn-lift shadow-lg shadow-cta/25"
+            data-track="cta-funnel-beforeafter"
+          >
+            <MessageSquare className="h-5 w-5 flex-shrink-0" />
+            {isGentleMode ? 'Unverbindlich anfragen' : 'So soll es bei mir auch aussehen'}
+          </Button>
+          <p className="text-xs text-muted-foreground mt-2">Unverbindlich · Antwort innerhalb von 24h</p>
+        </div>
       </div>
+
+      {/* Dynamic Funnel */}
+      {data.slug === 'haushaltsaufloesung' && (
+        <HaushaltsaufloesungFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
+      )}
+      {data.slug === 'entruempelung' && (
+        <EntruempelungFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
+      )}
+      {data.slug === 'messie-hilfe' && (
+        <MessieFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
+      )}
     </section>
   );
 }

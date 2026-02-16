@@ -134,34 +134,51 @@ export function SEAMidCTA({ data }: SEAMidCTAProps) {
           </div>
 
           {/* CTAs Centered */}
-          <div className="text-center space-y-4 mt-12">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-12">
             <Button
               size="lg"
               onClick={() => setIsModalOpen(true)}
               className={cn(
-                "gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground",
+                "gap-3 bg-cta hover:bg-cta-hover text-cta-foreground",
                 "h-14 px-8 text-base",
-                "btn-lift shadow-lg shadow-whatsapp/25",
-                "hover:shadow-xl hover:shadow-whatsapp/30"
+                "btn-lift shadow-lg shadow-cta/25",
+                "hover:shadow-xl hover:shadow-cta/30"
               )}
               data-track="cta-funnel-mid"
             >
-              <WhatsAppIcon className="h-5 w-5" />
-              <span className="hidden sm:inline">{ctaText.long}</span>
-              <span className="sm:hidden">{ctaText.short}</span>
+              <MessageCircle className="h-5 w-5" />
+              <span className="hidden sm:inline">{isGentle ? 'Unverbindlich anfragen' : 'Jetzt Anfrage starten'}</span>
+              <span className="sm:hidden">{isGentle ? 'Anfragen' : 'Anfrage starten'}</span>
             </Button>
 
-            {/* Secondary: Text link for calling */}
-            <div>
-              <a 
-                href={PHONE_LINK}
-                className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm lg:text-base font-medium"
-                data-track="cta-phone-mid"
-              >
-                <Phone className="h-4 w-4" />
-                Lieber anrufen?
+            <Button
+              asChild
+              size="lg"
+              className={cn(
+                "gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground",
+                "h-14 px-8 text-base",
+                "btn-lift shadow-lg shadow-whatsapp/25"
+              )}
+              data-track="cta-whatsapp-mid"
+            >
+              <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
+                <WhatsAppIcon className="h-5 w-5" />
+                <span className="hidden sm:inline">{ctaText.long}</span>
+                <span className="sm:hidden">{ctaText.short}</span>
               </a>
-            </div>
+            </Button>
+          </div>
+
+          {/* Secondary: Text link for calling */}
+          <div className="text-center mt-4">
+            <a 
+              href={PHONE_LINK}
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm lg:text-base font-medium"
+              data-track="cta-phone-mid"
+            >
+              <Phone className="h-4 w-4" />
+              Lieber anrufen?
+            </a>
           </div>
         </div>
       </div>

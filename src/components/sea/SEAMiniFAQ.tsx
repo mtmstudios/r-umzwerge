@@ -5,6 +5,8 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
+import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
+import { getWhatsAppLink } from '@/lib/constants';
 import type { SEAData } from '@/lib/seaData';
 
 interface SEAMiniFAQProps {
@@ -38,15 +40,12 @@ export function SEAMiniFAQ({ data }: SEAMiniFAQProps) {
                 key={index}
                 value={`faq-${index}`}
                 className={cn(
-                  // Glassmorphism
                   "glass rounded-xl px-5 overflow-hidden",
                   "border border-border/30",
-                  // Open state glow
                   "data-[state=open]:shadow-lg data-[state=open]:shadow-primary/5",
                   isGentle
                     ? "data-[state=open]:border-primary/30"
                     : "data-[state=open]:border-accent/30",
-                  // Hover state
                   "hover:bg-card/80",
                   "transition-all duration-300"
                 )}
@@ -69,6 +68,25 @@ export function SEAMiniFAQ({ data }: SEAMiniFAQProps) {
               </AccordionItem>
             ))}
           </Accordion>
+
+          {/* Micro-CTA after FAQ */}
+          <div className="mt-8 text-center glass rounded-xl p-5 border border-border/30">
+            <p className="text-sm text-muted-foreground mb-3">
+              {isGentle
+                ? 'Ihre Frage war nicht dabei? Schreiben Sie uns vertraulich.'
+                : 'Ihre Frage war nicht dabei?'}
+            </p>
+            <a
+              href={getWhatsAppLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-whatsapp hover:text-whatsapp-hover transition-colors"
+              data-track="cta-whatsapp-faq"
+            >
+              <WhatsAppIcon className="h-4 w-4" />
+              Per WhatsApp fragen
+            </a>
+          </div>
         </div>
       </div>
     </section>
