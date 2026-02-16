@@ -309,11 +309,11 @@ export function ContactFunnelModal({ open, onOpenChange }: ContactFunnelModalPro
   // Mobile & Tablet: Drawer from bottom
   if (isTabletOrMobile) {
     return (
-      <Drawer open={open} onOpenChange={onOpenChange}>
+      <Drawer open={open} onOpenChange={onOpenChange} handleOnly repositionInputs={false}>
         <DrawerContent className="max-h-[85vh] px-4 pb-4">
           {/* Header with drag handle and close button */}
           <div className="relative flex items-center justify-center pt-3 pb-2">
-            <div className="w-12 h-1.5 rounded-full bg-muted" />
+            <div data-vaul-handle="" aria-label="Drag handle" className="w-12 h-1.5 rounded-full bg-muted cursor-grab active:cursor-grabbing" />
             <button 
               onClick={() => onOpenChange(false)}
               className="absolute right-0 top-2 p-2 rounded-full bg-muted/50 hover:bg-muted transition-colors"
