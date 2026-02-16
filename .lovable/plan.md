@@ -1,90 +1,65 @@
 
+# Fix: Funnel-Eingabeprobleme auf Handy und Tablet
 
-# Tracking-Codes einbinden: etracker + Google Ads Remarketing
+## Problem
 
-## Uebersicht
+Auf Mobilgeraeten und Tablets gibt es zwei Probleme mit dem Funnel-Drawer:
 
-Zwei Tracking-Codes muessen DSGVO-konform in die Website integriert werden:
+1. **Keyboard-Dismiss-Bug**: Wenn die virtuelle Tastatur sich oeffnet (beim Tippen in Eingabefelder), interpretiert die Vaul-Drawer-Bibliothek die Aenderung der Viewport-Groesse als Wisch-Geste und schliesst den Drawer oder der Fokus geht verloren.
+2. **Doppelter Drag-Handle**: Die `DrawerContent`-Komponente erzeugt automatisch einen Drag-Handle (Balken oben). Jeder Funnel fuegt aber nochmal einen eigenen hinzu -- das ergibt zwei sichtbare Balken.
 
-1. **etracker** (Conversion Tracking) - Secure-Code: `Knsu83`
-2. **Google Ads Remarketing** - ID: `AW-17942249403`
+## Loesung
 
-Zusaetzlich muss die Datenschutzerklaerung um den etracker-Abschnitt ergaenzt werden.
+### 1. Drawer-Komponente absichern (`src/components/ui/drawer.tsx`)
 
-## Aenderungen
+- Den eingebauten automatischen Drag-Handle aus `DrawerContent` entfernen (wird von den Funnels selbst gerendert)
 
-### 1. etracker einbinden (`consentUtils.ts`)
+### 2. Alle 4 Funnel-Komponenten anpassen
 
-etracker wird mit `data-block-cookies="true"` geladen -- das bedeutet, etracker blockiert selbst Cookies ohne Einwilligung und arbeitet unter "berechtigtem Interesse" (Art. 6 Abs. 1 lit. f DSGVO). Das Script kann daher **immer** geladen werden (wie vom Anbieter vorgesehen).
+Betrifft:
+- `src/components/contact/ContactFunnelModal.tsx`
+- `src/components/contact/sea/EntruempelungFunnel.tsx`
+- `src/components/contact/sea/HaushaltsaufloesungFunnel.tsx`
+- `src/components/contact/sea/MessieFunnel.tsx`
 
-- Neue Funktion `loadEtracker()` hinzufuegen
-- In `applyConsent()` wird etracker immer geladen (da `data-block-cookies="true"`)
-- Bei Statistik-Einwilligung wird etracker auf `data-block-cookies="false"` umgestellt (volle Funktionalitaet)
-
-### 2. Google Ads Remarketing aktivieren (`consentUtils.ts`)
-
-Der bestehende Platzhalter wird mit der echten ID `AW-17942249403` ersetzt:
-- `loadGoogleAds('AW-17942249403')` wird bei Marketing-Einwilligung aufgerufen
-- Die auskommentierte Zeile wird aktiviert
-
-### 3. Cookie-Banner aktualisieren (`CookieConsentBanner.tsx`)
-
-- Statistik-Beschreibung um "etracker" ergaenzen:
-  "etracker & Google Analytics -- Hilft uns zu verstehen, wie Besucher unsere Website nutzen."
-
-### 4. Datenschutzerklaerung erweitern (`Datenschutz.tsx`)
-
-- Neuen Abschnitt "etracker" zwischen "WhatsApp" und "Google Analytics" einfuegen (wird neue Nr. 6)
-- Den bereitgestellten Datenschutz-Text von etracker einfuegen
-- Nummerierung der folgenden Abschnitte anpassen (Google Analytics wird 7, Google Ads wird 8, usw.)
-- etracker-Cookies zur Cookie-Tabelle hinzufuegen
-- Inhaltsverzeichnis aktualisieren
+Aenderungen pro Datei:
+- `handleOnly` auf dem Drawer setzen -- damit kann der Drawer **nur** ueber den Drag-Handle geschlossen werden, nicht durch Wischen im Content-Bereich (verhindert versehentliches Schliessen beim Tippen)
+- Dem Drag-Handle-Element ein `data-vaul-handle` Attribut geben, damit Vaul es als offiziellen Handle erkennt
+- `repositionInputs={false}` setzen, damit Vaul die Inputs nicht bei Keyboard-Oeffnung verschiebt (verhindert Fokus-Verlust)
 
 ## Technische Details
 
-### etracker-Ladelogik
+### drawer.tsx -- Handle entfernen
 
-```typescript
-// etracker immer laden (data-block-cookies="true" = TTDSG-konform)
-export const loadEtracker = (blockCookies: boolean = true): void => {
-  const existing = document.getElementById('_etLoader');
-  if (existing) {
-    // Update block-cookies attribute
-    existing.setAttribute('data-block-cookies', String(blockCookies));
-    return;
-  }
+```tsx
+// Vorher (Zeile 39):
+<div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />
 
-  const script = document.createElement('script');
-  script.id = '_etLoader';
-  script.type = 'text/javascript';
-  script.charset = 'UTF-8';
-  script.setAttribute('data-block-cookies', String(blockCookies));
-  script.setAttribute('data-secure-code', 'Knsu83');
-  script.src = '//code.etracker.com/code/e.js';
-  script.async = true;
-  document.head.appendChild(script);
-};
+// Nachher: Entfernt (kein automatischer Handle mehr)
 ```
 
-### applyConsent-Aenderung
+### Funnel-Drawer-Aenderung (Beispiel ContactFunnelModal.tsx)
 
-```typescript
-export const applyConsent = (consent: ConsentState): void => {
-  // etracker - immer laden, bei Statistik-Einwilligung volle Cookies
-  loadEtracker(!consent.statistics);
+```tsx
+// Vorher:
+<Drawer open={open} onOpenChange={onOpenChange}>
+  <DrawerContent className="max-h-[85vh] px-4 pb-4">
+    <div className="relative flex items-center justify-center pt-3 pb-2">
+      <div className="w-12 h-1.5 rounded-full bg-muted" />
 
-  // Google Ads Remarketing - nur bei Marketing-Einwilligung
-  if (consent.marketing) {
-    loadGoogleAds('AW-17942249403');
-  }
-};
+// Nachher:
+<Drawer open={open} onOpenChange={onOpenChange} handleOnly repositionInputs={false}>
+  <DrawerContent className="max-h-[85vh] px-4 pb-4">
+    <div className="relative flex items-center justify-center pt-3 pb-2">
+      <div data-vaul-handle="" aria-label="Drag handle" className="w-12 h-1.5 rounded-full bg-muted cursor-grab active:cursor-grabbing" />
 ```
 
 ### Betroffene Dateien
 
 | Datei | Aenderung |
 |-------|-----------|
-| `src/components/consent/consentUtils.ts` | etracker-Funktion + Google Ads ID aktivieren |
-| `src/components/consent/CookieConsentBanner.tsx` | Statistik-Beschreibung aktualisieren |
-| `src/pages/Datenschutz.tsx` | etracker-Abschnitt + Cookie-Tabelle + Nummerierung |
-
+| `src/components/ui/drawer.tsx` | Automatischen Handle entfernen |
+| `src/components/contact/ContactFunnelModal.tsx` | handleOnly + repositionInputs + data-vaul-handle |
+| `src/components/contact/sea/EntruempelungFunnel.tsx` | handleOnly + repositionInputs + data-vaul-handle |
+| `src/components/contact/sea/HaushaltsaufloesungFunnel.tsx` | handleOnly + repositionInputs + data-vaul-handle |
+| `src/components/contact/sea/MessieFunnel.tsx` | handleOnly + repositionInputs + data-vaul-handle |
