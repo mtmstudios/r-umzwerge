@@ -14,6 +14,7 @@ import { RegionsSection } from '@/components/sections/RegionsSection';
 import { FAQSection } from '@/components/sections/FAQSection';
 import { FinalCTASection } from '@/components/sections/FinalCTASection';
 import { SectionDivider } from '@/components/ui/SectionDivider';
+import { FAQ_ITEMS } from '@/lib/constants';
 
 const Index = () => {
   const location = useLocation();
@@ -29,6 +30,30 @@ const Index = () => {
       }
     }
   }, [location]);
+
+  // FAQ Schema.org für Startseite
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'faq-schema-home';
+    script.text = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: FAQ_ITEMS.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
+    });
+    document.head.appendChild(script);
+
+    return () => {
+      document.getElementById('faq-schema-home')?.remove();
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">

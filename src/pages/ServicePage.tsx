@@ -14,29 +14,24 @@ import { ServiceFAQ } from '@/components/services/ServiceFAQ';
 import { ServiceFinalCTA } from '@/components/services/ServiceFinalCTA';
 import { SERVICE_PAGES } from '@/lib/serviceData';
 import { SectionDivider } from '@/components/ui/SectionDivider';
+import { useSeo } from '@/hooks/useSeo';
 
 export default function ServicePage() {
   const { slug } = useParams<{ slug: string }>();
-  
-  // Get page data
+
   const pageData = slug ? SERVICE_PAGES[slug] : null;
-  
-  // SEO: Dynamic title and meta description (must be before early return)
+
+  useSeo({
+    title: pageData?.metaTitle ?? 'Räumzwerge – Entrümpelung in Süddeutschland',
+    description: pageData?.metaDescription ?? '',
+    path: `/leistungen/${slug ?? ''}`,
+    faqItems: pageData?.faq,
+  });
+
   useEffect(() => {
-    if (pageData) {
-      document.title = pageData.metaTitle;
-      
-      const metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.setAttribute('content', pageData.metaDescription);
-      }
+    window.scrollTo(0, 0);
+  }, [slug]);
 
-      // Scroll to top on mount
-      window.scrollTo(0, 0);
-    }
-  }, [pageData]);
-
-  // Redirect to 404 if not found
   if (!pageData) {
     return <Navigate to="/404" replace />;
   }

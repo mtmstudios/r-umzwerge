@@ -1,5 +1,4 @@
 import { useParams, Navigate } from 'react-router-dom';
-import { useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { FloatingCTAs } from '@/components/layout/FloatingCTAs';
@@ -13,6 +12,7 @@ import { ServicePricing } from '@/components/services/ServicePricing';
 import { ServiceFinalCTA } from '@/components/services/ServiceFinalCTA';
 import { SectionDivider } from '@/components/ui/SectionDivider';
 import { CITY_PAGES, isValidCitySlug } from '@/lib/cityData';
+import { useSeo } from '@/hooks/useSeo';
 
 // Standard process steps (same for all cities)
 const CITY_PROCESS_STEPS = [
@@ -36,28 +36,12 @@ export default function CityPage() {
   // Get city data (returns undefined if invalid)
   const cityData = citySlug ? CITY_PAGES[citySlug] : undefined;
   
-  // Set document title and meta description
-  useEffect(() => {
-    if (cityData) {
-      document.title = cityData.metaTitle;
-      
-      // Update meta description
-      const metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.setAttribute('content', cityData.metaDescription);
-      } else {
-        const meta = document.createElement('meta');
-        meta.name = 'description';
-        meta.content = cityData.metaDescription;
-        document.head.appendChild(meta);
-      }
-    }
-
-    // Cleanup on unmount
-    return () => {
-      document.title = 'Räumzwerge – Entrümpelung in Süddeutschland';
-    };
-  }, [cityData]);
+  useSeo({
+    title: cityData?.metaTitle ?? 'Räumzwerge – Entrümpelung in Süddeutschland',
+    description: cityData?.metaDescription ?? '',
+    path: `/${citySlug ?? ''}`,
+    faqItems: cityData?.faq,
+  });
 
   // Check if this is a valid city slug - after hooks
   if (!citySlug || !isValidCitySlug(citySlug) || !cityData) {

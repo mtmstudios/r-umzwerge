@@ -1,6 +1,6 @@
 import { Package, Building2, Wrench, Zap, Clock, Star, Check, ArrowDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { getWhatsAppLink } from '@/lib/constants';
+import { getWhatsAppLink, GOOGLE_RATING } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
@@ -15,7 +15,7 @@ const PRICE_FACTORS = [
 ];
 
 const TRUST_STATS = [
-  { icon: Star, value: '4.9', label: 'Google-Bewertung' },
+  { icon: Star, value: GOOGLE_RATING.score.toFixed(1), label: 'Google-Bewertung' },
   { icon: Clock, value: '<24h', label: 'Antwortzeit' },
   { icon: Check, value: '85%', label: 'Festpreis-Quote' },
 ];
