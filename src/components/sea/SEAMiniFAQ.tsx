@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { ClipboardList, Phone } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -5,8 +7,10 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
-import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
-import { getWhatsAppLink } from '@/lib/constants';
+import { PHONE_LINK } from '@/lib/constants';
+import { HaushaltsaufloesungFunnel } from '@/components/contact/sea/HaushaltsaufloesungFunnel';
+import { EntruempelungFunnel } from '@/components/contact/sea/EntruempelungFunnel';
+import { MessieFunnel } from '@/components/contact/sea/MessieFunnel';
 import type { SEAData } from '@/lib/seaData';
 
 interface SEAMiniFAQProps {
@@ -15,10 +19,10 @@ interface SEAMiniFAQProps {
 
 export function SEAMiniFAQ({ data }: SEAMiniFAQProps) {
   const isGentle = data.tone === 'gentle';
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <section className="py-12 lg:py-20 bg-muted/30 relative overflow-hidden">
-      {/* Decorative elements */}
       <div className="absolute bottom-0 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
       
       <div className="container-custom relative z-10">
@@ -49,16 +53,10 @@ export function SEAMiniFAQ({ data }: SEAMiniFAQProps) {
                   "hover:bg-card/80",
                   "transition-all duration-300"
                 )}
-                style={{
-                  animationDelay: `${index * 50}ms`,
-                }}
+                style={{ animationDelay: `${index * 50}ms` }}
               >
                 <AccordionTrigger 
-                  className={cn(
-                    "text-left text-base sm:text-lg font-medium hover:no-underline py-5",
-                    "transition-colors duration-200",
-                    "data-[state=open]:text-primary"
-                  )}
+                  className="text-left text-base sm:text-lg font-medium hover:no-underline py-5 transition-colors duration-200 data-[state=open]:text-primary"
                 >
                   {faq.question}
                 </AccordionTrigger>
@@ -73,22 +71,42 @@ export function SEAMiniFAQ({ data }: SEAMiniFAQProps) {
           <div className="mt-8 text-center glass rounded-xl p-5 border border-border/30">
             <p className="text-sm text-muted-foreground mb-3">
               {isGentle
-                ? 'Ihre Frage war nicht dabei? Schreiben Sie uns vertraulich.'
+                ? 'Ihre Frage war nicht dabei? Wir helfen Ihnen gerne persönlich.'
                 : 'Ihre Frage war nicht dabei?'}
             </p>
-            <a
-              href={getWhatsAppLink()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-whatsapp hover:text-whatsapp-hover transition-colors"
-              data-track="cta-whatsapp-faq"
-            >
-              <WhatsAppIcon className="h-4 w-4" />
-              Per WhatsApp fragen
-            </a>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="inline-flex items-center gap-2 text-sm font-semibold text-cta hover:text-cta-hover transition-colors"
+                data-track="cta-funnel-faq"
+              >
+                <ClipboardList className="h-4 w-4" />
+                Kostenloses Angebot berechnen
+              </button>
+              <span className="hidden sm:inline text-border">|</span>
+              <a
+                href={PHONE_LINK}
+                className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+                data-track="cta-phone-faq"
+              >
+                <Phone className="h-4 w-4" />
+                Jetzt anrufen
+              </a>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Dynamic Funnel */}
+      {data.slug === 'haushaltsaufloesung' && (
+        <HaushaltsaufloesungFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
+      )}
+      {data.slug === 'entruempelung' && (
+        <EntruempelungFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
+      )}
+      {data.slug === 'messie-hilfe' && (
+        <MessieFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
+      )}
     </section>
   );
 }
