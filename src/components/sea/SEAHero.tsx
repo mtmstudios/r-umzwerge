@@ -66,7 +66,7 @@ export function SEAHero({ data }: SEAHeroProps) {
               data-track="cta-funnel-hero"
             >
               <ClipboardList className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0" />
-              <span>📋 Kostenloses Angebot berechnen</span>
+              <span>Kostenloses Angebot berechnen</span>
             </Button>
             <Button
               asChild
