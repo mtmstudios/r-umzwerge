@@ -18,6 +18,7 @@ import ServicePage from "./pages/ServicePage";
 import SEALandingPage from "./pages/SEALandingPage";
 import Contact from "./pages/Contact";
 import CityPage from "./pages/CityPage";
+import Danke from "./pages/Danke";
 
 function PageTracker() {
   usePageTracking();
