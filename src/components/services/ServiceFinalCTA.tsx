@@ -31,7 +31,7 @@ export function ServiceFinalCTA() {
               className="gap-3 bg-cta hover:bg-cta-hover text-cta-foreground h-14 px-8 font-bold btn-lift shadow-lg shadow-cta/25"
             >
               <ClipboardList className="h-5 w-5" />
-              📋 Angebot berechnen
+              Angebot berechnen
             </Button>
 
             <Button
