@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
-import { Phone, MessageCircle, FileText } from "lucide-react";
-import { PHONE_LINK, getWhatsAppLink } from "@/lib/constants";
-import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
+import { Phone, FileText, ClipboardList } from "lucide-react";
+import { PHONE_LINK } from "@/lib/constants";
 
 interface ContactOptionsProps {
   onFormClick: () => void;
@@ -9,24 +8,25 @@ interface ContactOptionsProps {
 
 const options = [
   {
+    id: "funnel",
+    icon: ClipboardList,
+    title: "Angebot berechnen",
+    description: "Kostenloses Angebot in 5 Schritten",
+    action: "Jetzt starten →",
+    color: "bg-cta hover:bg-cta-hover",
+    iconColor: "text-white",
+    accentColor: "text-cta",
+  },
+  {
     id: "call",
     icon: Phone,
     title: "Anrufen",
     description: "Direkter Draht zu uns",
     action: "0160 3080676",
     href: PHONE_LINK,
-    color: "bg-cta hover:bg-cta-hover",
-    iconColor: "text-white",
-  },
-  {
-    id: "whatsapp",
-    icon: WhatsAppIcon,
-    title: "WhatsApp",
-    description: "Foto senden, Preis in 24h",
-    action: "Chat öffnen →",
-    href: getWhatsAppLink(),
-    color: "bg-[#25D366] hover:bg-[#20BD5A]",
-    iconColor: "text-white",
+    color: "bg-primary hover:bg-primary/90",
+    iconColor: "text-primary-foreground",
+    accentColor: "text-primary",
   },
   {
     id: "form",
@@ -35,8 +35,9 @@ const options = [
     description: "In 5 Schritten zur Anfrage",
     action: "Zum Formular ↓",
     href: "#funnel",
-    color: "bg-primary hover:bg-primary/90",
-    iconColor: "text-primary-foreground",
+    color: "bg-secondary hover:bg-secondary/80",
+    iconColor: "text-secondary-foreground",
+    accentColor: "text-primary",
   },
 ];
 
@@ -53,7 +54,7 @@ export function ContactOptions({ onFormClick }: ContactOptionsProps) {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              {option.id === "form" ? (
+              {option.id === "funnel" || option.id === "form" ? (
                 <button
                   onClick={onFormClick}
                   className="w-full group relative overflow-hidden rounded-2xl bg-card border border-border p-6 md:p-8 text-left transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1"
@@ -68,7 +69,7 @@ export function ContactOptions({ onFormClick }: ContactOptionsProps) {
                     <p className="text-muted-foreground text-sm mb-4">
                       {option.description}
                     </p>
-                    <span className="font-semibold text-primary">
+                    <span className={`font-semibold ${option.accentColor}`}>
                       {option.action}
                     </span>
                   </div>
@@ -77,8 +78,6 @@ export function ContactOptions({ onFormClick }: ContactOptionsProps) {
               ) : (
                 <a
                   href={option.href}
-                  target={option.id === "whatsapp" ? "_blank" : undefined}
-                  rel={option.id === "whatsapp" ? "noopener noreferrer" : undefined}
                   className="block group relative overflow-hidden rounded-2xl bg-card border border-border p-6 md:p-8 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1"
                 >
                   <div className="flex flex-col items-center text-center">
@@ -91,7 +90,7 @@ export function ContactOptions({ onFormClick }: ContactOptionsProps) {
                     <p className="text-muted-foreground text-sm mb-4">
                       {option.description}
                     </p>
-                    <span className={`font-semibold ${option.id === "call" ? "text-cta" : option.id === "whatsapp" ? "text-[#25D366]" : "text-primary"}`}>
+                    <span className={`font-semibold ${option.accentColor}`}>
                       {option.action}
                     </span>
                   </div>

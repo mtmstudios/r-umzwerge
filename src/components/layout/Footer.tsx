@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Phone, Mail, MapPin, Accessibility } from 'lucide-react';
-import { SERVICES, REGIONS, PHONE_NUMBER, EMAIL, ADDRESS, getWhatsAppLink } from '@/lib/constants';
-import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
+import { SERVICES, REGIONS, PHONE_NUMBER, EMAIL, ADDRESS, PHONE_LINK } from '@/lib/constants';
 import { AccessibilityWidget } from '@/components/accessibility/AccessibilityWidget';
+
 export function Footer() {
   const currentYear = new Date().getFullYear();
   const [isAccessibilityOpen, setIsAccessibilityOpen] = useState(false);
@@ -10,7 +10,6 @@ export function Footer() {
   return (
     <>
       <footer className="bg-primary text-primary-foreground pb-20 lg:pb-0">
-        {/* Link Columns */}
         <div className="container-custom py-10 lg:py-14">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
             {/* Leistungen */}
@@ -48,22 +47,11 @@ export function Footer() {
               <ul className="space-y-2.5">
                 <li>
                   <a
-                    href={`tel:${PHONE_NUMBER.replace(/\s/g, '')}`}
+                    href={PHONE_LINK}
                     className="flex items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm"
                   >
                     <Phone className="h-4 w-4 flex-shrink-0" />
                     {PHONE_NUMBER}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={getWhatsAppLink()}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm"
-                  >
-                    <WhatsAppIcon className="h-4 w-4 flex-shrink-0" />
-                    WhatsApp
                   </a>
                 </li>
                 <li>
@@ -89,26 +77,17 @@ export function Footer() {
               </h3>
               <ul className="space-y-2.5">
                 <li>
-                  <a
-                    href="/impressum"
-                    className="text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm"
-                  >
+                  <a href="/impressum" className="text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm">
                     Impressum
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="/datenschutz"
-                    className="text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm"
-                  >
+                  <a href="/datenschutz" className="text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm">
                     Datenschutz
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="/barrierefreiheit"
-                    className="text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm"
-                  >
+                  <a href="/barrierefreiheit" className="text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm">
                     Barrierefreiheit
                   </a>
                 </li>
@@ -148,17 +127,15 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
         <div className="border-t border-primary-foreground/10">
           <div className="container-custom py-5">
-          <div className="flex flex-col md:flex-row justify-center items-center gap-3 text-sm text-primary-foreground/50">
+            <div className="flex flex-col md:flex-row justify-center items-center gap-3 text-sm text-primary-foreground/50">
               <p>© {currentYear} Räumzwerge. Alle Rechte vorbehalten.</p>
             </div>
           </div>
         </div>
       </footer>
 
-      {/* Accessibility Widget */}
       <AccessibilityWidget 
         isOpen={isAccessibilityOpen} 
         onClose={() => setIsAccessibilityOpen(false)} 
