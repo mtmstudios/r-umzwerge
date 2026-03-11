@@ -98,7 +98,7 @@ export function SEAMidCTA({ data }: SEAMidCTAProps) {
               data-track="cta-funnel-mid"
             >
               <ClipboardList className="h-6 w-6" />
-              📋 Kostenloses Angebot berechnen
+              Kostenloses Angebot berechnen
             </Button>
             <Button
               asChild
