@@ -36,8 +36,8 @@ export const ContactFunnel = forwardRef<ContactFunnelRef>((_, ref) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  const navigate = useNavigate();
 
   useImperativeHandle(ref, () => ({
     scrollToFunnel: () => sectionRef.current?.scrollIntoView({ behavior: "smooth" }),
