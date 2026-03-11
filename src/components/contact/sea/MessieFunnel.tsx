@@ -343,7 +343,7 @@ export function MessieFunnel({ open, onOpenChange }: MessieFunnelProps) {
     </div>
   );
 
-  const content = isSubmitted ? renderSuccessState() : renderFunnelContent();
+  const content = renderFunnelContent();
 
   if (isTabletOrMobile) {
     return (

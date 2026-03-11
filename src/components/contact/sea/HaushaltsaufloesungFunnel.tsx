@@ -347,7 +347,7 @@ export function HaushaltsaufloesungFunnel({ open, onOpenChange }: Haushaltsauflo
     </div>
   );
 
-  const content = isSubmitted ? renderSuccessState() : renderFunnelContent();
+  const content = renderFunnelContent();
 
   if (isTabletOrMobile) {
     return (
