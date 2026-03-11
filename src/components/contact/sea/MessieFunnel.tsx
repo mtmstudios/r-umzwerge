@@ -64,13 +64,6 @@ export function MessieFunnel({ open, onOpenChange }: MessieFunnelProps) {
     }
   }, [open]);
 
-  useEffect(() => {
-    if (isSubmitted) {
-      const timeout = setTimeout(() => onOpenChange(false), 2000);
-      return () => clearTimeout(timeout);
-    }
-  }, [isSubmitted, onOpenChange]);
-
   const updateFormData = (key: keyof FormData, value: string | string[]) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
