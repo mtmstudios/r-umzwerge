@@ -38,7 +38,7 @@ export function FinalCTASection() {
             >
               <a href={PHONE_LINK}>
                 <Phone className="h-5 w-5 flex-shrink-0" />
-                📞 Jetzt anrufen
+                Jetzt anrufen
               </a>
             </Button>
           </div>

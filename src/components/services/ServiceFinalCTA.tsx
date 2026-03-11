@@ -41,7 +41,7 @@ export function ServiceFinalCTA() {
             >
               <a href={PHONE_LINK}>
                 <Phone className="h-5 w-5" />
-                📞 Jetzt anrufen
+                Jetzt anrufen
               </a>
             </Button>
           </div>

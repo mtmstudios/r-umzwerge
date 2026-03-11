@@ -79,7 +79,7 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
             data-track="cta-funnel-painpoints"
           >
             <ClipboardList className="h-6 w-6" />
-            📋 Jetzt kostenloses Angebot berechnen
+            Jetzt kostenloses Angebot berechnen
           </Button>
           <p className="text-muted-foreground text-sm mt-3">Unverbindlich · Antwort in unter 24h</p>
         </div>

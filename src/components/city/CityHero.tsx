@@ -64,7 +64,7 @@ export function CityHero({ h1, subline, trustPills, imageAlt }: CityHeroProps) {
             >
               <a href={PHONE_LINK}>
                 <Phone className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
-                <span>📞 Jetzt anrufen</span>
+                <span>Jetzt anrufen</span>
               </a>
             </Button>
           </div>

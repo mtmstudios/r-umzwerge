@@ -52,7 +52,7 @@ export const FloatingCTAs = forwardRef<HTMLDivElement, FloatingCTAsProps>(({ onF
             aria-label="Angebot berechnen"
           >
             <ClipboardList className="h-5 w-5 flex-shrink-0" />
-            <span>📋 Angebot</span>
+            <span>Angebot</span>
           </button>
         ) : (
           <a
@@ -61,7 +61,7 @@ export const FloatingCTAs = forwardRef<HTMLDivElement, FloatingCTAsProps>(({ onF
             aria-label="Angebot berechnen"
           >
             <ClipboardList className="h-5 w-5 flex-shrink-0" />
-            <span>📋 Angebot</span>
+            <span>Angebot</span>
           </a>
         )}
       </div>
