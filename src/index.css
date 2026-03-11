@@ -680,3 +680,9 @@
     transform: translateY(-4px);
   }
 }
+
+/* Subtle pulse for CTA attention */
+@keyframes pulse-subtle {
+  0%, 100% { box-shadow: 0 10px 25px -5px hsl(var(--cta) / 0.3); }
+  50% { box-shadow: 0 10px 35px -3px hsl(var(--cta) / 0.45); }
+}
