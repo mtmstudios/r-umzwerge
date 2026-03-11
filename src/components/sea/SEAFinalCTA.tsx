@@ -49,7 +49,7 @@ export function SEAFinalCTA({ data }: SEAFinalCTAProps) {
               data-track="cta-funnel-final"
             >
               <ClipboardList className="h-5 w-5 sm:h-6 sm:w-6" />
-              📋 Kostenloses Angebot berechnen
+              Kostenloses Angebot berechnen
             </Button>
 
             <Button
