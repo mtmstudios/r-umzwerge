@@ -37,7 +37,7 @@ export function SEAFinalCTA({ data }: SEAFinalCTAProps) {
       <div className="container-custom relative z-10">
         <div className="max-w-2xl mx-auto text-center">
           {/* Dynamic Headline */}
-          <h2 className="text-xl sm:text-2xl lg:text-4xl font-bold text-primary-foreground mb-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary-foreground mb-4">
             {data.ctaHeadline}
           </h2>
           <p className="text-primary-foreground/80 mb-10 text-base lg:text-lg">
