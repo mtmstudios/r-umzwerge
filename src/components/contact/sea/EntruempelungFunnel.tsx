@@ -274,15 +274,6 @@ export function EntruempelungFunnel({ open, onOpenChange }: EntruempelungFunnelP
   const showNextButton = !AUTO_ADVANCE_STEPS.has(currentStep) && currentStep !== TOTAL_STEPS;
   const showSubmitButton = currentStep === TOTAL_STEPS;
 
-  const renderSuccessState = () => (
-    <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-8 md:py-12">
-      <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4 md:mb-6">
-        <CheckCircle className="w-8 h-8 md:w-10 md:h-10 text-primary" />
-      </div>
-      <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3 md:mb-4">Anfrage gesendet!</h3>
-      <p className="text-sm md:text-base text-muted-foreground">Wir melden uns innerhalb von 24 Stunden mit einer Preiseinschätzung.</p>
-    </motion.div>
-  );
 
   const renderFunnelContent = () => (
     <div className="w-full">
