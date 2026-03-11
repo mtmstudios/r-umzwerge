@@ -4,9 +4,9 @@ const BASE_URL = 'https://raeumzwerge.de';
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.jpg`;
 
 const DEFAULT_TITLE = 'Räumzwerge – Entrümpelung in Süddeutschland | Sauber, Diskret, Transparent';
-const DEFAULT_DESCRIPTION = 'Professionelle Entrümpelung in Bayern & Baden-Württemberg. Preiseinschätzung per WhatsApp-Foto innerhalb von 24 Stunden. Besenrein & übergabefertig. Keine versteckten Kosten.';
+const DEFAULT_DESCRIPTION = 'Professionelle Entrümpelung in Bayern & Baden-Württemberg. Kostenlose Preiseinschätzung innerhalb von 24 Stunden. Besenrein & übergabefertig. Keine versteckten Kosten.';
 const DEFAULT_OG_TITLE = 'Räumzwerge – Entrümpelung ohne Stress';
-const DEFAULT_OG_DESCRIPTION = 'Professionelle Entrümpelung in Süddeutschland. Preiseinschätzung per WhatsApp-Foto innerhalb von 24 Stunden. Besenrein, transparent, fair.';
+const DEFAULT_OG_DESCRIPTION = 'Professionelle Entrümpelung in Süddeutschland. Kostenlose Preiseinschätzung innerhalb von 24 Stunden. Besenrein, transparent, fair.';
 
 export interface FaqItem {
   question: string;

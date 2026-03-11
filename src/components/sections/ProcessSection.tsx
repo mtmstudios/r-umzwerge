@@ -1,17 +1,17 @@
-import { Camera, Clock, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import { ClipboardList, Clock, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { getWhatsAppLink } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
-import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 import { HorizontalTimeline } from '@/components/ui/HorizontalTimeline';
+import { ContactFunnelModal } from '@/components/contact/ContactFunnelModal';
 
 const steps = [
   {
     number: 1,
-    icon: Camera,
-    title: "Foto senden",
-    description: "Ein paar Fotos + Ort via WhatsApp für eine erste Einschätzung.",
+    icon: ClipboardList,
+    title: "Anfrage starten",
+    description: "Kostenloses Angebot berechnen – in nur 5 Schritten.",
   },
   {
     number: 2,
@@ -29,6 +29,7 @@ const steps = [
 
 export function ProcessSection() {
   const { ref, isVisible } = useScrollReveal(0.1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <section id="ablauf" className="py-12 md:py-14 lg:py-16 bg-background">
@@ -56,21 +57,20 @@ export function ProcessSection() {
           isVisible && "visible"
         )}>
           <Button
-            asChild
             size="lg"
-            className="gap-2 sm:gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground h-12 sm:h-14 px-5 sm:px-8 btn-lift shadow-whatsapp text-sm sm:text-base"
+            onClick={() => setIsModalOpen(true)}
+            className="gap-2 sm:gap-3 bg-cta hover:bg-cta-hover text-cta-foreground h-12 sm:h-14 px-5 sm:px-8 btn-lift shadow-cta text-sm sm:text-base font-bold"
           >
-            <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-              <WhatsAppIcon className="h-5 w-5 flex-shrink-0" />
-              <span className="hidden sm:inline">Jetzt Foto senden</span>
-              <span className="sm:hidden">Foto senden</span>
-            </a>
+            <ClipboardList className="h-5 w-5 flex-shrink-0" />
+            <span>📋 Angebot berechnen</span>
           </Button>
           <p className="text-sm text-muted-foreground mt-4">
             Diskret, respektvoll und ohne Überraschungen.
           </p>
         </div>
       </div>
+
+      <ContactFunnelModal open={isModalOpen} onOpenChange={setIsModalOpen} />
     </section>
   );
 }
