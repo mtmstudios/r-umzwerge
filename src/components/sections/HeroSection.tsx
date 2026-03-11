@@ -43,7 +43,7 @@ export function HeroSection() {
           </h1>
           
           <p className="text-base md:text-lg xl:text-xl text-white/90 mb-6 md:mb-8 max-w-2xl">
-            Von Ulm aus koordinieren wir Entrümpelungen in ganz Baden-Württemberg und Bayern. Kostenlose Preiseinschätzung – innerhalb von 24 Stunden.
+            Kostenlose Ersteinschätzung am Telefon – schnell, diskret und unverbindlich.
           </p>
 
           {/* Dual-CTA: Funnel (Primary) + Phone (Secondary) */}
