@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { Phone, Camera, MessageCircle, Calendar, Sparkles } from 'lucide-react';
+import { Phone, Camera, MessageCircle, Sparkles, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 import { getWhatsAppLink, PHONE_LINK } from '@/lib/constants';
@@ -19,72 +19,51 @@ export function SEAMidCTA({ data }: SEAMidCTAProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Dynamic process steps based on tone
   const processSteps = isGentle
     ? [
-        { num: '1', label: 'Kontakt aufnehmen', icon: MessageCircle },
-        { num: '2', label: 'Gemeinsam besprechen', icon: MessageCircle },
-        { num: '3', label: 'Termin nach Wunsch', icon: Calendar },
+        { num: '1', label: 'Kontakt aufnehmen', sublabel: 'Per WhatsApp oder Telefon', icon: MessageCircle },
+        { num: '2', label: 'Gemeinsam besprechen', sublabel: 'Wir hören zu – ohne Druck', icon: MessageCircle },
+        { num: '3', label: 'Wir räumen für Sie', sublabel: 'Diskret und besenrein', icon: Sparkles },
       ]
     : [
-        { num: '1', label: 'Foto senden', icon: Camera },
-        { num: '2', label: 'Einschätzung erhalten', icon: MessageCircle },
-        { num: '3', label: 'Besenrein übergeben', icon: Sparkles },
+        { num: '1', label: 'Fotos senden', sublabel: '3–6 Fotos per WhatsApp', icon: Camera },
+        { num: '2', label: 'Festpreis in 24h', sublabel: 'Transparent & verbindlich', icon: MessageCircle },
+        { num: '3', label: 'Besenrein übergeben', sublabel: 'Wir räumen komplett', icon: Sparkles },
       ];
 
-  // Dynamic CTA text
-  const ctaText = isGentle
-    ? { long: 'Unverbindlich schreiben', short: 'Schreiben' }
-    : { long: 'Foto senden · Preis erhalten', short: 'Foto senden' };
-
-  // Intersection Observer for staggered animation
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
+        if (entry.isIntersecting) setIsVisible(true);
       },
-      { threshold: 0.2 }
+      { threshold: 0.15 }
     );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
+    if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
 
   return (
-    <section className="py-12 lg:py-20 bg-secondary/30 relative overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute top-1/2 left-0 w-48 h-48 bg-primary/5 rounded-full blur-3xl pointer-events-none -translate-y-1/2" />
-      <div className="absolute top-1/2 right-0 w-48 h-48 bg-cta/5 rounded-full blur-3xl pointer-events-none -translate-y-1/2" />
-      
+    <section className="py-14 lg:py-24 bg-secondary/30 relative overflow-hidden">
       <div className="container-custom relative z-10">
         <div className="max-w-4xl mx-auto">
           {/* Headline */}
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground text-center mb-10 lg:mb-14">
-            So einfach geht's
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground text-center mb-12 lg:mb-16">
+            So einfach geht's – in 3 Schritten
           </h2>
 
-          {/* Process Cards with Timeline */}
-          <div 
-            ref={sectionRef}
-            className="relative"
-          >
-            {/* Connecting gradient line (desktop only) */}
-            <div className="hidden sm:block absolute top-16 left-[15%] right-[15%] h-1 bg-gradient-to-r from-primary/20 via-cta/40 to-primary/20 rounded-full" />
+          {/* Process Steps */}
+          <div ref={sectionRef} className="relative">
+            {/* Connecting line (desktop) */}
+            <div className="hidden sm:block absolute top-20 left-[15%] right-[15%] h-1 bg-gradient-to-r from-primary/20 via-cta/40 to-primary/20 rounded-full" />
             
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-10">
               {processSteps.map((step, index) => {
                 const Icon = step.icon;
                 return (
                   <div
                     key={step.num}
                     className={cn(
-                      "relative",
-                      "opacity-0 translate-y-6",
+                      "relative opacity-0 translate-y-6",
                       isVisible && "opacity-100 translate-y-0"
                     )}
                     style={{
@@ -94,38 +73,22 @@ export function SEAMidCTA({ data }: SEAMidCTAProps) {
                       transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'
                     }}
                   >
-                    {/* Card */}
-                    <div className={cn(
-                      "glass card-glow rounded-2xl p-6 lg:p-8 text-center",
-                      "border border-border/30",
-                      "transition-all duration-300"
-                    )}>
-                      {/* Number Badge with CTA glow */}
-                      <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                        <div className="relative">
-                          {/* Glow ring */}
-                          <div className="absolute inset-0 w-10 h-10 rounded-full bg-cta/30 blur-md" />
-                          
-                          {/* Badge */}
-                          <div className="relative w-10 h-10 rounded-full bg-gradient-to-br from-cta to-cta-hover text-cta-foreground flex items-center justify-center font-bold text-lg shadow-lg shadow-cta/30">
-                            {step.num}
-                          </div>
+                    <div className="glass card-glow rounded-2xl p-7 lg:p-9 text-center border border-border/30">
+                      {/* Number Badge */}
+                      <div className="absolute -top-5 left-1/2 -translate-x-1/2">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cta to-cta-hover text-cta-foreground flex items-center justify-center font-bold text-xl shadow-lg shadow-cta/30">
+                          {step.num}
                         </div>
                       </div>
                       
-                      {/* Icon with premium styling */}
-                      <div className={cn(
-                        "w-16 h-16 mx-auto mb-4 mt-4 rounded-2xl",
-                        "bg-gradient-to-br from-secondary to-secondary/50",
-                        "flex items-center justify-center",
-                        "shadow-inner",
-                        "icon-bounce"
-                      )}>
-                        <Icon className="h-8 w-8 text-primary" />
+                      {/* Icon */}
+                      <div className="w-18 h-18 mx-auto mb-5 mt-5 rounded-2xl bg-gradient-to-br from-secondary to-secondary/50 flex items-center justify-center shadow-inner" style={{ width: '4.5rem', height: '4.5rem' }}>
+                        <Icon className="h-9 w-9 text-primary" />
                       </div>
                       
                       {/* Label */}
-                      <p className="font-semibold text-foreground text-lg">{step.label}</p>
+                      <p className="font-bold text-foreground text-xl mb-1">{step.label}</p>
+                      <p className="text-muted-foreground text-base">{step.sublabel}</p>
                     </div>
                   </div>
                 );
@@ -133,47 +96,26 @@ export function SEAMidCTA({ data }: SEAMidCTAProps) {
             </div>
           </div>
 
-          {/* CTAs Centered */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-12">
-            <Button
-              size="lg"
-              onClick={() => setIsModalOpen(true)}
-              className={cn(
-                "gap-3 bg-cta hover:bg-cta-hover text-cta-foreground",
-                "h-14 px-8 text-base",
-                "btn-lift shadow-lg shadow-cta/25",
-                "hover:shadow-xl hover:shadow-cta/30"
-              )}
-              data-track="cta-funnel-mid"
-            >
-              <MessageCircle className="h-5 w-5" />
-              <span className="hidden sm:inline">{isGentle ? 'Unverbindlich anfragen' : 'Jetzt Anfrage starten'}</span>
-              <span className="sm:hidden">{isGentle ? 'Anfragen' : 'Anfrage starten'}</span>
-            </Button>
-
+          {/* Secondary WhatsApp CTA below process */}
+          <div className="flex flex-col items-center mt-12 lg:mt-16">
             <Button
               asChild
               size="lg"
-              className={cn(
-                "gap-3 bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground",
-                "h-14 px-8 text-base",
-                "btn-lift shadow-lg shadow-whatsapp/25"
-              )}
-              data-track="cta-whatsapp-mid"
+              className="gap-3 h-14 md:h-16 px-8 md:px-10 text-base md:text-lg bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground font-bold rounded-2xl shadow-lg shadow-whatsapp/25 transition-all duration-200"
+              data-track="cta-whatsapp-process"
             >
               <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                <WhatsAppIcon className="h-5 w-5" />
-                <span className="hidden sm:inline">{ctaText.long}</span>
-                <span className="sm:hidden">{ctaText.short}</span>
+                <WhatsAppIcon className="h-6 w-6" />
+                <span>📸 Fotos senden & Preis erhalten</span>
+                <ArrowRight className="h-5 w-5" />
               </a>
             </Button>
-          </div>
-
-          {/* Secondary: Text link for calling */}
-          <div className="text-center mt-4">
+            <p className="text-muted-foreground text-base mt-3">Antwort innerhalb von 24 Stunden</p>
+            
+            {/* Secondary phone link */}
             <a 
               href={PHONE_LINK}
-              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm lg:text-base font-medium"
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-base font-medium mt-3"
               data-track="cta-phone-mid"
             >
               <Phone className="h-4 w-4" />
@@ -183,7 +125,7 @@ export function SEAMidCTA({ data }: SEAMidCTAProps) {
         </div>
       </div>
 
-      {/* Dynamic Funnel based on page slug */}
+      {/* Dynamic Funnel */}
       {data.slug === 'haushaltsaufloesung' && (
         <HaushaltsaufloesungFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
       )}

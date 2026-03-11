@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { CheckCircle, MessageSquare, ChevronDown } from 'lucide-react';
+import { CheckCircle, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
-import { getWhatsAppLink } from '@/lib/constants';
+import { getWhatsAppLink, PHONE_LINK } from '@/lib/constants';
 import { seaImages } from '@/lib/seaImages';
 import { HaushaltsaufloesungFunnel } from '@/components/contact/sea/HaushaltsaufloesungFunnel';
 import { EntruempelungFunnel } from '@/components/contact/sea/EntruempelungFunnel';
@@ -13,27 +13,20 @@ interface SEAHeroProps {
   data: SEAData;
 }
 
+const trustChecks = [
+  'Festpreisgarantie',
+  'Keine versteckten Kosten',
+  '100% Besenrein',
+  'Diskret & Respektvoll',
+];
+
 export function SEAHero({ data }: SEAHeroProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isGentle = data.tone === 'gentle';
 
-  // Dynamic CTA text based on tone
-  const getModalCTAText = () => {
-    if (isGentle) return { long: 'Unverbindlich anfragen', short: 'Anfragen' };
-    return { long: 'Jetzt Anfrage starten', short: 'Anfrage starten' };
-  };
-
-  const getWhatsAppCTAText = () => {
-    if (isGentle) return { long: 'Diskret schreiben', short: 'Schreiben' };
-    return { long: 'Foto senden · Preis erhalten', short: 'WhatsApp' };
-  };
-
-  const modalCta = getModalCTAText();
-  const whatsappCta = getWhatsAppCTAText();
-
   return (
     <section className="relative overflow-hidden">
-      {/* Fullscreen background for ALL breakpoints */}
+      {/* Fullscreen background */}
       <div className="absolute inset-0">
         <img 
           src={seaImages.heroTeam}
@@ -42,14 +35,13 @@ export function SEAHero({ data }: SEAHeroProps) {
           fetchPriority="high"
           loading="eager"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/60 to-black/40" />
       </div>
 
       <div className="container-custom relative">
-        {/* Unified Layout: Fullscreen with centered content for ALL breakpoints */}
-        <div className="min-h-[90vh] md:min-h-[80vh] xl:min-h-[75vh] flex flex-col justify-center items-center text-center px-4 py-16 md:py-20 xl:py-24 pt-28 lg:pt-32 relative">
+        <div className="min-h-[92vh] md:min-h-[82vh] xl:min-h-[78vh] flex flex-col justify-center items-center text-center px-4 py-16 md:py-20 xl:py-24 pt-28 lg:pt-32 relative">
           {/* Urgency Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/15 mb-5 animate-fade-in">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/15 mb-5">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
@@ -57,56 +49,54 @@ export function SEAHero({ data }: SEAHeroProps) {
             <span className="text-sm font-medium text-white/90">Noch diese Woche Termine frei</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl md:text-4xl xl:text-5xl 2xl:text-6xl font-bold text-white mb-4 md:mb-6 text-balance leading-tight max-w-4xl">
+          {/* H1 – Bold, action-oriented */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-6xl 2xl:text-7xl font-extrabold text-white mb-4 md:mb-5 text-balance leading-[1.1] max-w-4xl tracking-tight">
             {data.headline}
           </h1>
           
-          <p className="text-base md:text-lg xl:text-xl text-white/90 mb-6 md:mb-8 max-w-2xl">
-            {data.subline}
+          {/* Subheadline – Clear value prop */}
+          <p className="text-lg md:text-xl xl:text-2xl text-white/95 mb-8 md:mb-10 max-w-2xl font-medium leading-relaxed">
+            Sende uns einfach 3–6 Fotos per WhatsApp und erhalte in unter 24h dein Festpreis-Angebot.
           </p>
 
-          {/* CTAs */}
+          {/* Primary CTA – WhatsApp Green, highly visible */}
           <div className="flex flex-col sm:flex-row gap-3 mb-6 w-full sm:w-auto sm:justify-center">
             <Button
+              asChild
               size="lg"
-              onClick={() => setIsModalOpen(true)}
-              className="gap-2 bg-cta hover:bg-cta-hover text-cta-foreground text-sm md:text-base xl:text-lg h-12 md:h-14 xl:h-16 px-4 md:px-6 xl:px-8 btn-lift"
-              data-track="cta-funnel-hero"
+              className="gap-3 h-14 md:h-16 xl:h-[4.5rem] px-6 md:px-10 text-base md:text-lg xl:text-xl bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground border-0 shadow-2xl shadow-whatsapp/40 font-bold rounded-2xl transition-all duration-200"
+              data-track="cta-whatsapp-hero"
             >
-              <MessageSquare className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
-              <span className="hidden sm:inline">{modalCta.long}</span>
-              <span className="sm:hidden">{modalCta.short}</span>
+              <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
+                <WhatsAppIcon className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0" />
+                <span className="hidden sm:inline">📸 Fotos senden & Preis erhalten</span>
+                <span className="sm:hidden">📸 Fotos senden & Preis erhalten</span>
+              </a>
             </Button>
             <Button
               asChild
               size="lg"
-              className="gap-2 h-12 md:h-14 xl:h-16 px-4 md:px-6 xl:px-8 text-sm md:text-base xl:text-lg bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground border-0 shadow-whatsapp"
-              data-track="cta-whatsapp-hero"
+              className="gap-2 h-14 md:h-16 xl:h-[4.5rem] px-6 md:px-8 text-base md:text-lg bg-white/15 hover:bg-white/25 text-white border-2 border-white/30 backdrop-blur-sm font-semibold rounded-2xl transition-all duration-200"
+              data-track="cta-phone-hero"
             >
-              <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                <WhatsAppIcon className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
-                <span className="hidden sm:inline">{whatsappCta.long}</span>
-                <span className="sm:hidden">{whatsappCta.short}</span>
+              <a href={PHONE_LINK}>
+                <Phone className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
+                <span>Jetzt anrufen</span>
               </a>
             </Button>
           </div>
 
-          {/* Trust Pills */}
-          <div className="flex flex-wrap justify-center gap-2 xl:gap-3">
-            {data.trustPills.map((pill, index) => (
+          {/* Inline Trust Bar – 4 elements with checkmarks */}
+          <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 xl:gap-x-7">
+            {trustChecks.map((item) => (
               <div
-                key={index}
-                className="flex items-center gap-2 px-3 py-1.5 xl:px-4 xl:py-2 bg-white/15 backdrop-blur-sm rounded-full text-xs xl:text-sm font-medium text-white border border-white/10"
+                key={item}
+                className="flex items-center gap-2 text-sm md:text-base xl:text-lg text-white/95 font-medium"
               >
-                <CheckCircle className="h-3.5 w-3.5 xl:h-4 xl:w-4 text-accent" />
-                {pill}
+                <CheckCircle className="h-4 w-4 md:h-5 md:w-5 text-accent flex-shrink-0" />
+                {item}
               </div>
             ))}
-          </div>
-
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce">
-            <ChevronDown className="h-6 w-6 text-white/60" />
           </div>
         </div>
       </div>
