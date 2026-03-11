@@ -108,8 +108,8 @@ export const seaData: Record<SEAVariant, SEAData> = {
     title: 'Entrümpelung',
     metaTitle: 'Entrümpelung zum Festpreis | Räumzwerge',
     metaDescription: 'Schnelle Entrümpelung zum transparenten Festpreis. Foto senden, Preis erhalten, besenrein garantiert.',
-    headline: 'Entrümpelung zum Festpreis – schnell, sauber, transparent.',
-    subline: 'Foto senden, Preis erhalten, Termin machen. Besenrein garantiert.',
+    headline: 'Stressfreie Entrümpelung – Sauber, Diskret, Besenrein.',
+    subline: 'Sende uns einfach 3–6 Fotos per WhatsApp und erhalte in unter 24h dein Festpreis-Angebot.',
     trustPills: ['Antwort < 24h', 'Besenrein', 'Keine versteckten Kosten'],
     painPoints: [
       {
