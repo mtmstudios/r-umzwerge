@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, CheckCircle, X, Home, Building2, Users, Heart, ShieldCheck, Package, MapPin, Calendar, User, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -57,25 +58,18 @@ interface HaushaltsaufloesungFunnelProps {
 }
 
 export function HaushaltsaufloesungFunnel({ open, onOpenChange }: HaushaltsaufloesungFunnelProps) {
+  const navigate = useNavigate();
   const isTabletOrMobile = useIsTabletOrMobile();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     if (!open) {
-      const timeout = setTimeout(() => { setCurrentStep(1); setFormData(initialFormData); setIsSubmitted(false); }, 300);
+      const timeout = setTimeout(() => { setCurrentStep(1); setFormData(initialFormData); }, 300);
       return () => clearTimeout(timeout);
     }
   }, [open]);
-
-  useEffect(() => {
-    if (isSubmitted) {
-      const timeout = setTimeout(() => onOpenChange(false), 2000);
-      return () => clearTimeout(timeout);
-    }
-  }, [isSubmitted, onOpenChange]);
 
   const updateFormData = (key: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -119,8 +113,9 @@ export function HaushaltsaufloesungFunnel({ open, onOpenChange }: Haushaltsauflo
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
       });
       if (response.ok) {
-        setIsSubmitting(false); setIsSubmitted(true);
-        toast({ title: "Anfrage gesendet! ✓", description: "Wir melden uns einfühlsam und zeitnah bei Ihnen." });
+        setIsSubmitting(false);
+        onOpenChange(false);
+        navigate('/danke');
       } else { throw new Error(`HTTP Fehler: ${response.status}`); }
     } catch (error) {
       console.error('Submit error:', error); setIsSubmitting(false);
@@ -292,15 +287,6 @@ export function HaushaltsaufloesungFunnel({ open, onOpenChange }: Haushaltsauflo
   const showNextButton = !AUTO_ADVANCE_STEPS.has(currentStep) && currentStep !== TOTAL_STEPS;
   const showSubmitButton = currentStep === TOTAL_STEPS;
 
-  const renderSuccessState = () => (
-    <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-8 md:py-12">
-      <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4 md:mb-6">
-        <CheckCircle className="w-8 h-8 md:w-10 md:h-10 text-primary" />
-      </div>
-      <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3 md:mb-4">Vielen Dank für Ihre Anfrage</h3>
-      <p className="text-sm md:text-base text-muted-foreground">Wir melden uns einfühlsam und zeitnah bei Ihnen – in der Regel innerhalb von 24 Stunden.</p>
-    </motion.div>
-  );
 
   const renderFunnelContent = () => (
     <div className="w-full">
@@ -361,7 +347,7 @@ export function HaushaltsaufloesungFunnel({ open, onOpenChange }: Haushaltsauflo
     </div>
   );
 
-  const content = isSubmitted ? renderSuccessState() : renderFunnelContent();
+  const content = renderFunnelContent();
 
   if (isTabletOrMobile) {
     return (
