@@ -56,7 +56,6 @@ export function ContactFunnelModal({ open, onOpenChange }: ContactFunnelModalPro
       const timeout = setTimeout(() => {
         setCurrentStep(1);
         setFormData(initialFormData);
-        setIsSubmitted(false);
       }, 300);
       return () => clearTimeout(timeout);
     }
