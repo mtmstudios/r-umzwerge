@@ -66,7 +66,7 @@ export function HaushaltsaufloesungFunnel({ open, onOpenChange }: Haushaltsauflo
 
   useEffect(() => {
     if (!open) {
-      const timeout = setTimeout(() => { setCurrentStep(1); setFormData(initialFormData); setIsSubmitted(false); }, 300);
+      const timeout = setTimeout(() => { setCurrentStep(1); setFormData(initialFormData); }, 300);
       return () => clearTimeout(timeout);
     }
   }, [open]);
