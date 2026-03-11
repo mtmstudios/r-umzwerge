@@ -26,8 +26,8 @@ export function ServiceHero({ h1, subline, trustPills, slug, imageSrc, imageAlt,
   const { ref, isVisible } = useScrollReveal(0.1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const ctaLong = ctaText?.primary || '📋 Angebot berechnen';
-  const ctaShort = ctaText?.primaryShort || '📋 Angebot';
+  const ctaLong = ctaText?.primary || 'Angebot berechnen';
+  const ctaShort = ctaText?.primaryShort || 'Angebot';
 
   const resolvedImageSrc = slug && slug in serviceImages 
     ? serviceImages[slug as ServiceImageSlug] 
@@ -84,7 +84,7 @@ export function ServiceHero({ h1, subline, trustPills, slug, imageSrc, imageAlt,
             >
               <a href={PHONE_LINK}>
                 <Phone className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
-                <span>📞 Jetzt anrufen</span>
+                <span>Jetzt anrufen</span>
               </a>
             </Button>
           </div>
