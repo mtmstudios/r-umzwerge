@@ -116,25 +116,6 @@ export const ContactFunnel = forwardRef<ContactFunnelRef>((_, ref) => {
   const showNextButton = !AUTO_ADVANCE_STEPS.has(currentStep) && currentStep !== TOTAL_STEPS;
   const showSubmitButton = currentStep === TOTAL_STEPS;
 
-  if (isSubmitted) {
-    return (
-      <section ref={sectionRef} id="funnel" className="py-16 md:py-24 bg-muted/30">
-        <div className="container mx-auto px-4 md:px-6">
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="max-w-2xl mx-auto text-center py-16">
-            <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-10 h-10 text-primary" />
-            </div>
-            <h3 className="text-2xl font-bold text-foreground mb-4">Vielen Dank für Ihre Anfrage!</h3>
-            <p className="text-muted-foreground mb-8">Wir melden uns innerhalb von 24 Stunden bei Ihnen.</p>
-            <Button onClick={() => { setIsSubmitted(false); setCurrentStep(1); setFormData(initialFormData); }} variant="outline">
-              Neue Anfrage starten
-            </Button>
-          </motion.div>
-        </div>
-      </section>
-    );
-  }
-
   return (
     <section ref={sectionRef} id="funnel" className="py-16 md:py-24 bg-muted/30">
       <div className="container mx-auto px-4 md:px-6">
