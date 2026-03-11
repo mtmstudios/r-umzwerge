@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { CheckCircle, MessageSquare } from 'lucide-react';
+import { CheckCircle, Phone, ClipboardList } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { getWhatsAppLink } from '@/lib/constants';
+import { PHONE_LINK } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
 import { serviceImages } from '@/lib/serviceImages';
 import { ContactFunnelModal } from '@/components/contact/ContactFunnelModal';
-import { WhatsAppIcon } from '@/components/icons/WhatsAppIcon';
 
 interface CityHeroProps {
   h1: string;
@@ -21,7 +20,6 @@ export function CityHero({ h1, subline, trustPills, imageAlt }: CityHeroProps) {
 
   return (
     <section ref={ref} className="relative overflow-hidden">
-      {/* Fullscreen background */}
       <div className="absolute inset-0">
         <img 
           src={serviceImages.heroTeamRaeumzwerge}
@@ -49,26 +47,24 @@ export function CityHero({ h1, subline, trustPills, imageAlt }: CityHeroProps) {
             {subline}
           </p>
 
-          {/* CTAs */}
+          {/* Dual-CTA */}
           <div className="flex flex-col sm:flex-row gap-3 mb-4 w-full sm:w-auto sm:justify-center">
             <Button
               size="lg"
               onClick={() => setIsModalOpen(true)}
               className="gap-2 bg-cta hover:bg-cta-hover text-cta-foreground text-sm md:text-base xl:text-lg h-12 md:h-14 xl:h-16 px-4 md:px-6 xl:px-8 btn-lift"
             >
-              <MessageSquare className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
-              <span className="hidden sm:inline">Jetzt Anfrage starten</span>
-              <span className="sm:hidden">Anfrage starten</span>
+              <ClipboardList className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
+              <span>📋 Angebot berechnen</span>
             </Button>
             <Button
               asChild
               size="lg"
-              className="gap-2 h-12 md:h-14 xl:h-16 px-4 md:px-6 xl:px-8 text-sm md:text-base xl:text-lg bg-whatsapp hover:bg-whatsapp-hover text-whatsapp-foreground border-0"
+              className="gap-2 h-12 md:h-14 xl:h-16 px-4 md:px-6 xl:px-8 text-sm md:text-base xl:text-lg bg-white/15 hover:bg-white/25 text-white border-2 border-white/30 backdrop-blur-sm"
             >
-              <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                <WhatsAppIcon className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
-                <span className="hidden sm:inline">Foto senden · Preis erhalten</span>
-                <span className="sm:hidden">WhatsApp</span>
+              <a href={PHONE_LINK}>
+                <Phone className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
+                <span>📞 Jetzt anrufen</span>
               </a>
             </Button>
           </div>
@@ -77,7 +73,6 @@ export function CityHero({ h1, subline, trustPills, imageAlt }: CityHeroProps) {
             Unverbindlich. Keine versteckten Kosten.
           </p>
 
-          {/* Trust Pills */}
           <div className="flex flex-wrap justify-center gap-2 xl:gap-3">
             {trustPills.map((pill) => (
               <div

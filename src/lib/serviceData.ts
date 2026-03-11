@@ -56,8 +56,8 @@ export interface ServicePageData {
   // For discrete services like Messie
   isDiscrete?: boolean;
   ctaText?: {
-    whatsapp: string;
-    whatsappShort: string;
+    primary: string;
+    primaryShort: string;
   };
 }
 
@@ -481,8 +481,8 @@ export const SERVICE_PAGES: Record<string, ServicePageData> = {
     metaDescription: 'Diskrete Entrümpelung und Reinigung bei sensiblen Situationen. Respektvoll, ohne Aufsehen, mit klarer Kommunikation. Preiseinschätzung < 24h.',
     isDiscrete: true,
     ctaText: {
-      whatsapp: 'Unverbindlich anfragen',
-      whatsappShort: 'Anfragen',
+      primary: 'Unverbindlich anfragen',
+      primaryShort: 'Anfragen',
     },
     hero: {
       h1: 'Diskrete Reinigung & Entrümpelung – respektvoll und geschützt.',

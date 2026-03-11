@@ -17,8 +17,8 @@ import { useSeo } from '@/hooks/useSeo';
 // Standard process steps (same for all cities)
 const CITY_PROCESS_STEPS = [
   {
-    title: "Fotos senden",
-    description: "Senden Sie uns Fotos per WhatsApp für eine schnelle Einschätzung.",
+    title: "Anfrage starten",
+    description: "Starten Sie Ihre kostenlose Angebots-Berechnung in nur 5 Schritten.",
   },
   {
     title: "Angebot erhalten",

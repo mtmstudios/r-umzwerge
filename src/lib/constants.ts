@@ -1,12 +1,3 @@
-// WhatsApp configuration
-export const WHATSAPP_NUMBER = "491603080676";
-export const WHATSAPP_MESSAGE = "Hallo liebes Räumzwerge-Team, ich komme von eurer Website.";
-
-export const getWhatsAppLink = (customMessage?: string) => {
-  const message = encodeURIComponent(customMessage || WHATSAPP_MESSAGE);
-  return `https://api.whatsapp.com/send/?phone=${WHATSAPP_NUMBER}&text=${message}&type=phone_number&app_absent=0`;
-};
-
 // Phone configuration
 export const PHONE_NUMBER = "+49 160 3080676";
 export const PHONE_LINK = "tel:+491603080676";
@@ -118,8 +109,8 @@ export const SERVICES = [
 // FAQ Items
 export const FAQ_ITEMS = [
   {
-    question: "Wie läuft die Preiseinschätzung per WhatsApp ab?",
-    answer: "Du sendest uns ein paar Fotos und den Ort. Wir melden uns mit einer Preiseinschätzung – innerhalb von 24 Stunden (oft schneller).",
+    question: "Wie läuft die Preiseinschätzung ab?",
+    answer: "Starten Sie einfach unsere kostenlose Angebots-Berechnung oder rufen Sie uns an. Wir melden uns mit einer Preiseinschätzung – innerhalb von 24 Stunden (oft schneller).",
   },
   {
     question: "Wie schnell bekomme ich eine Rückmeldung?",
