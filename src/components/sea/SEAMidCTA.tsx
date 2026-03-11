@@ -32,9 +32,7 @@ export function SEAMidCTA({ data }: SEAMidCTAProps) {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
-      },
+      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
       { threshold: 0.15 }
     );
     if (sectionRef.current) observer.observe(sectionRef.current);
@@ -42,7 +40,7 @@ export function SEAMidCTA({ data }: SEAMidCTAProps) {
   }, []);
 
   return (
-    <section className="py-14 lg:py-24 bg-secondary/30 relative overflow-hidden">
+    <section className="py-14 lg:py-24 bg-background relative overflow-hidden">
       <div className="container-custom relative z-10">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground text-center mb-12 lg:mb-16">
@@ -115,7 +113,6 @@ export function SEAMidCTA({ data }: SEAMidCTAProps) {
         </div>
       </div>
 
-      {/* Dynamic Funnel */}
       {data.slug === 'haushaltsaufloesung' && (
         <HaushaltsaufloesungFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
       )}

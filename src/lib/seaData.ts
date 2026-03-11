@@ -46,9 +46,9 @@ export const seaData: Record<SEAVariant, SEAData> = {
     slug: 'haushaltsaufloesung',
     title: 'Haushaltsauflösung',
     metaTitle: 'Haushaltsauflösung komplett | Räumzwerge',
-    metaDescription: 'Einfühlsame Haushaltsauflösung mit Festpreis. Besenrein, respektvoll, schnelle Preiseinschätzung per WhatsApp.',
+    metaDescription: 'Einfühlsame Haushaltsauflösung mit Festpreis. Besenrein, respektvoll, schnelle Preiseinschätzung innerhalb von 24h.',
     headline: 'Haushaltsauflösung komplett – wir nehmen Ihnen alles ab.',
-    subline: 'Einfühlsam, respektvoll und besenrein. Preiseinschätzung per WhatsApp-Foto innerhalb von 24 Stunden.',
+    subline: 'Beantworten Sie online wenige Fragen und erhalten Sie in unter 24h Ihr Festpreis-Angebot.',
     trustPills: ['Einfühlsam', 'Festpreis möglich', 'Besenrein'],
     painPoints: [
       {
@@ -87,11 +87,11 @@ export const seaData: Record<SEAVariant, SEAData> = {
       },
     ],
     ctaHeadline: 'Jetzt unverbindlich anfragen',
-    ctaSubline: 'Foto senden – Preiseinschätzung innerhalb von 24h.',
+    ctaSubline: 'Jetzt online Anfrage starten – in 24h wissen Sie, was es kostet.',
     outcomeBadges: ['Besenrein', 'Übergabefertig', 'Respektvoll geräumt'],
     comparison: {
       headline: 'Warum Räumzwerge für Ihre Haushaltsauflösung?',
-      subline: 'Klicken Sie auf eine Karte, um unseren Unterschied zu sehen',
+      subline: 'Transparenter Vergleich',
       pairs: [
         { problem: 'Schnelles Abarbeiten ohne Rücksicht', solution: 'Einfühlsame Begleitung in schweren Zeiten' },
         { problem: 'Alles wird einfach entsorgt', solution: 'Wertanrechnung und Spenden möglich' },
@@ -107,9 +107,9 @@ export const seaData: Record<SEAVariant, SEAData> = {
     slug: 'entruempelung',
     title: 'Entrümpelung',
     metaTitle: 'Entrümpelung zum Festpreis | Räumzwerge',
-    metaDescription: 'Schnelle Entrümpelung zum transparenten Festpreis. Foto senden, Preis erhalten, besenrein garantiert.',
+    metaDescription: 'Schnelle Entrümpelung zum transparenten Festpreis. Online anfragen, Preis erhalten, besenrein garantiert.',
     headline: 'Stressfreie Entrümpelung – Sauber, Diskret, Besenrein.',
-    subline: 'Sende uns einfach 3–6 Fotos per WhatsApp und erhalte in unter 24h dein Festpreis-Angebot.',
+    subline: 'Beantworten Sie online wenige Fragen und erhalten Sie in unter 24h Ihr Festpreis-Angebot.',
     trustPills: ['Antwort < 24h', 'Besenrein', 'Keine versteckten Kosten'],
     painPoints: [
       {
@@ -122,7 +122,7 @@ export const seaData: Record<SEAVariant, SEAData> = {
       },
       {
         problem: 'Was kostet das überhaupt? Keine Lust auf böse Überraschungen.',
-        solution: 'Transparenter Festpreis nach Foto-Einschätzung. Keine versteckten Kosten.',
+        solution: 'Transparenter Festpreis nach Einschätzung. Keine versteckten Kosten.',
       },
     ],
     testimonial: {
@@ -132,7 +132,7 @@ export const seaData: Record<SEAVariant, SEAData> = {
     faqs: [
       {
         question: 'Wie läuft die Preiseinschätzung ab?',
-        answer: 'Einfach: Senden Sie uns Fotos per WhatsApp. Wir melden uns innerhalb von 24 Stunden mit einer Einschätzung.',
+        answer: 'Starten Sie einfach unsere kostenlose Angebots-Berechnung online. Wir melden uns innerhalb von 24 Stunden mit einer Einschätzung.',
       },
       {
         question: 'Wie schnell könnt ihr kommen?',
@@ -148,13 +148,13 @@ export const seaData: Record<SEAVariant, SEAData> = {
       },
     ],
     ctaHeadline: 'Jetzt Festpreis anfragen',
-    ctaSubline: 'Foto senden – in 24h wissen Sie, was es kostet.',
+    ctaSubline: 'Jetzt online Anfrage starten – in 24h wissen Sie, was es kostet.',
     outcomeBadges: ['Besenrein', 'Schnell erledigt', 'Fachgerecht entsorgt'],
     comparison: {
       headline: 'Warum Räumzwerge für Ihre Entrümpelung?',
-      subline: 'Klicken Sie auf eine Karte, um unseren Unterschied zu sehen',
+      subline: 'Transparenter Vergleich',
       pairs: [
-        { problem: 'Preisschätzung nur vor Ort', solution: 'Einschätzung per WhatsApp < 24h' },
+        { problem: 'Preisschätzung nur vor Ort', solution: 'Online-Einschätzung in unter 24h' },
         { problem: 'Versteckte Zusatzkosten', solution: 'Transparenter Festpreis möglich' },
         { problem: 'Grob geräumt', solution: 'Besenrein garantiert' },
         { problem: 'Lange Wartezeiten', solution: 'Schnelle Terminvergabe' },
@@ -170,7 +170,7 @@ export const seaData: Record<SEAVariant, SEAData> = {
     metaTitle: 'Diskrete Messie-Hilfe | Räumzwerge',
     metaDescription: 'Diskrete und respektvolle Hilfe bei Messie-Situationen. Ohne Vorurteile, 100% vertraulich, neutrale Fahrzeuge.',
     headline: 'Diskrete Hilfe bei Messie-Situationen – ohne Vorurteile.',
-    subline: 'Wir verstehen. Keine Verurteilung, keine neugierigen Blicke. 100% diskret und respektvoll.',
+    subline: 'Beantworten Sie online wenige Fragen und erhalten Sie in unter 24h Ihr Festpreis-Angebot.',
     trustPills: ['100% Diskret', 'Neutrale Fahrzeuge', 'Ein Ansprechpartner'],
     painPoints: [
       {
@@ -209,11 +209,11 @@ export const seaData: Record<SEAVariant, SEAData> = {
       },
     ],
     ctaHeadline: 'Unverbindlich Kontakt aufnehmen',
-    ctaSubline: 'Wir hören zu. Kein Druck, keine Wertung.',
+    ctaSubline: 'Jetzt online Anfrage starten – in 24h wissen Sie, was es kostet.',
     outcomeBadges: ['Diskret', 'Respektvoll', 'Ein neuer Anfang'],
     comparison: {
       headline: 'Warum Räumzwerge?',
-      subline: 'Klicken Sie auf eine Karte, um unseren Unterschied zu sehen',
+      subline: 'Transparenter Vergleich',
       pairs: [
         { problem: 'Auffällige Firmenfahrzeuge', solution: 'Neutrale Fahrzeuge auf Wunsch' },
         { problem: 'Schnelle Urteile, Druck', solution: 'Keine Wertung, kein Zeitdruck' },

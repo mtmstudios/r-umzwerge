@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { getSeaData, isValidSeaSlug } from '@/lib/seaData';
 import { SEAMinimalHeader } from '@/components/sea/SEAMinimalHeader';
 import { SEAHero } from '@/components/sea/SEAHero';
-import { SEAPainPoints } from '@/components/sea/SEAPainPoints';
 import { SEASocialProof } from '@/components/sea/SEASocialProof';
+import { SEAPainPoints } from '@/components/sea/SEAPainPoints';
 import { SEABeforeAfter } from '@/components/sea/SEABeforeAfter';
 import { SEAMidCTA } from '@/components/sea/SEAMidCTA';
 import { SEAComparison } from '@/components/sea/SEAComparison';
@@ -42,13 +42,21 @@ export default function SEALandingPage() {
       <SEAMinimalHeader />
       
       <main className="flex-1">
+        {/* 1. Hero */}
         <SEAHero data={data} />
-        <SEAPainPoints data={data} />
+        {/* 2. Reviews – instant trust right below the fold */}
         <SEASocialProof data={data} />
+        {/* 3. Problem agitation */}
+        <SEAPainPoints data={data} />
+        {/* 4. Result / Before-After proof */}
         <SEABeforeAfter data={data} />
+        {/* 5. Process – how easy it is */}
         <SEAMidCTA data={data} />
+        {/* 6. Comparison – why us */}
         <SEAComparison data={data} />
+        {/* 7. FAQ */}
         <SEAMiniFAQ data={data} />
+        {/* 8. Final CTA */}
         <SEAFinalCTA data={data} />
       </main>
 
