@@ -212,7 +212,7 @@ export function ContactFunnelModal({ open, onOpenChange }: ContactFunnelModalPro
     </div>
   );
 
-  const content = isSubmitted ? renderSuccessState() : renderFunnelContent();
+  const content = renderFunnelContent();
 
   if (isTabletOrMobile) {
     return (
