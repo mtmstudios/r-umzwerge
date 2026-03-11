@@ -12,6 +12,12 @@ const serviceIcons: Record<string, typeof Users> = {
   'messie-wohnungen': Lock,
 };
 
+const SERVICE_ROUTES: Record<string, string> = {
+  'wohnungsentruempelung': '/lp/entruempelung',
+  'haushaltsaufloesung': '/lp/haushaltsaufloesung',
+  'messie-wohnungen': '/lp/messie-hilfe',
+};
+
 export function ServicesSection() {
   const { ref: headerRef, isVisible: headerVisible } = useScrollReveal(0.1);
   const { ref: gridRef, isVisible: gridVisible } = useScrollReveal(0.1);
@@ -70,7 +76,7 @@ export function ServicesSection() {
                   description={service.description}
                   highlights={service.highlights}
                   icon={Icon}
-                  href={`/leistungen/${service.slug}`}
+                  href={SERVICE_ROUTES[service.slug] || `/leistungen/${service.slug}`}
                   size="large"
                   featured={service.featured}
                   index={index}
@@ -92,7 +98,7 @@ export function ServicesSection() {
                   description={service.description}
                   highlights={service.highlights}
                   icon={Icon}
-                  href={`/leistungen/${service.slug}`}
+                  href={SERVICE_ROUTES[service.slug] || `/leistungen/${service.slug}`}
                   size="default"
                   variant={service.slug === 'messie-wohnungen' ? 'glass' : 'default'}
                   index={index + 2}

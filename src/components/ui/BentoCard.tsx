@@ -180,7 +180,7 @@ export function BentoCard({
           variant === 'accent' ? 'text-accent' : 'text-primary'
         )}
       >
-        <span>Zur Lösung</span>
+        <span>Mehr erfahren</span>
         <ArrowRight className="h-4 w-4 transition-transform duration-300 lg:group-hover:translate-x-1" />
       </div>
     </a>

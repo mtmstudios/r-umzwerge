@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { ClipboardList, Clock, Sparkles } from 'lucide-react';
+import { ClipboardList, Clock, Sparkles, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
 import { HorizontalTimeline } from '@/components/ui/HorizontalTimeline';
 import { ContactFunnelModal } from '@/components/contact/ContactFunnelModal';
+import { PHONE_LINK } from '@/lib/constants';
 
 const steps = [
   {
@@ -16,8 +17,8 @@ const steps = [
   {
     number: 2,
     icon: Clock,
-    title: "Preis in 24h",
-    description: "Transparent & nachvollziehbar. Festpreis nach Einschätzung möglich.",
+    title: "Telefonische Einschätzung",
+    description: "Wir rufen Sie umgehend an, besprechen die Details und nennen Ihnen oft direkt einen Festpreis.",
   },
   {
     number: 3,
@@ -56,14 +57,26 @@ export function ProcessSection() {
           "text-center scroll-reveal",
           isVisible && "visible"
         )}>
-          <Button
-            size="lg"
-            onClick={() => setIsModalOpen(true)}
-            className="gap-2 sm:gap-3 bg-cta hover:bg-cta-hover text-cta-foreground h-12 sm:h-14 px-5 sm:px-8 btn-lift shadow-cta text-sm sm:text-base font-bold"
-          >
-            <ClipboardList className="h-5 w-5 flex-shrink-0" />
-            <span>Angebot berechnen</span>
-          </Button>
+          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
+            <Button
+              size="lg"
+              onClick={() => setIsModalOpen(true)}
+              className="w-full sm:w-auto gap-2 sm:gap-3 bg-cta hover:bg-cta-hover text-cta-foreground h-12 sm:h-14 px-5 sm:px-8 btn-lift shadow-cta text-sm sm:text-base font-bold"
+            >
+              <ClipboardList className="h-5 w-5 flex-shrink-0" />
+              <span>Rückruf anfordern</span>
+            </Button>
+            <Button
+              asChild
+              size="lg"
+              className="w-full sm:w-auto gap-2 h-12 sm:h-14 px-5 sm:px-8 bg-transparent hover:bg-primary/10 text-primary border-2 border-primary/30 text-sm sm:text-base font-semibold"
+            >
+              <a href={PHONE_LINK}>
+                <Phone className="h-5 w-5 flex-shrink-0" />
+                Jetzt anrufen
+              </a>
+            </Button>
+          </div>
           <p className="text-sm text-muted-foreground mt-4">
             Diskret, respektvoll und ohne Überraschungen.
           </p>
