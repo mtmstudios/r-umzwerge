@@ -12,6 +12,12 @@ const serviceIcons: Record<string, typeof Users> = {
   'messie-wohnungen': Lock,
 };
 
+const SERVICE_ROUTES: Record<string, string> = {
+  'wohnungsentruempelung': '/lp/entruempelung',
+  'haushaltsaufloesung': '/lp/haushaltsaufloesung',
+  'messie-wohnungen': '/lp/messie-hilfe',
+};
+
 export function ServicesSection() {
   const { ref: headerRef, isVisible: headerVisible } = useScrollReveal(0.1);
   const { ref: gridRef, isVisible: gridVisible } = useScrollReveal(0.1);
