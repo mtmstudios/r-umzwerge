@@ -134,7 +134,7 @@ export function PricingSection() {
                       Schnelle Preiseinschätzung
                     </h3>
                     <p className="text-sm sm:text-base text-muted-foreground">
-                      Kostenloses Angebot berechnen – Antwort innerhalb von 24 Stunden.
+                      Kostenloser Rückruf mit Ersteinschätzung – innerhalb von 24 Stunden.
                     </p>
                   </div>
                 </div>
