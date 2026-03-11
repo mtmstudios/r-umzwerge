@@ -58,11 +58,11 @@ interface HaushaltsaufloesungFunnelProps {
 }
 
 export function HaushaltsaufloesungFunnel({ open, onOpenChange }: HaushaltsaufloesungFunnelProps) {
+  const navigate = useNavigate();
   const isTabletOrMobile = useIsTabletOrMobile();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     if (!open) {
