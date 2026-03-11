@@ -45,6 +45,7 @@ const App = () => (
               <Route path="/barrierefreiheit" element={<Barrierefreiheit />} />
               <Route path="/leistungen/:slug" element={<ServicePage />} />
               <Route path="/lp/:slug" element={<SEALandingPage />} />
+              <Route path="/danke" element={<Danke />} />
               {/* City landing pages - must be before catch-all */}
               <Route path="/:citySlug" element={<CityPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
