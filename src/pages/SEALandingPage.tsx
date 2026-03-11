@@ -1,5 +1,5 @@
 import { useParams, Navigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getSeaData, isValidSeaSlug } from '@/lib/seaData';
 import { SEAMinimalHeader } from '@/components/sea/SEAMinimalHeader';
 import { SEAHero } from '@/components/sea/SEAHero';
@@ -12,29 +12,27 @@ import { SEAMiniFAQ } from '@/components/sea/SEAMiniFAQ';
 import { SEAFinalCTA } from '@/components/sea/SEAFinalCTA';
 import { SEAMinimalFooter } from '@/components/sea/SEAMinimalFooter';
 import { FloatingCTAs } from '@/components/layout/FloatingCTAs';
+import { EntruempelungFunnel } from '@/components/contact/sea/EntruempelungFunnel';
+import { HaushaltsaufloesungFunnel } from '@/components/contact/sea/HaushaltsaufloesungFunnel';
+import { MessieFunnel } from '@/components/contact/sea/MessieFunnel';
 
 export default function SEALandingPage() {
   const { slug } = useParams<{ slug: string }>();
+  const [isFunnelOpen, setIsFunnelOpen] = useState(false);
   
-  // Get data first (before any hooks that depend on it)
   const data = slug && isValidSeaSlug(slug) ? getSeaData(slug) : undefined;
 
-  // Update document title and meta - hook must be called unconditionally
   useEffect(() => {
     if (data) {
       document.title = data.metaTitle;
-      
       const metaDescription = document.querySelector('meta[name="description"]');
       if (metaDescription) {
         metaDescription.setAttribute('content', data.metaDescription);
       }
     }
-
-    // Scroll to top on mount
     window.scrollTo(0, 0);
   }, [data]);
 
-  // Validate and redirect after hooks
   if (!slug || !isValidSeaSlug(slug) || !data) {
     return <Navigate to="/" replace />;
   }
@@ -56,8 +54,19 @@ export default function SEALandingPage() {
 
       <SEAMinimalFooter />
       
-      {/* Mobile Sticky CTAs */}
-      <FloatingCTAs />
+      {/* Mobile Sticky Dual-CTAs */}
+      <FloatingCTAs onFunnelOpen={() => setIsFunnelOpen(true)} />
+
+      {/* Shared funnel for sticky bar */}
+      {data.slug === 'haushaltsaufloesung' && (
+        <HaushaltsaufloesungFunnel open={isFunnelOpen} onOpenChange={setIsFunnelOpen} />
+      )}
+      {data.slug === 'entruempelung' && (
+        <EntruempelungFunnel open={isFunnelOpen} onOpenChange={setIsFunnelOpen} />
+      )}
+      {data.slug === 'messie-hilfe' && (
+        <MessieFunnel open={isFunnelOpen} onOpenChange={setIsFunnelOpen} />
+      )}
     </div>
   );
 }
