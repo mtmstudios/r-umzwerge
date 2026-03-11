@@ -17,7 +17,7 @@ export function FinalCTASection() {
       <div className="container-custom">
         <div ref={ref} className={cn("text-center max-w-3xl mx-auto px-1", "scroll-reveal", isVisible && "visible")}>
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-primary-foreground mb-3 sm:mb-4">
-            Kostenlose Preiseinschätzung – innerhalb von 24h
+            Kostenlose Ersteinschätzung anfordern
           </h2>
           <p className="text-primary-foreground/80 mb-6 sm:mb-8 text-sm sm:text-base">
             Unverbindlich anfragen. Transparentes Vorgehen. Besenrein.
