@@ -22,7 +22,7 @@ export function SEAMiniFAQ({ data }: SEAMiniFAQProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <section className="py-12 lg:py-20 bg-muted/30 relative overflow-hidden">
+    <section className="py-12 lg:py-20 bg-secondary/30 relative overflow-hidden">
       <div className="absolute bottom-0 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
       
       <div className="container-custom relative z-10">
@@ -32,9 +32,7 @@ export function SEAMiniFAQ({ data }: SEAMiniFAQProps) {
               Häufige Fragen
             </h2>
             <p className="text-muted-foreground">
-              {isGentle
-                ? 'Hier finden Sie Antworten auf wichtige Fragen.'
-                : 'Schnell beantwortet.'}
+              {isGentle ? 'Hier finden Sie Antworten auf wichtige Fragen.' : 'Schnell beantwortet.'}
             </p>
           </div>
 
@@ -44,20 +42,13 @@ export function SEAMiniFAQ({ data }: SEAMiniFAQProps) {
                 key={index}
                 value={`faq-${index}`}
                 className={cn(
-                  "glass rounded-xl px-5 overflow-hidden",
-                  "border border-border/30",
+                  "glass rounded-xl px-5 overflow-hidden border border-border/30",
                   "data-[state=open]:shadow-lg data-[state=open]:shadow-primary/5",
-                  isGentle
-                    ? "data-[state=open]:border-primary/30"
-                    : "data-[state=open]:border-accent/30",
-                  "hover:bg-card/80",
-                  "transition-all duration-300"
+                  isGentle ? "data-[state=open]:border-primary/30" : "data-[state=open]:border-accent/30",
+                  "hover:bg-card/80 transition-all duration-300"
                 )}
-                style={{ animationDelay: `${index * 50}ms` }}
               >
-                <AccordionTrigger 
-                  className="text-left text-base sm:text-lg font-medium hover:no-underline py-5 transition-colors duration-200 data-[state=open]:text-primary"
-                >
+                <AccordionTrigger className="text-left text-base sm:text-lg font-medium hover:no-underline py-5 transition-colors duration-200 data-[state=open]:text-primary">
                   {faq.question}
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground pb-5 text-base leading-relaxed">
@@ -67,12 +58,9 @@ export function SEAMiniFAQ({ data }: SEAMiniFAQProps) {
             ))}
           </Accordion>
 
-          {/* Micro-CTA after FAQ */}
           <div className="mt-8 text-center glass rounded-xl p-5 border border-border/30">
             <p className="text-sm text-muted-foreground mb-3">
-              {isGentle
-                ? 'Ihre Frage war nicht dabei? Wir helfen Ihnen gerne persönlich.'
-                : 'Ihre Frage war nicht dabei?'}
+              {isGentle ? 'Ihre Frage war nicht dabei? Wir helfen Ihnen gerne persönlich.' : 'Ihre Frage war nicht dabei?'}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
@@ -97,7 +85,6 @@ export function SEAMiniFAQ({ data }: SEAMiniFAQProps) {
         </div>
       </div>
 
-      {/* Dynamic Funnel */}
       {data.slug === 'haushaltsaufloesung' && (
         <HaushaltsaufloesungFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
       )}

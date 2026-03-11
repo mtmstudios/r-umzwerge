@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { ClipboardList } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { useIsMobile, useIsTabletOrMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { ProblemSolutionCard } from './ProblemSolutionCard';
 import { EntruempelungFunnel } from '@/components/contact/sea/EntruempelungFunnel';
 import { HaushaltsaufloesungFunnel } from '@/components/contact/sea/HaushaltsaufloesungFunnel';
@@ -22,9 +22,7 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
-      },
+      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
       { threshold: 0.1 }
     );
     if (sectionRef.current) observer.observe(sectionRef.current);
@@ -32,9 +30,8 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
   }, []);
 
   return (
-    <section className="py-14 lg:py-20 relative overflow-hidden bg-secondary/40">
+    <section className="py-14 lg:py-20 relative overflow-hidden bg-background">
       <div className="container-custom relative z-10">
-        {/* Header */}
         <div className="text-center mb-10 lg:mb-14">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-3">
             {isGentle ? 'Wir verstehen, wie Sie sich fühlen' : 'Kennen Sie das?'}
@@ -46,8 +43,7 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
           </p>
         </div>
 
-        {/* Cards Grid: 1 col mobile, 2 col tablet, 3 col desktop */}
-        <div 
+        <div
           ref={sectionRef}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 lg:gap-6 max-w-5xl mx-auto"
         >
@@ -63,7 +59,6 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
           ))}
         </div>
 
-        {/* CTA – Orange funnel button */}
         <div className="mt-10 lg:mt-14 flex flex-col items-center">
           <Button
             size="lg"
@@ -85,7 +80,6 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
         </div>
       </div>
 
-      {/* Funnels */}
       {data.slug === 'haushaltsaufloesung' && (
         <HaushaltsaufloesungFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
       )}
