@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, CheckCircle, X, Home, Building2, Users, Heart, ShieldCheck, Package, MapPin, Calendar, User, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";

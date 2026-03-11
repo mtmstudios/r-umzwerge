@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, CheckCircle, X, User, Users, Briefcase, DoorOpen, Home as HomeIcon, Building2, Eye, Footprints, Heart, Sparkles, MapPin, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
