@@ -71,13 +71,6 @@ export function EntruempelungFunnel({ open, onOpenChange }: EntruempelungFunnelP
     }
   }, [open]);
 
-  useEffect(() => {
-    if (isSubmitted) {
-      const timeout = setTimeout(() => onOpenChange(false), 2000);
-      return () => clearTimeout(timeout);
-    }
-  }, [isSubmitted, onOpenChange]);
-
   const updateFormData = (key: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
