@@ -178,14 +178,16 @@ export const ContactFunnel = forwardRef<ContactFunnelRef>((_, ref) => {
             <AnimatePresence mode="wait">{renderStep()}</AnimatePresence>
 
             {/* Navigation */}
-            <div className="flex justify-between items-center mt-10 pt-6 border-t border-border">
+            <div className={`mt-10 pt-6 border-t border-border ${
+              showSubmitButton ? "flex flex-col-reverse sm:flex-row sm:justify-between gap-3" : "flex justify-between items-center"
+            }`}>
               <Button variant="outline" onClick={prevStep} disabled={currentStep === 1} className="gap-2">
                 <ArrowLeft className="w-4 h-4" /> Zurück
               </Button>
 
               {showSubmitButton && (
-                <div className="flex flex-col items-end gap-1">
-                  <Button onClick={handleSubmit} disabled={isSubmitting} className="gap-2 bg-cta hover:bg-cta-hover text-white min-h-[48px] px-6">
+                <div className="flex flex-col items-center sm:items-end gap-1 w-full sm:w-auto">
+                  <Button onClick={handleSubmit} disabled={isSubmitting} className="gap-2 bg-cta hover:bg-cta-hover text-white min-h-[48px] px-6 w-full sm:w-auto">
                     {isSubmitting ? (
                       <><span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" /> Wird gesendet...</>
                     ) : (
