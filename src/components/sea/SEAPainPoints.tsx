@@ -75,7 +75,7 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-3">
             {isGentle ? 'Wir verstehen, wie Sie sich fühlen' : 'Kennen Sie das?'}
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
+          <p className="text-base lg:text-lg text-muted-foreground max-w-xl mx-auto">
             {isGentle
               ? 'Sie sind nicht allein. Wir helfen – ohne Druck, ohne Wertung.'
               : 'Diese Situationen kennen wir. Und wir haben die Lösung.'}
