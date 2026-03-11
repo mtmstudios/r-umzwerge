@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { Home, Building2, Warehouse, Store, Sparkles, HelpCircle, Ruler, Clock } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
 export interface FormData {
@@ -19,6 +18,7 @@ export interface FormData {
 interface StepProps {
   formData: FormData;
   updateFormData: (key: keyof FormData, value: string) => void;
+  onAutoAdvance?: () => void;
 }
 
 const serviceTypes = [
@@ -43,8 +43,13 @@ const timelineOptions = [
   { id: "flexibel", label: "Flexibel" },
 ];
 
-// Step 1: Service Type
-export function Step1ServiceType({ formData, updateFormData }: StepProps) {
+// Step 1: Service Type — auto-advances on selection
+export function Step1ServiceType({ formData, updateFormData, onAutoAdvance }: StepProps) {
+  const handleSelect = (id: string) => {
+    updateFormData("serviceType", id);
+    setTimeout(() => onAutoAdvance?.(), 350);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -61,33 +66,33 @@ export function Step1ServiceType({ formData, updateFormData }: StepProps) {
         </p>
       </div>
       
-      <div className="grid grid-cols-3 gap-2 lg:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 lg:gap-4">
         {serviceTypes.map((type) => (
           <button
             key={type.id}
-            onClick={() => updateFormData("serviceType", type.id)}
-            className={`group relative p-2 lg:p-6 rounded-xl border-2 transition-all duration-300 ${
+            onClick={() => handleSelect(type.id)}
+            className={`group relative p-3 lg:p-6 rounded-xl border-2 transition-all duration-300 min-h-[80px] ${
               formData.serviceType === type.id
-                ? "border-primary bg-primary/5"
+                ? "border-primary bg-primary/5 scale-[0.97]"
                 : "border-border hover:border-primary/50 bg-card"
             }`}
           >
-            <div className="flex flex-col items-center gap-1 lg:gap-3">
-              <div className={`w-8 h-8 lg:w-12 lg:h-12 rounded-full flex items-center justify-center transition-colors ${
+            <div className="flex flex-col items-center gap-1.5 lg:gap-3">
+              <div className={`w-9 h-9 lg:w-12 lg:h-12 rounded-full flex items-center justify-center transition-colors ${
                 formData.serviceType === type.id
                   ? "bg-primary text-primary-foreground"
                   : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary"
               }`}>
-                <type.icon className="w-4 h-4 lg:w-6 lg:h-6" />
+                <type.icon className="w-4.5 h-4.5 lg:w-6 lg:h-6" />
               </div>
               <span className="font-medium text-foreground text-xs lg:text-base">{type.label}</span>
             </div>
             {formData.serviceType === type.id && (
               <motion.div
                 layoutId="serviceCheck"
-                className="absolute top-1 right-1 lg:top-2 lg:right-2 w-4 h-4 lg:w-6 lg:h-6 rounded-full bg-primary flex items-center justify-center"
+                className="absolute top-1.5 right-1.5 lg:top-2 lg:right-2 w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-primary flex items-center justify-center"
               >
-                <svg className="w-2.5 h-2.5 lg:w-4 lg:h-4 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-3 h-3 lg:w-4 lg:h-4 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </motion.div>
@@ -99,8 +104,13 @@ export function Step1ServiceType({ formData, updateFormData }: StepProps) {
   );
 }
 
-// Step 2: Scope
-export function Step2Scope({ formData, updateFormData }: StepProps) {
+// Step 2: Scope — auto-advances on selection
+export function Step2Scope({ formData, updateFormData, onAutoAdvance }: StepProps) {
+  const handleSelect = (id: string) => {
+    updateFormData("scope", id);
+    setTimeout(() => onAutoAdvance?.(), 350);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -117,19 +127,19 @@ export function Step2Scope({ formData, updateFormData }: StepProps) {
         </p>
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 lg:gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 lg:gap-4">
         {scopeOptions.map((option) => (
           <button
             key={option.id}
-            onClick={() => updateFormData("scope", option.id)}
-            className={`group relative p-3 lg:p-6 rounded-xl border-2 transition-all duration-300 text-left ${
+            onClick={() => handleSelect(option.id)}
+            className={`group relative p-4 lg:p-6 rounded-xl border-2 transition-all duration-300 text-left min-h-[80px] ${
               formData.scope === option.id
-                ? "border-primary bg-primary/5"
+                ? "border-primary bg-primary/5 scale-[0.97]"
                 : "border-border hover:border-primary/50 bg-card"
             }`}
           >
             <div className="flex items-center lg:items-start gap-3 lg:gap-4">
-              <div className={`w-8 h-8 lg:w-10 lg:h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
+              <div className={`w-9 h-9 lg:w-10 lg:h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
                 formData.scope === option.id
                   ? "bg-primary text-primary-foreground"
                   : "bg-muted text-muted-foreground"
@@ -144,9 +154,9 @@ export function Step2Scope({ formData, updateFormData }: StepProps) {
             {formData.scope === option.id && (
               <motion.div
                 layoutId="scopeCheck"
-                className="absolute top-2 right-2 w-4 h-4 lg:w-6 lg:h-6 rounded-full bg-primary flex items-center justify-center"
+                className="absolute top-2 right-2 w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-primary flex items-center justify-center"
               >
-                <svg className="w-2.5 h-2.5 lg:w-4 lg:h-4 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-3 h-3 lg:w-4 lg:h-4 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </motion.div>
@@ -158,7 +168,7 @@ export function Step2Scope({ formData, updateFormData }: StepProps) {
   );
 }
 
-// Step 3: Location
+// Step 3: Location — manual input, keeps Weiter button
 export function Step3Location({ formData, updateFormData }: StepProps) {
   return (
     <motion.div
@@ -182,12 +192,14 @@ export function Step3Location({ formData, updateFormData }: StepProps) {
             <Label htmlFor="postalCode" className="text-sm">PLZ *</Label>
             <Input
               id="postalCode"
-              type="text"
+              type="tel"
+              inputMode="numeric"
+              pattern="[0-9]*"
               placeholder="89278"
               value={formData.postalCode}
               onChange={(e) => updateFormData("postalCode", e.target.value)}
               maxLength={5}
-              className="mt-1 h-10 lg:h-11"
+              className="mt-1 h-11 lg:h-12 text-base"
             />
           </div>
           <div className="col-span-2">
@@ -198,7 +210,7 @@ export function Step3Location({ formData, updateFormData }: StepProps) {
               placeholder="Nersingen"
               value={formData.location}
               onChange={(e) => updateFormData("location", e.target.value)}
-              className="mt-1 h-10 lg:h-11"
+              className="mt-1 h-11 lg:h-12 text-base"
             />
           </div>
         </div>
@@ -207,8 +219,13 @@ export function Step3Location({ formData, updateFormData }: StepProps) {
   );
 }
 
-// Step 4: Timeline
-export function Step4Timeline({ formData, updateFormData }: StepProps) {
+// Step 4: Timeline — auto-advances on selection
+export function Step4Timeline({ formData, updateFormData, onAutoAdvance }: StepProps) {
+  const handleSelect = (id: string) => {
+    updateFormData("timeline", id);
+    setTimeout(() => onAutoAdvance?.(), 350);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -225,18 +242,18 @@ export function Step4Timeline({ formData, updateFormData }: StepProps) {
         </p>
       </div>
       
-      <div className="flex flex-wrap justify-center gap-2 lg:gap-3 max-w-2xl mx-auto">
+      <div className="grid grid-cols-2 gap-3 lg:flex lg:flex-wrap lg:justify-center lg:gap-3 max-w-2xl mx-auto">
         {timelineOptions.map((option) => (
           <button
             key={option.id}
-            onClick={() => updateFormData("timeline", option.id)}
-            className={`px-3 py-2 lg:px-6 lg:py-3 rounded-full border-2 font-medium transition-all duration-300 flex items-center gap-1.5 lg:gap-2 text-sm lg:text-base ${
+            onClick={() => handleSelect(option.id)}
+            className={`px-4 py-3 lg:px-6 lg:py-3 rounded-full border-2 font-medium transition-all duration-300 flex items-center justify-center gap-1.5 lg:gap-2 text-sm lg:text-base min-h-[48px] ${
               formData.timeline === option.id
-                ? "border-primary bg-primary text-primary-foreground"
+                ? "border-primary bg-primary text-primary-foreground scale-[0.97]"
                 : "border-border hover:border-primary/50 bg-card text-foreground"
             }`}
           >
-            <Clock className="w-3.5 h-3.5 lg:w-4 lg:h-4 hidden lg:block" />
+            <Clock className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
             {option.label}
           </button>
         ))}
@@ -245,7 +262,7 @@ export function Step4Timeline({ formData, updateFormData }: StepProps) {
   );
 }
 
-// Step 5: Contact Details
+// Step 5: Contact Details — optimized for phone callback
 export function Step5Contact({ formData, updateFormData }: StepProps) {
   return (
     <motion.div
@@ -256,38 +273,37 @@ export function Step5Contact({ formData, updateFormData }: StepProps) {
     >
       <div className="text-center mb-3 lg:mb-8">
         <h3 className="text-lg lg:text-2xl font-bold text-foreground mb-1 lg:mb-2">
-          Ihre Kontaktdaten
+          Fast geschafft!
         </h3>
         <p className="text-sm lg:text-base text-muted-foreground">
-          Wie können wir Sie erreichen?
+          Hinterlassen Sie Ihre Nummer für unsere kostenlose, telefonische Ersteinschätzung.
         </p>
       </div>
       
-      <div className="max-w-md mx-auto space-y-2 lg:space-y-4">
-        <div className="grid grid-cols-2 gap-2 lg:gap-4">
-          <div>
-            <Label htmlFor="name" className="text-sm">Name *</Label>
-            <Input
-              id="name"
-              type="text"
-              placeholder="Max Mustermann"
-              value={formData.name}
-              onChange={(e) => updateFormData("name", e.target.value)}
-              className="mt-1 h-10 lg:h-11"
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="phone" className="text-sm">Telefon *</Label>
-            <Input
-              id="phone"
-              type="tel"
-              placeholder="0160 1234567"
-              value={formData.phone}
-              onChange={(e) => updateFormData("phone", e.target.value)}
-              className="mt-1 h-10 lg:h-11"
-            />
-          </div>
+      <div className="max-w-md mx-auto space-y-3 lg:space-y-4">
+        <div>
+          <Label htmlFor="name" className="text-sm">Name *</Label>
+          <Input
+            id="name"
+            type="text"
+            placeholder="Max Mustermann"
+            value={formData.name}
+            onChange={(e) => updateFormData("name", e.target.value)}
+            className="mt-1 h-11 lg:h-12 text-base"
+          />
+        </div>
+        
+        <div>
+          <Label htmlFor="phone" className="text-sm">Telefon *</Label>
+          <Input
+            id="phone"
+            type="tel"
+            inputMode="tel"
+            placeholder="0160 1234567"
+            value={formData.phone}
+            onChange={(e) => updateFormData("phone", e.target.value)}
+            className="mt-1 h-11 lg:h-12 text-base"
+          />
         </div>
         
         <div>
@@ -298,18 +314,7 @@ export function Step5Contact({ formData, updateFormData }: StepProps) {
             placeholder="max@beispiel.de"
             value={formData.email}
             onChange={(e) => updateFormData("email", e.target.value)}
-            className="mt-1 h-10 lg:h-11"
-          />
-        </div>
-        
-        <div>
-          <Label htmlFor="message" className="text-sm">Nachricht (optional)</Label>
-          <Textarea
-            id="message"
-            placeholder="Gibt es etwas, das wir vorab wissen sollten?"
-            value={formData.message}
-            onChange={(e) => updateFormData("message", e.target.value)}
-            className="mt-1 min-h-[60px] lg:min-h-[100px]"
+            className="mt-1 h-11 lg:h-12 text-base"
           />
         </div>
       </div>
