@@ -56,8 +56,8 @@ export interface ServicePageData {
   // For discrete services like Messie
   isDiscrete?: boolean;
   ctaText?: {
-    whatsapp: string;
-    whatsappShort: string;
+    primary: string;
+    primaryShort: string;
   };
 }
 
