@@ -90,8 +90,7 @@ export const ContactFunnel = forwardRef<ContactFunnelRef>((_, ref) => {
       });
       if (response.ok) {
         setIsSubmitting(false);
-        setIsSubmitted(true);
-        toast({ title: "Anfrage gesendet! ✓", description: "Wir melden uns innerhalb von 24 Stunden bei Ihnen." });
+        navigate('/danke');
       } else {
         throw new Error(`HTTP Fehler: ${response.status}`);
       }
