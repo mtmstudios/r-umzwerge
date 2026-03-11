@@ -43,7 +43,7 @@ export const FloatingCTAs = forwardRef<HTMLDivElement, FloatingCTAsProps>(({ onF
           aria-label="Anrufen"
         >
           <Phone className="h-5 w-5 flex-shrink-0" />
-          <span>📞 Anrufen</span>
+          <span>Anrufen</span>
         </a>
         {onFunnelOpen ? (
           <button
