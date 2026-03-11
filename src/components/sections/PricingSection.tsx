@@ -145,7 +145,7 @@ export function PricingSection() {
                   className="w-full gap-2 sm:gap-3 bg-cta hover:bg-cta-hover text-cta-foreground h-12 sm:h-14 text-sm sm:text-base btn-lift shadow-cta font-bold"
                 >
                   <ClipboardList className="h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0" />
-                  <span>Angebot berechnen</span>
+                  <span>Rückruf anfordern</span>
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center mt-4">

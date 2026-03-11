@@ -98,7 +98,7 @@ export function ServicesSection() {
                   description={service.description}
                   highlights={service.highlights}
                   icon={Icon}
-                  href={`/leistungen/${service.slug}`}
+                  href={SERVICE_ROUTES[service.slug] || `/leistungen/${service.slug}`}
                   size="default"
                   variant={service.slug === 'messie-wohnungen' ? 'glass' : 'default'}
                   index={index + 2}

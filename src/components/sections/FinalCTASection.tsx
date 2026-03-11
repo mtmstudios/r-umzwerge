@@ -29,7 +29,7 @@ export function FinalCTASection() {
               className="gap-2 sm:gap-3 bg-cta hover:bg-cta-hover text-cta-foreground h-12 sm:h-14 px-5 sm:px-8 btn-lift shadow-cta text-sm sm:text-base font-bold"
             >
               <ClipboardList className="h-5 w-5 flex-shrink-0" />
-              <span>Angebot berechnen</span>
+              <span>Rückruf anfordern</span>
             </Button>
             <Button
               asChild

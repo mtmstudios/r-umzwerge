@@ -54,7 +54,7 @@ export function HeroSection() {
               className="gap-2 bg-cta hover:bg-cta-hover text-cta-foreground text-sm md:text-base xl:text-lg h-12 md:h-14 xl:h-16 px-4 md:px-6 xl:px-8 btn-lift"
             >
               <ClipboardList className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
-              <span>Angebot berechnen</span>
+              <span>Rückruf anfordern</span>
             </Button>
             <Button
               asChild

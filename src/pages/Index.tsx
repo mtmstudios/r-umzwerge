@@ -83,6 +83,13 @@ const Index = () => {
         <SectionDivider 
           variant="gradient" 
           fromColor="hsl(var(--background))" 
+          toColor="hsl(var(--secondary) / 0.15)" 
+        />
+        <AboutSection />
+        
+        <SectionDivider 
+          variant="gradient" 
+          fromColor="hsl(var(--secondary) / 0.15)" 
           toColor="hsl(var(--secondary) / 0.3)" 
         />
         <BeforeAfterSection />
