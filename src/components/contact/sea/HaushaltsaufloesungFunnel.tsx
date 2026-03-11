@@ -113,8 +113,9 @@ export function HaushaltsaufloesungFunnel({ open, onOpenChange }: Haushaltsauflo
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
       });
       if (response.ok) {
-        setIsSubmitting(false); setIsSubmitted(true);
-        toast({ title: "Anfrage gesendet! ✓", description: "Wir melden uns einfühlsam und zeitnah bei Ihnen." });
+        setIsSubmitting(false);
+        onOpenChange(false);
+        navigate('/danke');
       } else { throw new Error(`HTTP Fehler: ${response.status}`); }
     } catch (error) {
       console.error('Submit error:', error); setIsSubmitting(false);
