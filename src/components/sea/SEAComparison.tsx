@@ -13,21 +13,23 @@ interface SEAComparisonProps {
 }
 
 export function SEAComparison({ data }: SEAComparisonProps) {
-  const comparison = data.comparison;
-  if (!comparison) return null;
-
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const comparison = data.comparison;
+
   useEffect(() => {
+    if (!comparison) return;
     const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
       { threshold: 0.1 }
     );
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
-  }, []);
+  }, [comparison]);
+
+  if (!comparison) return null;
 
   return (
     <section className="py-14 lg:py-20 bg-background relative overflow-hidden">
