@@ -39,11 +39,11 @@ export function HeroSection() {
           )}
         >
           <h1 className="text-3xl md:text-4xl xl:text-5xl 2xl:text-6xl font-bold text-white mb-4 md:mb-6 text-balance leading-tight max-w-4xl">
-            Entrümpelung ohne Stress – mit unseren Teams in ganz Süddeutschland.
+            Hallo, wir sind Ihre Räumzwerge. Wir schaffen Platz, damit Sie durchatmen können.
           </h1>
           
           <p className="text-base md:text-lg xl:text-xl text-white/90 mb-6 md:mb-8 max-w-2xl">
-            Kostenlose Ersteinschätzung am Telefon – schnell, diskret und unverbindlich.
+            Ihr fleißiges, regionales Team für Entrümpelungen &amp; Haushaltsauflösungen in Süddeutschland. Schnell, diskret und besenrein.
           </p>
 
           {/* Dual-CTA: Funnel (Primary) + Phone (Secondary) */}

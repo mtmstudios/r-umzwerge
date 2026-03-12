@@ -33,10 +33,10 @@ export function AboutSection() {
               Über uns
             </span>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-foreground mb-4 lg:mb-6">
-              Wer sind die Räumzwerge?
+              Wer steckt hinter den Räumzwergen?
             </h2>
             <p className="text-base text-muted-foreground leading-relaxed mb-4">
-              Wir sind ein regionaler Partner aus Süddeutschland, der sich auf professionelle Entrümpelungen spezialisiert hat. Was uns antreibt? Menschen in schwierigen Situationen schnell, diskret und respektvoll zu helfen – ohne Vorurteile.
+              Wir sind ein starkes, regionales Team aus Süddeutschland. Wir wissen, dass eine Räumung oft emotional und stressig ist. Deshalb arbeiten wir wie die sprichwörtlichen Heinzelmännchen: Wir packen an, wo andere aufgeben, arbeiten unsichtbar im Hintergrund und nehmen Ihnen die schwere Last von den Schultern.
             </p>
             <p className="text-base text-muted-foreground leading-relaxed mb-6">
               Ob Haushaltsauflösung, Wohnungsentrümpelung oder sensible Messie-Räumung: Bei uns stehen Pünktlichkeit, Transparenz und ein fairer Festpreis im Mittelpunkt. Unser geschultes Team arbeitet besenrein und behandelt jede Situation mit dem nötigen Feingefühl.

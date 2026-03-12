@@ -8,6 +8,7 @@ import { TrustBar } from '@/components/sections/TrustBar';
 import { ProcessSection } from '@/components/sections/ProcessSection';
 import { ServicesSection } from '@/components/sections/ServicesSection';
 import { PricingSection } from '@/components/sections/PricingSection';
+import { GarantieSection } from '@/components/sections/GarantieSection';
 import { AboutSection } from '@/components/sections/AboutSection';
 import { BeforeAfterSection } from '@/components/sections/BeforeAfterSection';
 import { ReviewsSection } from '@/components/sections/ReviewsSection';
@@ -76,6 +77,13 @@ const Index = () => {
         <SectionDivider 
           variant="gradient" 
           fromColor="hsl(var(--secondary) / 0.3)" 
+          toColor="hsl(var(--secondary) / 0.2)" 
+        />
+        <GarantieSection />
+        
+        <SectionDivider 
+          variant="gradient" 
+          fromColor="hsl(var(--secondary) / 0.2)" 
           toColor="hsl(var(--background))" 
         />
         <PricingSection />
