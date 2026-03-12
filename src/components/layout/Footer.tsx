@@ -130,7 +130,10 @@ export function Footer() {
         <div className="border-t border-primary-foreground/10">
           <div className="container-custom py-5">
             <div className="flex flex-col md:flex-row justify-center items-center gap-3 text-sm text-primary-foreground/50">
-              <p>© {currentYear} Räumzwerge. Alle Rechte vorbehalten.</p>
+              <div className="text-center">
+                <p>© {currentYear} Räumzwerge. Alle Rechte vorbehalten.</p>
+                <p className="text-xs text-primary-foreground/40 mt-1">Ihre fleißigen Helfer für Süddeutschland.</p>
+              </div>
             </div>
           </div>
         </div>

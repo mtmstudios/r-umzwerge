@@ -12,7 +12,7 @@ export function FAQSection() {
     <section id="faq" className="py-12 md:py-14 lg:py-16 bg-background">
       <div className="container-custom">
         <div ref={ref} className={cn("text-center mb-8 md:mb-10", "scroll-reveal", isVisible && "visible")}>
-          <h2 className="text-section-mobile lg:text-section text-foreground mb-4">FAQ</h2>
+          <h2 className="text-section-mobile lg:text-section text-foreground mb-4">Die Räumzwerge antworten (FAQ)</h2>
         </div>
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-12">
           <Accordion type="single" collapsible className="space-y-3">
