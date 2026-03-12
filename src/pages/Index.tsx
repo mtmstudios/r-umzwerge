@@ -77,6 +77,13 @@ const Index = () => {
         <SectionDivider 
           variant="gradient" 
           fromColor="hsl(var(--secondary) / 0.3)" 
+          toColor="hsl(var(--secondary) / 0.2)" 
+        />
+        <GarantieSection />
+        
+        <SectionDivider 
+          variant="gradient" 
+          fromColor="hsl(var(--secondary) / 0.2)" 
           toColor="hsl(var(--background))" 
         />
         <PricingSection />
