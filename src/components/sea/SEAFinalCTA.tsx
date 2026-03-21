@@ -19,10 +19,7 @@ export function SEAFinalCTA({ data }: SEAFinalCTAProps) {
 
   return (
     <section className="py-16 lg:py-24 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/95 to-primary animate-gradient-slow" />
-      
-      <div className="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full blur-2xl animate-float-slow pointer-events-none" />
-      <div className="absolute bottom-10 right-10 w-48 h-48 bg-accent/10 rounded-full blur-3xl animate-float-slow pointer-events-none" style={{ animationDelay: '1s' }} />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/95 to-primary" />
       
       <div className="container-custom relative z-10">
         <div className="max-w-2xl mx-auto text-center">
@@ -33,34 +30,17 @@ export function SEAFinalCTA({ data }: SEAFinalCTAProps) {
             {data.ctaSubline}
           </p>
 
-          {/* Dual-CTA */}
+          {/* Dual-CTA: Phone primary, Funnel secondary */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
-            <Button
-              size="lg"
-              onClick={() => setIsModalOpen(true)}
-              className={cn(
-                "gap-3 bg-cta hover:bg-cta-hover text-cta-foreground",
-                "h-14 sm:h-16 px-8 text-base sm:text-lg font-bold",
-                "btn-lift shadow-xl shadow-black/20",
-                "hover:shadow-2xl hover:shadow-cta/30",
-                "transition-all duration-300",
-                "animate-[pulse-subtle_2s_ease-in-out_infinite]"
-              )}
-              data-track="cta-funnel-final"
-            >
-              <ClipboardList className="h-5 w-5 sm:h-6 sm:w-6" />
-              Kostenloses Angebot berechnen
-            </Button>
-
             <Button
               asChild
               size="lg"
               className={cn(
-                "gap-3 h-14 sm:h-16 px-8 text-base sm:text-lg font-semibold",
-                "bg-white/15 hover:bg-white/25 text-primary-foreground",
-                "border-2 border-white/30 backdrop-blur-sm",
-                "btn-lift shadow-xl shadow-black/20",
-                "transition-all duration-300"
+                "gap-3 bg-cta hover:bg-cta-hover text-cta-foreground",
+                "h-14 sm:h-16 px-8 text-base sm:text-lg font-bold",
+                "shadow-xl shadow-black/20",
+                "hover:shadow-2xl hover:shadow-cta/30",
+                "transition-all duration-200"
               )}
               data-track="cta-phone-final"
             >
@@ -68,6 +48,22 @@ export function SEAFinalCTA({ data }: SEAFinalCTAProps) {
                 <Phone className="h-5 w-5 sm:h-6 sm:w-6" />
                 Jetzt anrufen
               </a>
+            </Button>
+
+            <Button
+              size="lg"
+              onClick={() => setIsModalOpen(true)}
+              className={cn(
+                "gap-3 h-14 sm:h-16 px-8 text-base sm:text-lg font-semibold",
+                "bg-white/15 hover:bg-white/25 text-primary-foreground",
+                "border-2 border-white/30 backdrop-blur-sm",
+                "shadow-xl shadow-black/20",
+                "transition-all duration-200"
+              )}
+              data-track="cta-funnel-final"
+            >
+              <ClipboardList className="h-5 w-5 sm:h-6 sm:w-6" />
+              Angebot anfordern
             </Button>
           </div>
 
@@ -91,7 +87,6 @@ export function SEAFinalCTA({ data }: SEAFinalCTAProps) {
         </div>
       </div>
 
-      {/* Dynamic Funnel */}
       {data.slug === 'haushaltsaufloesung' && (
         <HaushaltsaufloesungFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
       )}

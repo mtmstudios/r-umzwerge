@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ClipboardList, Phone } from 'lucide-react';
+import { Phone, ClipboardList } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -23,8 +23,6 @@ export function SEAMiniFAQ({ data }: SEAMiniFAQProps) {
 
   return (
     <section className="py-12 lg:py-20 bg-secondary/30 relative overflow-hidden">
-      <div className="absolute bottom-0 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-      
       <div className="container-custom relative z-10">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-8 lg:mb-12">
@@ -45,7 +43,7 @@ export function SEAMiniFAQ({ data }: SEAMiniFAQProps) {
                   "glass rounded-xl px-5 overflow-hidden border border-border/30",
                   "data-[state=open]:shadow-lg data-[state=open]:shadow-primary/5",
                   isGentle ? "data-[state=open]:border-primary/30" : "data-[state=open]:border-accent/30",
-                  "hover:bg-card/80 transition-all duration-300"
+                  "hover:bg-card/80 transition-colors duration-200"
                 )}
               >
                 <AccordionTrigger className="text-left text-base sm:text-lg font-medium hover:no-underline py-5 transition-colors duration-200 data-[state=open]:text-primary">
@@ -63,23 +61,23 @@ export function SEAMiniFAQ({ data }: SEAMiniFAQProps) {
               {isGentle ? 'Ihre Frage war nicht dabei? Wir helfen Ihnen gerne persönlich.' : 'Ihre Frage war nicht dabei?'}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="inline-flex items-center gap-2 text-sm font-semibold text-cta hover:text-cta-hover transition-colors"
-                data-track="cta-funnel-faq"
-              >
-                <ClipboardList className="h-4 w-4" />
-                Kostenloses Angebot berechnen
-              </button>
-              <span className="hidden sm:inline text-border">|</span>
               <a
                 href={PHONE_LINK}
-                className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-cta hover:text-cta-hover transition-colors"
                 data-track="cta-phone-faq"
               >
                 <Phone className="h-4 w-4" />
                 Jetzt anrufen
               </a>
+              <span className="hidden sm:inline text-border">|</span>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+                data-track="cta-funnel-faq"
+              >
+                <ClipboardList className="h-4 w-4" />
+                Angebot anfordern
+              </button>
             </div>
           </div>
         </div>

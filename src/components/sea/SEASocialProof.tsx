@@ -18,28 +18,9 @@ function GoogleIcon({ className }: { className?: string }) {
   );
 }
 
-function ShimmerStars({ count = 5 }: { count?: number }) {
+function ReviewCard({ review }: { review: typeof FEATURED_REVIEWS[0] }) {
   return (
-    <div className="flex items-center gap-0.5 relative">
-      {[...Array(count)].map((_, i) => (
-        <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
-      ))}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" style={{ backgroundSize: '200% 100%' }} />
-    </div>
-  );
-}
-
-function ReviewCard({ review, index }: { review: typeof FEATURED_REVIEWS[0]; index: number }) {
-  return (
-    <div
-      className={cn(
-        "glass rounded-xl p-5 lg:p-6 border border-border/30",
-        "lg:hover:shadow-2xl lg:hover:-translate-y-2 lg:hover:shadow-primary/10",
-        "transition-all duration-500",
-        "opacity-0 animate-fade-in"
-      )}
-      style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'forwards' }}
-    >
+    <div className="glass rounded-xl p-5 lg:p-6 border border-border/30 lg:hover:shadow-2xl lg:hover:-translate-y-2 lg:hover:shadow-primary/10 transition-all duration-300">
       <div className="flex items-center gap-0.5 mb-3">
         {[...Array(review.rating)].map((_, i) => (
           <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
@@ -64,8 +45,6 @@ export function SEASocialProof({ data }: SEASocialProofProps) {
 
   return (
     <section className="py-12 lg:py-16 bg-secondary/30 relative overflow-hidden">
-      <div className="absolute top-0 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-      
       <div className="container-custom relative z-10">
         <div className="text-center mb-8 lg:mb-10">
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground mb-4">
@@ -73,14 +52,18 @@ export function SEASocialProof({ data }: SEASocialProofProps) {
           </h2>
           <div className="inline-flex items-center gap-3 glass px-6 py-4 rounded-full shadow-lg shadow-primary/5">
             <GoogleIcon className="h-6 w-6" />
-            <ShimmerStars count={5} />
+            <div className="flex items-center gap-0.5">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+              ))}
+            </div>
             <span className="font-bold text-foreground text-lg">{GOOGLE_RATING.score.toFixed(1)}</span>
             <span className="text-muted-foreground text-sm">· {GOOGLE_RATING.count} Bewertungen</span>
           </div>
         </div>
 
         {data.testimonial && (
-          <div className="max-w-2xl mx-auto mb-10 glass rounded-2xl p-6 lg:p-8 border border-border/30 shadow-lg shadow-primary/5 opacity-0 animate-fade-in" style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}>
+          <div className="max-w-2xl mx-auto mb-10 glass rounded-2xl p-6 lg:p-8 border border-border/30 shadow-lg shadow-primary/5">
             <div className="flex gap-4">
               <span className="text-4xl lg:text-5xl font-serif text-primary/30 leading-none select-none">"</span>
               <div>
@@ -97,8 +80,8 @@ export function SEASocialProof({ data }: SEASocialProofProps) {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mb-8">
-          {FEATURED_REVIEWS.map((review, index) => (
-            <ReviewCard key={review.id} review={review} index={index} />
+          {FEATURED_REVIEWS.map((review) => (
+            <ReviewCard key={review.id} review={review} />
           ))}
         </div>
 

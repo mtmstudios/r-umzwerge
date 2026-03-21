@@ -1,23 +1,17 @@
 import { useState, useRef, useEffect } from 'react';
-import { Sparkles, CheckCircle, Truck, Heart, Shield, Users, ClipboardList } from 'lucide-react';
+import { CheckCircle, Phone, ClipboardList } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { PHONE_LINK } from '@/lib/constants';
 import { seaImages } from '@/lib/seaImages';
 import { HaushaltsaufloesungFunnel } from '@/components/contact/sea/HaushaltsaufloesungFunnel';
 import { EntruempelungFunnel } from '@/components/contact/sea/EntruempelungFunnel';
 import { MessieFunnel } from '@/components/contact/sea/MessieFunnel';
 import type { SEAData, SEAVariant } from '@/lib/seaData';
 
-const iconMap: Record<string, React.ElementType> = {
-  'Besenrein': Sparkles,
-  'Übergabefertig': CheckCircle,
-  'Fachgerecht entsorgt': Truck,
-  'Respektvoll geräumt': Heart,
-  'Schnell erledigt': CheckCircle,
-  'Diskret': Shield,
-  'Respektvoll': Heart,
-  'Ein neuer Anfang': Sparkles,
-  'Schritt für Schritt': Users,
+const iconMap: Record<string, boolean> = {
+  'Besenrein': true, 'Übergabefertig': true, 'Fachgerecht entsorgt': true,
+  'Respektvoll geräumt': true, 'Schnell erledigt': true, 'Diskret': true,
+  'Respektvoll': true, 'Ein neuer Anfang': true, 'Schritt für Schritt': true,
 };
 
 const getImagesForVariant = (slug: SEAVariant) => {
@@ -71,8 +65,6 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
 
   return (
     <section className="py-10 md:py-16 bg-secondary/30 relative overflow-hidden">
-      <div className="absolute top-10 right-10 w-32 h-32 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
-      
       <div className="container-custom relative z-10">
         <h2 className="text-xl md:text-2xl font-bold text-foreground text-center mb-8">
           {isGentleMode ? 'Ein neuer Anfang – mit uns' : 'Das Ergebnis unserer Arbeit'}
@@ -96,7 +88,6 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
                 <img src={images.before} loading="lazy" alt="Vorher" className="w-full h-full object-cover scale-[1.15]" />
               </div>
               <div className="absolute top-0 bottom-0 w-1 bg-white/90 shadow-lg" style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}>
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/20 animate-pulse-subtle" />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-xl flex items-center justify-center border-2 border-primary/20">
                   <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
@@ -114,32 +105,41 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
         </div>
 
         <div className="flex flex-wrap justify-center gap-3">
-          {data.outcomeBadges.map((badge) => {
-            const Icon = iconMap[badge] || CheckCircle;
-            return (
-              <div
-                key={badge}
-                className="flex items-center gap-2 px-4 py-2.5 glass rounded-full border border-border/30 lg:hover:shadow-lg lg:hover:shadow-accent/10 lg:hover:-translate-y-0.5 transition-all duration-300 cursor-default"
-              >
-                <Icon className="h-4 w-4 text-accent" />
-                <span className="text-sm font-medium text-foreground">{badge}</span>
-              </div>
-            );
-          })}
+          {data.outcomeBadges.map((badge) => (
+            <div
+              key={badge}
+              className="flex items-center gap-2 px-4 py-2.5 glass rounded-full border border-border/30 lg:hover:shadow-lg lg:hover:shadow-accent/10 lg:hover:-translate-y-0.5 transition-all duration-300 cursor-default"
+            >
+              <CheckCircle className="h-4 w-4 text-accent" />
+              <span className="text-sm font-medium text-foreground">{badge}</span>
+            </div>
+          ))}
         </div>
 
-        <div className="text-center mt-8">
+        {/* Dual-CTA: Phone primary, Funnel secondary */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
+          <Button
+            asChild
+            size="lg"
+            className="gap-2 bg-cta hover:bg-cta-hover text-cta-foreground h-12 md:h-14 px-6 md:px-8 text-sm md:text-base shadow-lg shadow-cta/25 w-full sm:w-auto font-bold rounded-2xl"
+            data-track="cta-phone-beforeafter"
+          >
+            <a href={PHONE_LINK}>
+              <Phone className="h-5 w-5 flex-shrink-0" />
+              Jetzt anrufen
+            </a>
+          </Button>
           <Button
             size="lg"
             onClick={() => setIsModalOpen(true)}
-            className="gap-2 bg-cta hover:bg-cta-hover text-cta-foreground h-12 md:h-14 px-6 md:px-8 text-sm md:text-base btn-lift shadow-lg shadow-cta/25 w-full sm:w-auto"
+            className="gap-2 h-12 md:h-14 px-6 md:px-8 text-sm md:text-base bg-card hover:bg-secondary text-primary border-2 border-primary/30 font-semibold rounded-2xl w-full sm:w-auto"
             data-track="cta-funnel-beforeafter"
           >
             <ClipboardList className="h-5 w-5 flex-shrink-0" />
-            {isGentleMode ? 'Unverbindlich anfragen' : 'So soll es bei mir auch aussehen'}
+            Angebot anfordern
           </Button>
-          <p className="text-xs text-muted-foreground mt-2">Unverbindlich · Antwort innerhalb von 24h</p>
         </div>
+        <p className="text-xs text-muted-foreground mt-2 text-center">Unverbindlich · Antwort innerhalb von 24h</p>
       </div>
 
       {data.slug === 'haushaltsaufloesung' && (

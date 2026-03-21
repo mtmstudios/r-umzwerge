@@ -24,7 +24,6 @@ export function SEAHero({ data }: SEAHeroProps) {
 
   return (
     <section className="relative overflow-hidden">
-      {/* Fullscreen background */}
       <div className="absolute inset-0">
         <img 
           src={seaImages.heroTeam}
@@ -47,37 +46,35 @@ export function SEAHero({ data }: SEAHeroProps) {
             <span className="text-sm font-medium text-white/90">Noch diese Woche Termine frei</span>
           </div>
 
-          {/* H1 */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-6xl 2xl:text-7xl font-extrabold text-white mb-4 md:mb-5 text-balance leading-[1.1] max-w-4xl tracking-tight">
             {data.headline}
           </h1>
           
-          {/* Subheadline */}
           <p className="text-lg md:text-xl xl:text-2xl text-white/95 mb-8 md:mb-10 max-w-2xl font-medium leading-relaxed">
             {data.subline}
           </p>
 
-          {/* Dual-CTA: Funnel (Primary) + Phone (Secondary) */}
+          {/* Dual-CTA: Phone (Primary) + Funnel (Secondary) */}
           <div className="flex flex-col sm:flex-row gap-3 mb-6 w-full sm:w-auto sm:justify-center">
-            <Button
-              size="lg"
-              onClick={() => setIsModalOpen(true)}
-              className="gap-3 h-14 md:h-16 xl:h-[4.5rem] px-6 md:px-10 text-base md:text-lg xl:text-xl bg-cta hover:bg-cta-hover text-cta-foreground shadow-2xl shadow-cta/40 font-bold rounded-2xl transition-all duration-200 animate-[pulse-subtle_2s_ease-in-out_infinite]"
-              data-track="cta-funnel-hero"
-            >
-              <ClipboardList className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0" />
-              <span>Kostenloses Angebot berechnen</span>
-            </Button>
             <Button
               asChild
               size="lg"
-              className="gap-2 h-14 md:h-16 xl:h-[4.5rem] px-6 md:px-8 text-base md:text-lg bg-white/15 hover:bg-white/25 text-white border-2 border-white/30 backdrop-blur-sm font-semibold rounded-2xl transition-all duration-200"
+              className="gap-3 h-14 md:h-16 xl:h-[4.5rem] px-6 md:px-10 text-base md:text-lg xl:text-xl bg-cta hover:bg-cta-hover text-cta-foreground shadow-2xl shadow-cta/40 font-bold rounded-2xl transition-all duration-200"
               data-track="cta-phone-hero"
             >
               <a href={PHONE_LINK}>
-                <Phone className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
+                <Phone className="h-6 w-6 xl:h-7 xl:w-7 flex-shrink-0" />
                 <span>Jetzt anrufen</span>
               </a>
+            </Button>
+            <Button
+              size="lg"
+              onClick={() => setIsModalOpen(true)}
+              className="gap-2 h-14 md:h-16 xl:h-[4.5rem] px-6 md:px-8 text-base md:text-lg bg-white/15 hover:bg-white/25 text-white border-2 border-white/30 backdrop-blur-sm font-semibold rounded-2xl transition-all duration-200"
+              data-track="cta-funnel-hero"
+            >
+              <ClipboardList className="h-5 w-5 xl:h-6 xl:w-6 flex-shrink-0" />
+              <span>Angebot anfordern</span>
             </Button>
           </div>
 

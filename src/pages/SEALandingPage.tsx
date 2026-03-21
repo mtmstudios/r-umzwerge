@@ -1,6 +1,8 @@
 import { useParams, Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { Phone } from 'lucide-react';
 import { getSeaData, isValidSeaSlug } from '@/lib/seaData';
+import { PHONE_LINK } from '@/lib/constants';
 import { SEAMinimalHeader } from '@/components/sea/SEAMinimalHeader';
 import { SEAHero } from '@/components/sea/SEAHero';
 import { SEASocialProof } from '@/components/sea/SEASocialProof';
@@ -42,30 +44,35 @@ export default function SEALandingPage() {
       <SEAMinimalHeader />
       
       <main className="flex-1">
-        {/* 1. Hero */}
         <SEAHero data={data} />
-        {/* 2. Reviews – instant trust right below the fold */}
         <SEASocialProof data={data} />
-        {/* 3. Problem agitation */}
         <SEAPainPoints data={data} />
-        {/* 4. Result / Before-After proof */}
         <SEABeforeAfter data={data} />
-        {/* 5. Process – how easy it is */}
         <SEAMidCTA data={data} />
-        {/* 6. Comparison – why us */}
         <SEAComparison data={data} />
-        {/* 7. FAQ */}
         <SEAMiniFAQ data={data} />
-        {/* 8. Final CTA */}
         <SEAFinalCTA data={data} />
       </main>
 
       <SEAMinimalFooter />
       
-      {/* Mobile Sticky Dual-CTAs */}
-      <FloatingCTAs onFunnelOpen={() => setIsFunnelOpen(true)} />
+      {/* Mobile Sticky Call Bar - always visible */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+        <a
+          href={PHONE_LINK}
+          className="flex items-center justify-center gap-3 w-full py-4 bg-cta hover:bg-cta-hover text-cta-foreground rounded-2xl shadow-2xl shadow-cta/40 font-bold text-lg transition-all duration-200 active:scale-95"
+          data-track="cta-phone-sticky"
+        >
+          <Phone className="h-6 w-6" />
+          Jetzt anrufen
+        </a>
+      </div>
 
-      {/* Shared funnel for sticky bar */}
+      {/* Desktop floating CTAs (hidden on mobile since we have sticky bar) */}
+      <div className="hidden md:block lg:hidden">
+        <FloatingCTAs onFunnelOpen={() => setIsFunnelOpen(true)} />
+      </div>
+
       {data.slug === 'haushaltsaufloesung' && (
         <HaushaltsaufloesungFunnel open={isFunnelOpen} onOpenChange={setIsFunnelOpen} />
       )}
