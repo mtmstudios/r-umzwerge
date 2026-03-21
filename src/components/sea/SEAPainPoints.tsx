@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
-import { ClipboardList } from 'lucide-react';
+import { useState } from 'react';
+import { Phone, ClipboardList } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { PHONE_LINK } from '@/lib/constants';
 import { ProblemSolutionCard } from './ProblemSolutionCard';
 import { EntruempelungFunnel } from '@/components/contact/sea/EntruempelungFunnel';
 import { HaushaltsaufloesungFunnel } from '@/components/contact/sea/HaushaltsaufloesungFunnel';
@@ -15,19 +14,7 @@ interface SEAPainPointsProps {
 
 export function SEAPainPoints({ data }: SEAPainPointsProps) {
   const isGentle = data.tone === 'gentle';
-  const isMobile = useIsMobile();
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
-      { threshold: 0.1 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <section className="py-14 lg:py-20 relative overflow-hidden bg-background">
@@ -43,41 +30,43 @@ export function SEAPainPoints({ data }: SEAPainPointsProps) {
           </p>
         </div>
 
-        <div
-          ref={sectionRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 lg:gap-6 max-w-5xl mx-auto"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 lg:gap-6 max-w-5xl mx-auto">
           {data.painPoints.map((point, index) => (
             <ProblemSolutionCard
               key={index}
               problem={point.problem}
               solution={point.solution}
               index={index}
-              isVisible={isVisible}
-              isMobile={isMobile}
+              isVisible={true}
+              isMobile={true}
             />
           ))}
         </div>
 
-        <div className="mt-10 lg:mt-14 flex flex-col items-center">
+        {/* Dual-CTA: Phone primary, Funnel secondary */}
+        <div className="mt-10 lg:mt-14 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Button
+            asChild
+            size="lg"
+            className="gap-3 h-14 md:h-16 px-8 md:px-10 text-base md:text-lg font-bold rounded-2xl bg-cta hover:bg-cta-hover text-cta-foreground shadow-xl shadow-cta/30 w-full sm:w-auto"
+            data-track="cta-phone-painpoints"
+          >
+            <a href={PHONE_LINK}>
+              <Phone className="h-6 w-6" />
+              Jetzt anrufen
+            </a>
+          </Button>
           <Button
             size="lg"
             onClick={() => setIsModalOpen(true)}
-            className={cn(
-              "gap-3 h-14 md:h-16 px-8 md:px-10 text-base md:text-lg font-bold rounded-2xl",
-              "bg-cta hover:bg-cta-hover text-cta-foreground",
-              "shadow-xl shadow-cta/30 hover:shadow-2xl hover:shadow-cta/40",
-              "transition-all duration-200",
-              "w-full sm:w-auto",
-              "animate-[pulse-subtle_2s_ease-in-out_infinite]"
-            )}
+            className="gap-2 h-14 md:h-16 px-8 text-base md:text-lg bg-card hover:bg-secondary text-primary border-2 border-primary/30 font-semibold rounded-2xl w-full sm:w-auto"
             data-track="cta-funnel-painpoints"
           >
-            <ClipboardList className="h-6 w-6" />
-            Jetzt kostenloses Angebot berechnen
+            <ClipboardList className="h-5 w-5" />
+            Angebot anfordern
           </Button>
-          <p className="text-muted-foreground text-sm mt-3">Unverbindlich · Antwort in unter 24h</p>
         </div>
+        <p className="text-muted-foreground text-sm mt-3 text-center">Unverbindlich · Antwort in unter 24h</p>
       </div>
 
       {data.slug === 'haushaltsaufloesung' && (
