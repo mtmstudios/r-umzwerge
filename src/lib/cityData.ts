@@ -45,46 +45,58 @@ export const CITY_PAGES: Record<string, CityPageData> = {
     metaDescription: "Professionelle Entrümpelung in Ulm und Umgebung. Haushaltsauflösung, Wohnungsentrümpelung & diskrete Messie-Reinigung. ✓ Festpreis möglich ✓ Besenrein ✓ Antwort < 24h",
     hero: {
       h1: "Entrümpelung in Ulm – Ihr lokales Räumzwerge-Team",
-      subline: "Von unserem Hauptsitz in Nersingen aus sind wir in Ulm und dem gesamten Alb-Donau-Kreis für Sie da. Schnell, diskret, besenrein.",
-      trustPills: ["Hauptsitz in Nersingen", "Antwort < 24h", "Besenrein garantiert"],
+      subline: "Mit Hauptsitz in Nersingen sind wir das lokale Team für Entrümpelungen in Ulm, Neu-Ulm und dem gesamten Alb-Donau-Kreis. Schnelle Reaktion, transparente Preise, besenreine Übergabe – garantiert.",
+      trustPills: ["Lokales Team Ulm & Alb-Donau", "Antwort < 24h", "Besenrein garantiert"],
       imageAlt: "Räumzwerge Entrümpelung Team in Ulm beim Verladen von Möbeln",
     },
     services: {
       entruempelung: {
         h2: "Wohnungsentrümpelung in Ulm",
-        description: "Komplette Wohnungsentrümpelung in Ulm und Neu-Ulm. Von der Einschätzung bis zur besenreinen Übergabe – alles aus einer Hand. Wir kennen die lokalen Gegebenheiten und sind schnell vor Ort.",
+        description: "Komplette Wohnungsentrümpelung in Ulm und Neu-Ulm – von der Weststadt über Söflingen bis Böfingen und Donautal. Wir übernehmen die vollständige Räumung, fachgerechte Entsorgung und übergeben die Wohnung besenrein. Von der ersten Einschätzung per WhatsApp bis zur fertigen Übergabe alles aus einer Hand. Kein Aufwand für Sie.",
         link: "/leistungen/wohnungsentruempelung",
       },
       haushaltsaufloesung: {
         h2: "Haushaltsauflösung in Ulm",
-        description: "Respektvolle Haushaltsauflösung in Ulm bei Erbschaft, Umzug ins Pflegeheim oder Wohnungsverkauf. Wertgegenstände werden auf Wunsch angerechnet.",
+        description: "Respektvolle Haushaltsauflösung in Ulm bei Erbschaft, Umzug ins Pflegeheim oder Wohnungsverkauf. Wir kennen die Situation und arbeiten ohne Zeitdruck und ohne Stress für Ihre Familie. Gut erhaltene Möbel und Wertgegenstände rechnen wir auf Wunsch direkt auf den Auftragspreis an – faire Lösung für beide Seiten.",
         link: "/leistungen/haushaltsaufloesung",
       },
       messie: {
         h2: "Diskrete Messie-Hilfe in Ulm",
-        description: "Sensible Situationen erfordern besonderes Fingerspitzengefühl. Wir arbeiten in Ulm absolut diskret mit neutralen Fahrzeugen – ohne Aufsehen in der Nachbarschaft.",
+        description: "Sensible Situationen erfordern besonderes Fingerspitzengefühl. Wir arbeiten in Ulm und Umgebung absolut diskret: neutrale Fahrzeuge ohne Firmenaufdruck, kein unnötiger Lärm, keine Schaulustigen. Unser geschultes Team behandelt jeden Fall mit dem nötigen Respekt – ob in der Innenstadt oder in ruhigeren Wohngebieten wie Wiblingen oder Senden.",
         link: "/leistungen/messie-wohnungen",
       },
     },
     faq: [
       {
         question: "Wie schnell seid ihr in Ulm vor Ort?",
-        answer: "Als lokales Team mit Hauptsitz in Nersingen sind wir in der Regel innerhalb von 24-48 Stunden in Ulm vor Ort. Bei dringenden Fällen oft noch schneller.",
-      },
-      {
-        question: "Arbeitet ihr auch im Alb-Donau-Kreis?",
-        answer: "Ja, wir decken den gesamten Alb-Donau-Kreis ab – von Ehingen über Blaubeuren bis Langenau. Ulm und Neu-Ulm sind unser Kerngebiet.",
-      },
-      {
-        question: "Gibt es einen Vor-Ort-Termin in Ulm?",
-        answer: "Für größere Projekte bieten wir kostenlose Vor-Ort-Termine in Ulm an. Für kleinere Aufträge reicht oft eine Einschätzung per WhatsApp-Foto.",
+        answer: "Als lokales Team mit Hauptsitz in Nersingen – nur wenige Kilometer von Ulm entfernt – sind wir in der Regel innerhalb von 24–48 Stunden vor Ort. Bei dringenden Fällen, z. B. nach einem Todesfall oder vor einer Wohnungsübergabe, oft noch am selben oder nächsten Tag.",
       },
       {
         question: "Was kostet eine Entrümpelung in Ulm?",
-        answer: "Die Kosten hängen von Umfang, Etage und Entsorgungsaufwand ab. Senden Sie uns Fotos per WhatsApp für eine unverbindliche Einschätzung innerhalb von 24 Stunden.",
+        answer: "Die Kosten einer Entrümpelung in Ulm hängen von Größe der Wohnung, Etage, Menge des Inventars und Entsorgungsaufwand ab. Typisch sind 300–800 € für eine 2-Zimmer-Wohnung, größere Objekte individuell. Senden Sie uns einfach Fotos per WhatsApp – wir melden uns innerhalb von 24 Stunden mit einer unverbindlichen Einschätzung.",
+      },
+      {
+        question: "Kann die Entrümpelung in Ulm kostenlos sein?",
+        answer: "In manchen Fällen ja: Wenn bei einer Haushaltsauflösung oder Entrümpelung in Ulm noch gut erhaltene Möbel, Antiquitäten oder verwertbare Gegenstände vorhanden sind, können diese auf den Preis angerechnet werden – im besten Fall bis auf null. Das klären wir bei der Einschätzung transparent mit Ihnen.",
+      },
+      {
+        question: "In welchen Ulmer Stadtteilen arbeitet ihr?",
+        answer: "Wir sind in ganz Ulm tätig – von der Innenstadt und Weststadt über Söflingen, Böfingen und Donautal bis nach Wiblingen, Einsingen und Senden. Auch in Neu-Ulm und dem gesamten Alb-Donau-Kreis sind wir regelmäßig im Einsatz.",
+      },
+      {
+        question: "Wie lange dauert eine Entrümpelung in Ulm?",
+        answer: "Eine typische 2–3-Zimmer-Wohnung räumen wir in Ulm an einem Tag. Größere Objekte oder Keller und Dachböden können 1–2 Tage in Anspruch nehmen. Den genauen Zeitaufwand teilen wir Ihnen bei der Einschätzung mit.",
+      },
+      {
+        question: "Gibt es einen kostenlosen Vor-Ort-Termin in Ulm?",
+        answer: "Für größere Projekte bieten wir kostenlose Vor-Ort-Besichtigungen in Ulm an. Für kleinere Aufträge reicht in der Regel eine Einschätzung per WhatsApp-Foto – schnell, unkompliziert und ohne Verbindlichkeit.",
+      },
+      {
+        question: "Arbeitet ihr auch im Alb-Donau-Kreis?",
+        answer: "Ja, wir decken den gesamten Alb-Donau-Kreis ab – von Ehingen über Blaubeuren und Langenau bis Laupheim. Ulm und Neu-Ulm sind unser Kerngebiet, aber auch weiter entfernte Orte im Kreis fahren wir regelmäßig an.",
       },
     ],
-    nearbyAreas: ["Neu-Ulm", "Blaubeuren", "Ehingen", "Langenau", "Laupheim"],
+    nearbyAreas: ["Neu-Ulm", "Blaubeuren", "Ehingen", "Langenau", "Laupheim", "Günzburg", "Illertissen"],
   },
 
   augsburg: {
