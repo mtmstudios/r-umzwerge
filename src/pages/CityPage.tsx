@@ -67,7 +67,7 @@ export default function CityPage() {
         '@type': 'LocalBusiness',
         name: 'Räumzwerge',
         url: BASE_URL,
-        telephone: '+49 160 3080676',
+        telephone: '+49 176 22245161',
       },
       areaServed: { '@type': 'City', name: cityData.name },
       serviceType: 'Entrümpelung',

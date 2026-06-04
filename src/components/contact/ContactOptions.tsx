@@ -22,7 +22,7 @@ const options = [
     icon: Phone,
     title: "Anrufen",
     description: "Direkter Draht zu uns",
-    action: "0160 3080676",
+    action: "0176 22245161",
     href: PHONE_LINK,
     color: "bg-primary hover:bg-primary/90",
     iconColor: "text-primary-foreground",
