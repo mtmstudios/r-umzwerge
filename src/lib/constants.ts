@@ -1,6 +1,6 @@
 // Phone configuration
-export const PHONE_NUMBER = "+49 160 3080676";
-export const PHONE_LINK = "tel:+491603080676";
+export const PHONE_NUMBER = "+49 176 22245161";
+export const PHONE_LINK = "tel:+4917622245161";
 
 // Email
 export const EMAIL = "hallo@raeumzwerge.de";
