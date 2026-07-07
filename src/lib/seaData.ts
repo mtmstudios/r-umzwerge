@@ -1,6 +1,6 @@
 // SEA Landing Page Data - Conversion-optimized content for Google Ads
 
-export type SEAVariant = 'haushaltsaufloesung' | 'entruempelung' | 'messie-hilfe';
+export type SEAVariant = 'haushaltsaufloesung' | 'entruempelung' | 'messie-hilfe' | 'gewerbe';
 
 export interface SEAPainPoint {
   problem: string;
@@ -225,6 +225,67 @@ export const seaData: Record<SEAVariant, SEAData> = {
     },
     tone: 'gentle',
   },
+  'gewerbe': {
+    slug: 'gewerbe',
+    title: 'Gewerbeauflösung',
+    metaTitle: 'Gewerbe-, Büro- & Lagerauflösung | Räumzwerge',
+    metaDescription: 'Professionelle Gewerbe-, Büro- und Lagerräumung zum Festpreis. Diskret, schnell, besenrein & übergabefertig. Kostenloses Angebot innerhalb von 24h.',
+    headline: 'Gewerbe, Büro & Lager professionell räumen – Schnell, Diskret, Übergabefertig.',
+    subline: 'Ob Insolvenz, Umzug oder Mieterwechsel: Wir räumen Ihr Gewerbeobjekt zuverlässig – auch außerhalb der Geschäftszeiten. Angebot innerhalb von 24h.',
+    trustPills: ['Auch am Wochenende', 'Festpreis möglich', 'Übergabefertig zum Stichtag'],
+    painPoints: [
+      {
+        problem: 'Der Mietvertrag läuft aus – die Fläche muss termingerecht leer übergeben werden.',
+        solution: 'Wir arbeiten strikt nach Ihrem Stichtag – auch nachts oder am Wochenende.',
+      },
+      {
+        problem: 'Alte Büromöbel, Akten, IT-Geräte – wohin damit?',
+        solution: 'Fachgerechte Entsorgung inkl. DSGVO-konformer Aktenvernichtung und Elektroschrott.',
+      },
+      {
+        problem: 'Insolvenz oder Betriebsauflösung – alles muss schnell und diskret weg.',
+        solution: 'Diskrete Abwicklung, Wertanrechnung von Inventar & Maschinen möglich.',
+      },
+    ],
+    testimonial: {
+      text: 'Wir mussten unser Büro innerhalb von 5 Tagen räumen. Die Räumzwerge haben alles organisiert – Möbel, Akten, IT. Absolut zuverlässig und pünktlich zur Übergabe.',
+      author: 'Michael B., Geschäftsführer',
+    },
+    faqs: [
+      {
+        question: 'Räumt ihr auch außerhalb der Geschäftszeiten?',
+        answer: 'Ja, auf Wunsch räumen wir auch abends, nachts oder am Wochenende – ohne Aufpreis-Überraschungen.',
+      },
+      {
+        question: 'Was passiert mit alten Akten und Datenträgern?',
+        answer: 'Wir sorgen für DSGVO-konforme Aktenvernichtung und fachgerechte Entsorgung von IT-Geräten inkl. Nachweis.',
+      },
+      {
+        question: 'Könnt ihr auch Maschinen und Betriebsausstattung übernehmen?',
+        answer: 'Ja. Verwertbares Inventar rechnen wir gerne an und reduzieren damit Ihren Räumpreis.',
+      },
+      {
+        question: 'Ist ein Festpreis möglich?',
+        answer: 'In den meisten Fällen ja. Nach einer kurzen Einschätzung erhalten Sie einen verbindlichen Festpreis ohne versteckte Kosten.',
+      },
+    ],
+    ctaHeadline: 'Jetzt Festpreis für Ihre Gewerberäumung anfragen',
+    ctaSubline: 'Anfrage starten – innerhalb von 24h haben Sie Ihr Angebot.',
+    outcomeBadges: ['Übergabefertig', 'Fachgerecht entsorgt', 'Schnell erledigt'],
+    comparison: {
+      headline: 'Warum Räumzwerge für Ihre Gewerberäumung?',
+      subline: 'Transparenter Vergleich',
+      pairs: [
+        { problem: 'Nur Standard-Arbeitszeiten', solution: 'Auch nachts & am Wochenende' },
+        { problem: 'Akten landen im normalen Müll', solution: 'DSGVO-konforme Aktenvernichtung' },
+        { problem: 'Alles wird pauschal entsorgt', solution: 'Wertanrechnung von Inventar & Maschinen' },
+        { problem: 'Grobe Räumung ohne Übergabe', solution: 'Besenrein & übergabefertig zum Stichtag' },
+        { problem: 'Unklare Kosten', solution: 'Festpreis-Garantie ohne versteckte Kosten' },
+      ],
+      badges: ['Termintreu', 'DSGVO-konform', 'Festpreis'],
+    },
+    tone: 'direct',
+  },
 };
 
 export const getSeaData = (slug: string): SEAData | undefined => {
@@ -232,5 +293,5 @@ export const getSeaData = (slug: string): SEAData | undefined => {
 };
 
 export const isValidSeaSlug = (slug: string): slug is SEAVariant => {
-  return ['haushaltsaufloesung', 'entruempelung', 'messie-hilfe'].includes(slug);
+  return ['haushaltsaufloesung', 'entruempelung', 'messie-hilfe', 'gewerbe'].includes(slug);
 };

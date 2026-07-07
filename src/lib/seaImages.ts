@@ -15,6 +15,10 @@ import entruempelungNachher from '@/assets/entruempelung-nachher.png';
 import messieVorher from '@/assets/messie-vorher.png';
 import messieNachher from '@/assets/messie-nachher.png';
 
+// Gewerbe Before/After
+import gewerbeVorher from '@/assets/gewerbe-vorher.jpg';
+import gewerbeNachher from '@/assets/gewerbe-nachher.jpg';
+
 export const seaImages = {
   heroTeam: seaHeroTeam,
   haushaltsaufloesung: {
@@ -28,5 +32,9 @@ export const seaImages = {
   messie: {
     before: messieVorher,
     after: messieNachher,
+  },
+  gewerbe: {
+    before: gewerbeVorher,
+    after: gewerbeNachher,
   },
 };
