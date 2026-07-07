@@ -5,6 +5,7 @@ import { PHONE_LINK } from '@/lib/constants';
 import { HaushaltsaufloesungFunnel } from '@/components/contact/sea/HaushaltsaufloesungFunnel';
 import { EntruempelungFunnel } from '@/components/contact/sea/EntruempelungFunnel';
 import { MessieFunnel } from '@/components/contact/sea/MessieFunnel';
+import { GewerbeFunnel } from '@/components/contact/sea/GewerbeFunnel';
 import type { SEAData } from '@/lib/seaData';
 
 interface SEAComparisonProps {
@@ -126,6 +127,9 @@ export function SEAComparison({ data }: SEAComparisonProps) {
       )}
       {data.slug === 'messie-hilfe' && (
         <MessieFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
+      )}
+      {data.slug === 'gewerbe' && (
+        <GewerbeFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
       )}
     </section>
   );

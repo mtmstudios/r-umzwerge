@@ -6,6 +6,7 @@ import { seaImages } from '@/lib/seaImages';
 import { HaushaltsaufloesungFunnel } from '@/components/contact/sea/HaushaltsaufloesungFunnel';
 import { EntruempelungFunnel } from '@/components/contact/sea/EntruempelungFunnel';
 import { MessieFunnel } from '@/components/contact/sea/MessieFunnel';
+import { GewerbeFunnel } from '@/components/contact/sea/GewerbeFunnel';
 import type { SEAData, SEAVariant } from '@/lib/seaData';
 
 const iconMap: Record<string, boolean> = {
@@ -22,6 +23,8 @@ const getImagesForVariant = (slug: SEAVariant) => {
       return { before: seaImages.entruempelung.before, after: seaImages.entruempelung.after };
     case 'messie-hilfe':
       return { before: seaImages.messie.before, after: seaImages.messie.after };
+    case 'gewerbe':
+      return { before: seaImages.gewerbe.before, after: seaImages.gewerbe.after };
     default:
       return { before: seaImages.entruempelung.before, after: seaImages.entruempelung.after };
   }
@@ -150,6 +153,9 @@ export function SEABeforeAfter({ data }: SEABeforeAfterProps) {
       )}
       {data.slug === 'messie-hilfe' && (
         <MessieFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
+      )}
+      {data.slug === 'gewerbe' && (
+        <GewerbeFunnel open={isModalOpen} onOpenChange={setIsModalOpen} />
       )}
     </section>
   );
