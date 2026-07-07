@@ -17,6 +17,7 @@ import { FloatingCTAs } from '@/components/layout/FloatingCTAs';
 import { EntruempelungFunnel } from '@/components/contact/sea/EntruempelungFunnel';
 import { HaushaltsaufloesungFunnel } from '@/components/contact/sea/HaushaltsaufloesungFunnel';
 import { MessieFunnel } from '@/components/contact/sea/MessieFunnel';
+import { GewerbeFunnel } from '@/components/contact/sea/GewerbeFunnel';
 
 export default function SEALandingPage() {
   const { slug } = useParams<{ slug: string }>();
