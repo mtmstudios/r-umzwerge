@@ -83,6 +83,9 @@ export default function SEALandingPage() {
       {data.slug === 'messie-hilfe' && (
         <MessieFunnel open={isFunnelOpen} onOpenChange={setIsFunnelOpen} />
       )}
+      {data.slug === 'gewerbe' && (
+        <GewerbeFunnel open={isFunnelOpen} onOpenChange={setIsFunnelOpen} />
+      )}
     </div>
   );
 }
