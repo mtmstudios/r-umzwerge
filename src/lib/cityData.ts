@@ -69,31 +69,31 @@ export const CITY_PAGES: Record<string, CityPageData> = {
     faq: [
       {
         question: "Wie schnell seid ihr in Ulm vor Ort?",
-        answer: "Als lokales Team mit Hauptsitz in Nersingen – nur wenige Kilometer von Ulm entfernt – sind wir in der Regel innerhalb von 24–48 Stunden vor Ort. Bei dringenden Fällen, z. B. nach einem Todesfall oder vor einer Wohnungsübergabe, oft noch am selben oder nächsten Tag.",
+        answer: "Als lokales Team mit Hauptsitz in Nersingen – nur wenige Kilometer von Ulm entfernt – sind wir in der Regel innerhalb von 24 bis 48 Stunden vor Ort. Bei dringenden Fällen, zum Beispiel nach einem Todesfall, vor einer Wohnungsübergabe oder bei einer kurzfristigen Räumung, finden wir oft noch am selben oder nächsten Tag einen Termin. Ihr persönlicher Ansprechpartner klärt die nächsten Schritte schnell und unkompliziert mit Ihnen.",
       },
       {
         question: "Was kostet eine Entrümpelung in Ulm?",
-        answer: "Die Kosten einer Entrümpelung in Ulm hängen von Größe der Wohnung, Etage, Menge des Inventars und Entsorgungsaufwand ab. Typisch sind 300–800 € für eine 2-Zimmer-Wohnung, größere Objekte individuell. Senden Sie uns einfach Fotos per WhatsApp – wir melden uns innerhalb von 24 Stunden mit einer unverbindlichen Einschätzung.",
+        answer: "Die Kosten einer Entrümpelung in Ulm hängen von Größe, Etage, Menge des Inventars, Zugang, Transport und Entsorgung ab. Typisch sind 300 bis 800 € für eine 2-Zimmer-Wohnung, größere Objekte kalkulieren wir individuell. Nach der Einschätzung erhalten Sie auf Wunsch ein transparentes Festpreisangebot ohne versteckte Kosten. So wissen Kunden, Privatpersonen, Vermieter und Hausverwaltungen genau, womit sie rechnen können.",
       },
       {
         question: "Kann die Entrümpelung in Ulm kostenlos sein?",
-        answer: "In manchen Fällen ja: Wenn bei einer Haushaltsauflösung oder Entrümpelung in Ulm noch gut erhaltene Möbel, Antiquitäten oder verwertbare Gegenstände vorhanden sind, können diese auf den Preis angerechnet werden – im besten Fall bis auf null. Das klären wir bei der Einschätzung transparent mit Ihnen.",
+        answer: "In manchen Fällen ja. Wenn bei einer Haushaltsauflösung, Wohnungsauflösung oder Entrümpelung in Ulm noch gut erhaltene Möbel, Antiquitäten oder verwertbare Gegenstände vorhanden sind, ist eine Wertanrechnung möglich. Der vorhandene Wert wird transparent geprüft und kann direkt auf den Auftragspreis angerechnet werden – im besten Fall bis auf null. Das klären wir fair, nachvollziehbar und mit Blick auf Ihre Bedürfnisse.",
       },
       {
         question: "In welchen Ulmer Stadtteilen arbeitet ihr?",
-        answer: "Wir sind in ganz Ulm tätig – von der Innenstadt und Weststadt über Söflingen, Böfingen und Donautal bis nach Wiblingen, Einsingen und Senden. Auch in Neu-Ulm und dem gesamten Alb-Donau-Kreis sind wir regelmäßig im Einsatz.",
+        answer: "Wir sind in ganz Ulm tätig – von der Innenstadt und Weststadt über Söflingen, Böfingen und Donautal bis nach Wiblingen, Einsingen und Senden. Auch in Neu-Ulm und im gesamten Alb-Donau-Kreis sind unsere Entrümpler regelmäßig im Einsatz. Als Entrümpelungsfirma in der Nähe übernehmen wir Räumungen für Wohnungen, Garagen, Keller, Dachböden, Wohnhäuser und bei Bedarf auch Firmenauflösungen.",
       },
       {
         question: "Wie lange dauert eine Entrümpelung in Ulm?",
-        answer: "Eine typische 2–3-Zimmer-Wohnung räumen wir in Ulm an einem Tag. Größere Objekte oder Keller und Dachböden können 1–2 Tage in Anspruch nehmen. Den genauen Zeitaufwand teilen wir Ihnen bei der Einschätzung mit.",
+        answer: "Eine typische 2- bis 3-Zimmer-Wohnung räumen unsere Profis in Ulm meist an einem Tag. Größere Objekte, ein ganzes Haus, ein Wohnhaus, Messie-Wohnungen oder umfangreiche Aufgaben in Keller, Dachboden und Garage können 1 bis 2 Tage oder länger dauern. Den genauen Zeitaufwand teilen wir Ihnen nach der Besichtigung vor Ort oder anhand Ihrer Informationen mit. Termintreue und eine besenreine Übergabe sind dabei besonders wichtig.",
       },
       {
         question: "Gibt es einen kostenlosen Vor-Ort-Termin in Ulm?",
-        answer: "Für größere Projekte bieten wir kostenlose Vor-Ort-Besichtigungen in Ulm an. Für kleinere Aufträge reicht in der Regel eine Einschätzung per WhatsApp-Foto – schnell, unkompliziert und ohne Verbindlichkeit.",
+        answer: "Ja. Für größere Projekte bieten wir eine kostenlose Besichtigung in Ulm und Umgebung an. Bei der Besichtigung vor Ort machen sich unsere Mitarbeiter ein genaues Bild vom Umfang, von der Entsorgung und von möglichen Besonderheiten. Für kleinere Dienstleistungen reicht oft eine Einschätzung per WhatsApp-Foto oder E-Mail. Die Kontaktaufnahme ist schnell, unverbindlich und ohne versteckte Kosten.",
       },
       {
         question: "Arbeitet ihr auch im Alb-Donau-Kreis?",
-        answer: "Ja, wir decken den gesamten Alb-Donau-Kreis ab – von Ehingen über Blaubeuren und Langenau bis Laupheim. Ulm und Neu-Ulm sind unser Kerngebiet, aber auch weiter entfernte Orte im Kreis fahren wir regelmäßig an.",
+        answer: "Ja, wir decken den gesamten Alb-Donau-Kreis ab – von Ehingen über Blaubeuren und Langenau bis Laupheim. Ulm und Neu-Ulm sind unser Kernbereich, aber auch weiter entfernte Orte fahren wir regelmäßig an. Als zuverlässiger Dienstleister und Spezialist für Entrümpelung, Haushaltsauflösungen und diskrete Messie-Hilfe legen wir Wert auf klare Informationen, faire Terminvergabe, Diskretion und ein gutes Preis-Leistungs-Verhältnis.",
       },
     ],
     nearbyAreas: ["Neu-Ulm", "Blaubeuren", "Ehingen", "Langenau", "Laupheim", "Günzburg", "Illertissen"],
