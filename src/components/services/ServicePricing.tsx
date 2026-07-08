@@ -3,7 +3,7 @@ import { Package, Building2, Wrench, Zap, Clock, Star, Check, ArrowDown, Clipboa
 import { Button } from '@/components/ui/button';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
-import pricingTabletImage from '@/assets/pricing-tablet.png';
+import pricingTabletImage from '@/assets/pricing-tablet.webp';
 import { ContactFunnelModal } from '@/components/contact/ContactFunnelModal';
 
 const PRICE_FACTORS = [

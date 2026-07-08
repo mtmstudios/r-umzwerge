@@ -5,7 +5,7 @@ import { PHONE_LINK } from '@/lib/constants';
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
 import { ContactFunnelModal } from '@/components/contact/ContactFunnelModal';
-import heroTeamImage from '@/assets/hero-team.jpg';
+import heroTeamImage from '@/assets/hero-team.webp';
 
 const trustPills = [
   "Antwort < 24h",

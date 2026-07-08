@@ -1,6 +1,6 @@
 import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
-import heroTeamImage from '@/assets/hero-team.jpg';
+import heroTeamImage from '@/assets/hero-team.webp';
 
 export function AboutSection() {
   const { ref, isVisible } = useScrollReveal(0.1);
