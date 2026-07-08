@@ -44,7 +44,7 @@ export const CITY_PAGES: Record<string, CityPageData> = {
     metaTitle: "Entrümpelung Ulm – Haushaltsauflösung & Messie-Hilfe | Räumzwerge",
     metaDescription: "Professionelle Entrümpelung in Ulm und Umgebung. Haushaltsauflösung, Wohnungsentrümpelung & diskrete Messie-Reinigung. ✓ Festpreis möglich ✓ Besenrein ✓ Antwort < 24h",
     hero: {
-      h1: "Entrümpelung in Ulm – Ihr lokales Räumzwerge-Team",
+      h1: "Entrümpelung & Haushaltauflösung in Ulm – Ihr lokales Räumzwerge-Team",
       subline: "Mit Hauptsitz in Nersingen sind wir das lokale Team für Entrümpelungen in Ulm, Neu-Ulm und dem gesamten Alb-Donau-Kreis. Schnelle Reaktion, transparente Preise, besenreine Übergabe – garantiert.",
       trustPills: ["Lokales Team Ulm & Alb-Donau", "Antwort < 24h", "Besenrein garantiert"],
       imageAlt: "Räumzwerge Entrümpelung Team in Ulm beim Verladen von Möbeln",
