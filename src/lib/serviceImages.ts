@@ -1,15 +1,15 @@
 // Service Page Images - Centralized imports for Vite bundling
 
 // Hero Images for Service Pages
-import entruempelungHero from '@/assets/service-entruempelung-hero.png';
-import haushaltsaufloesungHero from '@/assets/service-haushaltsaufloesung-hero.png';
-import kellerHero from '@/assets/service-keller.jpg';
-import gewerbeHero from '@/assets/service-gewerbe.jpg';
+import entruempelungHero from '@/assets/service-entruempelung-hero.webp';
+import haushaltsaufloesungHero from '@/assets/service-haushaltsaufloesung-hero.webp';
+import kellerHero from '@/assets/service-keller.webp';
+import gewerbeHero from '@/assets/service-gewerbe.webp';
 import messieHero from '@/assets/messiewohnung-bg.jpg';
 
 // City/Contact Hero Images
-import heroTeamRaeumzwerge from '@/assets/hero-team-raeumzwerge.png';
-import contactHero from '@/assets/contact-hero.png';
+import heroTeamRaeumzwerge from '@/assets/hero-team-raeumzwerge.webp';
+import contactHero from '@/assets/contact-hero.webp';
 
 export const serviceImages: Record<string, string> = {
   // Service-specific hero images

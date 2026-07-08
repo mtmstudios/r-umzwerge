@@ -4,8 +4,8 @@ import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
 
 // Import images directly for Vite bundling
-import beforeImage from '@/assets/before-after-vorher.png';
-import afterImage from '@/assets/before-after-nachher.png';
+import beforeImage from '@/assets/before-after-vorher.webp';
+import afterImage from '@/assets/before-after-nachher.webp';
 
 const outcomeBadges = [
   { icon: Sparkles, text: "Besenrein" },
