@@ -1,0 +1,2 @@
+Application architecture rules:
+- Keep the homepage mobile background video isolated in MobileHeroVideo with imported asset pointers, a static poster fallback, and no video mount on desktop, reduced-motion or data-saving devices; this preserves loading priority and accessibility without affecting advertising pages.
