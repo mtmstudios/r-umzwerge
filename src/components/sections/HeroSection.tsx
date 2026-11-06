@@ -6,6 +6,8 @@ import { useScrollReveal } from '@/hooks/useAnimations';
 import { cn } from '@/lib/utils';
 import { ContactFunnelModal } from '@/components/contact/ContactFunnelModal';
 import heroTeamImage from '@/assets/hero-team.webp';
+import mobilePoster from '@/assets/raeumzwerge-mobile.webp.asset.json';
+import { MobileHeroVideo } from './MobileHeroVideo';
 
 const trustPills = [
   "Antwort < 24h",
@@ -20,6 +22,8 @@ export function HeroSection() {
   return (
     <section ref={ref} className="relative overflow-hidden">
       <div className="absolute inset-0">
+        <picture>
+          <source media="(max-width: 1023px)" srcSet={mobilePoster.url} />
         <img 
           src={heroTeamImage} 
           alt="Räumzwerge-Team mit gebrandetem Transporter beim Verladen von Möbeln und Kartons vor einem Wohnhaus"
@@ -27,6 +31,8 @@ export function HeroSection() {
           fetchPriority="high"
           loading="eager"
         />
+        </picture>
+        <MobileHeroVideo />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30" />
       </div>
       
